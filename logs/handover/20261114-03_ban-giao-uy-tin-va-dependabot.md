@@ -38,8 +38,16 @@
 - [ ] 2.3. 👤 Cloudflare: tắt Security > Bots > JavaScript Detections cho `files.tsudev.com` (lỗi CSP console).
 - [ ] 2.4. 👤 #42 (repo `tsudev-org/tsufiles-assets` cho tệp build) và #44 (khóa ký dự phòng) - xem `logs/STATE.md`.
 - [ ] 2.5. 👤 SignPath (D5) - chưa đủ ngưỡng uy tín (kế hoạch `~/projects/logs/handover/20261113-02` mục 5).
-- [ ] 2.6. Agent: sau lần chạy Scorecard đầu tiên, đọc điểm (`gh api` code scanning, category `scorecard`) và sửa
-  hạng mục dễ (mục tiêu >= 7). Trả lời PR của người đóng góp ở #75-#78.
+- [x] 2.6. (15/11/2026) PR #79 gộp, website deploy version `badda0e2` (ảnh production trùng SHA-256 bản repo,
+  `/nhat-ky/` có `#english-summary`; quét giao diện: chỉ còn lỗi CSP do script inline Cloudflare chèn - không có trong
+  `dist/`, việc 2.3). Scorecard lần đầu **6.2/10**: Token-Permissions 0 (`release.yml` cấp workflow `contents: write`
+  -> đã hạ xuống `read`, PR `ci/scorecard-quyen-token`), Maintained 0 (repo < 90 ngày, tự lên), Code-Review 0 và
+  Branch-Protection 3 (👤: ruleset bắt buộc 1 người duyệt, áp cho admin - cân nhắc vì chỉ có một người bảo trì),
+  CII-Best-Practices 0 (2.1), Fuzzing 0 (Scorecard không nhận fuzz xUnit của .NET), Pinned 8 (rustup tải qua curl ở
+  `portable.yml`, `dotnet restore` chưa có lock file - việc sau), Signed-Releases 8 (Scorecard chưa thấy tệp
+  provenance `.intoto.jsonl` trong Release; chứng thực đang nằm ở GitHub attestations).
+- [ ] 2.7. Agent: sau bản phát hành tới, cân nhắc đính kèm bundle chứng thực (`*.intoto.jsonl`) vào Release để
+  Signed-Releases lên 10; bật `RestorePackagesWithLockFile` nếu chủ dự án đồng ý (đổi mọi PR NuGet).
 
 ## 3. Cổng kiểm
 

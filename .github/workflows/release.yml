@@ -20,8 +20,10 @@ on:
   push:
     tags: ['v*']
 
+# TsuFiles: quyền tối thiểu ở cấp workflow (OpenSSF Scorecard Token-Permissions); chỉ job windows (tạo bản nháp,
+# tải tệp lên) xin contents: write. portable.yml chỉ đọc.
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   portable:
