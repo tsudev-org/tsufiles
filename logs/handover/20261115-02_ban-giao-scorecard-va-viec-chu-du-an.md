@@ -2,7 +2,7 @@
 
 - **Mã phiếu**: 20261115-02 (số 02 để khỏi trùng phiếu toàn hệ `~/projects/logs/handover/20261115-01`)
 - **Từ**: phiên agent-files (15/11/2026) - **Đến**: phiên kế tiếp của repo này
-- **Trạng thái**: MỞ - mục 2 gần hết là việc 👤; agent phiên sau kiểm lại, làm phần có nhãn Agent
+- **Trạng thái**: ĐÓNG 16/11/2026 (2.5, 2.7 xong ở #86, #85; việc còn lại chép sang phiếu `20261116-01`)
 - **Phiếu trước**: `20261114-03` (ĐÓNG, việc còn mở chép sang mục 2 dưới đây). Phiếu toàn hệ: `20261115-01` (dòng
   tsufiles đã đánh dấu xong).
 
