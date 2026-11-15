@@ -18,6 +18,10 @@
     <!-- Kept trim- and AOT-safe (no reflection, compiled bindings, source-generated COM), so the publish can be
          trimmed and could become Native AOT later. -->
     <IsAotCompatible>true</IsAotCompatible>
+    <!-- TsuFiles: không lock file NuGet riêng: IsAotCompatible làm SDK thêm ngầm Microsoft.NET.ILLink.Tasks theo đúng bản
+         SDK đang chạy (10.0.403 -> 10.0.14, runner mới hơn -> 10.0.15), lock file sẽ lệch mỗi lần SDK nâng bản vá.
+         Mọi gói khác của dự án này đã được khóa qua tests/TsuFiles.Setup.Tests/packages.lock*.json. -->
+    <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
     <InvariantGlobalization>true</InvariantGlobalization>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <!-- TsuFiles: tên hiển thị -->
