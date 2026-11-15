@@ -14,8 +14,9 @@ if [[ "$(uname -s)" != Linux ]]; then
 fi
 
 if [[ "${1:-}" == --kiem ]]; then
-  dotnet restore TsuFiles.slnx --locked-mode
+  # Bản không-Wayland trước để obj/ cuối cùng mang đồ thị Linux của máy này.
   dotnet restore TsuFiles.slnx --locked-mode -p:TsuFilesNativeWayland=false
+  dotnet restore TsuFiles.slnx --locked-mode
   echo "Lock file khớp."
   exit 0
 fi
