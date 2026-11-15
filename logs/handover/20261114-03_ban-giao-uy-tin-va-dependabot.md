@@ -55,9 +55,11 @@
 `dotnet format --verify-no-changes` (tệp đổi), `check_i18n_vi.py`, `check-standards.sh` ĐẠT; test App lọc
 (NightOwl, NavCollapse, RenderTests.Main_window_pages_render) đạt trên WSL; CI chạy đủ.
 
-## 4. Còn chờ chủ dự án (15/11/2026)
+## 4. Sau đó (15/11/2026)
 
-- Đóng 4 cảnh báo CodeQL `cs/cleartext-storage` (#9-#12, `Program.cs`, dương tính giả - ghi log phiên bản/đường dẫn/mức
-  quyền): agent bị chặn ("Undermining Oversight"). Lệnh:
-  `for n in 9 10 11 12; do gh api -X PATCH repos/tsudev-org/tsufiles/code-scanning/alerts/$n -f state=dismissed -f dismissed_reason="false positive" -f dismissed_comment="Logs version, path, install kind, elevation level, OS, arg count - no secrets"; done`
-- Ô `report_url` của hồ sơ Best Practices còn trống (không ảnh hưởng mức passing); điền `https://github.com/tsudev-org/tsufiles/issues` khi sửa hồ sơ lần sau.
+- [x] 4 cảnh báo CodeQL `cs/cleartext-storage` (#9-#12) chủ dự án đã đóng "false positive" (12:05 UTC).
+- Ô `report_url` của Best Practices không phải ô nhập ở trang passing (là tiêu chí trạng thái ở mục khác) - không ảnh
+  hưởng passing 100%.
+- Câu trả lời đã nộp lưu ở `docs/best-practices.json`. Công cụ dùng chung + phiếu toàn hệ `20261115-01`
+  (`~/projects/logs/handover/20261115-01_yeu-cau-ho-so-xac-minh-toan-he.md`, phiếu con ở 7 repo); đã nhắn `tsudev-f7`.
+- Còn của repo này: Scorecard >= 7 (2.6/2.7), các việc 👤 mục 2.

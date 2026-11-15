@@ -1,0 +1,200 @@
+{
+ "fields": {
+  "name": "TsuFiles",
+  "homepage_url": "https://files.tsudev.com"
+ },
+ "criteria": {
+  "repo_interim": [
+   "Met",
+   "Every change, including work in progress, is pushed to branches and merged into main through pull requests in the public repository: https://github.com/tsudev-org/tsufiles/pulls?q=is%3Apr"
+  ],
+  "version_unique": [
+   "Met",
+   "Each release has a unique version identifier, e.g. 2.4.0-vn.1 and 2.4.1-vn.1: https://github.com/tsudev-org/tsufiles/releases"
+  ],
+  "version_semver": [
+   "Met",
+   "Versions use the SemVer format MAJOR.MINOR.PATCH from the upstream Filee version plus a -vn.N suffix for the fork revision (e.g. 2.4.1-vn.1)."
+  ],
+  "version_tags": [
+   "Met",
+   "Every release is tagged in git (v2.4.0-vn.1, v2.4.1-vn.1): https://github.com/tsudev-org/tsufiles/tags"
+  ],
+  "release_notes_vulns": [
+   "N/A",
+   "No vulnerability with a CVE (or other public identifier) has been fixed in any release so far. Security fixes would be listed in CHANGELOG.md and the GitHub release notes."
+  ],
+  "report_tracker": [
+   "Met",
+   "GitHub Issues with bug, feature and format request templates: https://github.com/tsudev-org/tsufiles/issues"
+  ],
+  "report_responses": [
+   "Met",
+   "The project is young (first public release 11/11/2026); the maintainer reads and answers every issue. No external bug report has gone unanswered."
+  ],
+  "enhancement_responses": [
+   "Met",
+   "Feature requests use the feature_request / format_request templates and are labeled and answered by the maintainer."
+  ],
+  "report_archive": [
+   "Met",
+   "GitHub Issues and Discussions are public and searchable: https://github.com/tsudev-org/tsufiles/issues?q=is%3Aissue"
+  ],
+  "vulnerability_report_process": [
+   "Met",
+   "SECURITY.md describes how to report vulnerabilities: https://github.com/tsudev-org/tsufiles/blob/main/SECURITY.md"
+  ],
+  "vulnerability_report_private": [
+   "Met",
+   "GitHub private vulnerability reporting is enabled: https://github.com/tsudev-org/tsufiles/security/advisories/new"
+  ],
+  "vulnerability_report_response": [
+   "Met",
+   "No vulnerability report was received in the last 6 months. SECURITY.md commits to acknowledge within 3 working days and give a first assessment within 7 days."
+  ],
+  "build": [
+   "Met",
+   "dotnet build TsuFiles.slnx (SDK version pinned in global.json). Packaging scripts in build/; CI builds Windows, Linux and macOS."
+  ],
+  "build_common_tools": [
+   "Met",
+   "Standard .NET SDK (dotnet build/test/publish) and PowerShell for packaging."
+  ],
+  "build_floss_tools": [
+   "Met",
+   "The .NET SDK (MIT), Avalonia (MIT) and PowerShell (MIT) are FLOSS."
+  ],
+  "test": [
+   "Met",
+   "xUnit test suites in tests/ (Core, Cli, App, Engines, Platform, Setup) are published with the source: https://github.com/tsudev-org/tsufiles/tree/main/tests"
+  ],
+  "test_invocation": [
+   "Met",
+   "Standard invocation: dotnet test TsuFiles.slnx (documented in CONTRIBUTING.md and AGENTS.md)."
+  ],
+  "test_most": [
+   "Met",
+   "Tests cover converters (real conversions), update download and signature verification, CLI, headless UI rendering of every page and the installer."
+  ],
+  "test_continuous_integration": [
+   "Met",
+   "GitHub Actions runs the full test suites on every push and pull request: https://github.com/tsudev-org/tsufiles/actions/workflows/ci.yml"
+  ],
+  "test_policy": [
+   "Met",
+   "CONTRIBUTING.md, Pull requests: 'make your change with tests'; the PR template asks how the change was tested: https://github.com/tsudev-org/tsufiles/blob/main/CONTRIBUTING.md"
+  ],
+  "tests_are_added": [
+   "Met",
+   "Recent changes add tests with the code, e.g. PRs #57-#62 (data folder migration, command rename, bundle ids) and #79 (UI rendering test)."
+  ],
+  "tests_documented_added": [
+   "Met",
+   "CONTRIBUTING.md and .github/PULL_REQUEST_TEMPLATE.md require tests for changes."
+  ],
+  "warnings": [
+   "Met",
+   "C# compiler warnings with nullable reference types enabled (Directory.Build.props), .NET analyzers, and dotnet format --verify-no-changes --severity warn in CI."
+  ],
+  "warnings_fixed": [
+   "Met",
+   "CI fails on formatting and analyzer findings at warning severity, so warnings are fixed before merge."
+  ],
+  "warnings_strict": [
+   "Met",
+   "Nullable analysis is enabled for all projects and the format/analyzer gate runs at warning severity."
+  ],
+  "know_secure_design": [
+   "Met",
+   "The maintainer documented the threat model and defence layers (untrusted file parsing, isolation of external engines, signed updates): https://github.com/tsudev-org/tsufiles/blob/main/docs/vi/KIEN-TRUC-BAO-MAT.md"
+  ],
+  "know_common_errors": [
+   "Met",
+   "The same document covers the common errors for this kind of software (path traversal / zip slip, network access during conversion, denial of service by crafted files, update tampering) and their mitigations."
+  ],
+  "crypto_published": [
+   "Met",
+   "Only published algorithms: ECDSA P-256 and SHA-256 via .NET System.Security.Cryptography."
+  ],
+  "crypto_call": [
+   "Met",
+   "No cryptographic primitives are implemented in the project; it calls the platform cryptography APIs."
+  ],
+  "crypto_floss": [
+   "Met",
+   "Cryptography comes from the .NET runtime (MIT) and the operating system."
+  ],
+  "crypto_keylength": [
+   "Met",
+   "Update signatures use ECDSA P-256 (128-bit security), hashes use SHA-256."
+  ],
+  "crypto_working": [
+   "Met",
+   "No broken algorithms are used for security. MD5 appears only as an ffprobe data-hash option for media info display, not for security."
+  ],
+  "crypto_weaknesses": [
+   "Met",
+   "No SHA-1 or MD5 for security decisions; signatures use ECDSA P-256 with SHA-256."
+  ],
+  "crypto_pfs": [
+   "N/A",
+   "The software does not implement a network protocol; HTTPS is handled by the operating system/.NET HttpClient."
+  ],
+  "crypto_password_storage": [
+   "N/A",
+   "The software has no user accounts and stores no passwords."
+  ],
+  "crypto_random": [
+   "Met",
+   "Keys are generated with ECDsa.Create (cryptographically secure RNG); no security-sensitive randomness uses System.Random."
+  ],
+  "delivery_unsigned": [
+   "Met",
+   "Hashes are never fetched over HTTP; the updater downloads SHA256SUMS over HTTPS and verifies its ECDSA signature before trusting any hash. Releases also carry GitHub build provenance attestations."
+  ],
+  "vulnerabilities_fixed_60_days": [
+   "Met",
+   "There are no known unpatched vulnerabilities (no open Dependabot or secret-scanning alerts)."
+  ],
+  "vulnerabilities_critical_fixed": [
+   "Met",
+   "No critical vulnerability has been reported; dependency alerts are fixed through Dependabot PRs."
+  ],
+  "no_leaked_credentials": [
+   "Met",
+   "No credentials in the repository: gitleaks runs in CI, GitHub secret scanning and push protection are enabled, and the update signing key is kept offline (docs/vi/PHAT-HANH.md)."
+  ],
+  "static_analysis": [
+   "Met",
+   "CodeQL (security-extended) on every push and pull request: https://github.com/tsudev-org/tsufiles/blob/main/.github/workflows/security.yml, plus OpenSSF Scorecard."
+  ],
+  "static_analysis_common_vulnerabilities": [
+   "Met",
+   "CodeQL security-extended queries look for common C# vulnerabilities (injection, path traversal, unsafe deserialization, etc.)."
+  ],
+  "static_analysis_fixed": [
+   "Met",
+   "No exploitable medium or higher finding is open. The only open CodeQL results (cs/cleartext-storage in Program.cs) are false positives: they log version, path, install kind and elevation level, no secrets."
+  ],
+  "static_analysis_often": [
+   "Met",
+   "CodeQL runs on every push and pull request and weekly."
+  ],
+  "dynamic_analysis": [
+   "Met",
+   "Weekly fuzzing of the in-house file format readers: https://github.com/tsudev-org/tsufiles/blob/main/.github/workflows/fuzz.yml (tests/TsuFiles.Engines.Tests/ForkFuzzTests.cs)."
+  ],
+  "dynamic_analysis_unsafe": [
+   "Unmet",
+   "Most code is memory-safe C#. The small Windows Explorer context-menu extension (src/Filee.ExplorerMenu/FileeExplorerMenu.c) is C and is not yet run under a memory-safety tool such as AddressSanitizer."
+  ],
+  "dynamic_analysis_enable_assertions": [
+   "Met",
+   "Tests and fuzzing run Debug/Release test builds with assertions (xUnit Assert, Debug.Assert in Debug) and --blame-crash."
+  ],
+  "dynamic_analysis_fixed": [
+   "Met",
+   "No exploitable medium or higher vulnerability has been found by fuzzing; findings would be fixed and turned into regression tests."
+  ]
+ }
+}
