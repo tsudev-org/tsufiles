@@ -3,6 +3,8 @@
     <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <!-- TsuFiles: tham chiếu TsuFiles.App nên đồ thị gói đổi theo Avalonia.Wayland (Directory.Build.props). -->
+    <TsuFilesLockPerWayland>true</TsuFilesLockPerWayland>
   </PropertyGroup>
 
   <ItemGroup>

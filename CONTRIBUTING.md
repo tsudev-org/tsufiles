@@ -22,6 +22,12 @@ startup entry, context menu or Explorer menu.
 
 Any IDE works (Visual Studio 2022+, Rider, VS Code with C# Dev Kit).
 
+NuGet restores are locked: every project has a `packages.lock.json` and CI restores with `--locked-mode`. After you
+add or upgrade a package (`Directory.Packages.props` or a `PackageReference`), run `tools/cap-nhat-lock-nuget.sh` on
+Linux/WSL and commit the lock files it changes. `TsuFiles.App` and the tests that reference it also keep
+`packages.lock.no-wayland.json` (Windows and macOS builds have no `Avalonia.Wayland`); Dependabot only updates the Linux
+file, so run the script on its NuGet pull requests too.
+
 ## Linux and macOS development
 
 Linux packages (x64, ARM64) are released like Windows; macOS stays a preview until it is notarized. Install .NET 10

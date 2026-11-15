@@ -46,6 +46,18 @@
     <TsuFilesExpectedSignerKeys></TsuFilesExpectedSignerKeys>
   </PropertyGroup>
 
+  <!-- TsuFiles: lock file NuGet (Scorecard Pinned-Dependencies, phiếu 20261115-02 mục 2.5). CI chạy
+       restore ở chế độ khóa (locked mode): gói đổi phiên bản hay băm (contentHash) mà lock file chưa ghi thì restore dừng.
+       Nâng gói (kể cả PR Dependabot) phải kèm lock file mới: `tools/cap-nhat-lock-nuget.sh`.
+       TsuFilesNativeWayland (Avalonia.Wayland chỉ có trong bản Linux, TsuFiles.App.csproj) làm đồ thị gói của App
+       và các dự án test tham chiếu App khác nhau theo hệ điều hành; các dự án đó đặt TsuFilesLockPerWayland=true và
+       giữ hai lock file: packages.lock.json (Linux, có Wayland - Dependabot chạy trên Linux nên cập nhật tệp này) và
+       packages.lock.no-wayland.json (Windows, macOS). -->
+  <PropertyGroup>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <TsuFilesNativeWayland Condition="'$(TsuFilesNativeWayland)' == '' And ($(RuntimeIdentifier.StartsWith('linux')) Or ('$(RuntimeIdentifier)' == '' And $([MSBuild]::IsOSPlatform('Linux'))))">true</TsuFilesNativeWayland>
+  </PropertyGroup>
+
   <!-- Libraries their makers sign: ReadyToRun recompiles an assembly and drops its Authenticode signature, so these
        stay as shipped and keep it (Windows Smart App Control trusts signed code). build/sign-windows.ps1 signs the
        rest. Run it on a publish folder to see which files are still unsigned when a package is added. -->

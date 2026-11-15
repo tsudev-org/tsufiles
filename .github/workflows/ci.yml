@@ -122,7 +122,8 @@ jobs:
           global-json-file: global.json
 
       - name: Restore
-        run: dotnet restore TsuFiles.slnx
+        # TsuFiles: lock file NuGet (Directory.Build.props); lệch thì chạy tools/cap-nhat-lock-nuget.sh.
+        run: dotnet restore TsuFiles.slnx --locked-mode
 
       - name: Check formatting
         run: dotnet format TsuFiles.slnx --verify-no-changes --no-restore --severity warn
@@ -263,7 +264,8 @@ jobs:
           "ready=$(([string](-not $missing)).ToLowerInvariant())" >> $env:GITHUB_OUTPUT
 
       - name: Restore
-        run: dotnet restore TsuFiles.slnx
+        # TsuFiles: lock file NuGet (Directory.Build.props); lệch thì chạy tools/cap-nhat-lock-nuget.sh.
+        run: dotnet restore TsuFiles.slnx --locked-mode
 
       - name: Fonts
         run: ./build/fetch-fonts.ps1

@@ -175,7 +175,8 @@ jobs:
           if ('${{ matrix.rid }}' -eq 'linux-arm64') {
             $native = @("-p:UnhwpNativeLibrary=$(Join-Path $env:RUNNER_TEMP 'linux-native/unhwp/libunhwp.so')")
           }
-          dotnet build TsuFiles.slnx -c Release @native
+          # TsuFiles: restore ở chế độ khóa theo lock file NuGet (Directory.Build.props).
+          dotnet build TsuFiles.slnx -c Release -p:RestoreLockedMode=true @native
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           # Magick.NET 15 has no ImageMagick library for Intel Macs: the one the package gets goes next to each build.
           if ('${{ matrix.rid }}' -eq 'osx-x64') {
