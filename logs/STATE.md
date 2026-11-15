@@ -5,9 +5,9 @@
 
 ## Hàng đợi task (làm từ trên xuống)
 
-- [ ] ⚡ TIẾP THEO: phiếu `logs/handover/20261115-02_ban-giao-scorecard-va-viec-chu-du-an.md` (đọc mục 2). Phần agent
-      chỉ còn 2.7 (đính kèm `*.intoto.jsonl` ở bản phát hành tới); còn lại là việc 👤: `WINGET_TOKEN`, Cloudflare
-      JavaScript Detections, #42/#44, SignPath, quyết định lock file NuGet, ruleset bắt buộc người duyệt.
+- [ ] ⚡ TIẾP THEO: phiếu `logs/handover/20261116-01_ban-giao-lock-nuget-va-intoto.md` (đọc mục 2). Phần agent: chạy
+      `tools/cap-nhat-lock-nuget.sh` trên mỗi PR Dependabot NuGet, đo lại Scorecard, kiểm `*.intoto.jsonl` ở bản phát
+      hành tới; còn lại là việc 👤: `WINGET_TOKEN`, Cloudflare JavaScript Detections, #42/#44, SignPath, ruleset duyệt.
 
 - [ ] Kế hoạch gia cố + hard fork (11/11/2026), mỗi phase một PR, làm theo thứ tự:
   - P1 PR #42 tải tệp build từ `tsudev-org/tsufiles-assets` - CHỜ chủ dự án tạo repo assets (job win-arm64 đỏ tới lúc đó).
@@ -56,6 +56,10 @@
 
 ## Đã hoàn thành (mới nhất trên cùng)
 
+- 16/11/2026 - #85 (`ae8a223d`): Release đính kèm `*-provenance.intoto.jsonl`, `*-sbom.intoto.jsonl` (Signed-Releases).
+  #86 (`09535dad`): lock file NuGet + CI `--locked-mode` (Pinned-Dependencies); App/App.Tests/Setup.Tests thêm
+  `packages.lock.no-wayland.json`, Setup không lock riêng (ILLink.Tasks ngầm theo SDK). Sinh lại:
+  `tools/cap-nhat-lock-nuget.sh` - BẮT BUỘC trên PR Dependabot NuGet. Phiếu `20261115-02` ĐÓNG, bàn giao `20261116-01`.
 - 16/11/2026 - Scorecard 7.1/10 (đo 15/11/2026 ở `3467de31`, đạt chỉ tiêu >= 7 của phiếu toàn hệ `20261115-01`).
   PR #83 gộp (`04e420da`): ghim `rustup-init` 1.29.3 theo SHA-256 ở `portable.yml` và `windows-arm64-native.yml`
   (bỏ `curl | sh`). 15/11/2026: Best Practices dự án 16719 passing (#81, #82). Phiếu `20261114-03` ĐÓNG.
