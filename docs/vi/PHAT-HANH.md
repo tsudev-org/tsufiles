@@ -53,6 +53,10 @@
    gh attestation verify "$D"/*linux-x64.tar.gz -R tsudev-org/tsufiles`. Có thêm SBOM
    `tsudev-files-<ver>-sbom.cdx.json` (CycloneDX 1.7, từ 2.4.1) được chứng thực cho mọi gói:
    `gh attestation verify "$D"/*linux-x64.tar.gz -R tsudev-org/tsufiles --predicate-type https://cyclonedx.org/bom`.
+   Từ bản sau 2.4.1-vn.1, bản nháp có thêm hai bundle chứng thực `tsudev-files-<ver>-provenance.intoto.jsonl` và
+   `tsudev-files-<ver>-sbom.intoto.jsonl` (bước "Attach attestation bundles"; OpenSSF Scorecard Signed-Releases cần
+   chúng) - kiểm ngoại tuyến được: `gh attestation verify <gói> -R tsudev-org/tsufiles --bundle <bundle>`. Không ký
+   ECDSA hai tệp này (đã ký Sigstore) và không đổi tên: tên tệp cố ý không trùng hậu tố trình cập nhật tìm.
    Rồi xuất bản:
    `gh release edit "v$V" -R tsudev-org/tsufiles --draft=false --latest`.
 6. Bản cài cũ sẽ nhận cập nhật: tải SHA256SUMS -> kiểm chữ ký ECDSA -> kiểm số phiên bản mới hơn -> tải bộ cài ->
