@@ -36,7 +36,8 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <TsuFilesNativeWayland Condition="$(RuntimeIdentifier.StartsWith('linux')) Or ('$(RuntimeIdentifier)' == '' And $([MSBuild]::IsOSPlatform('Linux')))">true</TsuFilesNativeWayland>
+    <!-- TsuFiles: TsuFilesNativeWayland tính ở Directory.Build.props (lock file NuGet theo Wayland cần nó ở mọi dự án). -->
+    <TsuFilesLockPerWayland>true</TsuFilesLockPerWayland>
     <DefineConstants Condition="'$(TsuFilesNativeWayland)' == 'true'">$(DefineConstants);TSUFILES_NATIVE_WAYLAND</DefineConstants>
   </PropertyGroup>
 

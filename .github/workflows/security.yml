@@ -91,7 +91,7 @@ jobs:
       - name: Soát gói có lỗ hổng đã công bố (kể cả phụ thuộc bắc cầu)
         shell: bash
         run: |
-          dotnet restore TsuFiles.slnx
+          dotnet restore TsuFiles.slnx --locked-mode
           dotnet list TsuFiles.slnx package --vulnerable --include-transitive 2>&1 | tee vuln.txt
           if grep -qiE '\b(High|Critical)\b' vuln.txt; then
             echo "::error::Có gói NuGet mang lỗ hổng mức High/Critical"; exit 1

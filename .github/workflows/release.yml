@@ -77,7 +77,8 @@ jobs:
       # Built first and tested like CI: the UI tests on their own with crash and hang blame (a crash names the
       # running test and leaves a dump in TestResults), then the rest.
       - name: Build
-        run: dotnet build TsuFiles.slnx -c Release
+        # TsuFiles: restore ở chế độ khóa theo lock file NuGet (Directory.Build.props).
+        run: dotnet build TsuFiles.slnx -c Release -p:RestoreLockedMode=true
 
       - name: Test UI on its own
         run: dotnet test tests/TsuFiles.App.Tests --no-build -c Release --blame-crash --blame-hang-timeout 5m --logger "console;verbosity=normal" --results-directory TestResults/app

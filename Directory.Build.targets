@@ -1,0 +1,9 @@
+<!--
+  TsuFiles: thiết lập phải đặt SAU nội dung tệp dự án (Directory.Build.props được nạp trước tệp dự án).
+-->
+<Project>
+  <!-- Lock file NuGet thứ hai cho bản không có Avalonia.Wayland (Windows, macOS): xem Directory.Build.props. -->
+  <PropertyGroup Condition="'$(TsuFilesLockPerWayland)' == 'true' And '$(TsuFilesNativeWayland)' != 'true'">
+    <NuGetLockFilePath>$(MSBuildProjectDirectory)/packages.lock.no-wayland.json</NuGetLockFilePath>
+  </PropertyGroup>
+</Project>
