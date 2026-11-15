@@ -2,7 +2,7 @@
 
 - **Mã phiếu**: 20261114-03
 - **Từ**: phiên agent-files (14/11/2026) - **Đến**: phiên kế tiếp của repo này
-- **Trạng thái**: MỞ - mục 2 là việc 👤; agent phiên sau chỉ kiểm lại và đóng
+- **Trạng thái**: ĐÓNG 16/11/2026 - việc còn mở chép sang phiếu `20261115-02`
 - **Phiếu trước**: `20261113-05` (ĐÓNG), `20261113-03` (ĐÓNG phần agent). Kế hoạch tổng: `20261114-01`.
 
 ## 0. Đọc trước
