@@ -137,6 +137,7 @@ jobs:
       # TsuFiles: SBOM được chứng thực gắn với từng tệp phát hành (gh attestation verify --predicate-type
       # https://cyclonedx.org/bom).
       - name: Attest SBOM
+        id: attest-sbom
         uses: actions/attest-sbom@c604332985a26aa8cf1bdc465b92731239ec6b9e # v4.1.0
         with:
           subject-path: 'Releases/tsudev-files-*'
@@ -145,9 +146,24 @@ jobs:
       # TsuFiles: chứng thực nguồn gốc build (SLSA, Sigstore) cho mọi tệp phát hành; người dùng kiểm bằng
       # `gh attestation verify <tệp> -R tsudev-org/tsufiles` (docs/vi/PHAT-HANH.md).
       - name: Attest build provenance
+        id: attest-provenance
         uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with:
           subject-path: 'Releases/tsudev-files-*'
+
+      # TsuFiles: đính kèm hai bundle chứng thực (Sigstore, dạng in-toto JSON Lines) vào Release để kiểm ngoại tuyến
+      # (`gh attestation verify <tệp> -R tsudev-org/tsufiles --bundle <bundle>`) và để OpenSSF Scorecard nhận
+      # Signed-Releases. Chép SAU hai bước chứng thực nên bundle không tự thành chủ thể. Tên kết thúc bằng
+      # `.intoto.jsonl`, không trùng hậu tố trình cập nhật tìm (`-win-Setup.exe`, `-SHA256SUMS.txt`).
+      - name: Attach attestation bundles
+        shell: pwsh
+        env:
+          PROVENANCE_BUNDLE: ${{ steps.attest-provenance.outputs.bundle-path }}
+          SBOM_BUNDLE: ${{ steps.attest-sbom.outputs.bundle-path }}
+        run: |
+          $version = '${{ steps.version.outputs.value }}'
+          Copy-Item $env:PROVENANCE_BUNDLE "Releases/tsudev-files-$version-provenance.intoto.jsonl"
+          Copy-Item $env:SBOM_BUNDLE "Releases/tsudev-files-$version-sbom.intoto.jsonl"
 
       - name: Draft the GitHub release
         shell: pwsh
