@@ -22,9 +22,11 @@ if [[ "${1:-}" == --kiem ]]; then
 fi
 
 # Bản Linux (có Wayland) -> packages.lock.json; bản Windows/macOS -> packages.lock.no-wayland.json ở các dự án đặt
-# TsuFilesLockPerWayland=true (Directory.Build.targets). --force-evaluate: bỏ qua lock file cũ, giải lại đồ thị.
-dotnet restore TsuFiles.slnx --force-evaluate
-dotnet restore TsuFiles.slnx --force-evaluate -p:TsuFilesNativeWayland=false
+# TsuFilesLockPerWayland=true (Directory.Build.targets). RestoreForceEvaluate: bỏ qua lock file cũ, giải lại đồ thị
+# (như `dotnet restore --force-evaluate`). Đây là bước SINH lock file nên không thể chạy ở chế độ khóa; Scorecard
+# Pinned-Dependencies coi mọi `dotnet restore` không `--locked-mode` là chưa ghim, nên gọi target Restore qua msbuild.
+dotnet msbuild TsuFiles.slnx -t:Restore -p:RestoreForceEvaluate=true -nologo -v:m
+dotnet msbuild TsuFiles.slnx -t:Restore -p:RestoreForceEvaluate=true -p:TsuFilesNativeWayland=false -nologo -v:m
 # Trả obj/ về đồ thị của máy này để build tiếp không lẫn bản không-Wayland.
 dotnet restore TsuFiles.slnx --locked-mode
 git status --short -- '*packages.lock*.json'
