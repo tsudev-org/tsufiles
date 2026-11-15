@@ -9,6 +9,10 @@ maintainer registers the project at <https://www.bestpractices.dev/en/projects/n
 shown in `README.md` and `README.en.md`. One suggested criterion is honestly Unmet: `dynamic_analysis_unsafe` (the C
 Explorer menu extension is not run under AddressSanitizer yet). Edit the entry whenever a fact below changes.
 
+The exact answers submitted (status + justification per criterion) are in
+[`best-practices.json`](best-practices.json); resubmit with the shared tool `~/projects/logs/tools/bestpractices/bp.cjs`
+(`fill 16719 <file> --submit`) after changing it.
+
 ## Basics
 
 | Criterion | Answer | Evidence |
