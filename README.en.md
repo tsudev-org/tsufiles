@@ -6,6 +6,7 @@
 [![CI](https://github.com/tsudev-org/tsufiles/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tsudev-org/tsufiles/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/tsudev-org/tsufiles/badge)](https://scorecard.dev/viewer/?uri=github.com/tsudev-org/tsufiles)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/16719/badge)](https://www.bestpractices.dev/projects/16719)
 
 **An offline, free and open-source file converter - a Vietnamese-first, security-hardened fork of
 [Filee](https://github.com/KnifeLemon/Filee).**

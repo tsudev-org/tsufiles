@@ -31,7 +31,8 @@
 
 ## 2. Việc tiếp theo (👤 = chỉ chủ dự án)
 
-- [ ] 2.1. 👤 Đăng ký OpenSSF Best Practices: <https://www.bestpractices.dev/en/projects/new>, chép câu trả lời ở
+- [x] 2.1. (XONG 15/11/2026: dự án 16719 đạt **passing 100%**, agent điền qua Playwright trong Edge profile riêng
+  `%LOCALAPPDATA%\tsudev-bp` sau khi chủ dự án đăng nhập; huy hiệu đã vào README) Đăng ký OpenSSF Best Practices: <https://www.bestpractices.dev/en/projects/new>, chép câu trả lời ở
   `docs/best-practices.md`; xong thì agent thêm huy hiệu vào README và ghi id.
 - [ ] 2.2. 👤 Secret `WINGET_TOKEN` (PAT `public_repo`) -> agent nộp winget qua komac, chuyển `winget` từ `planned`
   sang `channels` trong `packaging/package.json`.
@@ -53,3 +54,10 @@
 
 `dotnet format --verify-no-changes` (tệp đổi), `check_i18n_vi.py`, `check-standards.sh` ĐẠT; test App lọc
 (NightOwl, NavCollapse, RenderTests.Main_window_pages_render) đạt trên WSL; CI chạy đủ.
+
+## 4. Còn chờ chủ dự án (15/11/2026)
+
+- Đóng 4 cảnh báo CodeQL `cs/cleartext-storage` (#9-#12, `Program.cs`, dương tính giả - ghi log phiên bản/đường dẫn/mức
+  quyền): agent bị chặn ("Undermining Oversight"). Lệnh:
+  `for n in 9 10 11 12; do gh api -X PATCH repos/tsudev-org/tsufiles/code-scanning/alerts/$n -f state=dismissed -f dismissed_reason="false positive" -f dismissed_comment="Logs version, path, install kind, elevation level, OS, arg count - no secrets"; done`
+- Ô `report_url` của hồ sơ Best Practices còn trống (không ảnh hưởng mức passing); điền `https://github.com/tsudev-org/tsufiles/issues` khi sửa hồ sơ lần sau.

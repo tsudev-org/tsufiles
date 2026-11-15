@@ -5,8 +5,9 @@ maintainer registers the project at <https://www.bestpractices.dev/en/projects/n
 `https://github.com/tsudev-org/tsufiles`) and copies the answers below; each one links to the evidence. Prepared
 14/11/2026 (ticket `logs/handover/20261113-03`); keep it in step with the repository when a fact changes.
 
-After the badge is granted, add its badge line to the top of `README.md` and `README.en.md` next to the Scorecard
-badge, and write the project id here: `<id>`.
+**Granted: passing, 100% (15/11/2026), project id `16719`** - <https://www.bestpractices.dev/projects/16719>. Badge
+shown in `README.md` and `README.en.md`. One suggested criterion is honestly Unmet: `dynamic_analysis_unsafe` (the C
+Explorer menu extension is not run under AddressSanitizer yet). Edit the entry whenever a fact below changes.
 
 ## Basics
 
