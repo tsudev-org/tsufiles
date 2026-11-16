@@ -7,7 +7,14 @@ Hướng dẫn: assets/brand/README.md.
 
   python3 -m venv /tmp/brand && /tmp/brand/bin/pip install -r tools/thuong-hieu/requirements.txt
   /tmp/brand/bin/python -I tools/thuong-hieu/tao-tai-san.py          sinh lại toàn bộ
-  /tmp/brand/bin/python -I tools/thuong-hieu/tao-tai-san.py --kiem   chỉ kiểm (thoát 1 nếu thiếu/sai cỡ)
+  /tmp/brand/bin/python -I tools/thuong-hieu/tao-tai-san.py --kiem   chỉ kiểm (thoát 1 nếu thiếu/sai cỡ/sai dạng lớp)
+  python3 -I tools/thuong-hieu/tao-tai-san.py --sua-ico              ghi lại các tệp .ico đã có theo dạng đúng (chỉ
+                                                                    cần Python chuẩn, không cần Pillow)
+
+Định dạng ICO (16/11/2026, sửa lỗi icon trống trên thanh tác vụ Windows): lớp < 256 px là ảnh BMP 32 bit (DIB, có
+mặt nạ AND), chỉ lớp 256 px là PNG - đúng như ICO gốc của ứng dụng. Pillow ghi MỌI lớp thành PNG; Avalonia trên
+Windows không tạo được HICON từ các lớp PNG nhỏ đó nên cửa sổ không có icon (WM_GETICON = 0) và thanh tác vụ hiện ô
+trống. --kiem bắt lỗi này.
 
 Các bước:
 1. Cắt OWL_BOX, ước lượng nền chuyển sắc bằng mặt phẳng khớp với mép khung, tách nền bằng color-to-alpha theo khoảng
@@ -79,6 +86,111 @@ def ico_sizes(data: bytes) -> list[int]:
     return sorted((data[6 + 16 * i] or 256) for i in range(count))
 
 
+def ico_entries(data: bytes) -> list[tuple[int, bytes]]:
+    """(cỡ, dữ liệu) của từng lớp ICO."""
+    count = struct.unpack("<HHH", data[:6])[2]
+    out = []
+    for i in range(count):
+        w, _, _, _, _, _, size, offset = struct.unpack("<BBBBHHII", data[6 + 16 * i:22 + 16 * i])
+        out.append((w or 256, data[offset:offset + size]))
+    return out
+
+
+def ico_png_layers(data: bytes) -> list[int]:
+    """Các lớp < 256 px được lưu dạng PNG (phải là BMP, xem đầu tệp)."""
+    return [size for size, body in ico_entries(data) if size < 256 and body[:8] == b"\x89PNG\r\n\x1a\n"]
+
+
+def bmp_layer(size: int, rgba: bytes) -> bytes:
+    """Một lớp ICO dạng DIB 32 bit: BITMAPINFOHEADER (cao gấp đôi), điểm ảnh BGRA từ dưới lên, mặt nạ AND."""
+    header = struct.pack("<IiiHHIIiiII", 40, size, size * 2, 1, 32, 0, size * size * 4, 0, 0, 0, 0)
+    rows = []
+    for y in range(size - 1, -1, -1):
+        row = bytearray(rgba[y * size * 4:(y + 1) * size * 4])
+        row[0::4], row[2::4] = row[2::4], row[0::4]     # RGBA -> BGRA
+        rows.append(bytes(row))
+    stride = ((size + 31) // 32) * 4                    # mặt nạ AND 1 bit/điểm, dòng làm tròn 4 byte
+    mask = bytearray()
+    for y in range(size - 1, -1, -1):
+        bits = bytearray(stride)
+        for x in range(size):
+            if rgba[(y * size + x) * 4 + 3] == 0:
+                bits[x // 8] |= 0x80 >> (x % 8)
+        mask += bits
+    return header + b"".join(rows) + bytes(mask)
+
+
+def ico_bytes(layers: list[tuple[int, bytes, bytes]]) -> bytes:
+    """ICO từ (cỡ, RGBA, PNG) từng lớp: lớp 256 px giữ PNG, lớp nhỏ hơn ghi BMP."""
+    bodies = [(size, png if size >= 256 else bmp_layer(size, rgba)) for size, rgba, png in sorted(layers)]
+    out = bytearray(struct.pack("<HHH", 0, 1, len(bodies)))
+    offset = 6 + 16 * len(bodies)
+    for size, body in bodies:
+        out += struct.pack("<BBBBHHII", size % 256, size % 256, 0, 0, 1, 32, len(body), offset)
+        offset += len(body)
+    for _, body in bodies:
+        out += body
+    return bytes(out)
+
+
+def png_rgba(data: bytes) -> tuple[int, bytes]:
+    """Giải mã PNG RGBA 8 bit không xen kẽ (lớp ICO do Pillow ghi) bằng thư viện chuẩn: (cỡ, RGBA)."""
+    import zlib
+
+    pos, idat, width = 8, b"", 0
+    while pos < len(data):
+        length, kind = struct.unpack(">I4s", data[pos:pos + 8])
+        chunk = data[pos + 8:pos + 8 + length]
+        if kind == b"IHDR":
+            width, height, depth, color, _, _, interlace = struct.unpack(">IIBBBBB", chunk)
+            if (depth, color, interlace) != (8, 6, 0) or width != height:
+                raise ValueError("chỉ hỗ trợ PNG RGBA 8 bit vuông, không xen kẽ")
+        elif kind == b"IDAT":
+            idat += chunk
+        pos += 12 + length
+    raw, stride, out = zlib.decompress(idat), width * 4, bytearray()
+    previous = bytearray(stride)
+    for y in range(width):
+        kind, line = raw[y * (stride + 1)], bytearray(raw[y * (stride + 1) + 1:(y + 1) * (stride + 1)])
+        for x in range(stride):
+            a = line[x - 4] if x >= 4 else 0
+            b = previous[x]
+            c = previous[x - 4] if x >= 4 else 0
+            if kind == 1:
+                line[x] = (line[x] + a) & 0xFF
+            elif kind == 2:
+                line[x] = (line[x] + b) & 0xFF
+            elif kind == 3:
+                line[x] = (line[x] + (a + b) // 2) & 0xFF
+            elif kind == 4:
+                p = a + b - c
+                pa, pb, pc = abs(p - a), abs(p - b), abs(p - c)
+                line[x] = (line[x] + (a if pa <= pb and pa <= pc else b if pb <= pc else c)) & 0xFF
+        out += line
+        previous = line
+    return width, bytes(out)
+
+
+def fix_icos() -> int:
+    """--sua-ico: ghi lại .ico của ứng dụng có lớp nhỏ dạng PNG thành lớp BMP (giữ nguyên điểm ảnh). favicon của
+    website giữ lớp PNG (trình duyệt đọc được, tệp nhỏ hơn)."""
+    for path in OUTPUTS:
+        if path.suffix != ".ico" or path.parent != APP_ICONS or not path.is_file():
+            continue
+        data = path.read_bytes()
+        if not ico_png_layers(data):
+            print(f"  {path.relative_to(ROOT)} đã đúng")
+            continue
+        layers = []
+        for size, body in ico_entries(data):
+            if body[:8] != b"\x89PNG\r\n\x1a\n":
+                raise SystemExit(f"{path}: lớp {size} không phải PNG, không tự sửa được")
+            layers.append((size, png_rgba(body)[1], body))
+        path.write_bytes(ico_bytes(layers))
+        print(f"  {path.relative_to(ROOT)} ghi lại: lớp BMP {[s for s, _, _ in layers if s < 256]}, PNG [256]")
+    return check()
+
+
 def check() -> int:
     errors: list[str] = []
     if not SOURCE.is_file() or sha256(SOURCE) != SOURCE_SHA256:
@@ -92,6 +204,8 @@ def check() -> int:
         if path.suffix == ".ico":
             if ico_sizes(data) != ICO_SIZES:
                 errors.append(f"{rel}: lớp {ico_sizes(data)}, cần {ICO_SIZES}")
+            if path.parent == APP_ICONS and ico_png_layers(data):
+                errors.append(f"{rel}: lớp {ico_png_layers(data)} là PNG, phải là BMP (chạy --sua-ico)")
         elif path.suffix == ".png" and size and png_size(data) != size:
             errors.append(f"{rel}: cỡ {png_size(data)}, cần {size}")
     for e in errors:
@@ -178,9 +292,19 @@ def build() -> None:
         print(f"  {path.relative_to(ROOT)} {img.size[0]}x{img.size[1]} {path.stat().st_size // 1024} KiB")
 
     def save_ico(path: Path) -> None:
-        frames = [icon(s) for s in ICO_SIZES]
         path.parent.mkdir(parents=True, exist_ok=True)
-        frames[-1].save(path, format="ICO", sizes=[(s, s) for s in ICO_SIZES], append_images=frames[:-1])
+        if path.parent != APP_ICONS:                    # favicon: trình duyệt đọc lớp PNG, tệp nhỏ hơn
+            frames = [icon(s) for s in ICO_SIZES]
+            frames[-1].save(path, format="ICO", sizes=[(s, s) for s in ICO_SIZES], append_images=frames[:-1])
+            print(f"  {path.relative_to(ROOT)} lớp {ico_sizes(path.read_bytes())}")
+            return
+        layers = []
+        for size in ICO_SIZES:
+            frame = icon(size).convert("RGBA")
+            png = io.BytesIO()
+            frame.save(png, format="PNG", optimize=True)
+            layers.append((size, frame.tobytes(), png.getvalue()))
+        path.write_bytes(ico_bytes(layers))             # không dùng Pillow ghi ICO: nó ghi mọi lớp thành PNG
         print(f"  {path.relative_to(ROOT)} lớp {ico_sizes(path.read_bytes())}")
 
     print("Bản chính:", master.size)
@@ -263,5 +387,7 @@ def og_image(tight, resize, Image, ImageDraw):
 if __name__ == "__main__":
     if "--kiem" in sys.argv[1:]:
         sys.exit(check())
+    if "--sua-ico" in sys.argv[1:]:
+        sys.exit(fix_icos())
     build()
     sys.exit(check())

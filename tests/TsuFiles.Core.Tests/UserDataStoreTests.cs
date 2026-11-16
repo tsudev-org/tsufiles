@@ -1561,7 +1561,7 @@ public partial class UserDataStoreTests
         using var dir = new TempDir();
         var store = new UserDataStore(dir.Path);
         store.Load();
-        Assert.Equal(CloseAction.Ask, store.Settings.CloseAction);
+        Assert.Equal(CloseAction.Tray, store.Settings.CloseAction); // TsuFiles: the tray by default
         store.Settings.CloseAction = CloseAction.Quit;
         store.SaveSettings();
 

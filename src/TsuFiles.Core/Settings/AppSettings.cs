@@ -28,10 +28,10 @@ public enum CloseAction
     /// <summary>Ask, with "Don't ask again" (which saves the answer).</summary>
     Ask,
 
-    /// <summary>Hide the window; Filee keeps running in the tray.</summary>
+    /// <summary>Hide the window; TsuFiles keeps running in the tray (the default).</summary>
     Tray,
 
-    /// <summary>Quit Filee.</summary>
+    /// <summary>Quit TsuFiles.</summary>
     Quit,
 }
 
@@ -137,7 +137,7 @@ public sealed class DonutSettings
 public sealed class AppSettings
 {
     /// <summary>Current schema version. Increase when the format changes and add a migration.</summary>
-    public const int CurrentSchemaVersion = 74;
+    public const int CurrentSchemaVersion = 75;
 
     public int SchemaVersion { get; set; } = CurrentSchemaVersion;
 
@@ -151,9 +151,12 @@ public sealed class AppSettings
 
     public bool CheckForUpdates { get; set; } = true;
 
-    /// <summary>What closing the main window does. A value from a newer Filee reads as <see cref="CloseAction.Ask"/>.</summary>
+    /// <summary>
+    /// What closing the main window does. TsuFiles: mặc định chạy tiếp trong khay hệ thống (yêu cầu chủ dự án
+    /// 16/11/2026). A value from a newer TsuFiles reads as <see cref="CloseAction.Ask"/>.
+    /// </summary>
     [JsonConverter(typeof(LenientEnumJsonConverter<CloseAction>))]
-    public CloseAction CloseAction { get; set; } = CloseAction.Ask;
+    public CloseAction CloseAction { get; set; } = CloseAction.Tray;
 
     /// <summary>Record finished conversions in the history (home page). Off: nothing new is recorded.</summary>
     public bool KeepHistory { get; set; } = true;

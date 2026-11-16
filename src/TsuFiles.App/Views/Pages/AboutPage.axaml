@@ -106,26 +106,13 @@
         </StackPanel>
       </Border>
     </Grid>
-    <!-- The sponsors right below Filee itself and the updates, while there are any -->
-    <Border Classes="card" IsVisible="{Binding #Supporters.IsVisible}">
-      <StackPanel Spacing="12">
-        <TextBlock Classes="h2" Text="{DynamicResource sponsor.thanks}" />
-        <v:SupportersView x:Name="Supporters" ShowTitle="False" LogoHeight="40" />
-      </StackPanel>
-    </Border>
     <Border Classes="card">
       <StackPanel Spacing="10">
         <TextBlock Classes="h2" Text="{DynamicResource about.support_title}" />
         <TextBlock Classes="muted" TextWrapping="Wrap" Text="{DynamicResource about.support_text}" />
+        <!-- TsuFiles: chỉ còn góp ý / báo lỗi; nút Ủng hộ và "Gắn sao trên GitHub" đã bỏ (chủ dự án 16/11/2026). -->
         <WrapPanel>
-          <Button Classes="accent" Click="OnStar" Margin="0,0,8,0" Content="{DynamicResource feedback.star}" />
           <Button Click="OnIssue" Content="{DynamicResource feedback.issue}" Margin="0,0,8,0" />
-          <Button Click="OnSponsor">
-            <StackPanel Orientation="Horizontal" Spacing="6">
-              <PathIcon Width="13" Height="13" Data="{StaticResource Icon.Heart}" Foreground="#D4537E" />
-              <TextBlock Text="{DynamicResource about.sponsor}" />
-            </StackPanel>
-          </Button>
         </WrapPanel>
       </StackPanel>
     </Border>
