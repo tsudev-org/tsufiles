@@ -113,7 +113,7 @@ public class FonTests(EngineFixture fx) : IClassFixture<EngineFixture>
         Directory.EnumerateFiles(folder, "*", SearchOption.AllDirectories)
             .ToDictionary(p => Path.GetRelativePath(folder, p), p => Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(p))));
 
-    /// <summary>SFNT bytes Skia can read on every platform (web containers are decoded by TsuFiles first).</summary>
+    /// <summary>SFNT bytes Skia can read on every platform (web containers are decoded by Filee first).</summary>
     private static byte[] SfntBytes(string path, string format)
     {
         var bytes = File.ReadAllBytes(path);

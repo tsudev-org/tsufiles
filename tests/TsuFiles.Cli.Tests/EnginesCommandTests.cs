@@ -183,13 +183,13 @@ public sealed class EnginesCommandTests : IDisposable
             var result = JsonDocument.Parse(output).RootElement;
             Assert.Equal(["id", "state", "error"], Names(result));
             Assert.Equal("failed", result.GetProperty("state").GetString());
-            Assert.Equal("pandoc is being installed by another TsuFiles. Try again when it has finished.", result.GetProperty("error").GetString());
+            Assert.Equal("pandoc is being installed by another Filee. Try again when it has finished.", result.GetProperty("error").GetString());
             Assert.Empty(errors);
 
             (code, output, errors) = await Run("engines", "install", "pandoc");
             Assert.Equal(1, code);
             Assert.Empty(output);
-            Assert.Equal("tsufiles: pandoc is being installed by another TsuFiles. Try again when it has finished.", errors.Trim());
+            Assert.Equal("tsufiles: pandoc is being installed by another Filee. Try again when it has finished.", errors.Trim());
         }
         Assert.Empty(_server.Requests);
         Assert.Equal(0, (await Run("engines", "install", "pandoc")).Code);

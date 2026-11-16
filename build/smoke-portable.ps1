@@ -39,7 +39,7 @@ $cli = Join-Path $bin 'tsufiles-cli'
 
 Invoke-Checked 'CLI start' { & $cli version }
 # TsuFiles 2.4.1: the Filee launcher that the updater of 2.4.0-vn.1 starts (ADR-0003 section 5).
-if (-not $IsMacOS -and -not (Select-String -LiteralPath (Join-Path $bin 'TsuFiles') -SimpleMatch '/TsuFiles"' -Quiet)) { throw 'The TsuFiles launcher is missing.' }
+if (-not $IsMacOS -and -not (Select-String -LiteralPath (Join-Path $bin 'Filee') -SimpleMatch '/TsuFiles"' -Quiet)) { throw 'The Filee launcher is missing.' }
 Invoke-Checked 'rhwp start' { & (Join-Path $bin 'engines/rhwp/rhwp') --version }
 Invoke-Checked '7-Zip start' { & (Join-Path $bin 'engines/7zip/7zz') i | Out-Null }
 

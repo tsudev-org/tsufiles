@@ -1,4 +1,4 @@
-// Files dragged out of a web browser, as Avalonia hands them to TsuFiles: a Chrome picture (a Windows virtual file with
+// Files dragged out of a web browser, as Avalonia hands them to Filee: a Chrome picture (a Windows virtual file with
 // its address), Firefox's temporary copy, a Linux link. They reach the donut and the drop zone as placeholders named
 // like the files, and a drop on a slice saves and converts them into the folder Settings › General names.
 

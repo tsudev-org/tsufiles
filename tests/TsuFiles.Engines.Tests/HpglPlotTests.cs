@@ -1,5 +1,5 @@
 // HP-GL plot files (.plt, issue #410): pen moves read as lines, drawn as SVG and rendered through the vector engine.
-// The packed HP-GL/2 sample (PE) was encoded independently of TsuFiles's decoder, so the test is not circular.
+// The packed HP-GL/2 sample (PE) was encoded independently of Filee's decoder, so the test is not circular.
 
 using System.Text;
 using ImageMagick;

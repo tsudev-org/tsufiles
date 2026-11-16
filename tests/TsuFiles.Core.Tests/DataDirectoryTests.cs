@@ -1,4 +1,4 @@
-// TSUFILES_DATA_DIR moves the data folder, so a development or test copy never reads or writes the user's own TsuFiles.
+// TSUFILES_DATA_DIR moves the data folder, so a development or test copy never reads or writes the user's own Filee.
 
 using TsuFiles.Core.Settings;
 

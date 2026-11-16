@@ -1,4 +1,4 @@
-// The main window opens where it was, also after TsuFiles restarts (#586), and always fits the screen it opens on: a
+// The main window opens where it was, also after Filee restarts (#586), and always fits the screen it opens on: a
 // small or scaled screen gets a window that fits instead of one that runs off its bottom.
 
 using System.Reflection;
@@ -173,7 +173,7 @@ public class MainWindowPlacementTests
             main.Height = 620;
             Pump();
 
-            // What ClassicDesktopStyleApplicationLifetime does to every window when TsuFiles quits or Windows ends the
+            // What ClassicDesktopStyleApplicationLifetime does to every window when Filee quits or Windows ends the
             // session: Window.CloseCore with that reason (Avalonia 12, DoShutdown).
             typeof(Window).GetMethod("CloseCore", BindingFlags.Instance | BindingFlags.NonPublic, [typeof(WindowCloseReason), typeof(bool), typeof(bool)])!
                 .Invoke(main, [reason, programmatic, false]);

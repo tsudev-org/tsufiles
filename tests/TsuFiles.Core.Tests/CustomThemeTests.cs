@@ -1,4 +1,4 @@
-// theme.json: reading, dropping what TsuFiles cannot use, and leaving the user's file alone.
+// theme.json: reading, dropping what Filee cannot use, and leaving the user's file alone.
 
 using Microsoft.Extensions.Logging;
 using TsuFiles.Core.Settings;

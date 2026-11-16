@@ -44,7 +44,7 @@ public class WorkFoldersTests
         Assert.True(Directory.Exists(root));
         Assert.Equal(OwnerOnly, File.GetUnixFileMode(root));
         // Not a fixed name in the shared /tmp that someone else could have made first.
-        Assert.NotEqual(Path.Combine(Path.GetTempPath(), "TsuFiles"), root);
+        Assert.NotEqual(Path.Combine(Path.GetTempPath(), "Filee"), root);
     }
 
     [Fact]

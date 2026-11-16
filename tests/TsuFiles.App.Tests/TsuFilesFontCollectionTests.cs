@@ -32,7 +32,7 @@ public class TsuFilesFontCollectionTests
 
     private static string? Match(string language, int letter, FontWeight weight = FontWeight.Normal)
     {
-        var chain = ThemeService.FontFamilies(language).Replace("fonts:TsuFiles", Key, StringComparison.Ordinal);
+        var chain = ThemeService.FontFamilies(language).Replace("fonts:Filee", Key, StringComparison.Ordinal);
         return FontManager.Current.TryMatchCharacter(letter, FontStyle.Normal, weight, FontStretch.Normal, FontFamily.Parse(chain), null, out var typeface)
             ? typeface.GlyphTypeface.FamilyName
             : null;

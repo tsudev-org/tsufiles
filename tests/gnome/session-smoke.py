@@ -2,7 +2,7 @@
 """Load the real extension in an isolated headless GNOME session, including Shell's metadata compatibility check.
 
 Requires gnome-shell, Xwayland, dbus-run-session, gsettings and Python GObject bindings. No changes to the desktop
-or the installed TsuFiles. Unlike extension-smoke.js, this checks real Shell loading rather than mocking the Shell.
+or the installed Filee. Unlike extension-smoke.js, this checks real Shell loading rather than mocking the Shell.
 """
 
 import argparse

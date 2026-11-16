@@ -21,7 +21,7 @@ public class CadOptionsTests
         copy.Cad.Colors = CadColors.Grayscale;
         Assert.Equal(CadColors.BlackAndWhite, preset.Cad.Colors); // the copy has its own options
 
-        // A preset saved before the option draws as drawn; so does a choice from a newer TsuFiles.
+        // A preset saved before the option draws as drawn; so does a choice from a newer Filee.
         var old = JsonSerializer.Deserialize("""{"targetFormat":"pdf","cad":{"version":"AutoCad2013"}}""", TsuFilesJsonContext.Default.Preset)!;
         var newer = JsonSerializer.Deserialize("""{"targetFormat":"pdf","cad":{"version":"AutoCad2013","colors":"Sepia"}}""", TsuFilesJsonContext.Default.Preset)!;
         Assert.Equal((CadVersion.AutoCad2013, CadColors.AsDrawn), (old.Cad.Version, old.Cad.Colors));

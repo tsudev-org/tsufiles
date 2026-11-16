@@ -66,7 +66,7 @@ public class FitsFormatTests
         Assert.True(image["old"].FitsDebayer);
         Assert.Equal(FitsTiffMode.Linear, image["old"].FitsTiff);
         Assert.Equal(70, image["newer"].Quality);
-        Assert.Equal(FitsTiffMode.Linear, image["newer"].FitsTiff); // a mode from a newer TsuFiles
+        Assert.Equal(FitsTiffMode.Linear, image["newer"].FitsTiff); // a mode from a newer Filee
         Assert.False(image["mono"].FitsDebayer);
         Assert.Equal(FitsTiffMode.Stretched, image["stretched"].FitsTiff);
 

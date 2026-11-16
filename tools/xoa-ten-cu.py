@@ -28,7 +28,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 SKIP_PREFIXES = (".standards/", "logs/", "docs/adr/", "CHANGELOG.md", "LICENSE", "THIRD-PARTY-NOTICES.md",
                  "tools/doi-ten-tsudev.py", "tools/xoa-ten-cu.py", ".standards-upstream", ".gitleaksignore",
                  "docs/SECURITY.upstream.md", "src/Filee.ExplorerMenu/",
-                 "tests/TsuFiles.Core.Tests/ForkBrandingTests.cs")  # thử ForkDefaults.Brand() bằng chữ "Filee" cố ý
+                 "tests/")  # test giữ dữ liệu mẫu/tên cũ cố ý (di trú, Brand(), tên tệp phát hành); sửa tay khi cần
 TEXT_SUFFIXES = {".cs", ".csproj", ".props", ".targets", ".axaml", ".xaml", ".json", ".xml", ".yml", ".yaml", ".ps1",
                  ".sh", ".py", ".md", ".txt", ".plist", ".js", ".mjs", ".ts", ".astro", ".toml", ".css", ".html", ".svg",
                  ".iss", ".desktop", ".in"}
@@ -40,7 +40,10 @@ PROTECTED = re.compile(
     r"|AppId|AppGuid|Inno Setup|\b2\.4\.0\b|[Ll]egacy|[Uu]pstream|KnifeLemon|Myeonggu|[Cc]opyright|PreviousInstall"
     r"|\(\?:Filee|Filee\|"
     # Câu lịch sử: phiên bản của bản gốc ("Filee 2.1.0"), chuỗi đổi tên ("Filee" -> ...), "Filee gốc", tên cũ "Filee".
-    r"|Filee \d|\"Filee\" ->|Filee gốc|cũ \"Filee\"")
+    r"|Filee \d|\"Filee\" ->|Filee gốc|cũ \"Filee\""
+    # Định danh trong mã (khóa font, tên ứng dụng Avalonia, Id gói, thư mục cài cũ, launcher Linux), không phải chữ hiển thị.
+    r"|[\"']Filee[\"'#/\\]|fonts:Filee|\"Id\", \"Filee\"|LocalAppData, \"Filee\"|\$bin 'Filee'|^\s*\"Filee\",$"
+    r"|copied - 1;")
 
 # "Filee" là một từ (không phải một phần của đường dẫn, tên tệp hay định danh); "\nFilee" trong chuỗi JSON cũng tính.
 WORD = re.compile(r"(?:(?<=\\n)|(?<![\w./\\@-]))Filee(?![\w-]|\.[A-Za-z])")

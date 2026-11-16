@@ -11,7 +11,7 @@ namespace TsuFiles.App.Services;
 
 internal static class AnnotationFonts
 {
-    private const string EmbeddedPrefix = "fonts:TsuFiles#";
+    private const string EmbeddedPrefix = "fonts:Filee#";
 
     private static readonly Lazy<IReadOnlyList<SKTypeface>> Embedded = new(LoadEmbedded);
     private static string? _language;

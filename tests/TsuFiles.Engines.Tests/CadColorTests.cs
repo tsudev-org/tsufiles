@@ -59,7 +59,7 @@ public class CadColorTests(EngineFixture fx) : IClassFixture<EngineFixture>
         {
             FirstPoint = new XYZ(0, 50, 0),
             SecondPoint = new XYZ(100, 50, 0),
-            Style = new DimensionStyle("TsuFiles") { TextHeight = 3, ArrowSize = 3 },
+            Style = new DimensionStyle("Filee") { TextHeight = 3, ArrowSize = 3 },
             Color = new Color(6),
         };
         dimension.Offset = 6;

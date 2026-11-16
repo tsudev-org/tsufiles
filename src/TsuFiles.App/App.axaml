@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="using:TsuFiles.App"
              x:Class="TsuFiles.App.App"
-             Name="TsuFiles"
+             Name="Filee"
              RequestedThemeVariant="Default">
 
   <Application.DataTemplates>

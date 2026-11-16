@@ -1,4 +1,4 @@
-// What TsuFiles fixes in an HWPX copy before rhwp renders it (issue #65: an exam paper written in 한글 2022; issue #49:
+// What Filee fixes in an HWPX copy before rhwp renders it (issue #65: an exam paper written in 한글 2022; issue #49:
 // a table floating in a table cell of an HWP file).
 
 using System.IO.Compression;
@@ -208,7 +208,7 @@ public class RhwpInputTests(EngineFixture fx) : IClassFixture<EngineFixture>
     }
 
     /// <summary>
-    /// The #49 form in a package of TsuFiles's HWPX writer: "Before", then the tall outer table. With
+    /// The #49 form in a package of Filee's HWPX writer: "Before", then the tall outer table. With
     /// <paramref name="fromHwp"/> it carries the marker rhwp's export-hwpx writes.
     /// </summary>
     private async Task<string> MakeFormAsync(string dir, bool fromHwp)

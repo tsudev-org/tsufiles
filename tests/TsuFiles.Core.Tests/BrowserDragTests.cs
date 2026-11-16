@@ -1,5 +1,5 @@
 // What in a drag from a browser counts as a file (BrowserDrag): pictures always, links only when they point at a file
-// TsuFiles converts, never a page or a selection of text.
+// Filee converts, never a page or a selection of text.
 
 using TsuFiles.Core.Web;
 

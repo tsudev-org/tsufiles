@@ -1,4 +1,4 @@
-// Finder aliases dropped on TsuFiles convert the file they point to, like Windows shortcuts (#159).
+// Finder aliases dropped on Filee convert the file they point to, like Windows shortcuts (#159).
 
 using TsuFiles.Platform.MacOS;
 

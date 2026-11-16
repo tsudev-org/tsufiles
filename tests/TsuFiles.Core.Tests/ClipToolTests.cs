@@ -121,7 +121,7 @@ public class ClipToolTests
         Assert.True(crop.IsCropTool);
         Assert.False(crop.IsClipTool);
         Assert.True(new Preset { Kind = PresetKind.Tool, Tool = "crop" }.IsCropTool);
-        // A tool from a newer TsuFiles is neither.
+        // A tool from a newer Filee is neither.
         var unknown = new Preset { Kind = PresetKind.Tool, Tool = "stabilize" };
         Assert.False(unknown.IsCropTool || unknown.IsClipTool);
     }
@@ -259,7 +259,7 @@ public class ClipToolTests
     [Fact]
     public void Back_from_an_older_Filee_the_clip_tool_cuts_clips_again_and_keeps_the_users_changes()
     {
-        // A TsuFiles from 26 to 44 reads the unknown "tool" as nothing (a crop) and saves it so.
+        // A Filee from 26 to 44 reads the unknown "tool" as nothing (a crop) and saves it so.
         var presets = BuiltInData.CreatePresets();
         var clip = presets.Single(p => p.Id == "tool-clip");
         clip.Tool = null;
@@ -273,7 +273,7 @@ public class ClipToolTests
         Assert.Equal(("Highlights", "{name}_best"), (clip.Name, clip.Output.FileNamePattern));
         Assert.Single(presets, p => p.Id == "tool-clip");
 
-        // A TsuFiles before 26 read it as a group.
+        // A Filee before 26 read it as a group.
         clip.Kind = PresetKind.Group;
         clip.TargetFormat = Preset.GroupTarget;
         Assert.True(SettingsMigrations.ApplyToLibrary(44, presets, BuiltInData.ProfilesSchema58()));

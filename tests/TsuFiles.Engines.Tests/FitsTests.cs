@@ -1,4 +1,4 @@
-// FITS: TsuFiles's reader (Magick/Fits.cs), the stretch and debayering for pictures (FitsRendering) and the TIFF of the
+// FITS: Filee's reader (Magick/Fits.cs), the stretch and debayering for pictures (FitsRendering) and the TIFF of the
 // file's own depth (TiffWriter). The files are written in the tests (FitsBuilder), card by card as capture programs do.
 
 using System.Buffers.Binary;

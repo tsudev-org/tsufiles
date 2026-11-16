@@ -1,4 +1,4 @@
-// The log lines that explain a TsuFiles which seems to ignore everything: UI thread stalls, bursts kept short, the
+// The log lines that explain a Filee which seems to ignore everything: UI thread stalls, bursts kept short, the
 // start-up line, and the restart without administrator rights.
 
 using System.Globalization;
@@ -200,9 +200,9 @@ public class StartupDiagnosticsTests
         try
         {
             var log = StartupDiagnostics.CreateEarlyLogger(folder);
-            log.LogInformation("{Startup}", "TsuFiles test starting");
+            log.LogInformation("{Startup}", "Filee test starting");
             var file = Assert.Single(Directory.GetFiles(folder, "tsufiles-*.log"));
-            Assert.Contains("Program: TsuFiles test starting", File.ReadAllText(file));
+            Assert.Contains("Program: Filee test starting", File.ReadAllText(file));
         }
         finally
         {

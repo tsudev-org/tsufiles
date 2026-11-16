@@ -1,4 +1,4 @@
-// Setup speaks TsuFiles's languages from the app's own translation files.
+// Setup speaks Filee's languages from the app's own translation files.
 
 extern alias app;
 using System.Text.Json;

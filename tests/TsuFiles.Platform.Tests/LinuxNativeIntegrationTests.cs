@@ -19,7 +19,7 @@ public sealed class LinuxNativeIntegrationTests
         try
         {
             var capture = Path.Combine(root, "arguments");
-            var target = Path.Combine(root, "TsuFiles's app");
+            var target = Path.Combine(root, "Filee's app");
             File.WriteAllText(target, "#!/bin/sh\nprintf '%s\\0' \"$@\" > " + LinuxDesktopIntegration.ShellArgument(capture) + "\n");
             File.SetUnixFileMode(target, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
             var first = Path.Combine(root, "a", "한글 ' $(touch BAD) %F.txt");

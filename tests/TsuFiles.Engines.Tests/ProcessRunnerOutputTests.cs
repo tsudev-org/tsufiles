@@ -1,4 +1,4 @@
-// A program that leaves a child holding TsuFiles's output pipes (#1011): soffice.exe exits, but soffice.bin keeps the
+// A program that leaves a child holding Filee's output pipes (#1011): soffice.exe exits, but soffice.bin keeps the
 // inherited pipes open, so waiting for the end of the output would last until the timeout. And the output probe, for
 // a program that finished its file but doesn't exit.
 

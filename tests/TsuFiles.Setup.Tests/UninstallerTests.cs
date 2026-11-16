@@ -27,8 +27,8 @@ public class UninstallerTests
         var later = new Uninstaller(bench.Context).Run(bench.InstallFolder, record, deleteSettings: false, bench.Temp.Sub("trash"));
 
         Assert.Empty(later);
-        // TsuFiles cleaned up after itself first (Explorer menu, startup entry, downloaded engines), once and as the
-        // signed-in user: those are that user's, and an elevated process can't reach the TsuFiles they run.
+        // Filee cleaned up after itself first (Explorer menu, startup entry, downloaded engines), once and as the
+        // signed-in user: those are that user's, and an elevated process can't reach the Filee they run.
         Assert.Equal(["run-as-user TsuFiles.exe --uninstall-cleanup"], bench.System.Calls.Where(c => c.Contains("--uninstall-cleanup", StringComparison.Ordinal)));
         Assert.Contains("unregister-menu", bench.System.Calls);
         Assert.False(Directory.Exists(bench.InstallFolder));
@@ -49,7 +49,7 @@ public class UninstallerTests
         bench.Temp.Write(Path.Combine(Path.GetRelativePath(bench.Temp.Path, bench.Paths.SettingsFolder), @"logs\filee.log"));
         new Uninstaller(bench.Context).Run(bench.InstallFolder, record, deleteSettings: true, bench.Temp.Sub("trash"));
         Assert.False(Directory.Exists(bench.Paths.SettingsFolder));
-        // Only TsuFiles's folder: %APPDATA% itself stays.
+        // Only Filee's folder: %APPDATA% itself stays.
         Assert.True(Directory.Exists(bench.Paths.AppData));
     }
 
@@ -127,7 +127,7 @@ public class UninstallerTests
         var (bench, record) = Installed();
         using var _ = bench;
         bench.System.Running.Add(new RunningProgram(11, Path.Combine(bench.InstallFolder, "TsuFiles.exe")));
-        // What TsuFiles.exe does when the running TsuFiles stays: exit code 1, before it removes anything (#1079).
+        // What TsuFiles.exe does when the running Filee stays: exit code 1, before it removes anything (#1079).
         bench.System.Run = (_, _) => bench.System.Running.Count > 0 ? 1 : 0;
 
         var uninstaller = new Uninstaller(bench.Context);
@@ -146,7 +146,7 @@ public class UninstallerTests
         var command = $"\"{Path.Combine(bench.InstallFolder, "TsuFiles.exe")}\" --background";
         bench.Registry.SetString(Hive.CurrentUser, SetupNames.RunKey, SetupNames.AppName, command.ToUpperInvariant());
         // TsuFiles: the value of 2.4.0-vn.* under the old name goes too.
-        bench.Registry.SetString(Hive.CurrentUser, SetupNames.RunKey, "TsuFiles", command);
+        bench.Registry.SetString(Hive.CurrentUser, SetupNames.RunKey, "Filee", command);
         bench.Registry.SetString(Hive.CurrentUser, SetupNames.RunKey, "Other", command);
         bench.System.Run = (_, _) => -1;
 
@@ -155,7 +155,7 @@ public class UninstallerTests
 
         Assert.Equal("TsuFiles", SetupNames.AppName);
         Assert.Null(bench.Registry.Get(Hive.CurrentUser, SetupNames.RunKey, SetupNames.AppName));
-        Assert.Null(bench.Registry.Get(Hive.CurrentUser, SetupNames.RunKey, "TsuFiles"));
+        Assert.Null(bench.Registry.Get(Hive.CurrentUser, SetupNames.RunKey, "Filee"));
         Assert.Equal(command, bench.Registry.Get(Hive.CurrentUser, SetupNames.RunKey, "Other")?.Text);
         Assert.True(uninstaller.CleanupFailed);
         Assert.False(Directory.Exists(bench.InstallFolder));
@@ -167,12 +167,12 @@ public class UninstallerTests
         var (bench, record) = Installed();
         using var _ = bench;
         var portable = $"\"{Path.Combine(bench.InstallFolder + "-portable", "TsuFiles.exe")}\" --background";
-        bench.Registry.SetString(Hive.CurrentUser, SetupNames.RunKey, "TsuFiles", portable);
+        bench.Registry.SetString(Hive.CurrentUser, SetupNames.RunKey, "Filee", portable);
         bench.System.Run = (_, _) => 1;
 
         new Uninstaller(bench.Context).Run(bench.InstallFolder, record, deleteSettings: false, bench.Temp.Sub("trash"));
 
-        Assert.Equal(portable, bench.Registry.Get(Hive.CurrentUser, SetupNames.RunKey, "TsuFiles")?.Text);
+        Assert.Equal(portable, bench.Registry.Get(Hive.CurrentUser, SetupNames.RunKey, "Filee")?.Text);
     }
 
     [Fact]
@@ -197,7 +197,7 @@ public class UninstallerTests
     {
         var (bench, record) = Installed();
         using var _ = bench;
-        // Another account's TsuFiles when the rights to look at it are missing. It would run on from the trash folder (#1079).
+        // Another account's Filee when the rights to look at it are missing. It would run on from the trash folder (#1079).
         bench.System.OutOfSight = true;
 
         var error = Assert.Throws<SetupException>(() =>
@@ -213,7 +213,7 @@ public class UninstallerTests
     {
         var (bench, record) = Installed();
         using var _ = bench;
-        // Without administrator rights every other account's TsuFiles is out of sight, and none runs from this user's folder.
+        // Without administrator rights every other account's Filee is out of sight, and none runs from this user's folder.
         bench.System.OutOfSight = true;
 
         new Uninstaller(bench.Context).Run(bench.InstallFolder, record with { Scope = InstallScope.User }, deleteSettings: false, bench.Temp.Sub("trash"));
@@ -295,7 +295,7 @@ public class UninstallerTests
             Assert.Equal([bench.InstallFolder], error.Arguments);
         }
 
-        // TsuFiles stays in Apps, with what it takes to uninstall it again.
+        // Filee stays in Apps, with what it takes to uninstall it again.
         Assert.False(released);
         Assert.True(bench.Registry.KeyExists(Hive.LocalMachine, SetupNames.UninstallKey));
         Assert.True(File.Exists(uninstaller));
@@ -305,11 +305,11 @@ public class UninstallerTests
         // entry that still points here goes all the same.
         Assert.False(File.Exists(Path.Combine(bench.InstallFolder, "TsuFiles.exe")));
         var command = $"\"{Path.Combine(bench.InstallFolder, "TsuFiles.exe")}\" --background";
-        bench.Registry.SetString(Hive.CurrentUser, SetupNames.RunKey, "TsuFiles", command);
+        bench.Registry.SetString(Hive.CurrentUser, SetupNames.RunKey, "Filee", command);
         var second = new Uninstaller(bench.Context);
         Assert.Empty(second.Run(bench.InstallFolder, InstallRecord.Read(bench.InstallFolder)!, deleteSettings: false, bench.Temp.Sub("trash")));
         Assert.False(second.CleanupFailed);
-        Assert.Null(bench.Registry.Get(Hive.CurrentUser, SetupNames.RunKey, "TsuFiles"));
+        Assert.Null(bench.Registry.Get(Hive.CurrentUser, SetupNames.RunKey, "Filee"));
         Assert.Single(bench.System.Calls, c => c.Contains("--uninstall-cleanup", StringComparison.Ordinal));
         Assert.False(bench.Registry.KeyExists(Hive.LocalMachine, SetupNames.UninstallKey));
         Assert.False(Directory.Exists(bench.InstallFolder));
@@ -395,7 +395,7 @@ public class UninstallerTests
             Assert.Equal("installer.uninstall.files_left", error.TextKey);
         }
 
-        // Had it gone at the restart we ask for, uninstalling again would say TsuFiles isn't installed, with its entry left.
+        // Had it gone at the restart we ask for, uninstalling again would say Filee isn't installed, with its entry left.
         Assert.DoesNotContain(bench.System.Calls, c => c.Contains("delete-at-restart", StringComparison.Ordinal));
         Assert.True(bench.Registry.KeyExists(Hive.LocalMachine, SetupNames.UninstallKey));
         var again = InstallRecord.Read(bench.InstallFolder);
@@ -496,12 +496,12 @@ public class PreviousInstallTests
     public void Inno_setups_app_path_is_enough_and_the_scope_is_kept_apart()
     {
         using var temp = new TempFolder();
-        temp.Write(@"TsuFiles\TsuFiles.exe");
-        temp.Write(@"TsuFiles\unins000.exe");
+        temp.Write(@"Filee\TsuFiles.exe");
+        temp.Write(@"Filee\unins000.exe");
         var registry = new MemoryRegistry();
         registry.SetString(Hive.LocalMachine, SetupNames.UninstallKey, "Inno Setup: App Path", temp.Sub("Filee"));
         var previous = PreviousInstall.Find(registry, InstallScope.Machine)!;
-        Assert.Equal(temp.Sub("TsuFiles"), previous.Folder);
+        Assert.Equal(temp.Sub("Filee"), previous.Folder);
         Assert.True(previous.ByInno);
         Assert.Null(previous.RecordedTasks);
         Assert.Contains("unins000.exe", previous.OwnedFiles());
@@ -566,11 +566,11 @@ public class PathVariableTests
         using var temp = new TempFolder();
         var file = temp.Sub("registry.json");
         var registry = new MemoryRegistry(file);
-        registry.SetString(Hive.LocalMachine, SetupNames.UninstallKey, "DisplayName", "TsuFiles");
+        registry.SetString(Hive.LocalMachine, SetupNames.UninstallKey, "DisplayName", "Filee");
         registry.SetNumber(Hive.LocalMachine, SetupNames.UninstallKey, "NoModify", 1);
         registry.SetString(Hive.LocalMachine, SetupNames.MachineEnvironmentKey, "Path", "%SystemRoot%", expandable: true);
         var again = new MemoryRegistry(file);
-        Assert.Equal("TsuFiles", again.Get(Hive.LocalMachine, SetupNames.UninstallKey, "DisplayName")?.Text);
+        Assert.Equal("Filee", again.Get(Hive.LocalMachine, SetupNames.UninstallKey, "DisplayName")?.Text);
         Assert.Equal(1, again.Get(Hive.LocalMachine, SetupNames.UninstallKey, "NoModify")?.Value);
         Assert.True(again.Get(Hive.LocalMachine, SetupNames.MachineEnvironmentKey, "Path")!.Expandable);
         Assert.True(again.KeyExists(Hive.LocalMachine, @"Software\Microsoft\Windows\CurrentVersion\Uninstall"));

@@ -70,7 +70,7 @@ public class RhwpFontsTests(EngineFixture fx) : IClassFixture<EngineFixture>
     [Fact]
     public void A_font_without_the_text_s_characters_gets_one_that_has_them_all()
     {
-        // Russian in a document TsuFiles wrote: Malgun Gothic has no Cyrillic, Segoe UI has it and all the Latin.
+        // Russian in a document Filee wrote: Malgun Gothic has no Cyrillic, Segoe UI has it and all the Latin.
         var plan = Plan("Привет мир. Hello.", ("HANGUL", "맑은 고딕"), ("LATIN", "맑은 고딕"));
 
         Assert.Equal("Segoe UI", plan[("HANGUL", "맑은 고딕")]);
@@ -122,7 +122,7 @@ public class RhwpFontsTests(EngineFixture fx) : IClassFixture<EngineFixture>
     public async Task A_copy_of_the_hwpx_names_the_replacement_and_still_converts()
     {
         var dir = fx.NewFolder();
-        var hwpx = await fx.MakeHwpxAsync(dir); // Korean text with a few Han characters, TsuFiles's default fonts
+        var hwpx = await fx.MakeHwpxAsync(dir); // Korean text with a few Han characters, Filee's default fonts
         var faces = Faces(hwpx);
         var broken = faces.First();
 
@@ -143,7 +143,7 @@ public class RhwpFontsTests(EngineFixture fx) : IClassFixture<EngineFixture>
     public void Looking_up_a_missing_font_leaves_the_fallback_typeface_usable_for_others()
     {
         // fontconfig (and CoreText) answer an unknown family with some installed font; Windows answers null.
-        const string missing = "TsuFiles No Such Family";
+        const string missing = "Filee No Such Family";
         var fallback = SkiaSharp.SKFontManager.Default.MatchFamily(missing);
         Assert.SkipWhen(fallback is null, "this font manager has no fallback for unknown families");
         // SkiaSharp gives out one wrapper per native typeface: what Find gets is this very object.

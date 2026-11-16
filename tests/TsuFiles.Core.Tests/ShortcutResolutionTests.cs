@@ -36,7 +36,7 @@ public class ShortcutResolutionTests
         IPlatformServices elsewhere = new NullPlatformServices();
 
         Assert.Same(files, IPlatformServices.ResolveShortcuts(files, Target));
-        // Where TsuFiles doesn't follow shortcuts, one stays a file of its own.
+        // Where Filee doesn't follow shortcuts, one stays a file of its own.
         Assert.Equal([ToReport], elsewhere.ResolveShortcuts([ToReport]));
     }
 }

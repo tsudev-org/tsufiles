@@ -19,8 +19,8 @@ public class LegacyDataMigrationTests
         using var dir = new TempDir();
         var appData = Path.Combine(dir.Path, "Roaming");
         var local = Path.Combine(dir.Path, "Local");
-        Write(Path.Combine(appData, "TsuFiles", "settings.json"), "{\"theme\":1}");
-        Write(Path.Combine(appData, "TsuFiles", "logs", "filee-20261113.log"));
+        Write(Path.Combine(appData, "Filee", "settings.json"), "{\"theme\":1}");
+        Write(Path.Combine(appData, "Filee", "logs", "filee-20261113.log"));
         Write(Path.Combine(local, "Filee", "engines", "pandoc", ".filee-component"));
 
         var steps = LegacyDataMigration.Run(appData, local);
@@ -30,9 +30,9 @@ public class LegacyDataMigrationTests
         Assert.Equal("{\"theme\":1}", File.ReadAllText(Path.Combine(appData, "TsuFiles", "settings.json")));
         Assert.True(File.Exists(Path.Combine(appData, "TsuFiles", "logs", "filee-20261113.log")));
         Assert.True(File.Exists(Path.Combine(local, "TsuFiles", "engines", "pandoc", ".filee-component")));
-        Assert.False(Directory.Exists(Path.Combine(appData, "TsuFiles")));
+        Assert.False(Directory.Exists(Path.Combine(appData, "Filee")));
         // LocalAppData\Filee chỉ còn trống sau khi engines đi: xóa luôn.
-        Assert.False(Directory.Exists(Path.Combine(local, "TsuFiles")));
+        Assert.False(Directory.Exists(Path.Combine(local, "Filee")));
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public class LegacyDataMigrationTests
     {
         using var dir = new TempDir();
         var appData = Path.Combine(dir.Path, "Roaming");
-        Write(Path.Combine(appData, "TsuFiles", "settings.json"));
+        Write(Path.Combine(appData, "Filee", "settings.json"));
 
         Assert.Single(LegacyDataMigration.Run(appData, ""));
         Assert.Empty(LegacyDataMigration.Run(appData, ""));
@@ -60,7 +60,7 @@ public class LegacyDataMigrationTests
     public void An_existing_new_folder_gets_the_missing_items_and_keeps_its_own()
     {
         using var dir = new TempDir();
-        var from = Path.Combine(dir.Path, "TsuFiles");
+        var from = Path.Combine(dir.Path, "Filee");
         var to = Path.Combine(dir.Path, "TsuFiles");
         Write(Path.Combine(from, "settings.json"), "old");
         Write(Path.Combine(from, "presets.json"), "old presets");
@@ -80,7 +80,7 @@ public class LegacyDataMigrationTests
     public void A_name_in_both_places_keeps_both_files()
     {
         using var dir = new TempDir();
-        var from = Path.Combine(dir.Path, "TsuFiles");
+        var from = Path.Combine(dir.Path, "Filee");
         var to = Path.Combine(dir.Path, "TsuFiles");
         Write(Path.Combine(from, "settings.json"), "old");
         Write(Path.Combine(from, "history.json"), "old history");

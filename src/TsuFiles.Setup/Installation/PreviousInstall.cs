@@ -87,7 +87,7 @@ public sealed record PreviousInstall(
 /// <summary>TsuFiles 1.1 and earlier, installed by Velopack into %LocalAppData%\Filee for one user.</summary>
 public static class VelopackInstall
 {
-    public static string Root(SetupPaths paths) => Path.Combine(paths.LocalAppData, "TsuFiles");
+    public static string Root(SetupPaths paths) => Path.Combine(paths.LocalAppData, "Filee");
 
     public static bool Exists(SetupPaths paths) =>
         File.Exists(Path.Combine(Root(paths), "Update.exe")) && Directory.Exists(Path.Combine(Root(paths), "current"));

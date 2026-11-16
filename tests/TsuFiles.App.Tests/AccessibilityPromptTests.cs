@@ -1,5 +1,5 @@
 // macOS asks for Accessibility with its own alert once, not at every start (#316): after an update of the ad-hoc
-// signed app the list can show TsuFiles switched on while macOS still denies it, so the alert kept coming back.
+// signed app the list can show Filee switched on while macOS still denies it, so the alert kept coming back.
 
 using TsuFiles.App.Services.Triggers;
 using TsuFiles.Core.Settings;

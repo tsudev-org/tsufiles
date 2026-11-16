@@ -179,7 +179,7 @@ public class PayloadTests
         // A minimal PE32+ header whose certificate table (security directory) is the last 512 bytes of the file, as
         // signtool leaves a signed Setup: the payload sits right before it.
         var app = temp.Sub("app");
-        temp.Write(@"app\TsuFiles.exe", "TsuFiles");
+        temp.Write(@"app\TsuFiles.exe", "Filee");
         var program = temp.Sub("program.exe");
         File.WriteAllBytes(program, MinimalPe(0, 0));
         var unsigned = temp.Sub("unsigned.exe");
@@ -205,7 +205,7 @@ public class PayloadTests
         // A release signs the Setup program, then Setup.exe: Setup.exe's header no longer points to the program's
         // signature (its own goes at the end), and the uninstaller copied out of it points to it again.
         using var temp = new TempFolder();
-        temp.Write(@"app\TsuFiles.exe", "TsuFiles");
+        temp.Write(@"app\TsuFiles.exe", "Filee");
         var program = temp.Sub("program.exe");
         var bytes = MinimalPe(0, 0);
         var pe = BinaryPrimitives.ReadInt32LittleEndian(bytes.AsSpan(0x3C));

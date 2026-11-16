@@ -1,6 +1,6 @@
 // "Metadata": settings schema 72 brings the tool to existing libraries (in the palette only, after Add background), the
 // conversion it starts carries the edits and writes them through the one engine that writes only metadata (never a
-// re-encode), a route without it is refused, edits are read leniently, History offers no Retry an older TsuFiles would run
+// re-encode), a route without it is refused, edits are read leniently, History offers no Retry an older Filee would run
 // without the edits, and "Replace the original" is the tool's own output rule.
 
 using System.Text.Json;
@@ -68,7 +68,7 @@ public class MetadataToolTests
         Assert.True(SettingsMigrations.ApplyToLibrary(70, presets, profiles));
         Assert.Equal(BuiltInData.MetadataId, presets[^1].Id);
 
-        // Already there (a library a newer TsuFiles saved): nothing changes.
+        // Already there (a library a newer Filee saved): nothing changes.
         var count = presets.Count;
         Assert.False(SettingsMigrations.ApplyToLibrary(70, presets, profiles));
         Assert.Equal(count, presets.Count);

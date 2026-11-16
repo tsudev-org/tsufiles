@@ -41,7 +41,7 @@ public class ExtensionInputTests
     [InlineData(@"C:\x")]
     [InlineData("a..b")]
     [InlineData("txt~")] // only known extensions take other characters
-    [InlineData("photo.jpg")] // two-part extensions only when TsuFiles knows them
+    [InlineData("photo.jpg")] // two-part extensions only when Filee knows them
     [InlineData("averyveryverylongextension")]
     public void Rejects_what_cannot_be_an_extension(string input) => Assert.Null(ExtensionInput.Normalize(input));
 

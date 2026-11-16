@@ -1030,7 +1030,7 @@ public class MetadataTests(EngineFixture fx) : IClassFixture<EngineFixture>
     public async Task A_conversion_of_a_file_over_a_reads_limits_is_refused_and_says_why()
     {
         var converter = fx.Converters.OfType<ExifToolConverter>().Single();
-        Assert.SkipUnless(fx.Catalog.StatusOf(converter).IsAvailable, "TsuFiles doesn't find this ExifTool (Settings → Engines).");
+        Assert.SkipUnless(fx.Catalog.StatusOf(converter).IsAvailable, "Filee doesn't find this ExifTool (Settings → Engines).");
         var path = Path.Combine(fx.NewFolder(), "packed.png");
         await File.WriteAllBytesAsync(path, PngWithComment(100), Token);
         var tool = BuiltInData.CreatePresets().Single(p => p.Id == BuiltInData.MetadataId);
@@ -1306,7 +1306,7 @@ public class MetadataTests(EngineFixture fx) : IClassFixture<EngineFixture>
     {
         var (path, _) = await PhotoAsync();
         var converter = fx.Converters.OfType<ExifToolConverter>().Single();
-        Assert.SkipUnless(fx.Catalog.StatusOf(converter).IsAvailable, "TsuFiles doesn't find this ExifTool (Settings → Engines).");
+        Assert.SkipUnless(fx.Catalog.StatusOf(converter).IsAvailable, "Filee doesn't find this ExifTool (Settings → Engines).");
         var before = await File.ReadAllBytesAsync(path, Token);
         var tool = BuiltInData.CreatePresets().Single(p => p.Id == BuiltInData.MetadataId);
         var edits = Setting(("XMP-dc:Title", ["New title"]));

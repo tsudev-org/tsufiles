@@ -115,7 +115,7 @@ public static class ExplorerMenuPackage
                 new XElement(Rescap + "Capability", new XAttribute("Name", "unvirtualizedResources"))),
             new XElement(Foundation + "Applications",
                 new XElement(Foundation + "Application",
-                    new XAttribute("Id", "TsuFiles"),
+                    new XAttribute("Id", "Filee"),
                     new XAttribute("Executable", "TsuFiles.exe"),
                     new XAttribute(Uap10 + "TrustLevel", "mediumIL"),
                     new XAttribute(Uap10 + "RuntimeBehavior", "win32App"),

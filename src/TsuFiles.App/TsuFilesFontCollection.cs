@@ -32,7 +32,7 @@ internal sealed class TsuFilesFontCollection : IFontCollection
     private readonly Lock _lock = new();
     private readonly HashSet<string> _asked = new(StringComparer.OrdinalIgnoreCase);
 
-    internal TsuFilesFontCollection(string key = "fonts:TsuFiles") => _fonts = new ReadFonts(new Uri(key, UriKind.Absolute));
+    internal TsuFilesFontCollection(string key = "fonts:Filee") => _fonts = new ReadFonts(new Uri(key, UriKind.Absolute));
 
     public Uri Key => _fonts.Key;
 

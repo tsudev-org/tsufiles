@@ -66,7 +66,7 @@ public class QtaFormatTests
         Assert.DoesNotContain("qta", upgraded.Profiles.Single(p => p.Id == "audio").Extensions, StringComparer.OrdinalIgnoreCase);
     }
 
-    /// <summary>A library saved by TsuFiles at schema 54: no donut has .qta yet, plus <paramref name="own"/> if given.</summary>
+    /// <summary>A library saved by Filee at schema 54: no donut has .qta yet, plus <paramref name="own"/> if given.</summary>
     private static void SaveVersion54Library(string path, ToolbarProfile? own = null)
     {
         var store = new UserDataStore(path);

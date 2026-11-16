@@ -18,7 +18,7 @@ public class HwpxWriterTests(EngineFixture fx) : IClassFixture<EngineFixture>
 {
     private const string Markdown = """
         ---
-        title: TsuFiles 변환 테스트
+        title: Filee 변환 테스트
         ---
 
         # 첫 번째 제목

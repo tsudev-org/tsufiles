@@ -1,4 +1,4 @@
-// Closing the main window: keep TsuFiles in the tray, quit, or ask once with "Don't ask again" (Settings → General).
+// Closing the main window: keep Filee in the tray, quit, or ask once with "Don't ask again" (Settings → General).
 
 using Avalonia.Controls;
 using Avalonia.Headless;

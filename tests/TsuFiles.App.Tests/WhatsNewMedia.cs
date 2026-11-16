@@ -136,7 +136,7 @@ public class WhatsNewMedia
     {
         var clip = new Clip();
         // Where a browser picture stands before it is saved (BrowserDrags: placeholder paths named like the file).
-        var (window, vm) = OpenDonut([Path.Combine(Path.GetTempPath(), "TsuFiles", "web", "drop", "1", "sunset.jpg")], clickMode: false);
+        var (window, vm) = OpenDonut([Path.Combine(Path.GetTempPath(), "Filee", "web", "drop", "1", "sunset.jpg")], clickMode: false);
         var donut = window.DonutControl;
         var badge = window.GetVisualDescendants().OfType<Border>().Single(b => b.Name == "DownloadBadge");
         var badgeText = (TextBlock)badge.Child!;
@@ -1792,7 +1792,7 @@ public class WhatsNewMedia
         }
     }
 
-    /// <summary>Avalonia's BackEaseOut (the SoftEase of TsuFiles's styles).</summary>
+    /// <summary>Avalonia's BackEaseOut (the SoftEase of Filee's styles).</summary>
     private static double BackEaseOut(double t)
     {
         var p = 1 - t;

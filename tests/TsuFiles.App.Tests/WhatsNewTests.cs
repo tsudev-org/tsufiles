@@ -251,7 +251,7 @@ public class WhatsNewTests
             Assert.Null(windows.WhatsNew);
             Assert.Null(store.Settings.WhatsNewSeenVersion); // not seen yet: a quit now shows them next time
 
-            windows.ShowMain(); // the user opens TsuFiles from the tray
+            windows.ShowMain(); // the user opens Filee from the tray
             Pump();
             var window = Assert.IsType<WhatsNewWindow>(windows.WhatsNew);
             Assert.True(window.IsVisible);
@@ -310,7 +310,7 @@ public class WhatsNewTests
     [Fact]
     public void The_version_updated_from_decides_over_the_remembered_one()
     {
-        // 2.0.0's slides were seen, TsuFiles went back to 1.12.0 and was updated again: they are new again.
+        // 2.0.0's slides were seen, Filee went back to 1.12.0 and was updated again: they are new again.
         Assert.Equal(V2, WhatsNewService.Decide("2.0.0", true, V2, Decks, updated: true, updatedFrom: "1.12.0").Show?.Version);
         // Reinstalling the same version shows nothing.
         Assert.Equal(default, WhatsNewService.Decide(null, true, V2, Decks, updated: true, updatedFrom: "2.0.0"));

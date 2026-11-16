@@ -1,5 +1,5 @@
 // Coordinate systems of the geospatial engine against PROJ: the .prj definitions GDAL writes (ESRI WKT) and EPSG codes
-// must put a projected position within a millimetre of where PROJ says it is; systems TsuFiles can't convert are refused
+// must put a projected position within a millimetre of where PROJ says it is; systems Filee can't convert are refused
 // with their name; the datum rules; and the WKT / WKT-geometry parsers' errors. The reference positions below come
 // from pyproj 3.x (PROJ) for the longitude / latitude next to them.
 
@@ -12,7 +12,7 @@ public class GeoCrsTests
 {
     internal sealed record Case(int Code, string Wkt, double X, double Y, double Lon, double Lat);
 
-    /// <summary>Systems whose datum PROJ shifts and TsuFiles doesn't: the position is only right to a few hundred metres.</summary>
+    /// <summary>Systems whose datum PROJ shifts and Filee doesn't: the position is only right to a few hundred metres.</summary>
     private static readonly int[] ShiftedByProj = [27700];
 
     internal static readonly Case[] Cases =
@@ -35,7 +35,7 @@ public class GeoCrsTests
         new(3346, """PROJCS["LKS_1994_Lithuania_TM",GEOGCS["GCS_LKS_1994",DATUM["D_Lithuania_1994",SPHEROID["GRS_1980",6378137.0,298.257222101]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Transverse_Mercator"],PARAMETER["False_Easting",500000.0],PARAMETER["False_Northing",0.0],PARAMETER["Central_Meridian",24.0],PARAMETER["Scale_Factor",0.9998],PARAMETER["Latitude_Of_Origin",0.0],UNIT["Meter",1.0]]""", 582510.367297761, 6061948.683017084, 25.2797, 54.6872),
         // Zurich, ETRS89 UTM 32N
         new(25832, """PROJCS["ETRS_1989_UTM_Zone_32N",GEOGCS["GCS_ETRS_1989",DATUM["D_ETRS_1989",SPHEROID["GRS_1980",6378137.0,298.257222101]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Transverse_Mercator"],PARAMETER["False_Easting",500000.0],PARAMETER["False_Northing",0.0],PARAMETER["Central_Meridian",9.0],PARAMETER["Scale_Factor",0.9996],PARAMETER["Latitude_Of_Origin",0.0],UNIT["Meter",1.0]]""", 465403.2844656688, 5247150.839302885, 8.5417, 47.3769),
-        // London, British National Grid (Airy; PROJ applies a datum shift TsuFiles doesn't)
+        // London, British National Grid (Airy; PROJ applies a datum shift Filee doesn't)
         new(27700, """PROJCS["British_National_Grid",GEOGCS["GCS_OSGB_1936",DATUM["D_OSGB_1936",SPHEROID["Airy_1830",6377563.396,299.3249646]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Transverse_Mercator"],PARAMETER["False_Easting",400000.0],PARAMETER["False_Northing",-100000.0],PARAMETER["Central_Meridian",-2.0],PARAMETER["Scale_Factor",0.9996012717],PARAMETER["Latitude_Of_Origin",49.0],UNIT["Meter",1.0]]""", 530043.1949814068, 180358.20862000342, -0.1276, 51.5072),
         // Montpelier, Vermont state plane (Transverse Mercator, latitude of origin 42.5, scale 0.999964)
         new(32145, """PROJCS["NAD_1983_StatePlane_Vermont_FIPS_4400",GEOGCS["GCS_North_American_1983",DATUM["D_North_American_1983",SPHEROID["GRS_1980",6378137.0,298.257222101]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Transverse_Mercator"],PARAMETER["False_Easting",500000.0],PARAMETER["False_Northing",0.0],PARAMETER["Central_Meridian",-72.5],PARAMETER["Scale_Factor",0.999964286],PARAMETER["Latitude_Of_Origin",42.5],UNIT["Meter",1.0]]""", 493787.50490179786, 195543.33416470452, -72.5778, 44.2601),
@@ -71,7 +71,7 @@ public class GeoCrsTests
         var position = crs.ToLonLat(new Coord(c.X, c.Y));
         if (ShiftedByProj.Contains(code))
         {
-            Assert.True(crs.IsApproximate, "a datum TsuFiles doesn't shift is reported");
+            Assert.True(crs.IsApproximate, "a datum Filee doesn't shift is reported");
             Assert.InRange(Metres(position.X, position.Y, c.Lon, c.Lat), 0, 300);
             return;
         }
@@ -164,7 +164,7 @@ public class GeoCrsTests
     }
 
     [Theory]
-    // Lambert azimuthal equal-area (Europe), polar stereographic, oblique stereographic: projections TsuFiles doesn't have.
+    // Lambert azimuthal equal-area (Europe), polar stereographic, oblique stereographic: projections Filee doesn't have.
     [InlineData("""PROJCS["ETRS89_LAEA_Europe",GEOGCS["GCS_ETRS_1989",DATUM["D_ETRS_1989",SPHEROID["GRS_1980",6378137.0,298.257222101]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Lambert_Azimuthal_Equal_Area"],PARAMETER["False_Easting",4321000.0],PARAMETER["False_Northing",3210000.0],PARAMETER["Central_Meridian",10.0],PARAMETER["Latitude_Of_Origin",52.0],UNIT["Meter",1.0]]""", "Lambert_Azimuthal_Equal_Area")]
     [InlineData("""PROJCS["WGS_1984_UPS_North",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Stereographic"],PARAMETER["False_Easting",2000000.0],UNIT["Meter",1.0]]""", "Stereographic")]
     // WKT2 and geocentric / local / vertical systems.

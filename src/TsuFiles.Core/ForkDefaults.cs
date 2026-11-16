@@ -105,7 +105,7 @@ public static class ForkDefaults
             result ??= new StringBuilder(text.Length + 16);
             result.Append(text, copied, at - copied).Append(DisplayName);
             copied = at + UpstreamName.Length;
-            at = copied - 1;   // "TsuFiles" không tự chồng lên chính nó; quét tiếp sau chữ vừa thay
+            at = copied - 1;   // "Filee" không tự chồng lên chính nó; quét tiếp sau chữ vừa thay
         }
         if (result is null) return text;
         return result.Append(text, copied, text.Length - copied).ToString();

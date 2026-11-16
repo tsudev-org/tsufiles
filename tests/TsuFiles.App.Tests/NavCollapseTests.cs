@@ -1,4 +1,4 @@
-// The main window's navigation can collapse to an icon rail, and TsuFiles remembers how the user left it.
+// The main window's navigation can collapse to an icon rail, and Filee remembers how the user left it.
 
 using Avalonia.Headless.XUnit;
 using TsuFiles.App.Services;
@@ -37,7 +37,7 @@ public class NavCollapseTests
         }
         Assert.True(store.Settings.NavCollapsed);
 
-        // A fresh store reads the file back, as the next start of TsuFiles does.
+        // A fresh store reads the file back, as the next start of Filee does.
         using var next = Create(Open(dir.Path));
         Assert.True(next.IsNavCollapsed);
         Assert.Equal(64, next.NavWidth);

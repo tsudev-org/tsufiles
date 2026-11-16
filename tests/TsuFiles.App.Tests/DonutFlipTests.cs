@@ -1395,7 +1395,7 @@ public class DonutFlipTests
 
     /// <summary>
     /// macOS: the keyboard the drag donut took goes back to the app that had it once a conversion starts, but stays with
-    /// TsuFiles when the drop opens a window of its own (here the crop tool), or that window would open behind the app.
+    /// Filee when the drop opens a window of its own (here the crop tool), or that window would open behind the app.
     /// </summary>
     [AvaloniaFact]
     public void On_macos_the_keyboard_goes_back_after_a_conversion_and_stays_for_a_tools_window() => With(animations: false, back: null, () =>
