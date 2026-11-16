@@ -184,11 +184,15 @@ internal sealed partial class DocxWriter
                     break;
             }
         }
+        // Word needs a paragraph after a table that ends a section: a 1-point one, so a table that fills the page does
+        // not push an empty page after it.
+        const string Tiny = "<w:spacing w:before=\"0\" w:after=\"0\" w:line=\"20\" w:lineRule=\"exact\"/><w:rPr><w:sz w:val=\"2\"/><w:szCs w:val=\"2\"/></w:rPr>";
         var endsWithParagraph = blocks.Count > 0 && blocks[^1] is HParagraph;
+        var afterTable = blocks.Count > 0 && blocks[^1] is HTable;
         if (sectionEnd is not null && !endsWithParagraph)
-            sb.Append($"<w:p><w:pPr>{sectionEnd}</w:pPr></w:p>");
+            sb.Append(afterTable ? $"<w:p><w:pPr>{Tiny}{sectionEnd}</w:pPr></w:p>" : $"<w:p><w:pPr>{sectionEnd}</w:pPr></w:p>");
         else if (requireParagraph && !endsWithParagraph)
-            sb.Append("<w:p/>");
+            sb.Append(afterTable ? $"<w:p><w:pPr>{Tiny}</w:pPr></w:p>" : "<w:p/>");
         return sb.ToString();
     }
 

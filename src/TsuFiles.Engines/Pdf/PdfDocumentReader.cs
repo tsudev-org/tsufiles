@@ -16,9 +16,11 @@
 // positions, and a line that ends early although the next line's first word would have fitted (an address) keeps its
 // line break.
 //
-// Tables drawn with lines become tables (PdfDocumentReader.Tables). Not converted: tables without rules (their cells
-// come out as paragraphs in reading order), other vector drawings on text pages, annotations other than links, form
-// fields.
+// Tables drawn with lines become tables (PdfDocumentReader.Tables). For documents (ReadLayout: DOCX, HWPX, ODT),
+// blocks of text side by side without rules become tables without borders (PdfDocumentReader.LayoutTables: the heading
+// and signature block of administrative documents) and the annotation layer (digital signatures, seals, filled form
+// fields) floats in front of the text as pictures with transparency (PdfDocumentReader.Annotations). Not converted:
+// other vector drawings on text pages, annotations without an appearance.
 
 using System.Text;
 using System.Text.RegularExpressions;
@@ -108,11 +110,13 @@ internal sealed partial class PdfDocumentReader
     private readonly string _mediaFolder;
     private readonly bool _textOnly;
     private readonly bool _ocrLayer;
+    private readonly bool _layout;
     private byte[]? _pdfBytes;
     private int _pictures;
 
-    private PdfDocumentReader(string path, string mediaFolder, bool textOnly, bool ocrLayer = false)
+    private PdfDocumentReader(string path, string mediaFolder, bool textOnly, bool ocrLayer = false, bool layout = false)
     {
+        _layout = layout && !textOnly;
         _path = path;
         _mediaFolder = mediaFolder;
         _textOnly = textOnly;
@@ -121,6 +125,13 @@ internal sealed partial class PdfDocumentReader
 
     /// <summary>Reads <paramref name="path"/> with pictures (extracted into <paramref name="mediaFolder"/>) and scans.</summary>
     public static HDocument Read(string path, string mediaFolder) => new PdfDocumentReader(path, mediaFolder, textOnly: false).ReadDocument();
+
+    /// <summary>
+    /// Like <see cref="Read"/>, for documents laid out like the PDF (DOCX, HWPX, ODT): blocks of text side by side
+    /// become tables without borders, and the annotation layer (digital signatures, seals) floats in front of the text.
+    /// </summary>
+    public static HDocument ReadLayout(string path, string mediaFolder) =>
+        new PdfDocumentReader(path, mediaFolder, textOnly: false, layout: true).ReadDocument();
 
     /// <summary>
     /// Like <see cref="Read"/>, but the invisible text of a scan (its OCR layer, PdfOptions.Ocr) is the page's text:
@@ -229,6 +240,9 @@ internal sealed partial class PdfDocumentReader
         public List<Item> Items { get; set; } = [];
         public bool Scanned { get; set; }
         public string? ScanPath { get; set; }
+
+        /// <summary>Pictures of the annotation layer, floating in front of the text (PdfDocumentReader.Annotations).</summary>
+        public List<Overlay> Overlays { get; set; } = [];
     }
 
     // ───────────────────────── Document ─────────────────────────
@@ -358,22 +372,65 @@ internal sealed partial class PdfDocumentReader
 
         // Plain text (TXT, page texts for slides) keeps table cells as paragraphs in reading order.
         var tables = _textOnly ? [] : RuledTables(page.Paths, words);
+        var pictures = _textOnly ? [] : Pictures(page, content).ToList();
+        // Documents (DOCX, HWPX, ODT): blocks of text side by side become tables without borders (found before tabbed
+        // rows are joined: "Nơi nhận:" and the signer's title are two blocks, not a row with a tab), and the annotation
+        // layer (signatures, seals, the stamped number of a signed document) floats in front of the text.
+        if (_layout)
+        {
+            if (words.Count > 0)
+            {
+                var layoutTables = LayoutTables(Paragraphs(Lines(words)), pictures, content.Height);
+                var taken = layoutTables.SelectMany(t => t.Cells).SelectMany(c => c.Words).ToHashSet();
+                words.RemoveAll(taken.Contains);
+                tables.AddRange(layoutTables);
+            }
+            content.Overlays = AnnotationOverlays(page, content);
+        }
         content.Items = words.Count > 0 ? TextItems(words) : [];
         content.Items.AddRange(tables.Select(t => new Item { Table = t }));
         // A picture in a table cell goes into that cell, the others stay pictures of the page.
         if (!_textOnly)
-            content.Items.AddRange(PlacePictures(tables, Pictures(page, content)));
+            content.Items.AddRange(PlacePictures(tables, pictures));
         return content;
     }
 
-    /// <summary>Words → lines → paragraphs, with tabbed rows joined.</summary>
-    private static List<Item> TextItems(List<TextWord> words)
+    /// <summary>
+    /// Words → lines → paragraphs, with tabbed rows joined. <paramref name="joinRows"/> (a cell of a table without
+    /// rules): every row split at a gap is one line again, the gap kept as spaces ("Số:      /CAT-ANM", where the
+    /// number of a signed document is stamped later).
+    /// </summary>
+    private static List<Item> TextItems(List<TextWord> words, bool joinRows = false)
     {
         var lines = Lines(words);
+        if (joinRows)
+            return Paragraphs(JoinRows(lines));
         var items = Paragraphs(lines);
         if (JoinTabbedRows(lines, items) is { } joined)
             items = Paragraphs(joined);
         return items;
+    }
+
+    /// <summary>
+    /// The parts of each split row as one line, and every wide gap in a line (wider than an em: the blank left for a
+    /// number or a day) kept as spaces about as wide.
+    /// </summary>
+    private static List<TextLine> JoinRows(List<TextLine> lines)
+    {
+        var result = new List<TextLine>();
+        foreach (var row in lines.GroupBy(l => l.Row))
+        {
+            var ordered = row.SelectMany(l => l.Words).OrderBy(w => w.Left).ToList();
+            var words = new List<TextWord> { ordered[0] };
+            foreach (var word in ordered.Skip(1))
+            {
+                var gap = word.Left - words[^1].Right;
+                var spaces = gap > word.Size ? (int)Math.Clamp(Math.Round(gap / (0.25 * word.Size)), 2, 60) : 1;
+                words.Add(spaces > 1 ? word with { Text = new string(' ', spaces - 1) + word.Text } : word);
+            }
+            result.Add(new TextLine(words, row.Key));
+        }
+        return result;
     }
 
     private static bool Inside(PdfRectangle box, PdfPoint point) =>
@@ -532,12 +589,7 @@ internal sealed partial class PdfDocumentReader
         return Path.Combine(_mediaFolder, $"pdf-{++_pictures}.{extension}");
     }
 
-    private SKBitmap Render(int pageIndex)
-    {
-        _pdfBytes ??= File.ReadAllBytes(_path);
-        return Conversion.ToImage(_pdfBytes, pageIndex, null,
-            new RenderOptions(Dpi: RenderDpi, WithAnnotations: true, WithFormFill: true, BackgroundColor: SKColors.White));
-    }
+    private SKBitmap Render(int pageIndex) => Render(pageIndex, annotations: true);
 
     /// <summary>The whole page as a JPEG, the format of scans.</summary>
     private string RenderScan(int pageIndex)
@@ -697,6 +749,24 @@ internal sealed partial class PdfDocumentReader
                     blocks.Add(new HParagraph());
             }
 
+            // The annotation layer floats in front of the text at its place on the paper, held by the page's first paragraph.
+            if (!page.Scanned && page.Overlays.Count > 0)
+            {
+                if (blocks[first] is not HParagraph)
+                    blocks.Insert(first, new HParagraph { MarkFormat = new HCharFormat(Size: 100) });
+                var holder = (HParagraph)blocks[first];
+                foreach (var overlay in page.Overlays)
+                {
+                    holder.Inlines.Add(new HImage(overlay.Path)
+                    {
+                        Width = Hwp(overlay.Bounds.Width),
+                        Height = Hwp(overlay.Bounds.Height),
+                        Anchor = new HAnchor("PAPER", "LEFT", Hwp(overlay.Bounds.Left), "PAPER", "TOP", Hwp(page.Height - overlay.Bounds.Top),
+                            "IN_FRONT_OF_TEXT", AllowOverlap: true),
+                    });
+                }
+            }
+
             // A table cannot start a page in every format: a tiny empty paragraph before it carries the page break.
             if (!newSection && blocks[first] is HTable)
                 blocks.Insert(first, new HParagraph { MarkFormat = new HCharFormat(Size: 100) });
@@ -746,7 +816,10 @@ internal sealed partial class PdfDocumentReader
             bottom = Math.Min(bottom ?? double.MaxValue, page.Items.Min(i => i.Bottom));
         }
         static double Clamp(double? value) => Math.Clamp(value ?? Default, Min, Max);
-        return (Clamp(left), Clamp(right), Clamp(top), Clamp(bottom));
+        // Word and 한글 set lines and table rows a little taller than the PDF did: a full page keeps a line of room at
+        // the bottom (each page starts with a page break, so the room never pulls the next page's text up).
+        var slack = bottom is { } b ? Math.Min(12, Math.Max(0, b - Min)) : 0;
+        return (Clamp(left), Clamp(right), Clamp(top), Clamp(bottom - slack));
     }
 
     /// <summary>Distance between baselines relative to the font size in multi-line paragraphs (1.2 when unknown).</summary>
@@ -794,7 +867,11 @@ internal sealed partial class PdfDocumentReader
         return paragraph;
     }
 
-    private static HParagraph TextParagraph(Item item, Item? previous, Dictionary<double, int> headingLevels, double lineRatio)
+    /// <param name="looseCell">
+    /// In a cell of a table without rules, whose edges are only estimated: lines of different widths sharing their
+    /// middle are centred even when the widest one touches the cell's edge.
+    /// </param>
+    private static HParagraph TextParagraph(Item item, Item? previous, Dictionary<double, int> headingLevels, double lineRatio, bool looseCell = false)
     {
         var size = item.Size;
         var paragraph = new HParagraph();
@@ -816,6 +893,8 @@ internal sealed partial class PdfDocumentReader
         if (entry)
             align = HAlign.Left;
         else if (item.Lines.All(l => Math.Abs((l.Left - item.ContainerLeft) - (item.ContainerRight - l.Right)) < tolerance) && lefts.Min() > containerWidth * 0.04)
+            align = HAlign.Center;
+        else if (looseCell && CentredLines(item))
             align = HAlign.Center;
         else if (ends.All(r => r < 3) && starts.Min() > containerWidth * 0.15)
             align = HAlign.Right;
@@ -1005,7 +1084,22 @@ internal sealed partial class PdfDocumentReader
         var end = previous.Right + 0.3 * em + firstWord;
         if (end < item.Right - 0.5 * em)
             return true;
+        // Centred lines ("BỘ CÔNG AN" over "CÔNG AN TỈNH AN GIANG"): the room is on both sides of the shorter line.
+        // Measured against the column, not the widest line: a line that wrapped there stays one paragraph line.
+        if (CentredLines(item) && previous.Right - previous.Left + 0.3 * em + firstWord < column - em)
+            return true;
         return end < item.ContainerRight - 0.5 * em && item.ContainerRight - item.Right > 0.25 * column;
+    }
+
+    /// <summary>Lines of different widths sharing their middle: a centred paragraph.</summary>
+    private static bool CentredLines(Item item)
+    {
+        if (item.Lines.Count < 2)
+            return false;
+        var center = (item.Left + item.Right) / 2;
+        var tolerance = Math.Max(3, 0.03 * item.Width);
+        return item.Lines.All(l => Math.Abs((l.Left + l.Right) / 2 - center) <= tolerance)
+               && item.Lines.Any(l => l.Right - l.Left < item.Width - Math.Max(2, 0.4 * item.Size));
     }
 
     /// <summary>

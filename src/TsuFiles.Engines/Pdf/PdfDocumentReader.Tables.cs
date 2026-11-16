@@ -76,6 +76,9 @@ internal sealed partial class PdfDocumentReader
 
         public List<RuledCell> Cells { get; } = cells;
 
+        /// <summary>A table without rules made from blocks of text side by side (PdfDocumentReader.LayoutTables).</summary>
+        public bool Layout { get; init; }
+
         /// <summary>Distance from a cell's left edge to its text in left-aligned cells (the PDF's cell padding).</summary>
         public double Padding { get; set; }
 
@@ -495,7 +498,7 @@ internal sealed partial class PdfDocumentReader
                 Fill = cell.Fill,
             };
             // Text and pictures from top to bottom as in the PDF; pictures side by side share a paragraph.
-            var items = (cell.Words.Count > 0 ? TextItems(cell.Words) : []).Concat(cell.Pictures)
+            var items = (cell.Words.Count > 0 ? TextItems(cell.Words, grid.Layout) : []).Concat(cell.Pictures)
                 .OrderByDescending(i => i.Top).ThenBy(i => i.Left).ToList();
             var (innerLeft, innerRight) = (cell.Bounds.Left + padding, cell.Bounds.Right - padding);
             Item? previous = null;
@@ -505,7 +508,7 @@ internal sealed partial class PdfDocumentReader
                 (part.ContainerLeft, part.ContainerRight) = (innerLeft, innerRight);
                 if (!part.IsPicture)
                 {
-                    hcell.Blocks.Add(TextParagraph(part, previous, noHeadings, lineRatio));
+                    hcell.Blocks.Add(TextParagraph(part, previous, noHeadings, lineRatio, grid.Layout));
                     previous = part;
                     continue;
                 }
