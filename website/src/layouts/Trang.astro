@@ -1,10 +1,11 @@
 ---
 // Khung chung: <head> theo ECOSYSTEM_IDENTITY mục 2.2, đầu trang, chân trang nối về tsudev.com (mục 4).
 import '../styles/fonts.css';
+import '../styles/fonts-mono.css';
 import '../styles/tokens.css';
 import '../styles/palette.css';
 import '../styles/site.css';
-import { REPO_URL, SAN_PHAM, SITE, UPSTREAM_URL } from '../lib/noi-dung';
+import { REPO_URL, SAN_PHAM, SITE } from '../lib/noi-dung';
 
 interface Props {
   tieuDe?: string;     // Tên trang; bỏ trống ở trang chủ
@@ -93,11 +94,11 @@ const dangO = (href: string) => duongDan.startsWith(href);
         <div class="chan-trang__trong">
           <div class="chan-trang__cot">
             <a class="thuong-hieu thuong-hieu--nho" href="https://tsudev.com" target="_blank" rel="noopener noreferrer">
-              <img src="/brand/logo-mark.png" alt="" width="24" height="29">
+              <!-- Logo CHUNG của hệ tsudev (bản chính thức từ tsudev/apps/frontend-main/public/brand), không phải dấu của app -->
+              <picture><source srcset="/brand/logo-tsudev-48.avif 1x, /brand/logo-tsudev-96.avif 2x" type="image/avif"><source srcset="/brand/logo-tsudev-48.webp 1x, /brand/logo-tsudev-96.webp 2x" type="image/webp"><img src="/brand/logo-tsudev-256.png" alt="" width="28" height="28" loading="lazy" decoding="async"></picture>
               <span>tsudev</span>
             </a>
-            <p>TsuFiles là bản Việt hóa và gia cố bảo mật của
-              <a href={UPSTREAM_URL} target="_blank" rel="noopener noreferrer">Filee</a> (Myeonggu Kim - KnifeLemon),
+            <p>TsuFiles là trình chuyển đổi tệp ngoại tuyến miễn phí của hệ sinh thái tsudev,
               phát hành theo <a href="/ban-quyen/">giấy phép MIT</a>.</p>
           </div>
           <nav aria-label="Hệ sinh thái tsudev">

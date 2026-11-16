@@ -47,3 +47,6 @@
   --overlay: rgba(10, 10, 10, 0.35);
   color-scheme: light;
 }
+
+/* Font mono có số 0 trơn (Chivo Mono, tự host ở styles/fonts-mono.css) - chủ dự án yêu cầu số 0 không có ký tự bên trong. */
+:root { --font-mono: 'Chivo Mono', 'Cascadia Code', ui-monospace, monospace; }
