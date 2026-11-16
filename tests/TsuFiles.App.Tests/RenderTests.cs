@@ -981,19 +981,7 @@ public class RenderTests
         Save(window, $"window-sponsor-supporters-{language}.png");
         window.Close();
 
-        using var vm = new MainWindowViewModel(AppHost.Services, AppHost.Get<TsuFiles.Core.Localization.ILocalizer>(), AppHost.Get<UpdateService>(), AppHost.Get<UserDataStore>());
-        vm.Navigate("about");
-        var main = new MainWindow { DataContext = vm, Width = 1080, Height = 820 };
-        main.Show();
-        Pump();
-        var about = main.GetVisualDescendants().OfType<TsuFiles.App.Views.Pages.AboutPage>().Single();
-        about.Supporters.Show(new SupporterList(
-            [new Supporter("Acme", "https://acme.example", "acme.png"), new Supporter("Globex", "https://globex.example")],
-            [new("Kim"), new("Lee"), new("Park")]), _ => Logo());
-        Pump();
-        CheckAcknowledgement(main);
-        Save(main, $"page-about-supporters-{language}.png");
-        main.Close();
+        // TsuFiles: the About page no longer lists supporters (owner, 16/11/2026).
 
         static void CheckAcknowledgement(Window target)
         {
