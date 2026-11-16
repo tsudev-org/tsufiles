@@ -265,7 +265,7 @@ public sealed partial class ToolbarPageViewModel : ObservableObject, IDisposable
     /// <summary>The selected profile is for mixed selections (toggle in the profile card).</summary>
     [ObservableProperty] private bool _isMixed;
 
-    /// <summary>False for the last mixed-selection profile: Filee always needs one.</summary>
+    /// <summary>False for the last mixed-selection profile: TsuFiles always needs one.</summary>
     [ObservableProperty] private bool _canChangeMixed;
 
     [ObservableProperty] private bool _canDelete;

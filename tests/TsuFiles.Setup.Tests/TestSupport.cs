@@ -68,7 +68,7 @@ public sealed class FakeSystem : ISetupSystem
     /// <summary>Programs stay in <see cref="Running"/> when killed (not ours to end).</summary>
     public bool CantBeEnded { get; set; }
 
-    /// <summary>A Filee runs whose path can't be read.</summary>
+    /// <summary>A TsuFiles runs whose path can't be read.</summary>
     public bool OutOfSight { get; set; }
 
     /// <summary>Windows refuses to schedule deletions for the next restart (always without administrator rights).</summary>
@@ -162,7 +162,7 @@ public sealed class SetupBench : IDisposable
     /// <summary>The published app: TsuFiles.exe, the "filee" command, an engine and a few more files.</summary>
     private void WriteApp(Action<TempFolder, string>? app)
     {
-        _temp.Write(@"app\TsuFiles.exe", "Filee 2");
+        _temp.Write(@"app\TsuFiles.exe", "TsuFiles 2");
         _temp.Write(@"app\Filee.dll", new string('a', 20_000));
         _temp.Write(@"app\cli\tsufiles.cmd", "@\"%~dp0..\\tsufiles-cli.exe\" %*");
         _temp.Write(@"app\tsufiles-cli.exe", "cli");

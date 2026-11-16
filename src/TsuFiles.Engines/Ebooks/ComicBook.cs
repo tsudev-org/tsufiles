@@ -14,7 +14,7 @@ using TsuFiles.Core.Conversion;
 using TsuFiles.Core.Platform;
 using TsuFiles.Engines.Pdf;
 
-// PDFtoImage marks its API for the platforms PDFium ships for (Windows, macOS, Linux, mobile); Filee only targets
+// PDFtoImage marks its API for the platforms PDFium ships for (Windows, macOS, Linux, mobile); TsuFiles only targets
 // desktop platforms that are all covered.
 #pragma warning disable CA1416
 

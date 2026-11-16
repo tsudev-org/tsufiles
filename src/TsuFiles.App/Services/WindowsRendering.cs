@@ -1,11 +1,11 @@
-// How Avalonia draws Filee's windows on Windows. The donut, the toast and the notices are transparent windows; a report
+// How Avalonia draws TsuFiles's windows on Windows. The donut, the toast and the notices are transparent windows; a report
 // of one standing on a dark rectangle (issue #269) needs to say which way they were drawn, so the log gets it once per
 // start, with the graphics adapters, and TSUFILES_RENDERING picks another way without a new build.
 //
 // Avalonia's defaults: ANGLE (OpenGL ES on Direct3D 11) composed through WinUI composition, else DirectComposition, else
 // drawn into the window's redirection surface; software rendering when Direct3D 11 can't start. Every one of these
 // keeps per-pixel transparency (a redirection surface through DwmEnableBlurBehindWindow with an empty region), so
-// Filee keeps the defaults and only changes them when the variable asks.
+// TsuFiles keeps the defaults and only changes them when the variable asks.
 //
 // On ARM64, Avalonia's Adreno blocklist moves Qualcomm GPUs to the Microsoft Basic Render Driver, which draws on the CPU
 // (issue #236). "gpu", "vulkan" and "wgl" are for trying the GPU there again, one way each.

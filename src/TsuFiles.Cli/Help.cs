@@ -22,7 +22,7 @@ internal static class Help
         "watch" => Watch,
         "formats" => "Usage: tsufiles formats [<format>] [--json]\n\nLists every format, or what one format converts to.\n" +
                      "With --json, prints the same as JSON (for scripts and other programs).\n",
-        "presets" => "Usage: tsufiles presets [--json]\n\nLists the presets saved in Filee (built-in and your own).\n" +
+        "presets" => "Usage: tsufiles presets [--json]\n\nLists the presets saved in TsuFiles (built-in and your own).\n" +
                      "With --json, prints the same as JSON (for scripts and other programs).\n",
         "engines" => Engines,
         _ => General,
@@ -34,7 +34,7 @@ internal static class Help
         "watch" => WatchVi,
         "formats" => "Cách dùng: tsufiles formats [<định dạng>] [--json]\n\nLiệt kê mọi định dạng, hoặc một định dạng chuyển được sang những định dạng nào.\n" +
                      "Với --json, in cùng nội dung dưới dạng JSON (cho script và chương trình khác).\n",
-        "presets" => "Cách dùng: tsufiles presets [--json]\n\nLiệt kê các preset đã lưu trong Filee (có sẵn và do bạn tạo).\n" +
+        "presets" => "Cách dùng: tsufiles presets [--json]\n\nLiệt kê các preset đã lưu trong TsuFiles (có sẵn và do bạn tạo).\n" +
                      "Với --json, in cùng nội dung dưới dạng JSON (cho script và chương trình khác).\n",
         "engines" => EnginesVi,
         _ => GeneralVi,
@@ -61,7 +61,7 @@ internal static class Help
           tsufiles watch D:\HopThuDen --to pdf --move-originals
           tsufiles engines install pandoc
 
-        Preset và engine dùng chung với ứng dụng Filee. Mã thoát: 0 không có lỗi (kể cả tệp bị bỏ qua),
+        Preset và engine dùng chung với ứng dụng TsuFiles. Mã thoát: 0 không có lỗi (kể cả tệp bị bỏ qua),
         1 có tệp lỗi hoặc bị hủy, 2 sai tham số hoặc thiếu đầu vào, 3 không có gì để chuyển đổi.
 
         Ngôn ngữ: mặc định tiếng Việt; đặt biến môi trường TSUFILES_LANG=en để dùng tiếng Anh.
@@ -74,10 +74,10 @@ internal static class Help
                    tsufiles engines remove <engine> [--json] [--quiet]
 
         Liệt kê các engine tùy chọn trong Cài đặt → Engine (LibreOffice, Pandoc, FFmpeg, …), hoặc cài/gỡ một engine
-        với cùng nguồn tải và cùng bước kiểm tra (SHA-256) như ứng dụng. 'remove' chỉ gỡ những gì Filee đã tải;
+        với cùng nguồn tải và cùng bước kiểm tra (SHA-256) như ứng dụng. 'remove' chỉ gỡ những gì TsuFiles đã tải;
         bản riêng của bạn và bản tìm thấy trên máy được giữ nguyên.
 
-        Trong JSON của danh sách, "version" là phiên bản Filee sẽ tải, kể cả với engine có trạng thái
+        Trong JSON của danh sách, "version" là phiên bản TsuFiles sẽ tải, kể cả với engine có trạng thái
         "owncopy" (bản riêng của bạn hoặc bản tìm thấy trên máy).
 
         Tùy chọn:
@@ -89,7 +89,7 @@ internal static class Help
     private const string ConvertVi = """
         Cách dùng: tsufiles convert <tệp hoặc thư mục...> (--to <định dạng> | --preset <preset>) [tùy chọn]
 
-        Tệp có thể dùng ký tự đại diện (*.heic). Với thư mục, Filee chuyển đổi các tệp bên trong mà nó nhận diện được.
+        Tệp có thể dùng ký tự đại diện (*.heic). Với thư mục, TsuFiles chuyển đổi các tệp bên trong mà nó nhận diện được.
 
         Tùy chọn:
           -t, --to <định dạng>   Định dạng đích, ví dụ jpg, png, pdf, docx, mp4 (xem 'tsufiles formats')
@@ -161,7 +161,7 @@ internal static class Help
           tsufiles watch D:\Inbox --to pdf --move-originals
           tsufiles engines install pandoc
 
-        Presets and engines are the ones in the Filee app. Exit codes: 0 nothing failed (skipped
+        Presets and engines are the ones in the TsuFiles app. Exit codes: 0 nothing failed (skipped
         files included), 1 some failed or were cancelled, 2 wrong arguments or a missing input, 3 nothing to
         convert.
 
@@ -173,10 +173,10 @@ internal static class Help
                tsufiles engines remove <engine> [--json] [--quiet]
 
         Lists the optional engines of Settings → Engines (LibreOffice, Pandoc, FFmpeg, …), or installs or removes
-        one with the same download and checks as the app. 'remove' only removes what Filee downloaded; your own copy
+        one with the same download and checks as the app. 'remove' only removes what TsuFiles downloaded; your own copy
         and one found on this computer are left alone.
 
-        In the JSON of the list, "version" is the version Filee downloads, also for an engine whose status is
+        In the JSON of the list, "version" is the version TsuFiles downloads, also for an engine whose status is
         "owncopy" (your own copy or one found on this computer).
 
         Options:
@@ -188,7 +188,7 @@ internal static class Help
     private const string Convert = """
         Usage: tsufiles convert <files or folders...> (--to <format> | --preset <preset>) [options]
 
-        Files can be wildcards (*.heic). Folders convert the files in them that Filee knows.
+        Files can be wildcards (*.heic). Folders convert the files in them that TsuFiles knows.
 
         Options:
           -t, --to <format>      Target format, e.g. jpg, png, pdf, docx, mp4 (see 'tsufiles formats')

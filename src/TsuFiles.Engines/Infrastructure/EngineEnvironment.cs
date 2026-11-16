@@ -1,7 +1,7 @@
-// Shared context for engines: where Filee's own engine copies live and where engines keep their state.
+// Shared context for engines: where TsuFiles's own engine copies live and where engines keep their state.
 // Built-in engines never use software installed on the system (Microsoft Office, Hancom Office). The optional
 // engines (FFmpeg, calibre, Pandoc, Ghostscript, LibreOffice, Tesseract) are looked up in this order: a copy the user chose in
-// Settings → Engines (OwnCopies), Filee's own copy (installer or download, the tested version), then one already on
+// Settings → Engines (OwnCopies), TsuFiles's own copy (installer or download, the tested version), then one already on
 // the PC (on the PATH or where its installer puts it), so nobody has to download a second FFmpeg they already have.
 
 using System.Collections.Concurrent;
@@ -13,7 +13,7 @@ using TsuFiles.Core.Settings;
 namespace TsuFiles.Engines.Infrastructure;
 
 /// <summary>Environment information passed to every engine.</summary>
-/// <param name="dataDirectory">Filee's writable data directory (profiles, caches).</param>
+/// <param name="dataDirectory">TsuFiles's writable data directory (profiles, caches).</param>
 public sealed class EngineEnvironment(string dataDirectory)
 {
     /// <summary>Writable directory for engine state (e.g. LibreOffice profiles).</summary>
@@ -21,7 +21,7 @@ public sealed class EngineEnvironment(string dataDirectory)
 
     /// <summary>
     /// Per-user folder for engines downloaded on demand (see <see cref="EngineInstaller"/>):
-    /// %LOCALAPPDATA%\TsuFiles\engines. It is outside the app folder, so app updates keep it, and inside Filee's
+    /// %LOCALAPPDATA%\TsuFiles\engines. It is outside the app folder, so app updates keep it, and inside TsuFiles's
     /// install root, so uninstalling removes it. With TSUFILES_DATA_DIR set (<see cref="UserDataStore.DirectoryVariable"/>)
     /// it is the engines folder in there.
     /// </summary>
@@ -34,7 +34,7 @@ public sealed class EngineEnvironment(string dataDirectory)
 
     /// <summary>
     /// Finds an engine directory (<c>engines/&lt;name&gt;</c>): next to the executable (bundled with the installer),
-    /// in <see cref="DownloadRoot"/> (downloaded later), then in the Filee repository checkout the app runs from
+    /// in <see cref="DownloadRoot"/> (downloaded later), then in the TsuFiles repository checkout the app runs from
     /// (a folder with TsuFiles.slnx), so a developer running from <c>bin/Debug</c> uses the engines fetched there.
     /// </summary>
     public static string? FindBundled(string name)
@@ -58,7 +58,7 @@ public sealed class EngineEnvironment(string dataDirectory)
     }
 
     /// <summary>
-    /// Programs the user chose for an optional engine package instead of Filee's download: package id → the program
+    /// Programs the user chose for an optional engine package instead of TsuFiles's download: package id → the program
     /// they picked (or its folder). Set by the app and the command line from the settings.
     /// </summary>
     public static IReadOnlyDictionary<string, string> OwnCopies { get; set; } = new Dictionary<string, string>();
@@ -132,7 +132,7 @@ public sealed class EngineEnvironment(string dataDirectory)
         return null;
     }
 
-    /// <summary>True when package <paramref name="id"/> runs from Filee's own copy (not the user's or the PC's).</summary>
+    /// <summary>True when package <paramref name="id"/> runs from TsuFiles's own copy (not the user's or the PC's).</summary>
     public static bool UsesFileesCopy(string id) => OwnCopyFolder(id) is null
         && FindBundled(id) is { } folder && FolderWithPrograms(id, folder) is not null;
 
@@ -143,7 +143,7 @@ public sealed class EngineEnvironment(string dataDirectory)
 
     /// <summary>
     /// The folder of a copy of package <paramref name="id"/> already on the PC: on the PATH (also the user's and the
-    /// machine's PATH as saved, so a tool installed after Filee started is found, e.g. Scoop's shims) or where its
+    /// machine's PATH as saved, so a tool installed after TsuFiles started is found, e.g. Scoop's shims) or where its
     /// installer puts it (LibreOffice, calibre, Ghostscript under Program Files). Cached until
     /// <see cref="ForgetSystemCopies"/>.
     /// </summary>
@@ -258,7 +258,7 @@ public sealed class EngineEnvironment(string dataDirectory)
                     break;
             }
         }
-        // Never Filee's own folders: those are its own copy, found before.
+        // Never TsuFiles's own folders: those are its own copy, found before.
         var comparison = OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
         return folders.Distinct(OperatingSystem.IsWindows() ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal)
             .Where(f => !IsWithin(f, DownloadRoot, comparison) && !IsWithin(f, AppContext.BaseDirectory, comparison));

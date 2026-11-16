@@ -10,7 +10,7 @@
 
   Both files belong next to Filee.exe; the release workflow passes the publish folder as -Destination.
 
-  The DLL is loaded into explorer.exe, so it is built for the architecture of the Filee build it ships with
+  The DLL is loaded into explorer.exe, so it is built for the architecture of the TsuFiles build it ships with
   (-Architecture): x64, or arm64 for win-arm64 (the package then says arm64 too). The x64 Zig toolchain cross-compiles
   both; on Windows on ARM it runs under x64 emulation.
 

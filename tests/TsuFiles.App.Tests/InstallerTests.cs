@@ -1,4 +1,4 @@
-// The options Setup (src/TsuFiles.Setup) starts Filee with and the commands it runs. TsuFiles.Setup.Tests checks that what
+// The options Setup (src/TsuFiles.Setup) starts TsuFiles with and the commands it runs. TsuFiles.Setup.Tests checks that what
 // Setup writes is what these parse.
 
 using Avalonia.Headless.XUnit;
@@ -46,7 +46,7 @@ public class InstallerTests
         try
         {
             Assert.False(UpdateService.IsInstalledIn(folder));
-            // Filee's own Setup (2.0 and later).
+            // TsuFiles's own Setup (2.0 and later).
             File.WriteAllText(Path.Combine(folder, "uninstall.exe"), "");
             Assert.True(UpdateService.IsInstalledIn(folder));
             // Inno Setup (1.x), until Setup takes the installation over.

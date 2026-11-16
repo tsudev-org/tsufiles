@@ -1,4 +1,4 @@
-// Windows Imaging Component (WIC) through COM, the part Filee needs to decode a picture: a decoder for a file, its
+// Windows Imaging Component (WIC) through COM, the part TsuFiles needs to decode a picture: a decoder for a file, its
 // first frame, the frame's pixel format and a format converter to read the pixels in a known layout.
 
 using System.Runtime.InteropServices;
@@ -61,7 +61,7 @@ internal static class WicNative
         public int Height;
     }
 
-    // Only the methods Filee calls are typed; the slots before them keep the vtable order and are never called.
+    // Only the methods TsuFiles calls are typed; the slots before them keep the vtable order and are never called.
 
     [ComImport, Guid("ec5ec8a9-c395-4314-9c77-54d7a935ff70"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IWICImagingFactory

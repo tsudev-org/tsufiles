@@ -28,7 +28,7 @@ public class UpdateServiceTests
     public void Release_tags_compare_by_version(string? tag, string current, bool newer) =>
         Assert.Equal(newer, UpdateService.IsNewer(tag, current));
 
-    /// <summary>Filee works offline: a failed update check must neither throw nor report an update.</summary>
+    /// <summary>TsuFiles works offline: a failed update check must neither throw nor report an update.</summary>
     public static TheoryData<string> OfflineFailures => ["no network", "timeout", "dropped while reading", "not json"];
 
     [Theory]
@@ -201,7 +201,7 @@ public class UpdateServiceTests
     }
 
     internal const string Issuer = "CN=Certum Code Signing 2021 CA, O=Asseco Data Systems S.A., C=PL";
-    internal static readonly AuthenticodeSigner Publisher = new("CN=Open Source Developer, Filee", Issuer, new string('a', 64));
+    internal static readonly AuthenticodeSigner Publisher = new("CN=Open Source Developer, TsuFiles", Issuer, new string('a', 64));
 
     /// <summary>An update service whose own program is signed by <paramref name="own"/> and the installer by <paramref name="installer"/>.</summary>
     private static UpdateService Signed(AuthenticodeSigner? own, AuthenticodeSigner? installer) =>
@@ -536,7 +536,7 @@ public class UpdateServiceTests
             var installMode = File.GetUnixFileMode(installSh);
             Assert.True((installMode & UnixFileMode.UserExecute) != 0, "install.sh must be executable");
             var fileeMode = File.GetUnixFileMode(fileeExe);
-            Assert.True((fileeMode & UnixFileMode.UserExecute) != 0, "Filee must be executable");
+            Assert.True((fileeMode & UnixFileMode.UserExecute) != 0, "TsuFiles must be executable");
         }
     }
 
@@ -1022,7 +1022,7 @@ public class UpdateServiceTests
         File.SetUnixFileMode(mockInstallSh, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
 
         var argsOut = Path.Combine(tempDir, "filee-args.txt");
-        var mockFilee = Path.Combine(tempDir, "Filee");
+        var mockFilee = Path.Combine(tempDir, "TsuFiles");
         File.WriteAllText(mockFilee, $"#!/bin/sh\necho \"$@\" > '{argsOut}'\nexit 0\n");
         File.SetUnixFileMode(mockFilee, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
 
@@ -1032,7 +1032,7 @@ public class UpdateServiceTests
 
         var script =
             "for _ in $(seq 1 600); do if ! kill -0 \"$1\" 2>/dev/null; then break; fi; sleep 0.1; done; " +
-            "if kill -0 \"$1\" 2>/dev/null; then echo \"Update aborted: Filee (PID $1) did not exit within timeout\" >> \"$4\"; rm -rf \"$5\" 2>/dev/null; exit 1; fi; " +
+            "if kill -0 \"$1\" 2>/dev/null; then echo \"Update aborted: TsuFiles (PID $1) did not exit within timeout\" >> \"$4\"; rm -rf \"$5\" 2>/dev/null; exit 1; fi; " +
             "\"$2\" --upgrade >> \"$4\" 2>&1; " +
             "status=$?; " +
             "rm -rf \"$5\" 2>/dev/null; " +
@@ -1041,7 +1041,7 @@ public class UpdateServiceTests
             "else " +
             "echo \"Update failed with status $status\" >> \"$4\"; " +
             "echo \"$4\" > \"$6.tmp\" 2>/dev/null && mv -f \"$6.tmp\" \"$6\" 2>/dev/null || true; " +
-            "if [ -x \"$3\" ]; then exec \"$3\" --background; else echo \"Cannot restart Filee: '$3' is not executable after rollback\" >> \"$4\"; exit $status; fi; " +
+            "if [ -x \"$3\" ]; then exec \"$3\" --background; else echo \"Cannot restart TsuFiles: '$3' is not executable after rollback\" >> \"$4\"; exit $status; fi; " +
             "fi";
 
         using var proc = Process.Start(new ProcessStartInfo("/bin/sh")
@@ -1058,7 +1058,7 @@ public class UpdateServiceTests
         Assert.True(File.Exists(markerFile), "Failure marker file must be created");
         Assert.Equal(installLog, File.ReadAllText(markerFile).Trim());
 
-        Assert.True(File.Exists(argsOut), "Restored Filee executable must have been launched");
+        Assert.True(File.Exists(argsOut), "Restored TsuFiles executable must have been launched");
         var args = File.ReadAllText(argsOut).Trim();
         Assert.Equal("--background", args);
         Assert.DoesNotContain("--whats-new", args);
@@ -1078,12 +1078,12 @@ public class UpdateServiceTests
         var markerFile = Path.Combine(tempDir, ".update-failed");
         var mockInstallSh = Path.Combine(tempDir, "install.sh");
         File.WriteAllText(mockInstallSh, "#!/bin/sh\nexit 0\n");
-        var mockFilee = Path.Combine(tempDir, "Filee");
+        var mockFilee = Path.Combine(tempDir, "TsuFiles");
         File.WriteAllText(mockFilee, "#!/bin/sh\nexit 0\n");
 
         var timeoutScript =
             "for _ in $(seq 1 2); do if ! kill -0 \"$1\" 2>/dev/null; then break; fi; sleep 0.01; done; " +
-            "if kill -0 \"$1\" 2>/dev/null; then echo \"Update aborted: Filee (PID $1) did not exit within timeout\" >> \"$4\"; rm -rf \"$5\" 2>/dev/null; exit 1; fi; " +
+            "if kill -0 \"$1\" 2>/dev/null; then echo \"Update aborted: TsuFiles (PID $1) did not exit within timeout\" >> \"$4\"; rm -rf \"$5\" 2>/dev/null; exit 1; fi; " +
             "\"$2\" --upgrade >> \"$4\" 2>&1; " +
             "status=$?; " +
             "rm -rf \"$5\" 2>/dev/null; " +
@@ -1092,7 +1092,7 @@ public class UpdateServiceTests
             "else " +
             "echo \"Update failed with status $status\" >> \"$4\"; " +
             "echo \"$4\" > \"$6.tmp\" 2>/dev/null && mv -f \"$6.tmp\" \"$6\" 2>/dev/null || true; " +
-            "if [ -x \"$3\" ]; then exec \"$3\" --background; else echo \"Cannot restart Filee: '$3' is not executable after rollback\" >> \"$4\"; exit $status; fi; " +
+            "if [ -x \"$3\" ]; then exec \"$3\" --background; else echo \"Cannot restart TsuFiles: '$3' is not executable after rollback\" >> \"$4\"; exit $status; fi; " +
             "fi";
 
         using var proc = Process.Start(new ProcessStartInfo("/bin/sh")
@@ -1106,7 +1106,7 @@ public class UpdateServiceTests
         Assert.Equal(1, proc.ExitCode);
 
         Assert.False(Directory.Exists(workspace), "Workspace must be cleaned up on timeout");
-        Assert.Contains("Update aborted: Filee", File.ReadAllText(installLog));
+        Assert.Contains("Update aborted: TsuFiles", File.ReadAllText(installLog));
     }
 
     private static byte[] CreateTarGz(Action<TarWriter> populate)

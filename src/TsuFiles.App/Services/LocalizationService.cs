@@ -15,7 +15,7 @@ namespace TsuFiles.App.Services;
 /// <summary>JSON based localization with live language switching.</summary>
 public sealed class LocalizationService : ILocalizer
 {
-    /// <summary>Languages shipped with Filee: code → native name (shown in the language picker; see AppLanguages).</summary>
+    /// <summary>Languages shipped with TsuFiles: code → native name (shown in the language picker; see AppLanguages).</summary>
     public static readonly IReadOnlyList<(string Code, string NativeName)> Languages = AppLanguages.All;
 
     private readonly ResourceDictionary _resources = new();
@@ -89,7 +89,7 @@ public sealed class LocalizationService : ILocalizer
         CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "\u200E" + text + "\u200E" : text;
 
     /// <summary>
-    /// The language the user reads the OS in, taken before <see cref="SetLanguage"/> makes Filee's own the current one.
+    /// The language the user reads the OS in, taken before <see cref="SetLanguage"/> makes TsuFiles's own the current one.
     /// Not InstalledUICulture: that is the language Windows was installed in, which stays Polish when the user switches
     /// the display language to English (or Russian, …) later.
     /// </summary>
@@ -165,7 +165,7 @@ public sealed class LocalizationService : ILocalizer
         if (!(loader?.Exists(uri) ?? AssetLoader.Exists(uri)))
             return [];
         using var stream = loader?.Open(uri) ?? AssetLoader.Open(uri);
-        // TsuFiles: đổi tên hiển thị "Filee" -> "TsuFiles" ngay khi nạp, để không phải sửa từng tệp dịch.
+        // TsuFiles: đổi tên hiển thị "TsuFiles" -> "TsuFiles" ngay khi nạp, để không phải sửa từng tệp dịch.
         var strings = JsonSerializer.Deserialize(stream, AppJsonContext.Default.DictionaryStringString) ?? [];
         foreach (var key in strings.Keys.ToList())
             strings[key] = TsuFiles.Core.ForkDefaults.Brand(strings[key]);
@@ -174,7 +174,7 @@ public sealed class LocalizationService : ILocalizer
 
     /// <summary>
     /// One string in the system's language, before Avalonia (and the settings) are loaded: for the messages a launch
-    /// shows when it can't reach the running Filee. Falls back to English, then to the key.
+    /// shows when it can't reach the running TsuFiles. Falls back to English, then to the key.
     /// </summary>
     internal static string EarlyText(string key)
     {

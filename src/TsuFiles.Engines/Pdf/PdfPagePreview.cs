@@ -4,7 +4,7 @@
 using PDFtoImage;
 using SkiaSharp;
 
-// PDFtoImage supports every desktop platform Filee targets.
+// PDFtoImage supports every desktop platform TsuFiles targets.
 #pragma warning disable CA1416
 
 namespace TsuFiles.Engines.Pdf;

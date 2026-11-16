@@ -1,4 +1,4 @@
-// "Size limit" (#553): megabytes as Filee shows sizes and as mail and chat services count them, and the check that
+// "Size limit" (#553): megabytes as TsuFiles shows sizes and as mail and chat services count them, and the check that
 // no result over a preset's limit is handed over.
 
 using System.Globalization;

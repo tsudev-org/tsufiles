@@ -2,7 +2,7 @@
 // Built in code (no XAML) so TsuFiles.Setup can link it as it is; it uses only the Soft look's resources (SoftRadius,
 // AccentBrush, SurfaceAltBrush, …) and the h2 / muted text classes, which both apps define.
 //
-// Filee's "What's new" window adds Previous / Next around it; Setup's progress page sets AutoAdvance instead.
+// TsuFiles's "What's new" window adds Previous / Next around it; Setup's progress page sets AutoAdvance instead.
 
 using Avalonia;
 using Avalonia.Controls;

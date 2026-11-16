@@ -9,7 +9,7 @@ using PDFtoImage.Exceptions;
 using SkiaSharp;
 using TsuFiles.Core.Platform;
 
-#pragma warning disable CA1416 // PDFium ships for every desktop platform Filee targets.
+#pragma warning disable CA1416 // PDFium ships for every desktop platform TsuFiles targets.
 
 namespace TsuFiles.Engines.Pdf;
 

@@ -7,7 +7,7 @@ public static class WaylandSupport
 {
     /// <summary>
     /// Whether the native Wayland backend (Avalonia.Wayland) is opted into: on Linux, with <c>TSUFILES_USE_WAYLAND=1</c>
-    /// and a Wayland display to connect to. Otherwise Filee runs through X11 or XWayland.
+    /// and a Wayland display to connect to. Otherwise TsuFiles runs through X11 or XWayland.
     /// </summary>
     public static bool IsNativeWaylandRequested(bool isLinux, string? fileeUseWayland, string? waylandDisplay) =>
         isLinux

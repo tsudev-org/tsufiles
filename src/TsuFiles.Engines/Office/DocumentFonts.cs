@@ -64,7 +64,7 @@ internal static class DocumentFonts
 
     private static bool Installed(string face)
     {
-        // The user may have installed a font since an earlier conversion in this Filee session.
+        // The user may have installed a font since an earlier conversion in this TsuFiles session.
         RhwpFonts.Forget(face);
         return RhwpFonts.Find(face) is { Usable: true };
     }

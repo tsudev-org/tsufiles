@@ -116,7 +116,7 @@ public sealed class TriggerServiceLifecycleTests
     public void Input_after_the_event_queue_closed_never_throws_on_the_hook_thread()
     {
         // #528: a stop that fails leaves the native hook running with its queue closed. SharpHook's own event loop
-        // hook then threw on the OS hook thread for the next mouse move, which ended Filee.
+        // hook then threw on the OS hook thread for the next mouse move, which ended TsuFiles.
         var provider = new DelayedProvider();
         var hook = new QueuedGlobalHook(provider);
         var moves = 0;
@@ -235,7 +235,7 @@ public sealed class TriggerServiceLifecycleTests
         service.Start();
         Assert.True(SpinWait.SpinUntil(() => provider.Runs == 1, 2000));
 
-        // The donut is closed: Tab is none of Filee's business.
+        // The donut is closed: Tab is none of TsuFiles's business.
         provider.PostKey(EventType.KeyPressed, KeyCode.VcTab);
         provider.PostKey(EventType.KeyReleased, KeyCode.VcTab);
         Assert.Equal(0, Settle(() => flips));

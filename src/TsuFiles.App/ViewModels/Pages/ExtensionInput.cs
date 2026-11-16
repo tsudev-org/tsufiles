@@ -16,9 +16,9 @@ public static class ExtensionInput
     /// (" *.JPG " → "jpg", ".tar.gz" → "tar.gz"). Returns null for text that can't be an extension.
     /// </summary>
     /// <remarks>
-    /// Two-part extensions are only accepted when Filee knows them (tar.gz, tar.xz ...): files are matched with
+    /// Two-part extensions are only accepted when TsuFiles knows them (tar.gz, tar.xz ...): files are matched with
     /// <see cref="FormatRegistry.ExtensionOf"/>, which only sees the last part of any other name ("x.foo.bar" → "bar").
-    /// An extension Filee knows is taken as it is, so every suggestion can be added (Krita's backup "kra~").
+    /// An extension TsuFiles knows is taken as it is, so every suggestion can be added (Krita's backup "kra~").
     /// </remarks>
     public static string? Normalize(string? text)
     {

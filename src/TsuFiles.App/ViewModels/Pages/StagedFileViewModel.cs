@@ -16,7 +16,7 @@ public sealed partial class StagedFileViewModel : ObservableObject, IDisposable
     private readonly ILocalizer _loc;
     private readonly FileFormat? _format;
 
-    /// <param name="format">The file's format, or null when Filee doesn't know it (the card then shows no picture).</param>
+    /// <param name="format">The file's format, or null when TsuFiles doesn't know it (the card then shows no picture).</param>
     public StagedFileViewModel(string path, FileFormat? format, Action<StagedFileViewModel> remove, ILocalizer loc)
     {
         Path = path;

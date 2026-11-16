@@ -7,7 +7,7 @@
     <AssemblyName>TsuFiles</AssemblyName>
     <RootNamespace>TsuFiles.App</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <ApplicationIcon>Assets\Icons\filee.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\Icons\tsufiles.ico</ApplicationIcon>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
   </PropertyGroup>

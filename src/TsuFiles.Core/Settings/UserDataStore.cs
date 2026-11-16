@@ -27,9 +27,9 @@ public sealed class UserDataStore
     }
 
     /// <summary>
-    /// Environment variable that moves all of Filee's per-user data (settings, logs, downloaded engines) to another
+    /// Environment variable that moves all of TsuFiles's per-user data (settings, logs, downloaded engines) to another
     /// folder and gives that copy its own single instance: a development or test copy then never touches, or talks
-    /// to, the Filee the user runs. A copy started with it also leaves the system integration alone.
+    /// to, the TsuFiles the user runs. A copy started with it also leaves the system integration alone.
     /// </summary>
     public const string DirectoryVariable = "TSUFILES_DATA_DIR";
 
@@ -281,7 +281,7 @@ public sealed class UserDataStore
             Presets.RemoveAll(p => p.Id == preset.Id);
             Presets.Add(preset);
         }
-        // A bundle from a Filee before back faces has none: a built-in donut gets its default one, as on loading.
+        // A bundle from a TsuFiles before back faces has none: a built-in donut gets its default one, as on loading.
         SettingsMigrations.AddBackFaces(Presets, bundle.Profiles);
         // Mixed-selection profiles stay mixed: several may exist, and the catch-all is the first one with nothing
         // checked, so an imported one added at the end never replaces ours.
@@ -304,12 +304,12 @@ public sealed class UserDataStore
             // No back face known by now (a donut the user made, read from an older file): it has none.
             profile.BackPresetIds = (profile.BackPresetIds ?? []).Where(ids.Contains).Distinct().Take(ToolbarProfile.MaxSlices).ToList();
         }
-        // A Filee from before groups drops "kind" (and the presets) when it saves a group, which comes back as a
+        // A TsuFiles from before groups drops "kind" (and the presets) when it saves a group, which comes back as a
         // conversion to "group": still a group, now an empty one, rather than a conversion that can never run.
         foreach (var preset in Presets.Where(p => !p.IsGroup && p.TargetFormat == Preset.GroupTarget))
             preset.Kind = PresetKind.Group;
         // A group fans out conversions and tools (but never another group), each once, at most MaxSubPresets, and has no
-        // target format an older Filee could run it with.
+        // target format an older TsuFiles could run it with.
         var actions = Presets.Where(p => !p.IsGroup).Select(p => p.Id).ToHashSet();
         foreach (var group in Presets.Where(p => p.IsGroup))
         {
@@ -390,7 +390,7 @@ internal static class SettingsMigrations
         if (settings.SchemaVersion < 4)
             InsertBefore(settings.EnginePriority, "markdown", "hwpx-writer");
 
-        // v5: Microsoft Word automation was removed (Filee no longer uses software installed on the system) and the
+        // v5: Microsoft Word automation was removed (TsuFiles no longer uses software installed on the system) and the
         //     built-in "spreadsheet" engine (XLSX <-> CSV) was added; profiles are split by ApplyToLibrary.
         if (settings.SchemaVersion < 5)
         {
@@ -627,7 +627,7 @@ internal static class SettingsMigrations
         }
 
         // v17: rotate / flip presets and the "Rotate" / "Flip" groups that fan them out, on no donut, after "Remove
-        // background" as in a new library. Present already but saved since by a Filee before 17 (it reads and writes
+        // background" as in a new library. Present already but saved since by a TsuFiles before 17 (it reads and writes
         // an older schema, so back and forth between versions comes here again): that one dropped what it didn't
         // know, the rotation and the group, and left a preset that re-encodes unturned. Those parts are put back, the
         // user's own changes (name, quality, file names) stay.
@@ -681,7 +681,7 @@ internal static class SettingsMigrations
             }
         }
         // v20: "Compress PDF" (PDF → a smaller PDF), after "Split PDF" as in a new library, on no donut: the PDF donut
-        //      is full. Present already but saved since by a Filee before 20 (back and forth between versions): that
+        //      is full. Present already but saved since by a TsuFiles before 20 (back and forth between versions): that
         //      one dropped the compression level and left a preset that copies the pages, so the level is put back.
         if (from < 20)
         {
@@ -722,7 +722,7 @@ internal static class SettingsMigrations
         if (from < 25)
             changed |= AddGeo(presets, profiles);
         // v26: interactive "Crop" tool, after "Remove background" as in a new library, on no donut: users add it in
-        //      Settings → Toolbar. Present already but saved since by a Filee before 26: that one read the unknown
+        //      Settings → Toolbar. Present already but saved since by a TsuFiles before 26: that one read the unknown
         //      kind as a Group, dropped the target format and left an empty group. Kind and target format are put back,
         //      the user's own changes (name, file name pattern) stay.
         if (from < 26)
@@ -753,7 +753,7 @@ internal static class SettingsMigrations
         if (from < 28)
             changed |= Offer(presets, profiles, "archives", "zip-all", "extract");
         // v29: "Extract live video" (the video of a Live / Motion Photo as MP4), after "Extract frames" as in a new
-        //      library, on no donut: the images donut is full. Present already but saved since by a Filee before 29:
+        //      library, on no donut: the images donut is full. Present already but saved since by a TsuFiles before 29:
         //      that one dropped the option and left a plain MP4 preset, so it is put back. The images donut learns
         //      ".livp" (iPhone Live Photos downloaded from iCloud) unless a donut of the user already takes it.
         if (from < 29)
@@ -779,14 +779,14 @@ internal static class SettingsMigrations
         //      whose front as read is still exactly the new default front gets the new default back face (except
         //      presentations, CAD, mixed and text, see AddBackFaces), any other built-in donut the schema 58 one (both
         //      with the presets the library still has), a donut the user made none; no front changes. Also at a later
-        //      schema when a donut has no back face at all, not even an empty one: a Filee before 30 saved the library
+        //      schema when a donut has no back face at all, not even an empty one: a TsuFiles before 30 saved the library
         //      since and dropped what it didn't know, so the built-in back faces come back. One the user emptied is
         //      saved empty and stays so.
         if (from < 30 || profiles.Any(p => p.BackPresetIds is null))
             changed |= AddBackFaces(presets, profiles, storedFronts);
         // v31: "Live Photo (iPhone)" and "Motion Photo (Android)" (a clip of a video as a moving photo), after "Extract
         //      Live Photo video" as in a new library, and on the back of the video donut after "Extract frames" when it
-        //      has room and the user hasn't put them elsewhere on it. Present already but saved since by a Filee before
+        //      has room and the user hasn't put them elsewhere on it. Present already but saved since by a TsuFiles before
         //      31: that one dropped the option and left a plain JPG preset, so it is put back.
         if (from < 31)
         {
@@ -904,7 +904,7 @@ internal static class SettingsMigrations
         // v45: "Cut a clip" (a part of a video as a file of its own), after "Motion Photo (Android)" as in a new library,
         //      and first on the back of the video donut in place of FLAC (which stays in the library), when the user
         //      hasn't put it elsewhere on the donut and the face has room.
-        //      Present already but saved since by a Filee before 45: that one dropped the tool's name, which made it a
+        //      Present already but saved since by a TsuFiles before 45: that one dropped the tool's name, which made it a
         //      crop, so it is put back. The user's own changes (name, file name pattern) stay.
         if (from < 45)
             changed |= AddClipTool(presets, profiles);
@@ -946,7 +946,7 @@ internal static class SettingsMigrations
         // v51: "Edit pictures" (size, format, turn and colour chosen each time, #584), after "Crop" as in a new library,
         //      and on the front of the images donut after "Half size" when that is there, the user hasn't put the tool
         //      elsewhere on the donut and the face has room.
-        //      Present already but saved since by a Filee before 45 (2.0): that one dropped the tool's name, which made it
+        //      Present already but saved since by a TsuFiles before 45 (2.0): that one dropped the tool's name, which made it
         //      a crop, so it is put back. 2.1 keeps the name (the slice is greyed out there, as a tool it doesn't know).
         if (from < 51)
             changed |= AddImageEditTool(presets, profiles);
@@ -954,13 +954,13 @@ internal static class SettingsMigrations
         //      "Half size" (after "Edit pictures" when that follows it) when the front has room, else at the end of the
         //      back face when that has room. A front without "Half size" was laid out by the user and is left alone (the
         //      tool is in the library); one who put the tool somewhere on the donut keeps it there.
-        //      Present already but saved since by a Filee before 45 (2.0): that one dropped the tool's name, which made it
+        //      Present already but saved since by a TsuFiles before 45 (2.0): that one dropped the tool's name, which made it
         //      a crop, so it is put back. 2.1 keeps the name (the slice is greyed out there, as a tool it doesn't know).
         if (from < 52)
             changed |= AddHideTool(presets, profiles);
         // v53: "Merge images" (#645), after "Merge audio" as in a new library, and on the back of the images donut before
         //      "Merge PDF" when the user hasn't put it on either face: in a free slot, or in place of "GIF" (which stays in
-        //      the library) on a full face. Present already but saved since by a Filee before 53: that one dropped the option and left a
+        //      the library) on a full face. Present already but saved since by a TsuFiles before 53: that one dropped the option and left a
         //      plain "same format" preset, so it is put back.
         if (from < 53)
             changed |= AddMergeImages(presets, profiles);
@@ -1104,7 +1104,7 @@ internal static class SettingsMigrations
         {
             if (presets.FirstOrDefault(p => p.Id == preset.Id) is { } existing)
             {
-                // Saved since by an older Filee, which dropped the option and left a plain PDF preset.
+                // Saved since by an older TsuFiles, which dropped the option and left a plain PDF preset.
                 if (preset.Pdf.MakesSheets && !existing.Pdf.MakesSheets && existing.TargetFormat == preset.TargetFormat)
                 {
                     existing.Pdf.PagesPerSheet = preset.Pdf.PagesPerSheet;
@@ -1146,7 +1146,7 @@ internal static class SettingsMigrations
         {
             if (presets.FirstOrDefault(p => p.Id == preset.Id) is { } existing)
             {
-                // Saved since by an older Filee, which dropped the option and left a plain "same format" preset.
+                // Saved since by an older TsuFiles, which dropped the option and left a plain "same format" preset.
                 if (preset.CropsVideo && !existing.CropsVideo && existing.TargetFormat == preset.TargetFormat)
                 {
                     existing.Media.CropFrame = preset.Media.CropFrame;
@@ -1308,7 +1308,7 @@ internal static class SettingsMigrations
             var front = storedFronts?.GetValueOrDefault(profile.Id) ?? profile.PresetIds;
             var fresh = current[profile.Id];
             // Presentations, CAD and mixed have the same front in both layouts, so the front can't tell a new library
-            // from an existing one. Text: the Filee 1.0.1 front plus HWP from schema 7 is exactly the new text front.
+            // from an existing one. Text: the TsuFiles 1.0.1 front plus HWP from schema 7 is exactly the new text front.
             // Their schema 58 back faces hold every slot of the new ones.
             var isNew = front.SequenceEqual(fresh.PresetIds)
                         && !fresh.PresetIds.SequenceEqual(frozen[profile.Id].PresetIds)

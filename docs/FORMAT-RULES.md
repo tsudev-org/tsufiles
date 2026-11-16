@@ -1,6 +1,6 @@
-# What Filee shows by default
+# What TsuFiles shows by default
 
-Filee recognizes about 270 formats and ships many tools. These rules decide which of them a user sees by default,
+TsuFiles recognizes about 270 formats and ships many tools. These rules decide which of them a user sees by default,
 so the everyday conversions stay easy to find as more arrive. They come from [#806](https://github.com/KnifeLemon/Filee/issues/806),
 [#832](https://github.com/KnifeLemon/Filee/issues/832), [#844](https://github.com/KnifeLemon/Filee/issues/844) and
 [discussion #862](https://github.com/KnifeLemon/Filee/discussions/862).
@@ -52,7 +52,7 @@ A hidden format is left out of:
 - the slots that convert into it, on any donut (`to-<format>`);
 - the preset editor's target list and the other settings lists (toolbar editor palette, preset library).
 
-Nothing else changes: Filee still recognizes the file, the presets themselves stay, and the CLI converts to every
+Nothing else changes: TsuFiles still recognizes the file, the presets themselves stay, and the CLI converts to every
 format.
 
 ### 4. A dropped file's own fields stay visible on its donut
@@ -71,7 +71,7 @@ This exception is for the donut's slots only. The settings lists keep following 
 | an everyday or general output | as before |
 | a specialist or legacy output | it belongs **only** to fields that can be turned off and are off by default; if it has no such field, the field is defined first |
 
-This rule is not applied to formats Filee already had. Because Developer is on by default, a new output format that
+This rule is not applied to formats TsuFiles already had. Because Developer is on by default, a new output format that
 only developers make can't come in for now; that is looked at again when such a request comes.
 
 ## Donuts

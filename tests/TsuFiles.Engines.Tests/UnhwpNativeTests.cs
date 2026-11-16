@@ -1,5 +1,5 @@
 // Unhwp is available where its native library loads: from its NuGet package (win-x64, linux-x64, macOS) or from
-// Filee's own build of the same release (linux-arm64, win-arm64; build/build-native.py, -p:UnhwpNativeLibrary).
+// TsuFiles's own build of the same release (linux-arm64, win-arm64; build/build-native.py, -p:UnhwpNativeLibrary).
 
 using System.Reflection;
 using TsuFiles.Engines.Hwp;

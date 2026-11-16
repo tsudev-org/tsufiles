@@ -24,7 +24,7 @@ public class TranslatePresetMigrationTests
     }
 
     /// <summary>
-    /// A library as an older Filee saved it: no Translate preset or slot, and Captions off the video and audio donuts so
+    /// A library as an older TsuFiles saved it: no Translate preset or slot, and Captions off the video and audio donuts so
     /// the schema 57 step has a slot to add. With <paramref name="keepTranslate"/> the preset stays in the list, so the
     /// new step doesn't run and only the older steps apply.
     /// </summary>

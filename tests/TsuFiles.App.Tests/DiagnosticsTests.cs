@@ -1,4 +1,4 @@
-// The log lines that explain a Filee which seems to ignore everything: UI thread stalls, bursts kept short, the
+// The log lines that explain a TsuFiles which seems to ignore everything: UI thread stalls, bursts kept short, the
 // start-up line, and the restart without administrator rights.
 
 using System.Globalization;
@@ -170,7 +170,7 @@ public class StartupDiagnosticsTests
     {
         var line = StartupDiagnostics.Describe("1.11.0", "/opt/filee/Filee", "portable",
             new ElevationState(IntegrityLevel.High, IntegrityLevel.Medium, true), "Microsoft Windows 10.0.26200 X64", 3);
-        Assert.Equal("Filee 1.11.0 starting: /opt/filee/Filee (portable), integrity High (elevated), Explorer Medium, " +
+        Assert.Equal("TsuFiles 1.11.0 starting: /opt/filee/Filee (portable), integrity High (elevated), Explorer Medium, " +
                      "Microsoft Windows 10.0.26200 X64, 3 argument(s)", line);
     }
 
@@ -178,7 +178,7 @@ public class StartupDiagnosticsTests
     public void An_unknown_path_and_state_still_give_a_line()
     {
         var line = StartupDiagnostics.Describe("1.0.0", null, "development build", ElevationState.Unknown, "Linux", 0);
-        Assert.Equal("Filee 1.0.0 starting: (unknown path) (development build), integrity unknown, Linux, 0 argument(s)", line);
+        Assert.Equal("TsuFiles 1.0.0 starting: (unknown path) (development build), integrity unknown, Linux, 0 argument(s)", line);
     }
 
     [Theory]
@@ -200,9 +200,9 @@ public class StartupDiagnosticsTests
         try
         {
             var log = StartupDiagnostics.CreateEarlyLogger(folder);
-            log.LogInformation("{Startup}", "Filee test starting");
+            log.LogInformation("{Startup}", "TsuFiles test starting");
             var file = Assert.Single(Directory.GetFiles(folder, "tsufiles-*.log"));
-            Assert.Contains("Program: Filee test starting", File.ReadAllText(file));
+            Assert.Contains("Program: TsuFiles test starting", File.ReadAllText(file));
         }
         finally
         {

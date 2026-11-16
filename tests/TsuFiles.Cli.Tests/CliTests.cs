@@ -630,13 +630,13 @@ public sealed class CliTests : IDisposable
     public async Task Data_files_convert_to_each_other()
     {
         var json = Path.Combine(_folder, "config.json");
-        await File.WriteAllTextAsync(json, """{"name": "Filee", "ports": [80, 443]}""", TestContext.Current.CancellationToken);
+        await File.WriteAllTextAsync(json, """{"name": "TsuFiles", "ports": [80, 443]}""", TestContext.Current.CancellationToken);
 
         var (code, output, errors) = await Run("convert", json, "--to", "yaml");
 
         Assert.Equal(Cli.Success, code);
         Assert.Equal("", errors);
-        Assert.Equal("name: Filee\nports:\n  - 80\n  - 443\n", await File.ReadAllTextAsync(Path.Combine(_folder, "config.yaml"), TestContext.Current.CancellationToken));
+        Assert.Equal("name: TsuFiles\nports:\n  - 80\n  - 443\n", await File.ReadAllTextAsync(Path.Combine(_folder, "config.yaml"), TestContext.Current.CancellationToken));
 
         (code, output, _) = await Run("formats", "json");
         Assert.Equal(Cli.Success, code);

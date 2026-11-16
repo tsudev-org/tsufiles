@@ -48,8 +48,8 @@ public sealed partial class EnginePackageState : ObservableObject
         : _loc["engines.package.system_required"];
 
     /// <summary>
-    /// How to get an engine Filee doesn't download on this system (FFmpeg and Ghostscript from Homebrew on macOS,
-    /// the distribution's packages on Linux), in the app's language; null when Filee can download it.
+    /// How to get an engine TsuFiles doesn't download on this system (FFmpeg and Ghostscript from Homebrew on macOS,
+    /// the distribution's packages on Linux), in the app's language; null when TsuFiles can download it.
     /// </summary>
     public string? InstallGuidance
     {
@@ -70,17 +70,17 @@ public sealed partial class EnginePackageState : ObservableObject
     private EnginePackageStatus _status;
 
     /// <summary>
-    /// Filee's download is installed but older than the version this Filee pins (engines.json changed with an app
+    /// TsuFiles's download is installed but older than the version this TsuFiles pins (engines.json changed with an app
     /// update): <see cref="CanUpdate"/> offers the new one.
     /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(StatusText), nameof(CanUpdate))]
     private bool _isOutdated;
 
-    /// <summary>The version Filee downloads now, e.g. "8.0" for FFmpeg (the package's main component).</summary>
+    /// <summary>The version TsuFiles downloads now, e.g. "8.0" for FFmpeg (the package's main component).</summary>
     public string? Version => EngineDownloads.Components.TryGetValue(Package.Components[0], out var component) ? component.Version : null;
 
-    /// <summary>Filee's download is installed in an older version than the one Filee downloads now.</summary>
+    /// <summary>TsuFiles's download is installed in an older version than the one TsuFiles downloads now.</summary>
     public bool CanUpdate => Status == EnginePackageStatus.Installed && IsOutdated && EngineDownloads.CanDownload(Package);
 
     /// <summary>Folder of the copy in use while the status is <see cref="EnginePackageStatus.OwnCopy"/>.</summary>
@@ -92,7 +92,7 @@ public sealed partial class EnginePackageState : ObservableObject
     [NotifyPropertyChangedFor(nameof(StatusText), nameof(CanInstall), nameof(UsesOwnCopy), nameof(CanUseOwnCopy))]
     private bool _fromSystem;
 
-    /// <summary>"Update recommended: 7.1 here, Filee is tested with 9.0" for an older copy, else null.</summary>
+    /// <summary>"Update recommended: 7.1 here, TsuFiles is tested with 9.0" for an older copy, else null.</summary>
     [ObservableProperty]
     private string? _updateNote;
 
@@ -113,7 +113,7 @@ public sealed partial class EnginePackageState : ObservableObject
     [ObservableProperty]
     private bool _selected;
 
-    /// <summary>The engine is there: Filee's download or the user's own copy.</summary>
+    /// <summary>The engine is there: TsuFiles's download or the user's own copy.</summary>
     public bool IsInstalled => Status is EnginePackageStatus.Installed or EnginePackageStatus.OwnCopy;
     public bool CanRemove => Status == EnginePackageStatus.Installed;
     /// <summary>The user chose this copy ("Stop using it" applies).</summary>
@@ -122,7 +122,7 @@ public sealed partial class EnginePackageState : ObservableObject
     public bool CanUseOwnCopy => Status is EnginePackageStatus.NotInstalled or EnginePackageStatus.Failed or EnginePackageStatus.Installed
                                  || (Status == EnginePackageStatus.OwnCopy && FromSystem);
     public bool IsBusy => Status is EnginePackageStatus.Queued or EnginePackageStatus.Downloading or EnginePackageStatus.Unpacking;
-    /// <summary>Also when a copy on the PC is used: Filee's download is the tested version and wins once installed.</summary>
+    /// <summary>Also when a copy on the PC is used: TsuFiles's download is the tested version and wins once installed.</summary>
     public bool CanInstall => EngineDownloads.CanDownload(Package) && (Status is EnginePackageStatus.NotInstalled or EnginePackageStatus.Failed
                               || (Status == EnginePackageStatus.OwnCopy && FromSystem));
 
@@ -209,7 +209,7 @@ public sealed class EngineDownloadService
     }
 
     /// <summary>
-    /// The copy the engines use (<see cref="EngineInstaller.StatusOf"/>). A copy Filee didn't download gets its
+    /// The copy the engines use (<see cref="EngineInstaller.StatusOf"/>). A copy TsuFiles didn't download gets its
     /// version checked in the background (<see cref="EnginePackageState.UpdateNote"/>).
     /// </summary>
     private EnginePackageStatus StatusOf(EnginePackageState state)
@@ -240,7 +240,7 @@ public sealed class EngineDownloadService
             state.UpdateNote = _loc.Format("engines.update_recommended", installed.ToString(2), expected.ToString(2)));
     }
 
-    /// <summary>Filee's downloads that have a newer version now (only engines the user installed).</summary>
+    /// <summary>TsuFiles's downloads that have a newer version now (only engines the user installed).</summary>
     public IReadOnlyList<EnginePackageState> Outdated => Packages.Where(p => p.CanUpdate).ToList();
 
     /// <summary>
@@ -310,7 +310,7 @@ public sealed class EngineDownloadService
 
     /// <summary>
     /// The reason on the Engines card: an installer's error.* reason in the user's language (#527), also when another
-    /// Filee holds the package (#963).
+    /// TsuFiles holds the package (#963).
     /// </summary>
     internal static string ErrorText(ILocalizer loc, Exception ex) =>
         ex is HttpRequestException ? ex.Message
@@ -354,7 +354,7 @@ public sealed class EngineDownloadService
 
     /// <summary>
     /// Removes a package. Returns null when it's gone, else the key of the reason: its files are in use (a conversion
-    /// is running), or another Filee is installing or removing it (#963).
+    /// is running), or another TsuFiles is installing or removing it (#963).
     /// </summary>
     public string? Uninstall(EnginePackageState state)
     {

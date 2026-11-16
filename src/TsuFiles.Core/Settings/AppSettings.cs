@@ -146,7 +146,7 @@ public sealed class AppSettings
 
     public bool StartWithSystem { get; set; } = true;
 
-    /// <summary>Show the Explorer "Convert with Filee" context menu entry.</summary>
+    /// <summary>Show the Explorer "Convert with TsuFiles" context menu entry.</summary>
     public bool ContextMenuEnabled { get; set; } = true;
 
     public bool CheckForUpdates { get; set; } = true;
@@ -175,11 +175,11 @@ public sealed class AppSettings
     [JsonIgnore]
     public int EffectiveHistoryLimit => Math.Clamp(HistoryLimit, MinHistoryLimit, MaxHistoryLimit);
 
-    /// <summary>Whether the macOS Dock shows Filee.</summary>
+    /// <summary>Whether the macOS Dock shows TsuFiles.</summary>
     [JsonConverter(typeof(IconPreferenceJsonConverter))]
     public bool ShowInDock { get; set; } = true;
 
-    /// <summary>Whether the macOS menu bar shows Filee's status icon.</summary>
+    /// <summary>Whether the macOS menu bar shows TsuFiles's status icon.</summary>
     [JsonConverter(typeof(IconPreferenceJsonConverter))]
     public bool ShowMenuBarIcon { get; set; } = true;
 
@@ -194,7 +194,7 @@ public sealed class AppSettings
 
     /// <summary>
     /// The version whose "What's new" slides were last shown (or that was installed fresh, which needs none). Null in
-    /// settings from before the slides existed: Filee was updated from an older version.
+    /// settings from before the slides existed: TsuFiles was updated from an older version.
     /// </summary>
     public string? WhatsNewSeenVersion { get; set; }
 
@@ -227,10 +227,10 @@ public sealed class AppSettings
     /// <summary>Conversions that succeeded completely, counted until the feedback card has been shown.</summary>
     public int SuccessfulConversions { get; set; }
 
-    /// <summary>Set once the "Is Filee helping you?" card (GitHub star / feedback) has been shown.</summary>
+    /// <summary>Set once the "Is TsuFiles helping you?" card (GitHub star / feedback) has been shown.</summary>
     public bool FeedbackPromptShown { get; set; }
 
-    /// <summary>macOS: set once Filee has shown the system's Accessibility alert, which it shows only once (#316).</summary>
+    /// <summary>macOS: set once TsuFiles has shown the system's Accessibility alert, which it shows only once (#316).</summary>
     public bool AccessibilityPromptShown { get; set; }
 
     /// <summary>Folders whose new files are converted automatically (Settings → Watch folders).</summary>
@@ -244,7 +244,7 @@ public sealed class AppSettings
 
     /// <summary>
     /// Optional engines the user already has: package id ("ffmpeg", "calibre", …) → the program they picked. Used
-    /// instead of Filee's download (Settings → Engines).
+    /// instead of TsuFiles's download (Settings → Engines).
     /// </summary>
     public Dictionary<string, string> EngineOwnCopies { get; set; } = [];
 
@@ -287,7 +287,7 @@ public sealed class AppSettings
     public bool ZipGeoResults { get; set; }
 
     /// <summary>
-    /// How large Filee's windows draw everything (Theme → Window size; Ctrl + mouse wheel, Ctrl + plus / minus, Ctrl + 0):
+    /// How large TsuFiles's windows draw everything (Theme → Window size; Ctrl + mouse wheel, Ctrl + plus / minus, Ctrl + 0):
     /// 1 as designed, 0.7 to 1.8. A missing value (settings from before it) reads as 1, so it needs no schema step.
     /// </summary>
     public double UiScale { get; set; } = 1;
@@ -300,7 +300,7 @@ public sealed class AppSettings
 
     /// <summary>
     /// Where the main window was when it last closed, so the next start opens it there (#586). Null until it has closed
-    /// once. A Filee from before it skips the property, so it needs no schema step.
+    /// once. A TsuFiles from before it skips the property, so it needs no schema step.
     /// </summary>
     public WindowBounds? MainWindow { get; set; }
 
@@ -395,7 +395,7 @@ public sealed class BrowserDropSettings
 
     /// <summary>
     /// Links may lead to this computer and the local network (an intranet, a NAS). Off: a web page could otherwise make
-    /// Filee send requests to the router or other devices at home or at work.
+    /// TsuFiles send requests to the router or other devices at home or at work.
     /// </summary>
     public bool AllowLocalNetwork { get; set; }
 }

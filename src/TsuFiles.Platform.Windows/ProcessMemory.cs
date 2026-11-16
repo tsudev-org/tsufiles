@@ -1,4 +1,4 @@
-// Hands the pages of this process back to Windows once it is idle in the tray, so Task Manager shows what Filee
+// Hands the pages of this process back to Windows once it is idle in the tray, so Task Manager shows what TsuFiles
 // really needs instead of what the last conversion touched.
 
 namespace TsuFiles.Platform.Windows;

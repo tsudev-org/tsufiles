@@ -1,4 +1,4 @@
-// Renders every state of Setup's card headlessly (Skia) in Filee's languages, light and dark: catches XAML and binding
+// Renders every state of Setup's card headlessly (Skia) in TsuFiles's languages, light and dark: catches XAML and binding
 // errors and text that doesn't fit, and leaves screenshots in bin/.../screenshots for review. Animations are off
 // (static logo, a still from each clip) except in the test that runs them.
 
@@ -235,7 +235,7 @@ public class SetupWindowTests
     [AvaloniaFact]
     public async Task Uninstall_says_what_filee_could_not_clean_up_for_the_user()
     {
-        // Issue #1079: the startup entry stayed behind, and the card said Filee was gone without a word about it.
+        // Issue #1079: the startup entry stayed behind, and the card said TsuFiles was gone without a word about it.
         var (model, texts, runner) = Model("en", uninstall: true);
         runner.CleanupFailed = true;
         await model.UninstallAsync();

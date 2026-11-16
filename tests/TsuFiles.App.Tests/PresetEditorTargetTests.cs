@@ -1,4 +1,4 @@
-// The preset editor's target list offers only formats Filee can write: read-only FON (#177) is a source, never a target.
+// The preset editor's target list offers only formats TsuFiles can write: read-only FON (#177) is a source, never a target.
 
 using Avalonia.Controls;
 using Avalonia.Headless;

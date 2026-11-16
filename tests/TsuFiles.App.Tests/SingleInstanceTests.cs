@@ -1,4 +1,4 @@
-// A later launch hands its arguments to the running Filee, also while that one is still starting.
+// A later launch hands its arguments to the running TsuFiles, also while that one is still starting.
 
 using TsuFiles.App.Services;
 
@@ -9,7 +9,7 @@ public class SingleInstanceTests
     [Fact]
     public async Task Arguments_reach_a_first_instance_that_starts_listening_late()
     {
-        // The installer's --quit (or a second launch) came 8 s after Filee started, on a computer where Filee took 12 s
+        // The installer's --quit (or a second launch) came 8 s after TsuFiles started, on a computer where TsuFiles took 12 s
         // to start listening: one 3-second try gave up and the request was lost.
         var name = "Filee-test-" + Guid.NewGuid().ToString("N")[..8];
         using var first = SingleInstance.Acquire(name);
@@ -33,7 +33,7 @@ public class SingleInstanceTests
     [Fact]
     public async Task A_burst_of_later_launches_loses_nothing()
     {
-        // Explorer starts one Filee per selected file (issue #767): they all queue for the one pipe at the same time.
+        // Explorer starts one TsuFiles per selected file (issue #767): they all queue for the one pipe at the same time.
         var name = "Filee-test-" + Guid.NewGuid().ToString("N")[..8];
         using var first = SingleInstance.Acquire(name);
         var received = new System.Collections.Concurrent.ConcurrentBag<string>();
@@ -273,7 +273,7 @@ public class SingleInstanceTests
     }, TestContext.Current.CancellationToken);
 }
 
-/// <summary>Windows: a running Filee with other rights (as administrator) refuses a normal launch.</summary>
+/// <summary>Windows: a running TsuFiles with other rights (as administrator) refuses a normal launch.</summary>
 [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 public class SingleInstanceAccessTests
 {
@@ -283,7 +283,7 @@ public class SingleInstanceAccessTests
         Assert.SkipUnless(OperatingSystem.IsWindows(), "Windows pipe security.");
         var name = "Filee-test-" + Guid.NewGuid().ToString("N")[..8];
         using var first = SingleInstance.Acquire(name);
-        // Only SYSTEM may write: what a pipe of an elevated Filee looks like to a normal process.
+        // Only SYSTEM may write: what a pipe of an elevated TsuFiles looks like to a normal process.
         var security = new System.IO.Pipes.PipeSecurity();
         security.AddAccessRule(new System.IO.Pipes.PipeAccessRule(
             new System.Security.Principal.SecurityIdentifier(System.Security.Principal.WellKnownSidType.LocalSystemSid, null),

@@ -16,7 +16,7 @@ namespace TsuFiles.App.Services;
 
 internal static class BrowserDrags
 {
-    /// <summary>Formats whose text Filee reads, by native name.</summary>
+    /// <summary>Formats whose text TsuFiles reads, by native name.</summary>
     private static readonly string[] TextFormats =
     [
         BrowserDragFormats.UniformResourceLocatorW, BrowserDragFormats.UniformResourceLocator, BrowserDragFormats.MozUrl,
@@ -102,7 +102,7 @@ internal static class BrowserDrags
         return new BrowserDragContent { Files = files, Texts = texts, Picture = Picture(data, texts) };
     }
 
-    /// <summary>True for a path in the system's temporary folder (but not in Filee's own work folders).</summary>
+    /// <summary>True for a path in the system's temporary folder (but not in TsuFiles's own work folders).</summary>
     internal static bool IsTemporary(string path)
     {
         try

@@ -5,9 +5,9 @@
 //      not taken.
 //   2. A picture (the dragged HTML fragment is one <img> and no text; a Firefox file promise): its address.
 //   3. A download a page offers (DownloadURL): its address, named as the page says.
-//   4. Links: only when the address ends in an extension Filee converts (".pdf", ".docx", ".png"), never a web page
+//   4. Links: only when the address ends in an extension TsuFiles converts (".pdf", ".docx", ".png"), never a web page
 //      (".html", ".php", no extension). The server's answer is checked again when downloading.
-//   5. Nothing else, but the drag carries the picture's pixels (a blob: address Filee can't fetch): those, as PNG.
+//   5. Nothing else, but the drag carries the picture's pixels (a blob: address TsuFiles can't fetch): those, as PNG.
 //
 // A complete standalone SVG text selection is a picture too. Other plain text is not a file.
 
@@ -15,7 +15,7 @@ using TsuFiles.Core.Formats;
 
 namespace TsuFiles.Core.Web;
 
-/// <summary>The parts of a drag Filee reads for files from a browser.</summary>
+/// <summary>The parts of a drag TsuFiles reads for files from a browser.</summary>
 public sealed class BrowserDragContent
 {
     /// <summary>Files the drag hands over with their bytes (virtual files, a browser's temporary copy).</summary>
@@ -111,7 +111,7 @@ public static class BrowserDrag
         Links(content).Select(u => Uri.TryCreate(u, UriKind.Absolute, out var uri) ? uri : null).FirstOrDefault(u => u is not null);
 
     /// <summary>
-    /// The file at <paramref name="address"/>, or null when it isn't one Filee takes: not http(s) or data:, a web
+    /// The file at <paramref name="address"/>, or null when it isn't one TsuFiles takes: not http(s) or data:, a web
     /// page, a program, or a link whose type can't be told before downloading.
     /// </summary>
     /// <param name="image">The address is a picture's: taken even without an extension (".jpg" stands in until the bytes say).</param>

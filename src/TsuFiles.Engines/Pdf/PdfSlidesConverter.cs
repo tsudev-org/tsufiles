@@ -18,7 +18,7 @@ using SkiaSharp;
 using TsuFiles.Core.Conversion;
 using TsuFiles.Engines.Infrastructure;
 
-// PDFtoImage marks its API for the platforms PDFium ships for; Filee only targets desktop platforms, all covered.
+// PDFtoImage marks its API for the platforms PDFium ships for; TsuFiles only targets desktop platforms, all covered.
 #pragma warning disable CA1416
 
 namespace TsuFiles.Engines.Pdf;

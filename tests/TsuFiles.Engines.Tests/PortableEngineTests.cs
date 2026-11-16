@@ -42,7 +42,7 @@ public sealed class PortableEngineTests : IDisposable
     [InlineData("osx-arm64")]
     public void A_Mac_older_than_a_downloads_minimum_is_not_offered_it(string runtime)
     {
-        // calibre 9 needs macOS 14; the other downloads run on macOS 13, Filee's minimum.
+        // calibre 9 needs macOS 14; the other downloads run on macOS 13, TsuFiles's minimum.
         var ventura = EngineDownloads.ComponentsForRuntime(runtime, new Version(13, 6, 1));
         Assert.DoesNotContain("calibre", ventura.Keys);
         Assert.Contains("libreoffice", ventura.Keys);

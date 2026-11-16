@@ -23,7 +23,7 @@ public sealed record PreviousInstall(
 {
     public static Hive HiveOf(InstallScope scope) => scope == InstallScope.Machine ? Hive.LocalMachine : Hive.CurrentUser;
 
-    /// <summary>The installed Filee for <paramref name="scope"/>, or null (also when its entry points to nothing).</summary>
+    /// <summary>The installed TsuFiles for <paramref name="scope"/>, or null (also when its entry points to nothing).</summary>
     public static PreviousInstall? Find(ISetupRegistry registry, InstallScope scope)
     {
         var hive = HiveOf(scope);
@@ -72,8 +72,8 @@ public sealed record PreviousInstall(
 
     /// <summary>
     /// The options as they are now: the desktop shortcut and PATH entry exist or not, the Explorer menu package is
-    /// registered or not. The Explorer menu entry and start at sign-in are Filee settings, which an update leaves to
-    /// Filee: those come from the last install.
+    /// registered or not. The Explorer menu entry and start at sign-in are TsuFiles settings, which an update leaves to
+    /// TsuFiles: those come from the last install.
     /// </summary>
     public SetupTasks CurrentTasks(ISetupRegistry registry, ISetupSystem system, SetupPaths paths) => new(
         RecordedTasks?.ContextMenu ?? true,
@@ -84,22 +84,22 @@ public sealed record PreviousInstall(
         || SetupNames.LegacyShortcutNames.Any(name => File.Exists(Path.Combine(paths.Desktop(Scope), name)))); // TsuFiles: lối tắt của bản cũ
 }
 
-/// <summary>Filee 1.1 and earlier, installed by Velopack into %LocalAppData%\Filee for one user.</summary>
+/// <summary>TsuFiles 1.1 and earlier, installed by Velopack into %LocalAppData%\Filee for one user.</summary>
 public static class VelopackInstall
 {
-    public static string Root(SetupPaths paths) => Path.Combine(paths.LocalAppData, "Filee");
+    public static string Root(SetupPaths paths) => Path.Combine(paths.LocalAppData, "TsuFiles");
 
     public static bool Exists(SetupPaths paths) =>
         File.Exists(Path.Combine(Root(paths), "Update.exe")) && Directory.Exists(Path.Combine(Root(paths), "current"));
 
     /// <summary>
     /// Removes it without running its uninstaller, which would also delete the downloaded engines (and the settings
-    /// are in %APPDATA%). Its registry entries (context menu, startup) are rewritten by the new Filee.
+    /// are in %APPDATA%). Its registry entries (context menu, startup) are rewritten by the new TsuFiles.
     /// </summary>
     public static void Remove(SetupPaths paths, ISetupRegistry registry, ISetupSystem system, SetupLog log)
     {
         var root = Root(paths);
-        log.Info($"Removing Filee 1.1 (Velopack) from {root}; settings and engines stay");
+        log.Info($"Removing TsuFiles 1.1 (Velopack) from {root}; settings and engines stay");
         // Its Explorer menu entry points into the folder that goes next.
         system.UnregisterExplorerMenu();
         foreach (var file in new[] { "Update.exe", SetupNames.AppExe })

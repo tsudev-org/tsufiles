@@ -51,7 +51,7 @@ public sealed partial class FieldSwitchViewModel : ObservableObject
 
     [ObservableProperty] private bool _isOn;
 
-    // Only this field's id is added or removed: ids this version doesn't know (a newer Filee's fields) stay in the list.
+    // Only this field's id is added or removed: ids this version doesn't know (a newer TsuFiles's fields) stay in the list.
     partial void OnIsOnChanged(bool value)
     {
         var off = _store.Settings.TurnedOffFields;

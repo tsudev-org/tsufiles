@@ -179,7 +179,7 @@ internal static class ShellLinks
     private static object NewShellLink() =>
         Activator.CreateInstance(Type.GetTypeFromCLSID(CLSID_ShellLink, throwOnError: true)!)!;
 
-    // Only the methods Filee calls are typed; the slots between them keep the vtable order and are never called.
+    // Only the methods TsuFiles calls are typed; the slots between them keep the vtable order and are never called.
 
     [ComImport, Guid("000214F9-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     private interface IShellLinkW

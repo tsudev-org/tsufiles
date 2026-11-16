@@ -20,7 +20,7 @@
     <!-- TsuFiles: siêu dữ liệu nhà phát hành theo ECOSYSTEM_IDENTITY 2.3 (Company, Copyright); vẫn ghi công upstream
          (giấy phép MIT: thông báo bản quyền gốc giữ nguyên trong LICENSE). -->
     <Company>tsudev</Company>
-    <Authors>tsudev; Filee contributors</Authors>
+    <Authors>tsudev; TsuFiles contributors</Authors>
     <Copyright>Copyright (c) 2026 tsudev. Filee: Copyright (c) Filee contributors</Copyright>
 
     <!-- Single source of truth for the GitHub repository (used by the updater and the About page). -->
@@ -29,7 +29,7 @@
     <RepositoryUrl>$(TsuFilesRepositoryUrl)</RepositoryUrl>
 
     <!-- What an official build (-p:TsuFilesRelease=true) checks before it installs an update (UpdateService).
-         TsuFilesUpdatePublicKey: the public half of Filee's update key (base64; build/new-update-key.ps1 makes the pair,
+         TsuFilesUpdatePublicKey: the public half of TsuFiles's update key (base64; build/new-update-key.ps1 makes the pair,
          build/sign-checksums.ps1 signs every release's SHA256SUMS files with the private half). With a key, an
          update without a valid signature is refused on every platform; empty, the same-release checksum is all.
          TsuFilesExpectedPublisher and TsuFilesExpectedIssuer: the Authenticode certificate every Windows installer must be

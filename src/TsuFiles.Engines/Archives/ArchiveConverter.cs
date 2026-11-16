@@ -1,7 +1,7 @@
 // Archives: unpack (to a folder, the "Extract" preset), convert between archive formats (ZIP, 7Z, TAR, TAR.GZ,
 // TAR.BZ2, TAR.XZ, single-file GZ / BZ2 / XZ, and the Minecraft and Modrinth packs that are ZIPs, see GamePacks), and
 // "Compress into one archive" for any files (IFileCombiner).
-// Reading uses the bundled 7-Zip (engines/7zip, LGPL, separate process) plus Filee's own ALZ, EGG and lzip readers;
+// Reading uses the bundled 7-Zip (engines/7zip, LGPL, separate process) plus TsuFiles's own ALZ, EGG and lzip readers;
 // ZIP, TAR and TAR.GZ are written in-process, the other formats by 7-Zip. See docs/ENGINES.md.
 
 using TsuFiles.Core.Conversion;
@@ -14,7 +14,7 @@ namespace TsuFiles.Engines.Archives;
 /// <summary>The archive engine.</summary>
 public sealed class ArchiveConverter : IConverter, IFileCombiner
 {
-    /// <summary>Archive formats Filee writes (plus <see cref="FormatRegistry.Folder"/>).</summary>
+    /// <summary>Archive formats TsuFiles writes (plus <see cref="FormatRegistry.Folder"/>).</summary>
     private static readonly string[] ArchiveTargets = ["zip", "7z", "tar", "tgz", "tbz2", "txz", .. GamePacks.Formats];
 
     /// <summary>Compressed single files (no names or folders inside); they convert among each other.</summary>

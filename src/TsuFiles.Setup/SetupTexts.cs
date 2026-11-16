@@ -1,5 +1,5 @@
 // Setup's texts: the app's own translation files (src/TsuFiles.App/Assets/i18n, embedded), so Setup speaks every language
-// Filee does in the same words. Setup's own keys start with "installer."; it also uses the app's names of the options
+// TsuFiles does in the same words. Setup's own keys start with "installer."; it also uses the app's names of the options
 // and engines. Published as resources, so XAML binds them with DynamicResource like the app does.
 
 using System.Globalization;
@@ -19,7 +19,7 @@ public sealed class SetupTexts
         SetLanguage(language);
     }
 
-    /// <summary>Filee's languages (the app's list, AppLanguages) whose translation file Setup carries: all of them.</summary>
+    /// <summary>TsuFiles's languages (the app's list, AppLanguages) whose translation file Setup carries: all of them.</summary>
     public static IReadOnlyList<(string Code, string NativeName)> Languages { get; } =
         TsuFiles.App.Services.AppLanguages.All
             .Where(l => typeof(SetupTexts).Assembly.GetManifestResourceInfo($"i18n.{l.Code}.json") is not null).ToList();
@@ -115,7 +115,7 @@ public sealed class SetupTexts
         using var json = JsonDocument.Parse(stream);
         return json.RootElement.EnumerateObject()
             .Where(p => p.Value.ValueKind == JsonValueKind.String)
-            // TsuFiles: đổi tên hiển thị "Filee" -> "TsuFiles" (xem ForkDefaults.Brand).
+            // TsuFiles: đổi tên hiển thị "TsuFiles" -> "TsuFiles" (xem ForkDefaults.Brand).
             .ToDictionary(p => p.Name, p => TsuFiles.Core.ForkDefaults.Brand(p.Value.GetString() ?? ""));
     }
 }

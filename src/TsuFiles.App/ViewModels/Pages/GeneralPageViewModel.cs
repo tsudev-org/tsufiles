@@ -63,7 +63,7 @@ public sealed partial class GeneralPageViewModel : ObservableObject, IDisposable
     public string DataFolder => _store.Directory;
     public bool IsWindows => OperatingSystem.IsWindows();
     public bool HasSystemIntegration => _platform is not NullPlatformServices;
-    /// <summary>Whether this platform supports changing Filee's Dock visibility.</summary>
+    /// <summary>Whether this platform supports changing TsuFiles's Dock visibility.</summary>
     public bool SupportsDockVisibility => _platform.SupportsDockVisibility;
     public string ContextMenuText => _loc[OperatingSystem.IsMacOS() ? "general.context_menu_macos"
         : OperatingSystem.IsLinux() ? "general.context_menu_linux" : "general.context_menu"];

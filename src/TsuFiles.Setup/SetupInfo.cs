@@ -13,7 +13,7 @@ public static class SetupInfo
     /// <summary>The website: one big download button.</summary>
     public const string WebsiteUrl = "https://github.com/tsudev-org/tsufiles/releases/latest";
 
-    /// <summary>The version this Setup program was built as (the payload says which Filee it installs).</summary>
+    /// <summary>The version this Setup program was built as (the payload says which TsuFiles it installs).</summary>
     public static string Version =>
         typeof(SetupInfo).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion.Split('+')[0] ?? "0.0.0";
 }

@@ -99,7 +99,7 @@ internal static class ArchiveFiles
     {
         var info = new DirectoryInfo(folder);
         if (info.Exists && info.Attributes.HasFlag(FileAttributes.ReparsePoint))
-            throw new IOException($"{folder} is a link; Filee does not extract into links.");
+            throw new IOException($"{folder} is a link; TsuFiles does not extract into links.");
     }
 
     private static void MergeInto(string source, string target)

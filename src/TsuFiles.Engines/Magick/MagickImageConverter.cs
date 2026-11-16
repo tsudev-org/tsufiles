@@ -86,7 +86,7 @@ public sealed class MagickImageConverter : IConverter, ITiffMerger, IImageTransf
     public Task<IReadOnlyList<string>> ConvertAsync(ConversionStep step, IProgress<double>? progress, CancellationToken cancellationToken) =>
         Task.Run<IReadOnlyList<string>>(async () =>
         {
-            // FITS → TIFF keeps the file's depth (16 or 32 bits), which the Q8 build can't: Filee writes it.
+            // FITS → TIFF keeps the file's depth (16 or 32 bits), which the Q8 build can't: TsuFiles writes it.
             if (step.From == "fits" && step.To == "tiff")
                 return FitsRendering.WriteTiff(step, progress, cancellationToken);
             // Animated PNGs are often saved as .png: read them as APNG, so they stay animated as GIF or WebP. An AVIF is an

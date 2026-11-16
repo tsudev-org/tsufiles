@@ -2,7 +2,7 @@
 
 TsuFiles supports drag gestures on GNOME Wayland through the **TsuFiles donut at the cursor** GNOME Shell extension.
 
-The extension provides the pointer state required by Filee without access to `/dev/input`, membership in the `input` group, or running Filee as root.
+The extension provides the pointer state required by TsuFiles without access to `/dev/input`, membership in the `input` group, or running TsuFiles as root.
 
 > This integration is experimental. Fedora 44 / GNOME Shell 50 has prior drag-to-conversion coverage.
 > Fedora 45 / GNOME Shell 51.1 has extension loading, pointer-protocol and gesture-regression coverage;
@@ -10,7 +10,7 @@ The extension provides the pointer state required by Filee without access to `/d
 
 ## Setup
 
-Install Filee normally:
+Install TsuFiles normally:
 
 ```sh
 ./install.sh
@@ -21,9 +21,9 @@ On a GNOME session, `install.sh` puts the extension in `~/.local/share/gnome-she
 1. Open the **Extensions** application.
 2. Enable **TsuFiles donut at the cursor**.
 3. Log out and back in if the extension does not appear.
-4. Start Filee and make sure gesture detection is enabled under **Triggers**.
+4. Start TsuFiles and make sure gesture detection is enabled under **Triggers**.
 
-Do not run Filee with `sudo`.
+Do not run TsuFiles with `sudo`.
 
 ## Usage
 
@@ -31,20 +31,20 @@ With the default gesture:
 
 1. Open **Files / Nautilus**.
 2. Hold **Ctrl** and drag a file.
-3. Move the file over the desired format in the Filee wheel.
+3. Move the file over the desired format in the TsuFiles wheel.
 4. Release it to start the conversion.
 
 The wheel stays in place while selecting a format.
 
-Pausing Filee, disabling the gesture or extension, excluding the application, or dropping outside the wheel leaves the normal file-manager behavior unchanged.
+Pausing TsuFiles, disabling the gesture or extension, excluding the application, or dropping outside the wheel leaves the normal file-manager behavior unchanged.
 
-Custom modifiers and excluded applications continue to work through Filee's existing gesture settings.
+Custom modifiers and excluded applications continue to work through TsuFiles's existing gesture settings.
 
 ## Updates
 
-Updating Filee, in the app or with `./install.sh --upgrade`, also updates the extension when Filee installed it. GNOME Shell keeps running the version it loaded at login, so log out and back in after an update. If the running extension and Filee don't match, the **Triggers** page says so.
+Updating TsuFiles, in the app or with `./install.sh --upgrade`, also updates the extension when TsuFiles installed it. GNOME Shell keeps running the version it loaded at login, so log out and back in after an update. If the running extension and TsuFiles don't match, the **Triggers** page says so.
 
-`install.sh` replaces only an extension folder that Filee installed. If the folder came from somewhere else, a first install stops and an upgrade leaves it as it is. `uninstall.sh` removes the extension when Filee installed it.
+`install.sh` replaces only an extension folder that TsuFiles installed. If the folder came from somewhere else, a first install stops and an upgrade leaves it as it is. `uninstall.sh` removes the extension when TsuFiles installed it.
 
 ## Limitations
 
@@ -52,7 +52,7 @@ Updating Filee, in the app or with `./install.sh --upgrade`, also updates the ex
 - GNOME Shell 45–51 are declared as supported, but not every version has been tested.
 - Global Tab and mouse-wheel state are not available for switching wheel faces during a drag.
 - Global selection shortcuts and hold gestures are not available.
-- Filee runs through XWayland by default. With the experimental native Wayland backend (`TSUFILES_USE_WAYLAND=1`), the extension recognizes the donut by Filee's process; this combination has had less testing.
+- TsuFiles runs through XWayland by default. With the experimental native Wayland backend (`TSUFILES_USE_WAYLAND=1`), the extension recognizes the donut by TsuFiles's process; this combination has had less testing.
 - Multi-monitor setups and fractional scaling may require additional testing.
 
 KDE Plasma and Hyprland use a different setup; see `INSTALL.txt`.
@@ -61,11 +61,11 @@ KDE Plasma and Hyprland use a different setup; see `INSTALL.txt`.
 
 If the wheel does not appear:
 
-- Make sure Filee is not paused.
+- Make sure TsuFiles is not paused.
 - Check that the drag gesture is enabled under **Triggers**.
 - Make sure **TsuFiles donut at the cursor** is enabled. If Extensions reports **Out of date**, use an extension release that declares support for your GNOME major version, then sign out and sign in.
 - Make sure Files / Nautilus is not excluded.
-- Do not run Filee with `sudo`.
+- Do not run TsuFiles with `sudo`.
 - If the extension was installed or updated recently, log out and back in.
 
 To check the extension:
@@ -80,37 +80,37 @@ To check the communication socket:
 ls -l "$XDG_RUNTIME_DIR/tsufiles-gnome/pointer.sock"
 ```
 
-When connected successfully, Filee's log (`~/.config/TsuFiles/logs/`) contains:
+When connected successfully, TsuFiles's log (`~/.config/TsuFiles/logs/`) contains:
 
 ```text
 GNOME pointer extension connected
 ```
 
-If the **Triggers** page says the extension belongs to another version of Filee, log out and back in so GNOME Shell loads the installed extension. If the message stays, reinstall Filee.
+If the **Triggers** page says the extension belongs to another version of TsuFiles, log out and back in so GNOME Shell loads the installed extension. If the message stays, reinstall TsuFiles.
 
 
 ## Fedora 45 / GNOME 51 regression (2026-11-03)
 
 After upgrading to GNOME Shell 51, the extension could remain enabled but report **OUT OF DATE**. The extension
-metadata declared versions 45–50 only, so GNOME refused to run it. Filee then waited for a socket that was never
+metadata declared versions 45–50 only, so GNOME refused to run it. TsuFiles then waited for a socket that was never
 created, and Ctrl + drag retained the file manager's normal copy behavior. This was a compatibility-declaration
 bug, rather than evidence that GNOME had stopped providing the pointer API.
 
 Extension version **3** adds GNOME **51** to `shell-version`, retaining all previously declared versions. The pointer
-protocol stays at version **1**, using the same `pointer.sock` endpoint. The extension runtime JavaScript, Filee
+protocol stays at version **1**, using the same `pointer.sock` endpoint. The extension runtime JavaScript, TsuFiles
 application, converters, X11, KDE and Hyprland paths are unchanged by this fix.
 
-The matching metadata is installed both in the Shell extension folder and the bundled copy used by Filee updates.
+The matching metadata is installed both in the Shell extension folder and the bundled copy used by TsuFiles updates.
 GNOME Shell 51.1 still reported the cached version 2 after the files were replaced, and its `ReloadExtension`
-method returned `NotSupported`. **Sign out and sign in again**, then check the extension and Filee:
+method returned `NotSupported`. **Sign out and sign in again**, then check the extension and TsuFiles:
 
 ```sh
 gnome-extensions info tsufiles-donut@tsudev.com
 ls -l "$XDG_RUNTIME_DIR/tsufiles-gnome/pointer.sock"
 ```
 
-The extension should report version **3** and state **ACTIVE**. Filee should show gesture detection running and
-log `GNOME pointer extension connected`. A restart of Filee alone does not refresh cached Shell metadata.
+The extension should report version **3** and state **ACTIVE**. TsuFiles should show gesture detection running and
+log `GNOME pointer extension connected`. A restart of TsuFiles alone does not refresh cached Shell metadata.
 The fix retains normal GNOME extension-version validation.
 
 ### Automated checks
@@ -119,7 +119,7 @@ The existing `extension-smoke.js` tests real Gio sockets but mocks the Shell and
 It therefore cannot catch an unsupported `shell-version`. The additional `session-smoke.py` starts a separate
 headless GNOME session with the production metadata, waits for the extension to become active and verifies the
 private socket and protocol frames. It uses an isolated session bus, configuration, data and runtime directory;
-it does not operate the user's desktop or installed Filee.
+it does not operate the user's desktop or installed TsuFiles.
 
 Requirements: GNOME Shell with headless support, Xwayland, `dbus-run-session`, `gsettings`, Python 3 with GObject
 bindings, and GJS/Mutter libraries for the existing socket test. Run from the repository root:
@@ -170,7 +170,7 @@ Use disposable files in a temporary folder, after signing in again:
 - [ ] A drag without Ctrl keeps the normal file-manager behavior.
 - [ ] Pause, disabled gestures and excluded applications prevent the wheel from opening.
 - [ ] A configured alternate modifier, such as Ctrl+Shift, works.
-- [ ] Disabling/re-enabling the extension disconnects/reconnects Filee without restarting the app.
+- [ ] Disabling/re-enabling the extension disconnects/reconnects TsuFiles without restarting the app.
 - [ ] Locking and unlocking the screen does not leave a gesture stuck.
 - [ ] Repeat near screen edges, on a second monitor and with fractional scaling.
 - [ ] Repeat separately with the optional native backend (`TSUFILES_USE_WAYLAND=1`), keeping its validation distinct

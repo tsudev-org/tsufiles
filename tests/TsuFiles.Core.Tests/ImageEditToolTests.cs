@@ -188,7 +188,7 @@ public class ImageEditToolTests
     [Fact]
     public void Back_from_an_older_Filee_the_tool_edits_pictures_again_and_keeps_the_users_changes()
     {
-        // A Filee before 45 (2.0) has no "tool": it reads the tool as a crop and saves it so.
+        // A TsuFiles before 45 (2.0) has no "tool": it reads the tool as a crop and saves it so.
         var presets = BuiltInData.CreatePresets();
         var edit = presets.Single(p => p.Id == "tool-image-edit");
         edit.Tool = null;

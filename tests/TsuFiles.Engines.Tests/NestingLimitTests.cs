@@ -1,5 +1,5 @@
 // Documents nested far deeper than any real one (thousands of tables in table cells, groups in groups, links in links,
-// a note that refers to itself) and packages whose XML unpacks to more than Filee reads. A stack overflow cannot be
+// a note that refers to itself) and packages whose XML unpacks to more than TsuFiles reads. A stack overflow cannot be
 // caught and ended the whole app, with every watch folder; these must give a document with the deep part as plain
 // text, or a clear refusal (error.document_too_large). Every input is built here.
 

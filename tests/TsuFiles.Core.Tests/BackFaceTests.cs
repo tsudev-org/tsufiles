@@ -1,5 +1,5 @@
 // The back face of a donut (Tab flips the open donut to it): the built-in ones, settings schema 30 that gives existing
-// libraries theirs, a round trip through a Filee from before back faces, "Reset to default" and import.
+// libraries theirs, a round trip through a TsuFiles from before back faces, "Reset to default" and import.
 
 using System.Text.Json.Nodes;
 using TsuFiles.Core.Presets;
@@ -22,7 +22,7 @@ public partial class BackFaceTests
 
     private static ToolbarProfile Profile(UserDataStore store, string id) => store.Profiles.Single(p => p.Id == id);
 
-    /// <summary>A library as a Filee from before back faces wrote it: no "backPresetIds" anywhere.</summary>
+    /// <summary>A library as a TsuFiles from before back faces wrote it: no "backPresetIds" anywhere.</summary>
     private static void DropBackFaces(TempDir dir, int? schema)
     {
         var path = Path.Combine(dir.Path, "profiles.json");
@@ -176,7 +176,7 @@ public partial class BackFaceTests
     }
 
     [Theory]
-    [InlineData(29)]    // the older Filee also saved its settings, with its own schema
+    [InlineData(29)]    // the older TsuFiles also saved its settings, with its own schema
     [InlineData(null)]  // it only saved the library: the settings still say 30
     public void Back_from_an_older_Filee_the_built_in_back_faces_return_and_an_emptied_one_stays_empty(int? schema)
     {
@@ -187,18 +187,18 @@ public partial class BackFaceTests
         store.SaveLibrary();
         store.SaveSettings();
 
-        // Opened with this Filee again, the user's back faces are as they left them, the emptied one too.
+        // Opened with this TsuFiles again, the user's back faces are as they left them, the emptied one too.
         var same = NewStore(dir);
         Assert.Equal(["to-gif"], Profile(same, "images").BackPresetIds);
         Assert.Equal([], Profile(same, "pdf").BackPresetIds);
 
-        // An older Filee saved the library in between: it dropped the back faces it didn't know.
+        // An older TsuFiles saved the library in between: it dropped the back faces it didn't know.
         DropBackFaces(dir, schema);
         var back = NewStore(dir);
 
         // A new library: its fronts are still the new ones, so its new back faces return (the PDF back keeps split and
         // merge, the images back half size and the image editor). Presentations, CAD and mixed have the same front in
-        // both layouts and text the front of a Filee 1.0.1 library after schema 7: these four get the schema 58 ones.
+        // both layouts and text the front of a TsuFiles 1.0.1 library after schema 7: these four get the schema 58 ones.
         string[] schema58Backs = ["presentations", "cad", "mixed", "text"];
         Assert.Equal(BuiltInData.CreateProfiles().Select(p => p.Id), back.Profiles.Select(p => p.Id));
         foreach (var expected in BuiltInData.CreateProfiles())
@@ -220,8 +220,8 @@ public partial class BackFaceTests
     }
 
     [Theory]
-    [InlineData(4)]  // Filee 1.0.1
-    [InlineData(6)]  // Filee 1.1.0
+    [InlineData(4)]  // TsuFiles 1.0.1
+    [InlineData(6)]  // TsuFiles 1.1.0
     public void Back_from_Filee_1_0_1_or_1_1_0_a_new_library_gets_its_new_back_faces_and_the_old_steps_on_top(int schema)
     {
         using var dir = new TempDir();
@@ -252,8 +252,8 @@ public partial class BackFaceTests
     }
 
     [Theory]
-    [InlineData(4)]   // opened straight from Filee 1.0.1: the front as that Filee wrote it
-    [InlineData(29)]  // opened with a Filee from 7 to 29 first: schema 7 put HWP after HWPX, the new text front exactly
+    [InlineData(4)]   // opened straight from TsuFiles 1.0.1: the front as that TsuFiles wrote it
+    [InlineData(29)]  // opened with a TsuFiles from 7 to 29 first: schema 7 put HWP after HWPX, the new text front exactly
     public void A_text_donut_from_Filee_1_0_1_keeps_the_schema_58_back_face(int from)
     {
         var presets = BuiltInData.CreatePresets();

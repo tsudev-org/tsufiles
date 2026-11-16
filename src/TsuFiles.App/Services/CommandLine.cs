@@ -136,7 +136,7 @@ public sealed record CommandLine(
 
     /// <summary>
     /// Deletes the list file once its paths were taken over. Only files the Explorer menu wrote (prefix, temp
-    /// folder) are deleted, so a crafted command line cannot make Filee delete anything else.
+    /// folder) are deleted, so a crafted command line cannot make TsuFiles delete anything else.
     /// </summary>
     public void DeleteListFile()
     {

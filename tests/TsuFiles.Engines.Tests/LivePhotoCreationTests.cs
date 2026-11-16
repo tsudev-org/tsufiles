@@ -1,6 +1,6 @@
 // Video → Live / Motion Photo. The outputs are taken apart box by box and segment by segment: the structure an iPhone
 // and a Pixel write (identifiers, the still image time track, the XMP container directory and the appended MP4), then
-// played by ffprobe and read back by Filee's own Live / Motion Photo extraction.
+// played by ffprobe and read back by TsuFiles's own Live / Motion Photo extraction.
 
 using System.Buffers.Binary;
 using System.Globalization;
@@ -107,7 +107,7 @@ public class LivePhotoCreationTests(EngineFixture fx) : IClassFixture<EngineFixt
         if (target == "jpg")
             Assert.Equal("JFIF", Segments(await File.ReadAllBytesAsync(photo, TestContext.Current.CancellationToken))[0].Name);
 
-        // Filee's own extraction recognises the pair: the photo gives the MOV next to it.
+        // TsuFiles's own extraction recognises the pair: the photo gives the MOV next to it.
         var extract = new Preset { TargetFormat = "mp4", Media = { ExtractMotionPhoto = true } };
         var extracted = Assert.Single(Outputs(await fx.ConvertAsync([photo], extract)));
         Assert.InRange((await MediaInfo.ProbeAsync(Tools().Ffprobe, extracted, TestContext.Current.CancellationToken)).Duration!.Value.TotalSeconds, 2.9, 3.1);
@@ -261,7 +261,7 @@ public class LivePhotoCreationTests(EngineFixture fx) : IClassFixture<EngineFixt
         using (var picture = new MagickImage(photo))
             Assert.Equal((320u, 240u), (picture.Width, picture.Height));
 
-        // Filee's own extraction takes the video out again.
+        // TsuFiles's own extraction takes the video out again.
         var extract = new Preset { TargetFormat = "mp4", Media = { ExtractMotionPhoto = true } };
         var extracted = Assert.Single(Outputs(await fx.ConvertAsync([photo], extract)));
         Assert.InRange((await MediaInfo.ProbeAsync(Tools().Ffprobe, extracted, TestContext.Current.CancellationToken)).Duration!.Value.TotalSeconds, 2.9, 3.1);

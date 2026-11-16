@@ -61,7 +61,7 @@ public static class ProcessRunner
             UseShellExecute = false,
             CreateNoWindow = true,
             // Closed right after the start: a program that asks a question (7-Zip's password prompt) reads end of
-            // input instead of waiting on the console or pipe Filee itself was started with.
+            // input instead of waiting on the console or pipe TsuFiles itself was started with.
             RedirectStandardInput = true,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
@@ -311,7 +311,7 @@ public static class ProcessRunner
     }
 
     /// <summary>
-    /// Below normal priority, so a long conversion on every core leaves room for the desktop and Filee's own input
+    /// Below normal priority, so a long conversion on every core leaves room for the desktop and TsuFiles's own input
     /// hook (#511); on an idle machine it is as fast. Programs it starts inherit it. A process that is already gone
     /// or not ours to change stays as it is.
     /// </summary>
@@ -349,7 +349,7 @@ public static class ProcessRunner
             TryKill(process, null);
             return true;
         }
-        // It has exited, the run is over, or another tick is looking too: anything that gets out of a timer ends Filee.
+        // It has exited, the run is over, or another tick is looking too: anything that gets out of a timer ends TsuFiles.
         catch (Exception ex) when (ex is not OutOfMemoryException)
         {
             return false;

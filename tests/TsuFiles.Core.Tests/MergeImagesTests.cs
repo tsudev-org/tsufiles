@@ -1,5 +1,5 @@
 // "Merge images" (#645): the preset, its place on the images donut, how existing libraries get it (settings schema 53),
-// presets files older and newer Filee versions read, and the queue merging pictures into one image.
+// presets files older and newer TsuFiles versions read, and the queue merging pictures into one image.
 
 using System.Text.Json;
 using TsuFiles.Core.Conversion;
@@ -118,7 +118,7 @@ public class MergeImagesTests
     [Fact]
     public void Schema_53_puts_the_option_back_when_an_older_filee_dropped_it()
     {
-        // A Filee before 53 saved the library again: the preset is left with what it knows, its name kept.
+        // A TsuFiles before 53 saved the library again: the preset is left with what it knows, its name kept.
         var presets = BuiltInData.CreatePresets();
         var stripped = presets.Single(p => p.Id == "merge-images");
         stripped.Image.JoinIntoOne = false;
@@ -146,7 +146,7 @@ public class MergeImagesTests
         Assert.Equal((ImageJoinDirection.Horizontal, ImageJoinFit.Original, 24, "transparent"),
             (read.Image.JoinDirection, read.Image.JoinFit, read.Image.JoinGap, read.Image.JoinBackground));
 
-        // A direction or fit this version doesn't know (a newer Filee's) doesn't lose the presets file.
+        // A direction or fit this version doesn't know (a newer TsuFiles's) doesn't lose the presets file.
         var newer = json.Replace("\"Horizontal\"", "\"Diagonal\"").Replace("\"Original\"", "7");
         var fallback = Assert.Single(JsonSerializer.Deserialize(newer, TsuFilesJsonContext.Default.ListPreset)!);
         Assert.Equal((ImageJoinDirection.Vertical, ImageJoinFit.SameSize), (fallback.Image.JoinDirection, fallback.Image.JoinFit));

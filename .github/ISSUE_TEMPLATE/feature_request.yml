@@ -7,11 +7,11 @@ body:
     attributes:
       value: |
         > [!NOTE]
-        > A file type Filee can't open yet? Please use the **Format request** form instead.
+        > A file type TsuFiles can't open yet? Please use the **Format request** form instead.
   - type: textarea
     id: what
     attributes:
-      label: What would you like Filee to do?
+      label: What would you like TsuFiles to do?
     validations:
       required: true
   - type: textarea

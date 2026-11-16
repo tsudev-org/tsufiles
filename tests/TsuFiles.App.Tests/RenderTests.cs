@@ -1133,7 +1133,7 @@ public class RenderTests
 
             Assert.Equal(Avalonia.Media.Color.Parse("#101820"), Assert.IsAssignableFrom<Avalonia.Media.ISolidColorBrush>(window.Background).Color);
             Assert.Equal(Avalonia.Media.Color.Parse("#E8E4D8"), BrushColor(window, "TextPrimaryBrush"));
-            // Colours the file does not set, and the other variant, keep Filee's own.
+            // Colours the file does not set, and the other variant, keep TsuFiles's own.
             Assert.Equal(Avalonia.Media.Color.Parse("#AEACA4"), BrushColor(window, "TextSecondaryBrush"));
             Assert.Equal(Avalonia.Media.Color.Parse("#F6F5F1"), BrushColor(window, "PageBrush", Avalonia.Styling.ThemeVariant.Light));
             Save(window, "page-theme-custom.png");
@@ -1240,7 +1240,7 @@ public class RenderTests
         window.Close();
 
         Assert.True(vm.Apply());
-        // Stored as customSize with resize None, so an older Filee keeps reading presets.json instead of treating it
+        // Stored as customSize with resize None, so an older TsuFiles keeps reading presets.json instead of treating it
         // as broken and overwriting the user's presets with the built-in ones (issue #576).
         Assert.Equal(TsuFiles.Core.Presets.ResizeMode.None, preset.Image.Resize);
     }
@@ -1555,7 +1555,7 @@ public class RenderTests
         Assert.Equal("deu", vm.OcrLanguage.Value);
         Assert.Empty(vm.MoreOcrLanguages);
 
-        // A code Filee doesn't list, in a preset from elsewhere, is left out.
+        // A code TsuFiles doesn't list, in a preset from elsewhere, is left out.
         preset.Pdf.OcrLanguage = "klingon";
         Assert.Equal("eng", new PresetEditorViewModel(preset, loc).OcrLanguage.Value);
     }
@@ -1994,7 +1994,7 @@ public class RenderTests
     }
 
     /// <summary>
-    /// The extension chips of a profile that shares extensions with "Images" (warning chips), has one Filee doesn't
+    /// The extension chips of a profile that shares extensions with "Images" (warning chips), has one TsuFiles doesn't
     /// know (muted chip) and shows suggestions for what is being typed (dark: a refused duplicate instead).
     /// </summary>
     [AvaloniaTheory]

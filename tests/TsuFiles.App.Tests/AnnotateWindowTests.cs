@@ -699,7 +699,7 @@ public sealed class AnnotateWindowTests : IDisposable
 
     public static TheoryData<string> MixedTexts => new()
     {
-        "Save مرحبا بالعالم", "مرحبا Filee", "المجموع 1,200 ريال", "Total: 1,200 ريال (approx.)", "خصم 50%", "السعر -5",
+        "Save مرحبا بالعالم", "مرحبا TsuFiles", "المجموع 1,200 ريال", "Total: 1,200 ريال (approx.)", "خصم 50%", "السعر -5",
         "ا 5%", "ا +5", "ا #5", "a ا-5 b", "ا 1.5.", "ا 5 6", "ا: 10:30", "abc ١٢٣ ٤٥٦", "١٢٣ ٤٥٦", "مرحبا ABC 123 def",
         "שלום 1-2", "abc (שלום) def", "مرحبا (1)", "مرحبا!", "Hi مرحبا!", "abc ا 5", "x = ا 3", "2 ا", "$5 مقابل €4",
         "מחיר (USD) 5", "ש [a] (b) ג", "abc\u200F 12", "ب٬a", "ש١٬", "١٬٢٠٠ ريال", "(a [ب) c]",
@@ -881,10 +881,10 @@ public sealed class AnnotateWindowTests : IDisposable
             var left = box.TranslatePoint(default, window)!.Value.X;
             Assert.True(Math.Abs(left - On(window, 0.15, 0.5).X) < 2, $"the box at {left:0}, the click at {On(window, 0.15, 0.5).X:0}");
             // Arabic is typed right to left, as its tag is drawn.
-            window.Editor.Text = "مرحبا Filee";
+            window.Editor.Text = "مرحبا TsuFiles";
             Dispatcher.UIThread.RunJobs();
             Assert.Equal(Avalonia.Media.FlowDirection.RightToLeft, window.Editor.FlowDirection);
-            window.Editor.Text = "Filee مرحبا";
+            window.Editor.Text = "TsuFiles مرحبا";
             Dispatcher.UIThread.RunJobs();
             Assert.Equal(Avalonia.Media.FlowDirection.LeftToRight, window.Editor.FlowDirection);
         }

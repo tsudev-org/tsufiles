@@ -10,7 +10,7 @@ public class BrandAssetsTests
     private static readonly int[] IcoLayers = [16, 20, 24, 32, 40, 48, 64, 96, 128, 256];
 
     [Theory]
-    [InlineData("src/TsuFiles.App/Assets/Icons/filee.ico")]
+    [InlineData("src/TsuFiles.App/Assets/Icons/tsufiles.ico")]
     [InlineData("website/public/favicon.ico")]
     public void Icons_carry_every_layer(string path)
     {
@@ -22,7 +22,7 @@ public class BrandAssetsTests
     }
 
     [Theory]
-    [InlineData("src/TsuFiles.App/Assets/Icons/filee.png", 512, 512)]
+    [InlineData("src/TsuFiles.App/Assets/Icons/tsufiles.png", 512, 512)]
     [InlineData("assets/brand/tsufiles-mark-512.png", 512, 512)]
     [InlineData("website/public/favicon-16x16.png", 16, 16)]
     [InlineData("website/public/favicon-32x32.png", 32, 32)]
@@ -43,7 +43,7 @@ public class BrandAssetsTests
     [Fact]
     public void The_app_icon_has_a_transparent_background()
     {
-        using var bitmap = SkiaSharp.SKBitmap.Decode(Path.Combine(TestPaths.RepoRoot, "src/TsuFiles.App/Assets/Icons/filee.png"));
+        using var bitmap = SkiaSharp.SKBitmap.Decode(Path.Combine(TestPaths.RepoRoot, "src/TsuFiles.App/Assets/Icons/tsufiles.png"));
         Assert.Equal(0, bitmap.GetPixel(0, 0).Alpha);
         Assert.Equal(0, bitmap.GetPixel(bitmap.Width - 1, bitmap.Height - 1).Alpha);
         Assert.Equal(255, bitmap.GetPixel(bitmap.Width / 2, bitmap.Height / 2).Alpha);

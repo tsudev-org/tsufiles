@@ -3,7 +3,7 @@
 //
 // Rights: the program starts without administrator rights (asInvoker). An install for all users starts itself again
 // with them (one UAC prompt) and waits; the elevated copy writes what to start at the end into a file, and this
-// unelevated one starts Filee as the signed-in user: Filee must not run elevated (Windows blocks drag and drop from
+// unelevated one starts TsuFiles as the signed-in user: TsuFiles must not run elevated (Windows blocks drag and drop from
 // Explorer into elevated windows). The uninstaller first copies itself to %TEMP% and runs from there (with
 // administrator rights when needed), so the install folder can be deleted.
 
@@ -47,7 +47,7 @@ internal static class Program
         var payload = start.Payload;
         var uninstall = start.Mode == StartMode.Uninstall;
         var log = new SetupLog(options.LogFile ?? SetupLog.DefaultFile(paths.Temp, uninstall ? "Filee-Uninstall" : "Filee-Setup"));
-        log.Info($"{(uninstall ? "Uninstaller" : "Setup")} {SetupInfo.Version}{(payload is null ? "" : $" with Filee {payload.Manifest.Version}")}: " +
+        log.Info($"{(uninstall ? "Uninstaller" : "Setup")} {SetupInfo.Version}{(payload is null ? "" : $" with TsuFiles {payload.Manifest.Version}")}: " +
                  $"{exe} {SetupOptions.Join(args)}; administrator: {NativeMethods.IsElevated()}; Windows {Environment.OSVersion.Version} " +
                  $"{RuntimeInformation.OSArchitecture}{(sandbox is null ? "" : $"; sandbox {sandbox}")}");
         foreach (var unknown in options.Unknown)
@@ -119,7 +119,7 @@ internal static class Program
                      ?? (options.Portable ? Path.Combine(Path.GetDirectoryName(exe)!, TsuFiles.Core.ForkDefaults.DataFolderName) : paths.DefaultInstallFolder(scope));
         if (previous is not null && options.Directory is { } asked
             && !Path.GetFullPath(Environment.ExpandEnvironmentVariables(asked)).TrimEnd('\\').Equals(previous.Folder, StringComparison.OrdinalIgnoreCase))
-            log.Warn($"/DIR={asked} ignored: Filee is installed in {previous.Folder}, which an update keeps");
+            log.Warn($"/DIR={asked} ignored: TsuFiles is installed in {previous.Folder}, which an update keeps");
 
         var modernMenu = context.System.ExplorerMenuSupported && scope == InstallScope.Machine && !options.Portable;
         var tasks = previous is null
@@ -172,7 +172,7 @@ internal static class Program
         if (result is { Succeeded: true } && launch is not null)
         {
             if (options.NoLaunch || sandbox is not null)
-                log.Info($"Not starting Filee ({(sandbox is null ? "/NOLAUNCH" : "sandbox")}): {launch.Executable} {launch.Arguments}");
+                log.Info($"Not starting TsuFiles ({(sandbox is null ? "/NOLAUNCH" : "sandbox")}): {launch.Executable} {launch.Arguments}");
             else
                 StartFilee(launch, options.LaunchFile, log);
         }
@@ -300,7 +300,7 @@ internal static class Program
     {
         if (sandbox is null)
             return new SetupContext(new WindowsRegistry(), new WindowsSetupSystem(log, seeOtherAccounts), paths, log);
-        // The sandbox's registry is a JSON file; Filee runs with its data in the sandbox.
+        // The sandbox's registry is a JSON file; TsuFiles runs with its data in the sandbox.
         return new SetupContext(new MemoryRegistry(Path.Combine(sandbox, "registry.json")),
             new SandboxSetupSystem(log, paths.SettingsFolder), paths, log, Sandbox: true);
     }
@@ -391,7 +391,7 @@ internal static class Program
         arg.Equals(name, StringComparison.OrdinalIgnoreCase) || arg.StartsWith(name + "=", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
-    /// Starts Filee as the signed-in user: through the unelevated Setup that started this one (the launch file), else
+    /// Starts TsuFiles as the signed-in user: through the unelevated Setup that started this one (the launch file), else
     /// with Explorer's token when this Setup is elevated, else directly.
     /// </summary>
     private static void StartFilee(LaunchRequest launch, string? launchFile, SetupLog log)
@@ -401,7 +401,7 @@ internal static class Program
             try
             {
                 File.WriteAllLines(launchFile, [launch.Executable, launch.Arguments]);
-                log.Info($"Filee starts from the unelevated Setup: {launch.Arguments}");
+                log.Info($"TsuFiles starts from the unelevated Setup: {launch.Arguments}");
                 return;
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -413,11 +413,11 @@ internal static class Program
         {
             if (NativeMethods.StartAsShellUser(launch.Executable, launch.Arguments, Path.GetDirectoryName(launch.Executable)!, out var error))
             {
-                log.Info($"Started Filee as the signed-in user: {launch.Arguments}");
+                log.Info($"Started TsuFiles as the signed-in user: {launch.Arguments}");
                 return;
             }
-            // Filee notices it runs elevated and offers to restart without administrator rights.
-            log.Warn($"Could not start Filee as the signed-in user ({error}); starting it with Setup's rights");
+            // TsuFiles notices it runs elevated and offers to restart without administrator rights.
+            log.Warn($"Could not start TsuFiles as the signed-in user ({error}); starting it with Setup's rights");
         }
         Start(launch, log);
     }
@@ -431,11 +431,11 @@ internal static class Program
                 UseShellExecute = false,
                 WorkingDirectory = Path.GetDirectoryName(launch.Executable)!,
             });
-            log.Info($"Started Filee: {launch.Arguments}");
+            log.Info($"Started TsuFiles: {launch.Arguments}");
         }
         catch (Exception ex) when (ex is Win32Exception or InvalidOperationException)
         {
-            log.Warn($"Could not start Filee: {ex.Message}");
+            log.Warn($"Could not start TsuFiles: {ex.Message}");
         }
     }
 
@@ -478,7 +478,7 @@ internal static class Program
     private static void Tell(SetupOptions options, string text, uint icon)
     {
         if (options.CanShowMessages)
-            NativeMethods.MessageBox(0, text, "Filee Setup", NativeMethods.MB_OK | icon | NativeMethods.MB_SETFOREGROUND);
+            NativeMethods.MessageBox(0, text, "TsuFiles Setup", NativeMethods.MB_OK | icon | NativeMethods.MB_SETFOREGROUND);
     }
 }
 

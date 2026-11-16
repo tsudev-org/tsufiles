@@ -1,4 +1,4 @@
-<!-- Setup's card on top of Filee's Soft.axaml: big soft buttons, the Options sheet, the window chrome. -->
+<!-- Setup's card on top of TsuFiles's Soft.axaml: big soft buttons, the Options sheet, the window chrome. -->
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 

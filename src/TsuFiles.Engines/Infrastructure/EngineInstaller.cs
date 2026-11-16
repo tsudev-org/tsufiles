@@ -7,7 +7,7 @@
 //    entries, no admin rights. Parts headless LibreOffice never uses (help, gallery, most dictionaries) are removed.
 //  * conda-forge packages (Ghostscript, the Microsoft C++ runtime) are zip files holding zstd-compressed tarballs;
 //    only their Windows binaries (Library/bin) are unpacked, with a managed decompressor (no 7-Zip, no installer).
-//  * NSIS installers (Tesseract) are unpacked with Filee's own 7-Zip, never run: files only, no registry entries.
+//  * NSIS installers (Tesseract) are unpacked with TsuFiles's own 7-Zip, never run: files only, no registry entries.
 //  * A marker file with the component's hash records what is installed, so an engines.json update is detected.
 
 using System.Diagnostics;
@@ -37,21 +37,21 @@ public readonly record struct EngineInstallProgress(EngineInstallStage Stage, st
 public enum EngineCopyStatus
 {
     NotInstalled,
-    /// <summary>Filee's download.</summary>
+    /// <summary>TsuFiles's download.</summary>
     Installed,
-    /// <summary>The user's own copy (Settings → Engines) or one found on the PC; nothing of Filee's is used.</summary>
+    /// <summary>The user's own copy (Settings → Engines) or one found on the PC; nothing of TsuFiles's is used.</summary>
     OwnCopy,
 }
 
 /// <summary>The copy of a package the engines use, as Settings → Engines and 'filee engines' show it.</summary>
 /// <param name="Folder">Folder of the copy in use while the status is <see cref="EngineCopyStatus.OwnCopy"/>.</param>
 /// <param name="FromSystem">That copy was found on the PC (PATH, Program Files), not chosen by the user.</param>
-/// <param name="Outdated">Filee's download is older than the version engines.json pins.</param>
+/// <param name="Outdated">TsuFiles's download is older than the version engines.json pins.</param>
 public sealed record EngineCopy(EngineCopyStatus Status, string? Folder, bool FromSystem, bool Outdated);
 
-/// <summary>Another Filee (the app, the CLI or a second copy) is installing or removing the same package.</summary>
+/// <summary>Another TsuFiles (the app, the CLI or a second copy) is installing or removing the same package.</summary>
 public sealed class EngineBusyException(string packageId)
-    : IOException($"{packageId} is being installed by another Filee. Try again when it has finished.")
+    : IOException($"{packageId} is being installed by another TsuFiles. Try again when it has finished.")
 {
     public string PackageId { get; } = packageId;
 }
@@ -94,12 +94,12 @@ public sealed class EngineInstaller
 
     /// <summary>
     /// The client to create an installer with: automatic redirects off, because the installer follows them itself
-    /// (mirrors may use plain HTTP; every file is checked against its SHA-256), and Filee's user agent.
+    /// (mirrors may use plain HTTP; every file is checked against its SHA-256), and TsuFiles's user agent.
     /// </summary>
     public static HttpClient CreateHttpClient(TimeSpan timeout)
     {
         var http = new HttpClient(new SocketsHttpHandler { AllowAutoRedirect = false }) { Timeout = timeout };
-        http.DefaultRequestHeaders.UserAgent.ParseAdd($"Filee/{typeof(EngineInstaller).Assembly.GetName().Version}");
+        http.DefaultRequestHeaders.UserAgent.ParseAdd($"TsuFiles/{typeof(EngineInstaller).Assembly.GetName().Version}");
         return http;
     }
 
@@ -110,7 +110,7 @@ public sealed class EngineInstaller
     public IReadOnlyDictionary<string, EngineComponent> Components => _components;
 
     /// <summary>
-    /// The copy the engines use, in the order they look: the user's own copy, Filee's download, a copy on the PC
+    /// The copy the engines use, in the order they look: the user's own copy, TsuFiles's download, a copy on the PC
     /// (only looked for when neither of the others is there).
     /// </summary>
     public EngineCopy StatusOf(EnginePackage package)
@@ -286,7 +286,7 @@ public sealed class EngineInstaller
     }
 
     /// <summary>
-    /// Holds the package's lock file (.downloads/locks/&lt;id&gt;.lock) while it is installed or removed, so two Filee
+    /// Holds the package's lock file (.downloads/locks/&lt;id&gt;.lock) while it is installed or removed, so two TsuFiles
     /// processes never write the same download or replace the same folder at once. The file stays; the open handle
     /// is the lock (deleting it on close would let a third process lock a new file while a second still holds the old).
     /// </summary>
@@ -477,7 +477,7 @@ public sealed class EngineInstaller
                     break;
                 case "nsis":
                     var sevenZip = Archives.SevenZip.Locate()
-                                   ?? throw new InvalidOperationException($"{component.Id} needs Filee's 7-Zip, which is missing.");
+                                   ?? throw new InvalidOperationException($"{component.Id} needs TsuFiles's 7-Zip, which is missing.");
                     Directory.CreateDirectory(staging);
                     await sevenZip.ExtractAsync(file, staging, [], _root, cancellationToken);
                     TrimTesseract(staging);
@@ -608,7 +608,7 @@ public sealed class EngineInstaller
         if (!OperatingSystem.IsWindows())
             throw new PlatformNotSupportedException($"The {id} package is a Windows installer.");
         Directory.CreateDirectory(target);
-        // The Installer service won't follow a junction a user made (#527); Filee keeps using its own paths.
+        // The Installer service won't follow a junction a user made (#527); TsuFiles keeps using its own paths.
         // The log too: through a link it can't be written (1622), as when %TEMP% has moved with AppData\Local.
         msi = RealPath.Of(msi);
         target = RealPath.Of(target);
@@ -679,7 +679,7 @@ public sealed class EngineInstaller
 
     /// <summary>
     /// Removes what OCR never uses (~80 MB): the training programs and their manuals, the installer's own files and
-    /// the bundled language data (Filee downloads its own, see OcrLanguages). tesseract.exe, its DLLs and the
+    /// the bundled language data (TsuFiles downloads its own, see OcrLanguages). tesseract.exe, its DLLs and the
     /// licenses in doc/ stay.
     /// </summary>
     internal static void TrimTesseract(string root)

@@ -86,7 +86,7 @@ covers it; click and key gestures don't, as they read the file manager's selecti
 `DraggedFiles.Read` asks `BrowserDrags` (App, reads Avalonia's drag data) first; `BrowserDrag` (Core, pure rules)
 decides what in the drag is a file:
 
-| Source | What the drag carries | What Filee takes |
+| Source | What the drag carries | What TsuFiles takes |
 | --- | --- | --- |
 | Chrome / Edge, Windows | the picture as a virtual file (`FileGroupDescriptorW` + `FileContents`, which Avalonia 12 gives as a storage item without a local path), a `.url` virtual file for links, `UniformResourceLocatorW`, `text/x-moz-url`, `HTML Format` | the picture's own bytes; for a link, its address |
 | Firefox, Windows | the picture written to `%TEMP%` (`CF_HDROP`), `text/x-moz-url`, file promise formats | the temporary copy (a local file in the temp folder *and* a web address on the drag) |
@@ -95,7 +95,7 @@ decides what in the drag is a file:
 
 Rules, in order: files handed over with their bytes (never `.url` shortcuts or programs); a picture (an HTML fragment
 that is one `<img>` and no text, or a Firefox file promise); a `DownloadURL` a page sets; links only when the address
-ends in an extension Filee converts and isn't a web page (`.html`, `.php`, none); last, picture pixels for a `blob:`
+ends in an extension TsuFiles converts and isn't a web page (`.html`, `.php`, none); last, picture pixels for a `blob:`
 picture. Plain text is never read. `data:` addresses are decoded.
 
 Until the conversion runs, the files stand as **placeholders** (`WebDrop`): paths in `%TEMP%\TsuFiles\web\<drop>\drop\<n>\`
@@ -166,7 +166,7 @@ while another app holds Secure Input (Terminal with Secure Keyboard Entry can ke
 only to the key window and app in front. The hook's copy of a press is ignored while the window has the keyboard (`HookFlipsKey`, one flip
 per press, following `IsActive`); key window status is explicitly released once a conversion starts or the donut closes
 (`IPlatformServices.ReleaseKeyWindow` / `ReturnFocus`), returning typing to the previous app (unless the user clicked elsewhere meanwhile) while the progress ring finishes, and stays
-with Filee when the drop opens a window of its own (a tool, the merge order, the save dialog). Not on Windows, where taking the keyboard
+with TsuFiles when the drop opens a window of its own (a tool, the merge order, the save dialog). Not on Windows, where taking the keyboard
 during a drag breaks Explorer's.
 The editor's Front / Back switch (`ToolbarPageViewModel.EditingBack`) edits either list with the same drag and drop.
 
@@ -235,7 +235,7 @@ without touching the file's content.
   `MetadataEdits`), so the toast, History, cancelling and the output rules (where the copy goes, its name
   `{name}_metadata`, a name already taken, "Replace the original" sending the original to the Recycle Bin / Trash)
   work as for any other file. "Replace the original" is the tool's own output rule, kept on disk. History offers no
-  Retry for it: a Filee from before it would re-encode the file without the changes.
+  Retry for it: a TsuFiles from before it would re-encode the file without the changes.
 - Only an engine that writes metadata and nothing else takes such a conversion: `ConversionEdge.Metadata`, never part
   of an ordinary route, and with `RoutePlanner.Plan(metadata: true)` the whole route or none. Without one the file
   fails (`error.no_route`, with the route asked for, so `tsufiles` can name the package), never re-encoded instead.
@@ -266,7 +266,7 @@ without touching the file's content.
   hint says so. A file that holds more than its picture (`ExifTool.HoldsMore`: a Motion Photo's video, an MPF second
   picture, a gain map, a Samsung trailer) doesn't offer it, and the window says why: it would orphan what's there and
   leave that metadata, which no field shows. Camera RAW and DNG don't offer it either.
-- Without ExifTool the window reads nothing and offers Settings → Engines: a metadata library inside Filee can be made
+- Without ExifTool the window reads nothing and offers Settings → Engines: a metadata library inside TsuFiles can be made
   to hang or fill the memory by a small file, and can't be stopped, while ExifTool runs apart under limits of time,
   memory and output: a small file can make it hold and print gigabytes of text, and a file over them goes to the summary
   as holding too much past the output or memory limit, as unreadable past the time limit, or with more than 3,000
@@ -333,7 +333,7 @@ job. The window only chooses the clip; writing it is an ordinary conversion.
   sound, A2 music). Both are custom-drawn controls; their pictures and loudness are taken again only when the clip's
   ends rest.
 - Space plays the clip as it will be written: `Engines/Media/ClipPreview` runs the same filter graph as the output,
-  the pictures as raw BGRA frames over a pipe and the sound through `ffplay` (when it sits next to Filee's FFmpeg;
+  the pictures as raw BGRA frames over a pipe and the sound through `ffplay` (when it sits next to TsuFiles's FFmpeg;
   without it the preview is silent). FFmpeg for the window runs below normal priority.
 - Save calls `ClipTool.ConversionOf`, which carries the `ClipEdit` in `MediaOptions.Clip`, so the toast, cancel, the
   output rules (`{name}_clip` next to the video) and the history work as for any conversion. `FfmpegConverter`
@@ -374,7 +374,7 @@ hidden rows and manual breaks, then see the PDF that those settings will produce
   sheet's print settings. A new print area is written only after the user explicitly changes or accepts the range.
 - `SpreadsheetPrintService` runs LibreOffice once for each region. Preview and export use the same disposable-workbook
   path; export then joins the region PDFs in the chosen order with PDFsharp. The ordinary XLSX → PDF donut conversion
-  can still differ because route planning may select Filee's built-in spreadsheet reader instead of LibreOffice.
+  can still differ because route planning may select TsuFiles's built-in spreadsheet reader instead of LibreOffice.
 - `PdfPreviewDocument` caches a PDF's bytes and page geometry. The studio asks PDFium/PDFtoImage for small thumbnails
   and only one large selected page, all decoded away from the UI thread; exporting never performs preview rendering.
   Cancellation closes LibreOffice and the temporary job folder is removed on success, error or window close.
@@ -416,7 +416,7 @@ Bump `AppSettings.CurrentSchemaVersion` and add a step to `SettingsMigrations` w
 
 ## "What's new" slides
 
-After an update, Filee shows the new version's features once as slides (an animation or picture, a title, a line or
+After an update, TsuFiles shows the new version's features once as slides (an animation or picture, a title, a line or
 two). The pieces:
 
 - `Assets/WhatsNew/<version>/slides.json` lists the slides: `id`, `media` (a file next to it), and the i18n keys of
@@ -434,7 +434,7 @@ two). The pieces:
   current one visible, so the height is the tallest slide's and the window doesn't jump.
 - `WhatsNewWindow` adds the card, ✕, Previous / Next ("Get started" on the last slide), ←/→ and Esc.
 - `WhatsNewService` decides at start-up, before the first run is marked complete:
-  - a fresh install (first run not completed) needs no slides, as the first-run setup introduces Filee; its
+  - a fresh install (first run not completed) needs no slides, as the first-run setup introduces TsuFiles; its
     version is stored as seen;
   - otherwise `AppSettings.WhatsNewSeenVersion` (null in settings older than the slides, which means "updated")
     is compared with the running version, and the newest deck after it, up to this version, is shown;
@@ -442,7 +442,7 @@ two). The pieces:
     stored as seen quietly.
   The version is stored when the window opens. A start in the background (`--background` at sign-in, or the
   Explorer menu) keeps the deck until `WindowService.ShowMain` raises `MainShown`; the installer starts an updated
-  Filee with `--background --whats-new`, which shows it at once. About → "What's new in Filee X" opens the newest
+  TsuFiles with `--background --whats-new`, which shows it at once. About → "What's new in TsuFiles X" opens the newest
   deck again.
 
 The `<!-- update -->` lines of CHANGELOG.md are the other half: the update card shows them for a version that isn't
@@ -476,20 +476,20 @@ Everything OS-specific goes through `IPlatformServices` (`TsuFiles.Core/Platform
 `TsuFiles.Platform.Windows`; macOS will get its own project. Global input uses SharpHook on both.
 
 Home → Recent conversions opens a result with `OpenFile` (the shell on Windows, `open` on macOS, `xdg-open` on Linux,
-so a file is handed to its app and never started itself; only formats Filee knows are offered) and, where
+so a file is handed to its app and never started itself; only formats TsuFiles knows are offered) and, where
 `SupportsOpenWith` (Windows), the shell's "Open with" dialog (`SHOpenWithDialog`, on a thread of its own because it
 blocks until closed). The cards' pictures come from `HistoryThumbnails`: Skia decodes them off the UI thread, scaled
 down while decoding where the format allows, from a copy read in one go so the file isn't held open, and a small cache
 keeps them while the files are unchanged. For video files, FFmpeg extracts and scales a representative frame off the UI thread without locking the file.
 
-On macOS, files reach Filee from file managers other than Finder too (issue #160). The "Convert with Filee" service
+On macOS, files reach TsuFiles from file managers other than Finder too (issue #160). The "Convert with TsuFiles" service
 (`MacOSServicesProvider`) and the donut's drags (`DraggedFiles`) read file URLs first, then the older
 `NSFilenamesPboardType` array of paths (`PasteboardPaths`); the service also takes plain-text lines that are absolute
 paths. The donut registers those types with AppKit next to Avalonia's own, so such a drag reaches it, and a drag or
 service request without readable files is logged with the types it offered. File promises (`NSFilePromiseProvider`)
-can't be received through Avalonia; for a browser drag Filee reads the address and HTML it also offers, which the donut
+can't be received through Avalonia; for a browser drag TsuFiles reads the address and HTML it also offers, which the donut
 registers too (see "Files dragged from a web browser"). A click-mode donut opened for a later launch or the service forgives one loss of
-focus within a second of opening (`ActivationGrace`): Filee becoming the active app can take focus away from it.
+focus within a second of opening (`ActivationGrace`): TsuFiles becoming the active app can take focus away from it.
 
 A keyboard shortcut with `TriggerGesture.Clipboard` reads the clipboard instead of the selection
 (`IPlatformServices.ReadClipboard`, `MacOSClipboard`): copied files (file URLs, then `NSFilenamesPboardType`; copied
@@ -503,25 +503,25 @@ failed). No shortcut has `Clipboard` on by default and no settings migration add
 keys back, so a preset combination would also reach the app in front (Shift + Cmd + V is Paste and Match Style in most
 text fields). Whoever wants it turns the switch on in Settings → Shortcuts for a shortcut with keys of their own choosing.
 
-The donut, the toast and the notices are transparent windows. On Windows Filee keeps Avalonia's rendering defaults
+The donut, the toast and the notices are transparent windows. On Windows TsuFiles keeps Avalonia's rendering defaults
 (ANGLE on Direct3D 11 composed through WinUI composition, then DirectComposition, then the window's redirection
 surface; software rendering when Direct3D 11 fails): each of them keeps per-pixel transparency. The log says what was
 picked (`Rendering: AngleEgl with WinUIComposition`), lists the graphics adapters, carries Avalonia's own errors from
 starting the GPU paths (`AvaloniaLogForwarder`), and describes each kind of transparent window the first time it
 shows (`TransparentWindows`). A system backdrop (Acrylic, Mica) or an accent blur on such a window turns its
-transparent area into a blurred rectangle (issue #269). Filee sets neither, so one found there came from another
+transparent area into a blurred rectangle (issue #269). TsuFiles sets neither, so one found there came from another
 program: each time the window shows, a backdrop is set back to none and the accent (which can't be read back) is
 turned off. For a report that still shows the wrong thing, the `TSUFILES_RENDERING` environment variable picks another
 way to draw (`WindowsRendering`): `dcomp` (skip WinUI composition), `redirection` (Direct3D into the redirection
-surface) or `software` (no GPU); unset or `auto` keeps the defaults. Filee reads it at start. On ARM64, Avalonia's
+surface) or `software` (no GPU); unset or `auto` keeps the defaults. TsuFiles reads it at start. On ARM64, Avalonia's
 Adreno blocklist draws on the CPU through the Microsoft Basic Render Driver (issue #236), and three values try the GPU
 there again: `gpu` (Direct3D on the first adapter that isn't the Basic Render Driver), `vulkan` and `wgl` (OpenGL), the
 last two falling back to software when they can't start. On Linux (X11) only `software` applies: the GPU's driver stays
-in memory for as long as Filee runs, also with no window open, so this is the way to a smaller tray app (issue #957).
+in memory for as long as TsuFiles runs, also with no window open, so this is the way to a smaller tray app (issue #957).
 
 ## Explorer integration
 
-Settings → General → "Show “Convert with Filee” in the Explorer context menu" (`AppSettings.ContextMenuEnabled`) is
+Settings → General → "Show “Convert with TsuFiles” in the Explorer context menu" (`AppSettings.ContextMenuEnabled`) is
 applied by `WindowsPlatformServices.SetContextMenu` at start-up and whenever settings change (installed builds only):
 
 - **Classic verb** `HKCU\Software\Classes\*\shell\Filee` (`TsuFiles.exe --convert "%1"`, `MultiSelectModel` `Player`) and
@@ -536,7 +536,7 @@ applied by `WindowsPlatformServices.SetContextMenu` at start-up and whenever set
   (`ExplorerMenuPackage.CreateManifest`: `desktop4:FileExplorerContextMenus`, `desktop5:ItemType Type="*"`,
   `com:SurrogateServer`, `uap10:AllowExternalContent`, `AppListEntry="none"`). Both files ship next to TsuFiles.exe and the
   package's external location is the install folder (`C:\Program Files\Filee` by default).
-  - The package is **unsigned** (publisher contains `OID.2.25.311729368913984317654407730594956997722=1`; Filee has no
+  - The package is **unsigned** (publisher contains `OID.2.25.311729368913984317654407730594956997722=1`; TsuFiles has no
     code-signing certificate). Windows only registers an unsigned package with executable content **with
     administrator rights** (it installs it for all users); a per-user attempt fails with 0x80073D2B "an unsigned
     package cannot include Executable activations". Setup (`src/TsuFiles.Setup`) has those rights anyway and
@@ -574,7 +574,7 @@ the entry up for new menus; if not, restart Explorer. To remove it by hand:
 
 `Filee-<version>-win-Setup.exe` is Filee's own installer, `src/TsuFiles.Setup` (it replaced the Inno Setup script of
 1.x). It is an Avalonia program with the app's look and translations: it links `Styles/Soft.axaml` (which therefore
-styles only Avalonia's own controls; Filee's controls are in `Controls.axaml`), `SoftPalette` (accent, radii, font
+styles only Avalonia's own controls; TsuFiles's controls are in `Controls.axaml`), `SoftPalette` (accent, radii, font
 order), `AppLanguages` and `Assets/i18n/*.json` (Setup's texts are the `installer.*` keys). To stay small it uses
 Windows' own UI fonts (Segoe UI, Nirmala UI and the UI language's CJK font first; titles bold, as those CJK fonts
 have no semibold) instead of the app's embedded Noto fonts.
@@ -582,12 +582,12 @@ have no semibold) instead of the app's embedded Noto fonts.
 - **Look**: one borderless 640×420 card (`SetupWindow`, its own window buttons, drag to move) whose states crossfade
   (`Views/StateViews.axaml`): Welcome (the logo springing into place, `AppLogo`; one Install button; an Options sheet
   sliding up with the language, folder, options and engines), Progress (the new version's "What's new" slides, a thin
-  `ShimmerBar`), Done (`CheckBurst`, "Launch Filee"), Failed ("Copy details") and the uninstaller's states.
+  `ShimmerBar`), Done (`CheckBurst`, "Launch TsuFiles"), Failed ("Copy details") and the uninstaller's states.
   `SoftBackdrop` draws slowly drifting accent blobs behind it. The slides are the app's (`SlideShow`, `AnimatedImage`,
   `SlideDeck` and `Assets/WhatsNew`, linked): the newest deck up to the version being installed, advancing every 6 s.
   Every animation runs only while the window is visible and not minimized (`FrameLoop`) and is a still picture when
   Windows' "Show animations" is off (`SetupMotion`). `/SILENT` shows only the progress card, without slides. After an
-  update Setup starts Filee with `--background --whats-new`, so the slides show once in the app as well.
+  update Setup starts TsuFiles with `--background --whats-new`, so the slides show once in the app as well.
 
 - **Build** (`build/build-installer.ps1`): Setup is published as one self-contained, trimmed file
   (`-p:TsuFilesSetupPublish=true`), so it runs on Windows 10 1809+ x64 without .NET. `build/tools/make-setup.cs` appends
@@ -604,14 +604,14 @@ have no semibold) instead of the app's embedded Noto fonts.
   and still couldn't link SkiaSharp's native libraries in.
 - **Rights**: Setup starts unelevated (asInvoker) and, for an install for all users, starts itself again with
   administrator rights (one UAC prompt) and waits. The elevated copy writes what to start at the end into a file
-  (`/LAUNCHFILE`), and the unelevated one starts Filee from it as the signed-in user. Elevated without such a parent
-  (run as administrator, a package manager), it starts Filee with Explorer's token.
-- **Install** (`Installer`): checks the free space and the payload's hash first, closes Filee (`--quit`, then ends
+  (`/LAUNCHFILE`), and the unelevated one starts TsuFiles from it as the signed-in user. Elevated without such a parent
+  (run as administrator, a package manager), it starts TsuFiles with Explorer's token.
+- **Install** (`Installer`): checks the free space and the payload's hash first, closes TsuFiles (`--quit`, then ends
   what still runs from the folder), unpacks into `<folder>\~setup-*\new` checking every file, checks that every
   program finds the Microsoft C++ runtime it imports (next to it or in System32; `RuntimeCheck`), then swaps the files
   in (`FileSwap`: replaced and obsolete files are renamed into a backup, which works for files in use) and writes the
-  uninstall entry, the shortcuts and PATH. Any failure until then puts everything back. Filee's own settings (Explorer
-  menu, start at sign-in, engines, a picked language) are handed to Filee on its command line, as before.
+  uninstall entry, the shortcuts and PATH. Any failure until then puts everything back. TsuFiles's own settings (Explorer
+  menu, start at sign-in, engines, a picked language) are handed to TsuFiles on its command line, as before.
 - **Updates from 1.x**: the uninstall key stays `{C8686E06-8327-40A2-B0F7-3DEDD61D9248}_is1` (Inno Setup's AppId), so
   Apps & Features keeps one Filee. `PreviousInstall` reads the folder and choices of an Inno Setup installation; an
   update keeps the folder and what is registered now (desktop shortcut, PATH, the top-level menu package), removes
@@ -620,10 +620,10 @@ have no semibold) instead of the app's embedded Noto fonts.
 - **Uninstall**: `uninstall.exe` is Setup without its payload. Run from the install folder it copies itself to
   `%TEMP%` and waits for the copy, which removes what `uninstall.json` lists (other files in the folder stay), the
   shortcuts, the PATH entry and the key. `TsuFiles.exe --uninstall-cleanup` runs as the signed-in user (`RunAsSignedInUser`):
-  the startup entry, the classic verb and the engines are theirs, and the pipe of a Filee without administrator rights
+  the startup entry, the classic verb and the engines are theirs, and the pipe of a TsuFiles without administrator rights
   refuses an elevated client (`CurrentUserOnly` compares the pipe's owner with the token's owner, which is
-  Administrators when elevated), so that Filee would never hear `--quit`. Files in use are moved out and deleted at the
-  next restart. Only programs `uninstall.json` lists are ended. A Filee that can't be ended, or a file that can't be
+  Administrators when elevated), so that TsuFiles would never hear `--quit`. Files in use are moved out and deleted at the
+  next restart. Only programs `uninstall.json` lists are ended. A TsuFiles that can't be ended, or a file that can't be
   moved or renamed, fails the uninstall and keeps the key, `uninstall.json` and `uninstall.exe`, so it can be run again;
   `uninstall.json` itself is never scheduled or renamed. A program without a payload is the uninstaller only as `uninstall.exe`, as `TsuFiles.Setup.exe` (a development build) or with `/UNINSTALL`
   (`SetupStart`); any other name is a Setup.exe whose download didn't finish, and it says so instead (exit code 1).
@@ -654,8 +654,8 @@ and standalone shell scripts (`install.sh`, `uninstall.sh`).
 - **Transactional upgrade**: `UpdateAsync` stages the payload in a private directory (`~/.local/share/filee/.update-*`),
   spawns a detached `/bin/sh` helper, and requests application shutdown (`App.Quit`). Once the old process exits, the
   helper executes `install.sh --upgrade` (which safely moves the existing installation to a backup directory, validates the
-  new files, and rolls back on failure or signal interruption), and restarts Filee with `--background --whats-new`.
-  Output and rollback diagnostics are appended to Filee's daily log (`~/.config/TsuFiles/logs/`). Downloaded conversion engines
+  new files, and rolls back on failure or signal interruption), and restarts TsuFiles with `--background --whats-new`.
+  Output and rollback diagnostics are appended to TsuFiles's daily log (`~/.config/TsuFiles/logs/`). Downloaded conversion engines
   (`~/.local/share/Filee/engines`) and user settings (`~/.config/TsuFiles`) remain untouched.
 - **Uninstallation**: `uninstall.sh` removes the application directory, desktop launcher, and `~/.local/bin/tsufiles` symlink
   after verifying the `.filee-package` marker. User settings and converted files are kept.

@@ -88,7 +88,7 @@ public static class ForkDefaults
     /// Bộ quét ký tự một lượt, O(n), không cấp phát khi không có gì để đổi, không bao giờ ném ngoại lệ. Trước đây là
     /// regex có giới hạn 100 ms: khi máy bận (khởi động lạnh, JIT) đồng hồ vượt giới hạn dù mẫu tuyến tính, và
     /// RegexMatchTimeoutException làm sập ứng dụng, Setup hay dòng lệnh (`filee help engines`). Quy tắc giữ đúng mẫu cũ
-    /// <c>(?&lt;![A-Za-z0-9_.\\/%@~-])Filee(?![A-Za-z0-9_\\/@]|\.(?:exe|app|lnk|sh|cmd|json|txt)\b| Donut)</c>;
+    /// <c>(?&lt;![A-Za-z0-9_.\\/%@~-])TsuFiles(?![A-Za-z0-9_\\/@]|\.(?:exe|app|lnk|sh|cmd|json|txt)\b| Donut)</c>;
     /// ForkBrandingTests so kết quả với chính mẫu đó trên mọi bản dịch và chuỗi ngẫu nhiên.
     /// </remarks>
     public static string Brand(string text)
@@ -105,7 +105,7 @@ public static class ForkDefaults
             result ??= new StringBuilder(text.Length + 16);
             result.Append(text, copied, at - copied).Append(DisplayName);
             copied = at + UpstreamName.Length;
-            at = copied - 1;   // "Filee" không tự chồng lên chính nó; quét tiếp sau chữ vừa thay
+            at = copied - 1;   // "TsuFiles" không tự chồng lên chính nó; quét tiếp sau chữ vừa thay
         }
         if (result is null) return text;
         return result.Append(text, copied, text.Length - copied).ToString();
@@ -113,7 +113,7 @@ public static class ForkDefaults
 
     private static readonly string[] IdentifierExtensions = ["exe", "app", "lnk", "sh", "cmd", "json", "txt"];
 
-    /// <summary>"Filee" tại <paramref name="at"/> là chữ hiển thị (đổi được), không phải một phần của định danh.</summary>
+    /// <summary>"TsuFiles" tại <paramref name="at"/> là chữ hiển thị (đổi được), không phải một phần của định danh.</summary>
     private static bool IsDisplayWord(string text, int at)
     {
         // Đứng ngay sau chữ/số ASCII, "_", ".", "\", "/", "%", "@", "~", "-": thuộc định danh hoặc đường dẫn.

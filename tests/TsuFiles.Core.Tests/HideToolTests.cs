@@ -1,5 +1,5 @@
 // "Pixelate / blur": where a part lies in pixels, how large the squares or the blur are and which square a pixel is in,
-// the conversion the tool becomes, how it is saved (and read by an older Filee), the job queue covering the parts once
+// the conversion the tool becomes, how it is saved (and read by an older TsuFiles), the job queue covering the parts once
 // and never handing the picture over uncovered, and the tool arriving in libraries from before it (settings schema 52).
 
 using System.Text.Json;
@@ -153,7 +153,7 @@ public class HideToolTests
         Assert.False(HideTool.CanHide("mp4"));
     }
 
-    // ───────────────────────── Saved, and read by an older Filee ─────────────────────────
+    // ───────────────────────── Saved, and read by an older TsuFiles ─────────────────────────
 
     [Fact]
     public void The_choice_is_saved_by_name_and_the_parts_never_reach_a_saved_tool()
@@ -381,7 +381,7 @@ public class HideToolTests
     [Fact]
     public void Back_from_a_Filee_before_2_1_the_tool_hides_parts_again_and_keeps_the_users_changes()
     {
-        // A Filee before 45 (2.0) drops the tool's name: the tool reads as a crop there and is saved so.
+        // A TsuFiles before 45 (2.0) drops the tool's name: the tool reads as a crop there and is saved so.
         var presets = BuiltInData.CreatePresets();
         var hide = presets.Single(p => p.Id == "tool-hide");
         hide.Tool = null;

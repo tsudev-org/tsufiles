@@ -1382,7 +1382,7 @@ public sealed partial class JobQueue : IAsyncDisposable
     /// <summary>
     /// Deletes the work folders of jobs a crash, a forced quit or a power cut kept from removing them: intermediate
     /// PDFs, TIFF pages and video frames can take gigabytes, and the OS doesn't empty its temp folder by itself. Only a
-    /// job's folder nothing was written in for <paramref name="age"/> goes, so a job still running in another Filee (the
+    /// job's folder nothing was written in for <paramref name="age"/> goes, so a job still running in another TsuFiles (the
     /// command line) keeps its own; files from a browser have a sweep of their own (<c>WebDrop.DeleteStale</c>).
     /// </summary>
     public static void DeleteStaleWorkFolders(string workRoot, TimeSpan age)

@@ -108,7 +108,7 @@ foreach ($name in @('TsuFiles', 'tsufiles-cli')) {
 }
 if (-not $Runtime.StartsWith('osx-')) {
     # TsuFiles 2.4.1 (ADR-0003 section 5): the updater of 2.4.0-vn.1 only takes a package with an executable named
-    # Filee, and starts <install folder>/Filee after install.sh. This launcher hands everything to TsuFiles.
+    # TsuFiles, and starts <install folder>/Filee after install.sh. This launcher hands everything to TsuFiles.
     $legacy = Join-Path $publish 'Filee'
     [IO.File]::WriteAllText($legacy, "#!/bin/sh`n# TsuFiles: the app was named Filee up to 2.4.0-vn.1; its updater starts this file.`nexec `"`$(dirname `"`$(readlink -f `"`$0`")`")/TsuFiles`" `"`$@`"`n")
     Invoke-Checked 'Legacy launcher permissions' { chmod +x $legacy }
@@ -140,7 +140,7 @@ if ($Runtime.StartsWith('osx-')) {
     Invoke-Checked 'Validate Info.plist' { plutil -lint (Join-Path $contents 'Info.plist') }
     $iconset = Join-Path $stage 'tsufiles.iconset'
     New-Item -ItemType Directory -Path $iconset | Out-Null
-    $sourceIcon = Join-Path $root 'src/TsuFiles.App/Assets/Icons/filee.png'
+    $sourceIcon = Join-Path $root 'src/TsuFiles.App/Assets/Icons/tsufiles.png'
     foreach ($size in @(16, 32, 128, 256, 512)) {
         foreach ($scale in @(1, 2)) {
             $pixels = $size * $scale
@@ -178,7 +178,10 @@ if ($Runtime.StartsWith('osx-')) {
     Copy-Item -LiteralPath (Join-Path $root 'installer/macos/HUONG-DAN-CAI-DAT.txt') -Destination $package
 }
 else {
-    Copy-Item -LiteralPath (Join-Path $root 'src/TsuFiles.App/Assets/Icons/filee.png') -Destination $package
+    Copy-Item -LiteralPath (Join-Path $root 'src/TsuFiles.App/Assets/Icons/tsufiles.png') -Destination $package
+    # TsuFiles: bản đã cài trước 2.4.2 có lối tắt menu "Icon=<thư mục cài>/tsufiles.png"; trình cập nhật trong app không
+    # chạy lại install.sh nên giữ thêm bản sao tên cũ, kẻo lối tắt mất icon sau khi cập nhật (ADR-0003 mục 8).
+    Copy-Item -LiteralPath (Join-Path $root 'src/TsuFiles.App/Assets/Icons/tsufiles.png') -Destination (Join-Path $package 'tsufiles.png')
     Copy-Item -LiteralPath (Join-Path $root 'installer/linux/install.sh') -Destination $package
     Copy-Item -LiteralPath (Join-Path $root 'installer/linux/uninstall.sh') -Destination $package
     Copy-Item -LiteralPath (Join-Path $root 'installer/linux/INSTALL.txt') -Destination $package

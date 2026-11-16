@@ -1,4 +1,4 @@
-// FITS images (Flexible Image Transport System: telescope cameras, capture and stacking software), read by Filee itself
+// FITS images (Flexible Image Transport System: telescope cameras, capture and stacking software), read by TsuFiles itself
 // from the FITS standard 4.0: 2880-byte blocks, a header of 80-character cards, big-endian data. ImageMagick's Q8 build
 // would cut 16- and 32-bit data down to 8 bits and knows nothing of Bayer patterns, so the values are read here as they
 // are (BZERO + BSCALE × stored) for FitsRendering to stretch, debayer or write into a TIFF of the file's own depth.
@@ -61,7 +61,7 @@ internal static class Fits
     /// <summary>Keywords that name the Bayer pattern, in the order they are looked for.</summary>
     private static readonly string[] PatternKeywords = ["BAYERPAT", "COLORTYP"];
 
-    /// <exception cref="InvalidDataException">The file is not FITS, is damaged, or has no picture Filee reads.</exception>
+    /// <exception cref="InvalidDataException">The file is not FITS, is damaged, or has no picture TsuFiles reads.</exception>
     public static FitsImage Read(string path, CancellationToken cancellationToken = default)
     {
         using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 1 << 16);

@@ -21,7 +21,7 @@ public sealed class GhostscriptConverter : IConverter, IImageTransformer
 
     /// <summary>
     /// Environment variables Ghostscript would otherwise read from the user's system (extra options, resource and
-    /// font search paths). Filee's copy has its resources compiled in and must behave the same on every PC.
+    /// font search paths). TsuFiles's copy has its resources compiled in and must behave the same on every PC.
     /// </summary>
     private static readonly Dictionary<string, string> CleanEnvironment = new()
     {
@@ -71,7 +71,7 @@ public sealed class GhostscriptConverter : IConverter, IImageTransformer
         return written;
     }
 
-    /// <summary>Filee's own Ghostscript (engines/ghostscript, downloaded on demand), never one installed on the system.</summary>
+    /// <summary>TsuFiles's own Ghostscript (engines/ghostscript, downloaded on demand), never one installed on the system.</summary>
     internal static string? Locate() =>
         EngineEnvironment.OwnProgram("ghostscript", "gswin64c.exe") ?? LocateBundled()
         ?? EngineEnvironment.SystemProgram("ghostscript", "gswin64c.exe");
@@ -97,7 +97,7 @@ public sealed class GhostscriptConverter : IConverter, IImageTransformer
 
     /// <summary>
     /// Rewrites a PDF smaller with pdfwrite's settings for the level (/screen, /ebook, /printer: pictures at 72, 150 and
-    /// 300 dpi, Filee's levels too). Used by <see cref="Pdf.PdfSharpConverter"/> for "Compress PDF" when the preset asks
+    /// 300 dpi, TsuFiles's levels too). Used by <see cref="Pdf.PdfSharpConverter"/> for "Compress PDF" when the preset asks
     /// for Ghostscript; the caller keeps the result only when it is smaller.
     /// </summary>
     internal static async Task CompressPdfAsync(string gs, string input, string output, PdfCompression level, string workDirectory,

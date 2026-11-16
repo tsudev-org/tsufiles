@@ -33,7 +33,7 @@ public partial class UserDataStoreTests
     {
         using var dir = new TempDir();
         var path = Path.Combine(dir.Path, "settings.json");
-        // Settings saved by a Filee before the option: off.
+        // Settings saved by a TsuFiles before the option: off.
         File.WriteAllText(path, """{"schemaVersion":68,"browserDrops":{"folder":"","saveOnlyConverted":true}}""");
         var store = new UserDataStore(dir.Path);
         store.Load();
@@ -341,7 +341,7 @@ public partial class UserDataStoreTests
         var group = reloaded.FindPreset("mine")!;
         Assert.True(group.IsGroup);
         Assert.Equal(["to-png", "to-jpg", "to-webp", "to-bmp", "to-gif", "to-ico"], group.SubPresetIds);
-        // No target format a Filee from before groups (which reads it as a conversion) could run it with.
+        // No target format a TsuFiles from before groups (which reads it as a conversion) could run it with.
         Assert.Equal(Preset.GroupTarget, group.TargetFormat);
         Assert.Null(TsuFiles.Core.Formats.FormatRegistry.FindById(Preset.GroupTarget));
     }
@@ -389,7 +389,7 @@ public partial class UserDataStoreTests
         store.Presets.Add(new Preset { Id = "old-group", Name = "Rotate", Kind = PresetKind.Group, SubPresetIds = ["to-png"] });
         store.SaveLibrary();
 
-        // An older Filee knows neither "kind" nor "subPresetIds" and leaves them out when it saves.
+        // An older TsuFiles knows neither "kind" nor "subPresetIds" and leaves them out when it saves.
         var path = Path.Combine(dir.Path, "presets.json");
         var presets = System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllText(path))!.AsArray();
         var saved = presets.Single(p => (string?)p!["id"] == "old-group")!.AsObject();
@@ -573,7 +573,7 @@ public partial class UserDataStoreTests
         store.Presets.Add(new Preset { Id = "old", Name = "Old", TargetFormat = "mp4" });
         store.SaveLibrary();
 
-        // A Filee from before the option saved no "hardwareEncoding".
+        // A TsuFiles from before the option saved no "hardwareEncoding".
         var path = Path.Combine(dir.Path, "presets.json");
         var presets = System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllText(path))!.AsArray();
         Assert.True((bool)presets.Single(p => (string?)p!["id"] == "fast")!["media"]!["hardwareEncoding"]!);
@@ -602,7 +602,7 @@ public partial class UserDataStoreTests
         store.Presets.Add(new Preset { Id = "odd", Name = "Odd", TargetFormat = "gif" });
         store.SaveLibrary();
 
-        // A Filee from before the option saved no "animationSpeed"; a hand-edited file may hold anything.
+        // A TsuFiles from before the option saved no "animationSpeed"; a hand-edited file may hold anything.
         var path = Path.Combine(dir.Path, "presets.json");
         var presets = System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllText(path))!.AsArray();
         Assert.Equal(0.5, (double)presets.Single(p => (string?)p!["id"] == "slow")!["image"]!["animationSpeed"]!);
@@ -1257,7 +1257,7 @@ public partial class UserDataStoreTests
         Assert.DoesNotContain("heic", images.Extensions);
         Assert.False(SettingsMigrations.ApplyToLibrary(28, presets, profiles)); // once only
 
-        // Back from an older Filee, which dropped the option it didn't know: the preset extracts again, its name stays.
+        // Back from an older TsuFiles, which dropped the option it didn't know: the preset extracts again, its name stays.
         motion.Media.ExtractMotionPhoto = false;
         motion.Name = "Live video";
         Assert.True(SettingsMigrations.ApplyToLibrary(28, presets, profiles));
@@ -1300,7 +1300,7 @@ public partial class UserDataStoreTests
         SettingsMigrations.ApplyToLibrary(30, BuiltInData.CreatePresets(), full);
         Assert.Equal(before, fullBack);
 
-        // Back from an older Filee, which dropped the option it didn't know: the preset makes Live Photos again.
+        // Back from an older TsuFiles, which dropped the option it didn't know: the preset makes Live Photos again.
         iphone.Media.LivePhoto = LivePhotoKind.None;
         iphone.Name = "My Live Photo";
         Assert.True(SettingsMigrations.ApplyToLibrary(30, presets, profiles));
@@ -1394,7 +1394,7 @@ public partial class UserDataStoreTests
         Assert.Equal((LivePhotoKind.Apple, 2.5, 2.0, 0.5),
             (read.Media.LivePhoto, read.Media.LivePhotoStart, read.Media.LivePhotoLength, read.Media.LivePhotoCover));
 
-        // A kind of a newer Filee: still one preset that loads, as a plain conversion.
+        // A kind of a newer TsuFiles: still one preset that loads, as a plain conversion.
         var future = System.Text.Json.JsonSerializer.Deserialize(json.Replace("\"Apple\"", "\"Hologram\""), TsuFilesJsonContext.Default.Preset)!;
         Assert.Equal(LivePhotoKind.None, future.Media.LivePhoto);
     }
@@ -1457,7 +1457,7 @@ public partial class UserDataStoreTests
         Assert.Equal("rotate-left", presets[background + 1].Id);
     }
 
-    /// <summary>Presets and donuts as a Filee before PDF → PPTX wrote them (schema 17).</summary>
+    /// <summary>Presets and donuts as a TsuFiles before PDF → PPTX wrote them (schema 17).</summary>
     private static (List<Preset> Presets, List<ToolbarProfile> Profiles) Version17Library()
     {
         var presets = BuiltInData.CreatePresets();
@@ -1604,7 +1604,7 @@ public partial class UserDataStoreTests
     [Fact]
     public void Back_from_an_older_Filee_rotate_and_flip_work_again_and_keep_the_users_changes()
     {
-        // What a Filee before 17 leaves after saving: kind, members and rotation dropped, the rest as it was.
+        // What a TsuFiles before 17 leaves after saving: kind, members and rotation dropped, the rest as it was.
         var presets = BuiltInData.CreatePresets();
         var left = presets.Single(p => p.Id == "rotate-left");
         left.Image.Rotation = ImageRotation.None;
@@ -1692,7 +1692,7 @@ public partial class UserDataStoreTests
     [Fact]
     public void Back_from_an_older_Filee_tool_crop_works_again_and_keeps_the_users_changes()
     {
-        // What a Filee before 26 leaves after saving: kind read as Group, TargetFormat dropped, SubPresetIds empty, the rest as it was.
+        // What a TsuFiles before 26 leaves after saving: kind read as Group, TargetFormat dropped, SubPresetIds empty, the rest as it was.
         var presets = BuiltInData.CreatePresets();
         var crop = presets.Single(p => p.Id == "tool-crop");
         crop.Kind = PresetKind.Group;
@@ -1712,7 +1712,7 @@ public partial class UserDataStoreTests
     [Fact]
     public void Back_from_an_older_Filee_compress_pdf_compresses_again_and_keeps_the_users_changes()
     {
-        // What a Filee before 20 leaves after saving: the compression level dropped, the rest as it was.
+        // What a TsuFiles before 20 leaves after saving: the compression level dropped, the rest as it was.
         var presets = BuiltInData.CreatePresets();
         var compress = presets.Single(p => p.Id == "compress-pdf");
         compress.Pdf.Compression = PdfCompression.None;

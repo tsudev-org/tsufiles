@@ -1,5 +1,5 @@
 // Installs, updates and uninstalls against a registry in memory, a fake Windows and scratch folders: nothing here
-// touches HKLM, HKCU, PATH, the Start menu or a real Filee.
+// touches HKLM, HKCU, PATH, the Start menu or a real TsuFiles.
 
 extern alias app;
 using TsuFiles.Setup.Installation;
@@ -51,7 +51,7 @@ public class InstallerTests
         Assert.True(PathVariable.Contains(path.Text, Path.Combine(folder, "cli")));
         Assert.Contains("broadcast", bench.System.Calls);
 
-        // Filee starts with the choices; it applies them for the signed-in user.
+        // TsuFiles starts with the choices; it applies them for the signed-in user.
         Assert.Equal(Path.Combine(folder, "TsuFiles.exe"), result.Launch!.Executable);
         Assert.Equal("--install-engines=pandoc --start-with-windows=on --context-menu=on", result.Launch.Arguments);
     }
@@ -141,14 +141,14 @@ public class InstallerTests
         var result = bench.Install(bench.Choices(current) with { Engines = [] }, previous);
         Assert.True(result.Succeeded, result.Error?.ToString());
 
-        // Filee was asked to quit, what still ran from the folder was ended.
+        // TsuFiles was asked to quit, what still ran from the folder was ended.
         Assert.Contains("run Filee.exe --quit", bench.System.Calls);
         Assert.Contains("kill 4242", bench.System.Calls);
         // Inno's uninstaller and the files 2.0 doesn't have are gone; the new files are in.
         foreach (var gone in new[] { "unins000.exe", "unins000.dat", "unins000.msg", "OldOnly.dll", @"runtimes\win-x64\native\old.dll", "Filee.exe", @"cli\filee.cmd", "filee-cli.exe" })
             Assert.False(File.Exists(Path.Combine(folder, gone)), gone);
         Assert.False(Directory.Exists(Path.Combine(folder, "runtimes")));
-        Assert.Equal("Filee 2", File.ReadAllText(Path.Combine(folder, "TsuFiles.exe")));
+        Assert.Equal("TsuFiles 2", File.ReadAllText(Path.Combine(folder, "TsuFiles.exe")));
         Assert.True(File.Exists(Path.Combine(folder, "uninstall.exe")));
         // One uninstall entry, now ours: no "Inno Setup: …" values left.
         Assert.DoesNotContain(registry.ValueNames(Hive.LocalMachine, Key), n => n.StartsWith("Inno Setup", StringComparison.Ordinal));
@@ -173,7 +173,7 @@ public class InstallerTests
         // Something of the user's in the folder stays.
         File.WriteAllText(Path.Combine(folder, "notes.txt"), "mine");
         File.Delete(Path.Combine(bench.AppFolder, "Removed.dll"));
-        File.WriteAllText(Path.Combine(bench.AppFolder, "TsuFiles.exe"), "Filee 2.1");
+        File.WriteAllText(Path.Combine(bench.AppFolder, "TsuFiles.exe"), "TsuFiles 2.1");
         bench.MakeSetup("2.1.0");
 
         var previous = PreviousInstall.Find(bench.Registry, InstallScope.Machine)!;
@@ -183,7 +183,7 @@ public class InstallerTests
         Assert.True(result.Succeeded, result.Error?.ToString());
         Assert.False(File.Exists(Path.Combine(folder, "Removed.dll")));
         Assert.True(File.Exists(Path.Combine(folder, "notes.txt")));
-        Assert.Equal("Filee 2.1", File.ReadAllText(Path.Combine(folder, "TsuFiles.exe")));
+        Assert.Equal("TsuFiles 2.1", File.ReadAllText(Path.Combine(folder, "TsuFiles.exe")));
         Assert.Equal("2.1.0", InstallRecord.Read(folder)!.Version);
         Assert.Equal("2.1.0", bench.Registry.Get(Hive.LocalMachine, Key, "DisplayVersion")?.Text);
     }
@@ -246,7 +246,7 @@ public class InstallerTests
             .ToDictionary(f => f, File.ReadAllText);
         var entryBefore = bench.Registry.ValueNames(Hive.LocalMachine, Key)
             .ToDictionary(n => n, n => bench.Registry.Get(Hive.LocalMachine, Key, n)!.Value);
-        File.WriteAllText(Path.Combine(bench.AppFolder, "TsuFiles.exe"), "Filee 3");
+        File.WriteAllText(Path.Combine(bench.AppFolder, "TsuFiles.exe"), "TsuFiles 3");
         bench.MakeSetup("3.0.0");
         File.Delete(Path.Combine(bench.Paths.CommonStartMenu, SetupNames.ShortcutName)); // TsuFiles: tên hiển thị
 
@@ -292,7 +292,7 @@ public class InstallerTests
         Assert.False(File.Exists(Path.Combine(bench.Paths.CommonStartMenu, SetupNames.ShortcutName))); // TsuFiles: tên hiển thị
 
         using var portable = new SetupBench();
-        var folder = portable.Temp.Sub("Portable Filee");
+        var folder = portable.Temp.Sub("Portable TsuFiles");
         var result = portable.Install(portable.Choices() with { Folder = folder, Portable = true }, previous: null);
         Assert.True(result.Succeeded);
         Assert.Null(result.Launch);
@@ -327,7 +327,7 @@ public class InstallerTests
         bench.Temp.Write(Path.Combine(Path.GetRelativePath(bench.Temp.Path, root), @"current\TsuFiles.exe"));
         bench.Temp.Write(Path.Combine(Path.GetRelativePath(bench.Temp.Path, root), @"packages\Filee-1.1.0-full.nupkg"));
         var engine = bench.Temp.Write(Path.Combine(Path.GetRelativePath(bench.Temp.Path, root), @"engines\pandoc\.filee-component"));
-        bench.Registry.SetString(Hive.CurrentUser, SetupNames.VelopackUninstallKey, "DisplayName", "Filee");
+        bench.Registry.SetString(Hive.CurrentUser, SetupNames.VelopackUninstallKey, "DisplayName", "TsuFiles");
         Assert.True(VelopackInstall.Exists(bench.Paths));
 
         Assert.True(bench.Install().Succeeded);
@@ -352,9 +352,9 @@ public class InstallerTests
         Assert.True(options.ContextMenu);
         Assert.Equal(language, options.Language);
 
-        // Setup's language only goes to Filee when the user picked it; else Filee keeps following Windows.
+        // Setup's language only goes to TsuFiles when the user picked it; else TsuFiles keeps following Windows.
         Assert.Null(CommandLine.Parse(Installer.LaunchArguments(fresh with { LanguagePicked = false }, update: false).Split(' ')).Language);
-        // Nothing picked is an answer too: Filee then doesn't ask on first run.
+        // Nothing picked is an answer too: TsuFiles then doesn't ask on first run.
         Assert.Empty(CommandLine.Parse(Installer.LaunchArguments(fresh with { Engines = [] }, update: false).Split(' ')).InstallEngines!);
         var updated = CommandLine.Parse(Installer.LaunchArguments(fresh, update: true).Split(' '));
         Assert.True(updated.Background);

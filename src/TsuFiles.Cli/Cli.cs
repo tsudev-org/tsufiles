@@ -274,7 +274,7 @@ internal static class Cli
             }
             if (!format.Writable)
             {
-                errors.WriteLine(CliLanguage.T($"tsufiles: Filee đọc được {format.DisplayName} nhưng không ghi được định dạng này.", $"tsufiles: Filee reads {format.DisplayName} but can't write it."));
+                errors.WriteLine(CliLanguage.T($"tsufiles: TsuFiles đọc được {format.DisplayName} nhưng không ghi được định dạng này.", $"tsufiles: TsuFiles reads {format.DisplayName} but can't write it."));
                 return null;
             }
             preset = new Preset { TargetFormat = format.Id };
@@ -341,7 +341,7 @@ internal static class Cli
 
     /// <summary>
     /// Files from the arguments: files as given, wildcards ("*.heic", which cmd.exe and PowerShell pass on unexpanded)
-    /// and folders (their files in formats Filee knows; with --recursive also in sub folders).
+    /// and folders (their files in formats TsuFiles knows; with --recursive also in sub folders).
     /// </summary>
     internal static List<string> ExpandInputs(IEnumerable<string> inputs, bool recursive, List<string> missing, bool foldersAsInputs = false)
     {

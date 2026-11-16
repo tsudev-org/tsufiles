@@ -30,7 +30,7 @@ public static class ExplorerMenuRegistration
 
     /// <summary>
     /// Windows 11 on x64 or ARM64: the new context menu exists, and Explorer can load the DLL shipped with this build
-    /// (built for the same architecture as Filee itself, so not an x64 Filee on ARM64 Windows).
+    /// (built for the same architecture as TsuFiles itself, so not an x64 TsuFiles on ARM64 Windows).
     /// </summary>
     public static bool IsSupportedOs =>
         OperatingSystem.IsWindowsVersionAtLeast(10, 0, ExplorerMenuPackage.MinimumBuild)
@@ -45,7 +45,7 @@ public static class ExplorerMenuRegistration
         File.Exists(Path.Combine(installFolder, ExplorerMenuPackage.DllFileName))
         && File.Exists(Path.Combine(installFolder, ExplorerMenuPackage.PackageFileName));
 
-    /// <summary>State of the top-level menu entry for the Filee in <paramref name="installFolder"/>.</summary>
+    /// <summary>State of the top-level menu entry for the TsuFiles in <paramref name="installFolder"/>.</summary>
     public static ModernContextMenuState GetState(string installFolder)
     {
         if (!IsSupportedOs || !HasFiles(installFolder))

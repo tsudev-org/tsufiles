@@ -54,7 +54,7 @@ public sealed class AppLocalRuntimeTests : IDisposable
         Assert.SkipUnless(OperatingSystem.IsWindows(), "cmd.exe.");
         var cmd = Path.Combine(Environment.SystemDirectory, "cmd.exe");
 
-        // "set /p" waits for a line; with Filee's own input passed on it would wait until the timeout.
+        // "set /p" waits for a line; with TsuFiles's own input passed on it would wait until the timeout.
         var result = await ProcessRunner.RunAsync(cmd, ["/c", "set /p answer=Password? & exit 4"], TimeSpan.FromSeconds(30),
             TestContext.Current.CancellationToken);
 

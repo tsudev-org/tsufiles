@@ -1,4 +1,4 @@
-// Explorer's classic menu entry starts one Filee per selected file (issue #767): all of them must end up as one request.
+// Explorer's classic menu entry starts one TsuFiles per selected file (issue #767): all of them must end up as one request.
 
 using TsuFiles.App.Services;
 
@@ -94,7 +94,7 @@ public class SelectionLaunchesTests
         var launches = new SelectionLaunches(() => [A, B], time);
         Assert.Equal([A, B], launches.Arrived([A]));
 
-        // B's launch could not reach Filee. Its file, right-clicked again later, must not be swallowed.
+        // B's launch could not reach TsuFiles. Its file, right-clicked again later, must not be swallowed.
         time.Advance(20);
         Assert.Equal([A, B], launches.Arrived([B]));
     }

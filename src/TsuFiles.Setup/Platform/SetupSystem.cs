@@ -1,5 +1,5 @@
 // What Setup does to Windows besides files and the registry: shortcuts, the Windows 11 Explorer menu package, running
-// Filee's own installer commands, closing programs, telling Windows about a new PATH. Tests replace it with a fake;
+// TsuFiles's own installer commands, closing programs, telling Windows about a new PATH. Tests replace it with a fake;
 // a /SANDBOX run with SandboxSystem, which leaves the PC alone.
 
 using System.Diagnostics;
@@ -40,8 +40,8 @@ public interface ISetupSystem
 
     /// <summary>
     /// Like <see cref="RunAndWait"/>, as the user signed in to Windows: their registry and folders, and able to reach the
-    /// Filee they run. An elevated program can't do either, as another account (a standard user's administrator prompt)
-    /// or even as the same one (the pipe of a Filee without administrator rights refuses it). -1 also when it can't
+    /// TsuFiles they run. An elevated program can't do either, as another account (a standard user's administrator prompt)
+    /// or even as the same one (the pipe of a TsuFiles without administrator rights refuses it). -1 also when it can't
     /// be run as that user.
     /// </summary>
     int RunAsSignedInUser(string executable, string arguments, TimeSpan timeout);
@@ -65,7 +65,7 @@ public interface ISetupSystem
 
 /// <summary>The real thing.</summary>
 /// <param name="seeOtherAccounts">
-/// The uninstaller, elevated: it also sees and ends programs of other accounts (a standard user's Filee, when an
+/// The uninstaller, elevated: it also sees and ends programs of other accounts (a standard user's TsuFiles, when an
 /// administrator's account answered the prompt), which Windows otherwise hides from it.
 /// </param>
 [SupportedOSPlatform("windows")]
@@ -201,7 +201,7 @@ public class WindowsSetupSystem(SetupLog log, bool seeOtherAccounts = false) : I
 
     /// <summary>
     /// Runs <paramref name="action"/> with the debug privilege when asked for (see the class). Only meanwhile: programs
-    /// started later (Filee, PowerShell, cmd) would inherit it.
+    /// started later (TsuFiles, PowerShell, cmd) would inherit it.
     /// </summary>
     private void SeeingOtherAccounts(Action action)
     {
@@ -327,9 +327,9 @@ public class WindowsSetupSystem(SetupLog log, bool seeOtherAccounts = false) : I
 }
 
 /// <summary>
-/// /SANDBOX: no Explorer menu, no PATH broadcast, nothing scheduled for the next restart, and Filee's installer
-/// commands run with TSUFILES_DATA_DIR in the sandbox, which gives that Filee its own data and single instance: it never
-/// reaches (or quits) the Filee the user runs.
+/// /SANDBOX: no Explorer menu, no PATH broadcast, nothing scheduled for the next restart, and TsuFiles's installer
+/// commands run with TSUFILES_DATA_DIR in the sandbox, which gives that TsuFiles its own data and single instance: it never
+/// reaches (or quits) the TsuFiles the user runs.
 /// </summary>
 [SupportedOSPlatform("windows")]
 public sealed class SandboxSetupSystem(SetupLog log, string dataFolder) : WindowsSetupSystem(log)

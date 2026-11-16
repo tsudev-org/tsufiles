@@ -22,7 +22,7 @@ var output = Path.GetFullPath(args[0]);
 Directory.CreateDirectory(output);
 var repo = Environment.CurrentDirectory;
 while (!File.Exists(Path.Combine(repo, "TsuFiles.slnx")))
-    repo = Path.GetDirectoryName(repo) ?? throw new InvalidOperationException("Run this from inside the Filee repository.");
+    repo = Path.GetDirectoryName(repo) ?? throw new InvalidOperationException("Run this from inside the TsuFiles repository.");
 
 var work = Directory.CreateTempSubdirectory("filee-msix-");
 try
@@ -30,7 +30,7 @@ try
     var manifestPath = Path.Combine(work.FullName, "AppxManifest.xml");
     File.WriteAllText(manifestPath, ExplorerMenuPackage.CreateManifest(architecture), new UTF8Encoding(false));
     var packagePath = Path.Combine(output, ExplorerMenuPackage.PackageFileName);
-    var logo = Path.Combine(repo, "src", "TsuFiles.App", "Assets", "Icons", "filee.png");
+    var logo = Path.Combine(repo, "src", "TsuFiles.App", "Assets", "Icons", "tsufiles.png");
     Appx.Pack(packagePath, manifestPath, [(ExplorerMenuPackage.LogoPath, logo, "image/png")]);
     Console.WriteLine($"Wrote {packagePath} ({new FileInfo(packagePath).Length:N0} bytes, manifest {ExplorerMenuPackage.ManifestVersion}, {architecture})");
 }

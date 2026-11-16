@@ -60,7 +60,7 @@ dotnet run --project src/TsuFiles.Cli -- help # TSUFILES_LANG=en để xem tiế
 | `src/TsuFiles.App/Assets/i18n/vi.json` | Agent/người dịch; giữ đồng bộ khóa với `en.json` |
 | `src/TsuFiles.Cli/` (chuỗi `CliLanguage.T`) | Agent dòng lệnh |
 | `tools/`, `.github/workflows/security.yml`, `docs/vi/` | Riêng của fork |
-| Phần còn lại của `src/`, `tests/`, `build/` | TsuFiles (kế thừa từ Filee, đã tách hẳn - sửa như mã của mình) |
+| Phần còn lại của `src/`, `tests/`, `build/` | TsuFiles (kế thừa từ TsuFiles, đã tách hẳn - sửa như mã của mình) |
 
 ### B.4. Quy tắc riêng
 

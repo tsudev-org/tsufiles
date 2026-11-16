@@ -1,5 +1,5 @@
-// One selection in Explorer can reach Filee as many launches: the classic menu entry ("%1" with MultiSelectModel
-// "Player", the only entry on Windows 10) starts one Filee per selected file, in no fixed order and over many seconds
+// One selection in Explorer can reach TsuFiles as many launches: the classic menu entry ("%1" with MultiSelectModel
+// "Player", the only entry on Windows 10) starts one TsuFiles per selected file, in no fixed order and over many seconds
 // (with 100 files, gaps of up to 0.7 s on a fast computer). No wait can tell which one is the last. So the
 // first launch asks the file manager what is selected: the donut gets all of it at once, whenever the user clicks, and
 // the launches still on their way bring nothing new.
@@ -16,7 +16,7 @@ internal sealed class SelectionLaunches(Func<IReadOnlyList<string>> readSelectio
     /// <summary>A launch this long after the last one is a new request, so it is worth asking for the selection.</summary>
     private static readonly TimeSpan NewRequestAfter = TimeSpan.FromSeconds(1);
 
-    /// <summary>After this long without a launch, the ones still expected aren't coming (they could not reach Filee).</summary>
+    /// <summary>After this long without a launch, the ones still expected aren't coming (they could not reach TsuFiles).</summary>
     private static readonly TimeSpan ExpectFor = TimeSpan.FromSeconds(15);
 
     private readonly TimeProvider _time = time ?? TimeProvider.System;

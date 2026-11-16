@@ -32,14 +32,14 @@ public enum ConflictPolicy
 /// <summary>Output placement and naming rules.</summary>
 public sealed class OutputRule
 {
-    /// <summary>A name this version doesn't know (from a newer Filee) reads as <see cref="OutputLocation.Default"/>.</summary>
+    /// <summary>A name this version doesn't know (from a newer TsuFiles) reads as <see cref="OutputLocation.Default"/>.</summary>
     [System.Text.Json.Serialization.JsonConverter(typeof(LenientEnumJsonConverter<OutputLocation>))]
     public OutputLocation Location { get; set; } = OutputLocation.Default;
 
     /// <summary>
     /// "Ask every time" (#521): the donut asks where to save first, once per batch, in the source's folder
     /// (<see cref="AskedLocation"/>). Where nothing can ask (the command line, files from a browser, other tools),
-    /// <see cref="Location"/> applies. A bool of its own, so a Filee from before it keeps the preset and uses Location.
+    /// <see cref="Location"/> applies. A bool of its own, so a TsuFiles from before it keeps the preset and uses Location.
     /// </summary>
     public bool AskEveryTime { get; set; }
 
@@ -118,7 +118,7 @@ public sealed class OutputRule
     /// <summary>
     /// Copy to folder only (#856): the files are moved into <see cref="CustomFolder"/> instead of copied, so they are
     /// gone from where they were. Off by default. An original is removed only once its copy is complete; files from a
-    /// browser have no original and are saved as when copying. A Filee from before it ignores it and copies.
+    /// browser have no original and are saved as when copying. A TsuFiles from before it ignores it and copies.
     /// </summary>
     public bool MoveInsteadOfCopy { get; set; }
 

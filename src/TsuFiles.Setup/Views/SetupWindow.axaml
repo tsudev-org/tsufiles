@@ -7,7 +7,7 @@
         x:Class="TsuFiles.Setup.Views.SetupWindow"
         x:DataType="vm:SetupViewModel"
         Title="{DynamicResource installer.title}"
-        Icon="avares://TsuFiles.Setup/Assets/Icons/filee.ico"
+        Icon="avares://TsuFiles.Setup/Assets/Icons/tsufiles.ico"
         Width="664" Height="444"
         CanResize="False"
         WindowDecorations="None"

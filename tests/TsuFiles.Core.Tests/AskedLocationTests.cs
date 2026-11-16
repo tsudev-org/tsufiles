@@ -1,5 +1,5 @@
 // "Ask every time" (#521): what the save dialog suggests, and where the files go once it is answered: only the file
-// the dialog asked about may replace one, and a preset that asks still loads in a Filee from before it.
+// the dialog asked about may replace one, and a preset that asks still loads in a TsuFiles from before it.
 
 using System.Text.Json;
 using TsuFiles.Core.Conversion;

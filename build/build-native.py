@@ -256,7 +256,7 @@ def pe_imports(path):
 
 def write_source_note(output, name, repository, commit, details):
     with open(os.path.join(output, "SOURCE.txt"), "w", encoding="utf-8") as stream:
-        stream.write(f"{name} built from source by Filee's CI on {distribution()}.\n"
+        stream.write(f"{name} built from source by TsuFiles's CI on {distribution()}.\n"
                      f"Source: {repository}/tree/{commit}\n{details}\n")
 
 

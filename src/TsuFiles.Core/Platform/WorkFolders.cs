@@ -1,4 +1,4 @@
-// Where Filee keeps the files it works with: every job's folder (JobQueue) and the files dragged from a browser
+// Where TsuFiles keeps the files it works with: every job's folder (JobQueue) and the files dragged from a browser
 // (WebDrop). On Windows that is %TEMP%\Filee, and %TEMP% is the user's own. On Linux the temp folder is /tmp, which
 // every user shares: someone else could make /tmp/Filee first and then read or swap the files a conversion leaves in
 // it. So on Linux and macOS the work files go into the user's cache folder, which only they can open.

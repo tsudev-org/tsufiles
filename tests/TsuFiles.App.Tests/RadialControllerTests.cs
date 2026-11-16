@@ -1,6 +1,6 @@
 // The drag-wait donut is an invisible, topmost window that catches clicks so a drag can reach it: it must close when
 // the gesture ends without files, even after a conversion left the ring behind (issue: desktop icons stopped reacting
-// to clicks until Filee quit).
+// to clicks until TsuFiles quit).
 
 using Avalonia.Headless;
 using Avalonia.Headless.XUnit;
@@ -230,7 +230,7 @@ public class RadialControllerTests
             Assert.True(toolIndex >= 0);
             dropped(new DonutHit(DonutHitKind.Segment, toolIndex, -1), new DraggedItems([tempFile], null));
 
-            // Keyboard stays with Filee for the tool window
+            // Keyboard stays with TsuFiles for the tool window
             Assert.Empty(platform.KeyWindowsReleased);
             Assert.Equal(0, platform.ReturnFocusCalls);
         }

@@ -6,7 +6,7 @@ namespace TsuFiles.App.Services.Triggers;
 
 /// <summary>
 /// Connects to the per-user GNOME Shell extension. It sends pointer state only, never typed keys or file contents.
-/// No native global hook is loaded on this path. Reconnection also covers enabling the extension after Filee starts.
+/// No native global hook is loaded on this path. Reconnection also covers enabling the extension after TsuFiles starts.
 /// </summary>
 internal sealed class GnomePointerBridge(Action<GnomePointerState> received, Action<GnomeBridgeStatus> status) : IDisposable
 {
@@ -60,7 +60,7 @@ internal sealed class GnomePointerBridge(Action<GnomePointerState> received, Act
             }
             catch (Exception ex) when (ex is IOException or SocketException or OperationCanceledException)
             {
-                // Disabled extension, sign-out, or update. Keep the drop zone and the rest of Filee usable.
+                // Disabled extension, sign-out, or update. Keep the drop zone and the rest of TsuFiles usable.
             }
             finally
             {
@@ -86,7 +86,7 @@ internal enum GnomePointerParse { Valid, OtherVersion, Invalid }
 internal sealed record GnomePointerState(int Version, int X, int Y, int Modifiers, int Buttons,
     string? Process, bool Desktop, bool Blocked)
 {
-    /// <summary>The protocol version this Filee reads; the extension sends it as <c>PROTOCOL_VERSION</c>.</summary>
+    /// <summary>The protocol version this TsuFiles reads; the extension sends it as <c>PROTOCOL_VERSION</c>.</summary>
     public const int ProtocolVersion = 1;
 
     public static bool TryParse(string json, out GnomePointerState? state) => Parse(json, out state) == GnomePointerParse.Valid;

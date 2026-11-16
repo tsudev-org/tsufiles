@@ -1,4 +1,4 @@
-// Autodesk FBX, read only: binary (6.x and 7.x) and ASCII files through Filee's own parser (FbxParser), no FBX SDK.
+// Autodesk FBX, read only: binary (6.x and 7.x) and ASCII files through TsuFiles's own parser (FbxParser), no FBX SDK.
 // Read: mesh geometry with polygons triangulated, the first normal, UV, colour and material layer (by polygon
 // vertex, by control point, by polygon or all the same; direct or indexed); the model hierarchy from the
 // connections, each model's translation, rotation (any Euler order, pre- and post-rotation, pivots and offsets) and

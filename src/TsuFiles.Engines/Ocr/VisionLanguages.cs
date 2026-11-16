@@ -36,7 +36,7 @@ internal static class VisionLanguages
         ["chi_tra"] = ["zh-Hant"],
     };
 
-    /// <summary>The languages Vision reads on every macOS Filee runs on (13 and later), when it can't be asked.</summary>
+    /// <summary>The languages Vision reads on every macOS TsuFiles runs on (13 and later), when it can't be asked.</summary>
     internal static readonly IReadOnlyList<string> Fallback =
         ["en-US", "fr-FR", "it-IT", "de-DE", "es-ES", "pt-BR", "zh-Hans", "zh-Hant", "ko-KR", "ja-JP", "ru-RU", "uk-UA"];
 

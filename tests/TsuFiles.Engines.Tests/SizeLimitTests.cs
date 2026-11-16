@@ -1,5 +1,5 @@
 // "Size limit" (#553): a picture or a video over the preset's limit is made smaller until it fits, or refused. The
-// picture tests use ImageMagick in-process; the video ones run only when Filee's FFmpeg is installed
+// picture tests use ImageMagick in-process; the video ones run only when TsuFiles's FFmpeg is installed
 // (`pwsh build/fetch-engines.ps1 -Only ffmpeg`), on inputs FFmpeg generates itself.
 
 using ImageMagick;

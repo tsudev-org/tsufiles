@@ -1,4 +1,4 @@
-// The TsuFiles logo (assets/brand, generated into src/TsuFiles.App/Assets/Icons/filee.png by
+// The TsuFiles logo (assets/brand, generated into src/TsuFiles.App/Assets/Icons/tsufiles.png by
 // tools/thuong-hieu/tao-tai-san.py), with a short entrance: it springs up from a smaller size, fades in and turns a
 // little into place. Without animations (or after 0.9 s) it is simply the logo.
 
@@ -18,7 +18,7 @@ public sealed class AppLogo : Control
 
     private static readonly TimeSpan Duration = TimeSpan.FromMilliseconds(900);
     private static readonly Lazy<Bitmap> Image =
-        new(() => new Bitmap(AssetLoader.Open(new Uri("avares://TsuFiles.Setup/Assets/Icons/filee.png"))));
+        new(() => new Bitmap(AssetLoader.Open(new Uri("avares://TsuFiles.Setup/Assets/Icons/tsufiles.png"))));
 
     private readonly FrameLoop _loop;
     private double _progress;

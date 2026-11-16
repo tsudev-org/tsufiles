@@ -80,7 +80,7 @@ public static class OcrLanguages
     public static async Task<string> EnsureAsync(string code, CancellationToken cancellationToken)
     {
         if (!Components.ContainsKey(code))
-            throw new ArgumentException($"Tesseract has no language '{code}' in Filee's list.", nameof(code));
+            throw new ArgumentException($"Tesseract has no language '{code}' in TsuFiles's list.", nameof(code));
         await OneAtATime.WaitAsync(cancellationToken);
         try
         {

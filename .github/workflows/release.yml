@@ -9,7 +9,7 @@
 # The SHA256SUMS files are signed there too, with the update key that never leaves that PC: it uploads a .sig next to
 # every SHA256SUMS file of the release (the Linux and macOS ones drafted here as well), and official builds refuse an
 # update without one.
-# Release notes: the version's section of CHANGELOG.md (what changed, for people using Filee), then the list GitHub
+# Release notes: the version's section of CHANGELOG.md (what changed, for people using TsuFiles), then the list GitHub
 # generates from the pull requests merged since the previous release, grouped by label (.github/release.yml), with
 # their authors and new contributors.
 # Large engines are not in the installer; its engine page (or the app, on first run and in Settings > Engines)

@@ -1,9 +1,9 @@
-// Removes Filee:
+// Removes TsuFiles:
 //  1. "Filee.exe --uninstall-cleanup", as the signed-in user: Filee quits and removes what it registered for that user
 //     (Explorer menu entries, the Send To shortcut, the startup entry, the Windows 11 package) and the engines it
 //     downloaded;
 //  2. ends the programs of uninstall.json that still run (never anything else: a folder chosen by the user may hold
-//     other programs), removes the Explorer menu package if it is still there; a Filee that can't be ended stops the
+//     other programs), removes the Explorer menu package if it is still there; a TsuFiles that can't be ended stops the
 //     uninstall here, before anything is deleted;
 //  3. removes the shortcuts, the PATH entry, the files of uninstall.json, the install folder and the uninstall entry;
 //  4. deletes the settings (%APPDATA%\Filee) only when the user asked for it: by default they stay for a reinstall.
@@ -11,7 +11,7 @@
 // the folder into the trash folder and deleted at the next restart, so the folder itself goes now. With the trash on
 // another volume it is renamed in place; without administrator rights Windows won't delete that one at the restart, so
 // the user is told it stays. A file that can't even be renamed keeps the uninstall entry, uninstall.json and
-// uninstall.exe, and the uninstall fails: Filee stays listed in Apps and can be uninstalled again, rather than left
+// uninstall.exe, and the uninstall fails: TsuFiles stays listed in Apps and can be uninstalled again, rather than left
 // behind without a way to remove it. Before that, about two seconds in all go to waiting for a security scan, which
 // holds a file for a moment and likes a program's files just when they are being removed.
 
@@ -25,7 +25,7 @@ public sealed class Uninstaller(SetupContext context)
     private ISetupSystem System => context.System;
     private SetupLog Log => context.Log;
 
-    /// <summary>Filee's cleanup also removes the Explorer menu package through PowerShell, which takes a while.</summary>
+    /// <summary>TsuFiles's cleanup also removes the Explorer menu package through PowerShell, which takes a while.</summary>
     public static TimeSpan CleanupTimeout { get; } = TimeSpan.FromSeconds(90);
 
     /// <summary>How long a program may still be listed after it was ended.</summary>
@@ -43,7 +43,7 @@ public sealed class Uninstaller(SetupContext context)
     private readonly List<string> _kept = [];
 
     /// <summary>
-    /// After <see cref="Run"/>: Filee's own cleanup never finished, so the signed-in user may still have its Explorer menu
+    /// After <see cref="Run"/>: TsuFiles's own cleanup never finished, so the signed-in user may still have its Explorer menu
     /// entries, its startup entry (when it isn't in this account's registry) and downloaded engines.
     /// </summary>
     public bool CleanupFailed { get; private set; }
@@ -58,12 +58,12 @@ public sealed class Uninstaller(SetupContext context)
     /// itself from its file while it runs: that file must not move away under it).
     /// </param>
     /// <returns>Files and folders that are deleted at the next restart.</returns>
-    /// <exception cref="SetupException">Filee keeps running or files can't be removed; the uninstall entry stays.</exception>
+    /// <exception cref="SetupException">TsuFiles keeps running or files can't be removed; the uninstall entry stays.</exception>
     public IReadOnlyList<string> Run(string folder, InstallRecord record, bool deleteSettings, string trash,
         IProgress<SetupProgress>? progress = null, Action? releaseUninstaller = null)
     {
         folder = Path.TrimEndingDirectorySeparator(Path.GetFullPath(folder));
-        Log.Info($"Uninstalling Filee {record.Version} from {folder} ({record.Scope}); delete settings: {deleteSettings}");
+        Log.Info($"Uninstalling TsuFiles {record.Version} from {folder} ({record.Scope}); delete settings: {deleteSettings}");
         var later = new List<string>();
         var stuck = new List<string>();
         progress?.Report(new SetupProgress(SetupStep.Closing, 0));
@@ -77,18 +77,18 @@ public sealed class Uninstaller(SetupContext context)
             Log.Info($"Ending {program.Path} ({program.Id})");
             System.Kill(program.Id);
         }
-        // From here on a Filee would run on from the trash folder, and offer updates, with nothing left to remove it.
+        // From here on a TsuFiles would run on from the trash folder, and offer updates, with nothing left to remove it.
         if (StaysRunning(folder, record))
-            throw new SetupException("installer.uninstall.still_running", $"Filee could not be ended and still runs from {folder}");
+            throw new SetupException("installer.uninstall.still_running", $"TsuFiles could not be ended and still runs from {folder}");
         progress?.Report(new SetupProgress(SetupStep.Removing, 0.3));
         if (System.ExplorerMenuSupported)
             System.UnregisterExplorerMenu();
 
-        // A Filee that didn't quit gives up before it cleans up. It has been ended now.
+        // A TsuFiles that didn't quit gives up before it cleans up. It has been ended now.
         if (!cleaned)
             cleaned = RunCleanup(exe);
         if (!cleaned)
-            Log.Warn("Filee's cleanup did not finish: what it registered for the user may stay");
+            Log.Warn("TsuFiles's cleanup did not finish: what it registered for the user may stay");
         if (!cleaned || !hasExe)
             RemoveStartupEntry(folder);
         CleanupFailed = !cleaned;
@@ -133,7 +133,7 @@ public sealed class Uninstaller(SetupContext context)
         if (stuck.Count > 0)
         {
             Log.Error($"Could not remove: {string.Join(", ", stuck)}");
-            throw new SetupException("installer.uninstall.files_left", $"Could not remove {stuck.Count} files of Filee", folder);
+            throw new SetupException("installer.uninstall.files_left", $"Could not remove {stuck.Count} files of TsuFiles", folder);
         }
         Registry.DeleteKey(hive, SetupNames.UninstallKey);
         progress?.Report(new SetupProgress(SetupStep.Removing, 0.95));
@@ -155,7 +155,7 @@ public sealed class Uninstaller(SetupContext context)
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            // Something that isn't Filee's is still in it (a folder the user chose), or a file is in use.
+            // Something that isn't TsuFiles's is still in it (a folder the user chose), or a file is in use.
             Log.Warn($"{folder} stays: {ex.Message}");
             DeleteFolderAtRestart(folder, later);
         }
@@ -172,12 +172,12 @@ public sealed class Uninstaller(SetupContext context)
     private bool RunCleanup(string exe)
     {
         var code = System.RunAsSignedInUser(exe, "--uninstall-cleanup", CleanupTimeout);
-        Log.Info($"Filee --uninstall-cleanup: exit code {code}");
+        Log.Info($"TsuFiles --uninstall-cleanup: exit code {code}");
         return code == 0;
     }
 
     /// <summary>
-    /// The programs of uninstall.json that run: anything else in the folder isn't Filee's to end. Not the uninstaller that
+    /// The programs of uninstall.json that run: anything else in the folder isn't TsuFiles's to end. Not the uninstaller that
     /// started this one either: it waits for this one and ends by itself.
     /// </summary>
     private List<RunningProgram> ProgramsLeftIn(string folder, InstallRecord record)
@@ -190,8 +190,8 @@ public sealed class Uninstaller(SetupContext context)
     }
 
     /// <summary>
-    /// Whether Filee still runs after it was ended: it can't be ended, or an elevated uninstaller may not look at another
-    /// account's Filee. Without administrator rights every other account's is out of sight, but a per-user folder
+    /// Whether TsuFiles still runs after it was ended: it can't be ended, or an elevated uninstaller may not look at another
+    /// account's TsuFiles. Without administrator rights every other account's is out of sight, but a per-user folder
     /// isn't theirs to run from. Looks at processes, not at whether Filee.exe is in use: Explorer showing its icon, or
     /// Apps in Settings, holds it just the same.
     /// </summary>
@@ -208,14 +208,14 @@ public sealed class Uninstaller(SetupContext context)
             {
                 Log.Error(left.Count > 0
                     ? $"Still running: {string.Join(", ", left.Select(p => p.Path))}"
-                    : "Still running: a Filee this program may not look at");
+                    : "Still running: a TsuFiles this program may not look at");
                 return true;
             }
             Thread.Sleep(250);
         }
     }
 
-    /// <summary>Filee's startup entry in this account's registry, if it starts the Filee in this folder (not a portable copy).</summary>
+    /// <summary>TsuFiles's startup entry in this account's registry, if it starts the TsuFiles in this folder (not a portable copy).</summary>
     private void RemoveStartupEntry(string folder)
     {
         foreach (var name in new[] { SetupNames.AppName, SetupNames.LegacyAppName })

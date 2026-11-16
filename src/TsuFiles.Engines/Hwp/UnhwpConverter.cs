@@ -1,6 +1,6 @@
 // HWP / HWPX → plain text, Markdown or HTML with Unhwp (MIT, native library shipped in the NuGet package).
 //
-// Unhwp's Markdown links pictures as "assets/<id>" without writing them: Filee takes each picture from the document
+// Unhwp's Markdown links pictures as "assets/<id>" without writing them: TsuFiles takes each picture from the document
 // (GetResourceData) and puts it into a "<name>_files" folder next to the Markdown file (MarkdownPictures), or embeds
 // it in the HTML page as a data: URI, so the page stays one file. Pictures it can't provide are left out instead of
 // becoming broken links; "Leave out pictures" (DocumentOptions.LeaveOutPictures) leaves out all of them.
@@ -40,7 +40,7 @@ public sealed class UnhwpConverter : IConverter
             : EngineStatus.Unavailable("engine.reason.unsupported_platform");
 
     /// <summary>
-    /// Whether this process has Unhwp's native library. The package ships it for win-x64, linux-x64 and macOS; Filee's
+    /// Whether this process has Unhwp's native library. The package ships it for win-x64, linux-x64 and macOS; TsuFiles's
     /// own build adds linux-arm64 and win-arm64 (build/build-native.py). Decided once, by loading it.
     /// </summary>
     private static readonly Lazy<bool> NativeLibraryUsable = new(() =>

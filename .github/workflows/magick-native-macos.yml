@@ -1,7 +1,7 @@
 name: ImageMagick for macOS 13
 
 # Magick.NET's macOS libraries are built without a deployment target, so they need the macOS of the runner that built
-# them (#600: 14.0 on Apple silicon for Magick.NET 14.17.2), and Magick.NET 15 has none for Intel Macs at all. Filee
+# them (#600: 14.0 on Apple silicon for Magick.NET 14.17.2), and Magick.NET 15 has none for Intel Macs at all. TsuFiles
 # supports macOS 13 on both, so this job builds the same Magick.Native release from its pinned source with
 # MACOSX_DEPLOYMENT_TARGET=13.0: ImageMagick's dependencies (ImageMagick/Dependencies, every library at the commit its
 # release pins), ImageMagick at the commit Magick.Native pins, then Magick.Native itself. The steps are upstream's own

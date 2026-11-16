@@ -1,50 +1,50 @@
 ---
-name: filee
-description: Convert files offline with the Filee command-line tool (images, documents, PDF, audio, video, ebooks). Use when the user asks to convert a file to another format, check whether Filee can convert a format, or read Filee's JSON result. Not for editing file contents.
+name: tsufiles
+description: Convert files offline with the TsuFiles command-line tool (images, documents, PDF, audio, video, ebooks). Use when the user asks to convert a file to another format, check whether TsuFiles can convert a format, or read TsuFiles's JSON result. Not for editing file contents.
 ---
 
-# Filee
+# TsuFiles
 
-Filee converts files offline. The `filee` command shares formats, presets and engines with the Filee app.
+TsuFiles converts files offline. The `tsufiles` command shares formats, presets and engines with the TsuFiles app.
 
-The command is `filee` on every OS. If the shell can't find it, Filee may be installed but not on PATH. On Linux and macOS the installer links it as `$HOME/.local/bin/filee`, so that folder has to be on PATH. On Windows, run `cli\filee.cmd` (or `filee-cli.exe`) from the Filee folder by its full path.
+The command is `tsufiles` on every OS. If the shell can't find it, TsuFiles may be installed but not on PATH. On Linux and macOS the installer links it as `$HOME/.local/bin/tsufiles`, so that folder has to be on PATH. On Windows, run `cli\tsufiles.cmd` (or `tsufiles-cli.exe`) from the TsuFiles folder by its full path.
 
-## 1. Check that Filee is installed
+## 1. Check that TsuFiles is installed
 
 ```sh
-filee version
+tsufiles version
 ```
 
-It prints something like `filee 2.2.0` and exits with 0. If the command doesn't exist and you can't find the install, tell the user to download TsuFiles from https://files.tsudev.com/tai-ve/ and stop.
+It prints something like `tsufiles 2.4.1` and exits with 0. If the command doesn't exist and you can't find the install, tell the user to download TsuFiles from https://files.tsudev.com/tai-ve/ and stop.
 
 ## 2. Check the conversion first
 
-Ask Filee what a format can become before you convert:
+Ask TsuFiles what a format can become before you convert:
 
 ```sh
-filee formats md --json
+tsufiles formats md --json
 ```
 
 Look at two lists in the result:
 
-- `targets`: formats Filee can make right now.
-- `withEngines`: formats Filee can make once the user gets an extra engine in the app.
+- `targets`: formats TsuFiles can make right now.
+- `withEngines`: formats TsuFiles can make once the user gets an extra engine in the app.
 
-If the target is in neither list, Filee can't do this conversion. Say so instead of trying.
+If the target is in neither list, TsuFiles can't do this conversion. Say so instead of trying.
 
 ## 3. Convert
 
 Always pass `--json --quiet` and `-o <folder>`:
 
 ```sh
-filee convert <files or folders...> --to <format> -o <folder> --json --quiet
+tsufiles convert <files or folders...> --to <format> -o <folder> --json --quiet
 ```
 
 Why `--quiet`: without it `--json` also writes progress events to stderr, one object per line, which get in the way when a shell merges stderr into stdout. The JSON result on stdout stays the same.
 
 Why `-o`: results land in one folder you chose instead of wherever the app's output settings put them (usually next to the originals), so you can find them.
 
-Other useful flags: `--preset <preset>` instead of `--to` (see `filee presets --json`), `-r` for sub folders, `--sort <name|name-desc|modified|modified-desc|created|created-desc>` for the order files merge in, `--skip` to leave existing outputs alone, `--overwrite` to replace them. By default Filee adds a number rather than overwriting.
+Other useful flags: `--preset <preset>` instead of `--to` (see `tsufiles presets --json`), `-r` for sub folders, `--sort <name|name-desc|modified|modified-desc|created|created-desc>` for the order files merge in, `--skip` to leave existing outputs alone, `--overwrite` to replace them. By default TsuFiles adds a number rather than overwriting.
 
 ## 4. Read the result
 
@@ -67,7 +67,7 @@ A file is converted only when its `state` is `done` and `outputs` isn't empty.
 
 ## 5. When a file fails
 
-- If the failed file has `needsEngines`, Filee is missing an engine for this conversion. Tell the user which engine it names and ask them to open Filee, go to Settings → Engines, and get it. Then run the same command again.
+- If the failed file has `needsEngines`, TsuFiles is missing an engine for this conversion. Tell the user which engine it names and ask them to open TsuFiles, go to Settings → Engines, and get it. Then run the same command again.
 - If the file's `state` is `cancelled`, the run was stopped before it finished. Tell the user it wasn't converted.
 - Otherwise pass the file's `error` text on to the user. Don't retry blindly.
 
@@ -76,7 +76,7 @@ A file is converted only when its `state` is `done` and `outputs` isn't empty.
 ### Convert one file
 
 ```sh
-filee convert photo.png --to jpg -o converted --json --quiet
+tsufiles convert photo.png --to jpg -o converted --json --quiet
 ```
 
 Output, trimmed to the fields that matter here:
@@ -92,7 +92,7 @@ Exit code 0, `state` is `done`, and the new file is the path in `outputs`.
 ### A conversion that needs an engine
 
 ```sh
-filee convert notes.md --to pptx -o converted --json --quiet
+tsufiles convert notes.md --to pptx -o converted --json --quiet
 ```
 
 Output, trimmed:
@@ -103,4 +103,4 @@ Output, trimmed:
                "errorKey": "error.no_route", "needsEngines": [ "pandoc" ] } ] }
 ```
 
-Exit code 1. Tell the user something like: "Filee needs the pandoc engine for this. Open Filee, go to Settings → Engines, get it, then I'll try again."
+Exit code 1. Tell the user something like: "TsuFiles needs the pandoc engine for this. Open TsuFiles, go to Settings → Engines, get it, then I'll try again."

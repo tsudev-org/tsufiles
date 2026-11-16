@@ -1,7 +1,7 @@
 // Reads source images with ImageMagick, handling the formats that need more than "open the file": camera RAW
 // (LibRaw settings), layered PSD/PSB/XCF (one flattened picture instead of one file per layer) and Windows
-// metafiles (rendered at the preset's DPI), APNG (Filee's own reader composes the frames) and uncompressed DICOM
-// (Filee's own reader, as ImageMagick's Q8 build reads only 8-bit DICOM), FITS (Filee's own reader, stretched and
+// metafiles (rendered at the preset's DPI), APNG (TsuFiles's own reader composes the frames) and uncompressed DICOM
+// (TsuFiles's own reader, as ImageMagick's Q8 build reads only 8-bit DICOM), FITS (TsuFiles's own reader, stretched and
 // debayered as the preset says), the photo of an iPhone LIVP and the merged picture of a Krita KRA. Used by every engine
 // that takes a raster image as input.
 
@@ -47,14 +47,14 @@ internal static class ImageReader
         {
             images.Dispose();
             throw new InvalidOperationException(
-                "This DICOM image is compressed in a way Filee can't read (more than 8 bits per sample, or an unusual " +
+                "This DICOM image is compressed in a way TsuFiles can't read (more than 8 bits per sample, or an unusual " +
                 "compression). Export it uncompressed from the viewing software and try again. (" + ex.Message + ")", ex);
         }
         catch (MagickException ex) when (formatId == "xcf")
         {
             images.Dispose();
             throw new InvalidOperationException(
-                "This GIMP file can't be read. Filee reads 8-bit XCF files saved without \"better but slower compression\"; " +
+                "This GIMP file can't be read. TsuFiles reads 8-bit XCF files saved without \"better but slower compression\"; " +
                 "in GIMP, export the picture as PNG or PSD instead. (" + ex.Message + ")", ex);
         }
         catch

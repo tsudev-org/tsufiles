@@ -1,7 +1,7 @@
 // The embedded Noto fonts (build/fetch-fonts.ps1), each family read when text first asks for it (issue #957). Avalonia's
 // EmbeddedFontCollection opens every file at the start, and SkiaSharp copies a font it opens from a stream into native
 // memory for good. So all 18 files (37 MB) stayed in memory on top of the pages of Filee.dll that the copying read, also
-// in a Filee started to the tray that has drawn no text yet. Since a letter is only matched in the family asked for, the
+// in a TsuFiles started to the tray that has drawn no text yet. Since a letter is only matched in the family asked for, the
 // families after the one that has it are never asked for: Noto Sans SC stays unread until a chain reaches it.
 
 using System.Collections;
@@ -14,7 +14,7 @@ using Avalonia.Platform;
 namespace TsuFiles.App;
 
 /// <summary>
-/// Embedded Noto fonts: <c>fonts:Filee#Noto Sans</c>, <c>#Noto Sans JP</c>, <c>#Noto Sans KR</c>,
+/// Embedded Noto fonts: <c>fonts:TsuFiles#Noto Sans</c>, <c>#Noto Sans JP</c>, <c>#Noto Sans KR</c>,
 /// <c>#Noto Sans SC</c>, <c>#Noto Sans Devanagari</c>, <c>#Noto Sans Arabic</c>, <c>#Noto Sans Thai</c>.
 /// <para>
 /// A letter is only matched in the family asked for, so the order of SoftPalette's font chain decides (#1095). Avalonia's
@@ -32,7 +32,7 @@ internal sealed class TsuFilesFontCollection : IFontCollection
     private readonly Lock _lock = new();
     private readonly HashSet<string> _asked = new(StringComparer.OrdinalIgnoreCase);
 
-    internal TsuFilesFontCollection(string key = "fonts:Filee") => _fonts = new ReadFonts(new Uri(key, UriKind.Absolute));
+    internal TsuFilesFontCollection(string key = "fonts:TsuFiles") => _fonts = new ReadFonts(new Uri(key, UriKind.Absolute));
 
     public Uri Key => _fonts.Key;
 

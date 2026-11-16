@@ -98,7 +98,7 @@ public static class WebFormats
         return (semicolon >= 0 ? mime[..semicolon] : mime).Trim().ToLowerInvariant();
     }
 
-    /// <summary>The extension (no dot) Filee writes for a media type it knows, or null.</summary>
+    /// <summary>The extension (no dot) TsuFiles writes for a media type it knows, or null.</summary>
     public static string? ExtensionForMime(string? mime) => ByMime.GetValueOrDefault(Normalize(mime));
 
     /// <summary>True for a web page (HTML) media type.</summary>
@@ -191,7 +191,7 @@ public static class WebFormats
 
     /// <summary>
     /// The name a file should have once its first bytes are known: a sniffed image or PDF replaces an extension that
-    /// says otherwise (a ".jpg" URL that serves WebP), or is added to a name Filee can't place; a known extension
+    /// says otherwise (a ".jpg" URL that serves WebP), or is added to a name TsuFiles can't place; a known extension
     /// whose format can't be sniffed (".docx" for a ZIP) stays.
     /// </summary>
     public static string NameFor(string name, ReadOnlySpan<byte> head, string? mime)

@@ -30,7 +30,7 @@ public sealed partial class MergeSource(string path, Action<MergeSource> remove,
     public string Name => System.IO.Path.GetFileName(Path);
     public string Folder => WebDrop.IsPlaceholder(Path) ? "" : System.IO.Path.GetDirectoryName(Path) ?? "";
 
-    /// <summary>The format, or null when Filee doesn't know it (the file then shows no picture).</summary>
+    /// <summary>The format, or null when TsuFiles doesn't know it (the file then shows no picture).</summary>
     public FileFormat? Format { get; } = FormatRegistry.Detect(path);
 
     /// <summary>The extension ("PDF", "PNG"), shown when the file has no picture.</summary>

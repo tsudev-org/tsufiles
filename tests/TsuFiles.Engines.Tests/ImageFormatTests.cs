@@ -1,4 +1,4 @@
-// The less common raster formats ImageMagick (Magick.NET Q8) reads and writes for Filee: every one is checked against
+// The less common raster formats ImageMagick (Magick.NET Q8) reads and writes for TsuFiles: every one is checked against
 // the coders the bundled build really has, then converted there and back. Inputs are generated in the tests.
 
 using ImageMagick;
@@ -11,7 +11,7 @@ namespace TsuFiles.Engines.Tests;
 
 public class ImageFormatTests(EngineFixture fx) : IClassFixture<EngineFixture>
 {
-    /// <summary>Formats Filee reads and writes with ImageMagick's own coders (APNG is Filee's, see ApngTests).</summary>
+    /// <summary>Formats TsuFiles reads and writes with ImageMagick's own coders (APNG is TsuFiles's, see ApngTests).</summary>
     private static readonly string[] ReadWrite = ["mng", "qoi", "dds", "pcx", "cur", "xpm", "xbm", "wbmp", "pam", "pfm", "sgi", "ras", "miff"];
 
     private static readonly string[] ReadOnly = ["dcm", "pcd", "exr", "hdr"];

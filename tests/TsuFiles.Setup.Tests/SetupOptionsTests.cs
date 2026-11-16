@@ -1,4 +1,4 @@
-// The command line callers already use: Filee 1.x's updater ("/SILENT /NORESTART"), winget's silent switches,
+// The command line callers already use: TsuFiles 1.x's updater ("/SILENT /NORESTART"), winget's silent switches,
 // build scripts and people who scripted the Inno Setup installer.
 
 using TsuFiles.Setup.Installation;
@@ -42,7 +42,7 @@ public class SetupOptionsTests
             "/MERGETASKS=!startup", "/NOICONS", "/CURRENTUSER", "/LOG=C:\\logs\\setup.log", "/NOCLOSEAPPLICATIONS",
             "/NORESTART", "/SP-", "/NOCANCEL", "/RESTARTEXITCODE=3", "/CLOSEAPPLICATIONS", "/RESTARTAPPLICATIONS",
             "/NORESTARTAPPLICATIONS", "/NOFORCECLOSEAPPLICATIONS", "/LOGCLOSEAPPLICATIONS", "/COMPONENTS=a", "/TYPE=full",
-            "/GROUP=Filee", "/NOGROUP", "/PASSWORD=x", "/LOADINF=a.inf", "/SAVEINF=b.inf",
+            "/GROUP=TsuFiles", "/NOGROUP", "/PASSWORD=x", "/LOADINF=a.inf", "/SAVEINF=b.inf",
         ]);
         Assert.Equal(SetupUi.Silent, options.Ui);
         Assert.True(options.SuppressMessageBoxes);

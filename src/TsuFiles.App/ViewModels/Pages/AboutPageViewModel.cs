@@ -38,7 +38,7 @@ public sealed partial class AboutPageViewModel : ObservableObject, IDisposable
 
     public string RepositoryUrl { get; } = UpdateService.RepositoryUrl;
 
-    /// <summary>"What's new in Filee 2.0": the slides of the newest version up to this one; null when there are none.</summary>
+    /// <summary>"What's new in TsuFiles 2.0": the slides of the newest version up to this one; null when there are none.</summary>
     public string? WhatsNewText { get; }
 
     public bool HasWhatsNew => WhatsNewText is not null;
@@ -83,7 +83,7 @@ public sealed partial class AboutPageViewModel : ObservableObject, IDisposable
         ShowUpdateState(newer, afterCheck: true);
     }
 
-    /// <summary>Downloads and runs the new installer, which updates Filee in place (a portable copy opens the download page).</summary>
+    /// <summary>Downloads and runs the new installer, which updates TsuFiles in place (a portable copy opens the download page).</summary>
     [RelayCommand]
     private Task DownloadUpdate() => AppHost.Get<WindowService>().StartUpdateAsync(_updates);
 

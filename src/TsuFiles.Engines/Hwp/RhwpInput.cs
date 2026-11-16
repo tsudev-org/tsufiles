@@ -1,4 +1,4 @@
-// What Filee changes in an HWPX before rhwp renders it to PDF, in a copy (the user's file is never touched):
+// What TsuFiles changes in an HWPX before rhwp renders it to PDF, in a copy (the user's file is never touched):
 //
 // - Fonts (RhwpFonts): installed fonts for the text's language and characters, no CFF2 variable fonts (#61, #64).
 // - Punctuation widths (RhwpInput.Punctuation): quotes and CJK punctuation in Chinese and Japanese fonts get letter
@@ -16,7 +16,7 @@
 //   text, its line is moved up to the paragraph's top (the line minus the table's offset, margins and height):
 //   nothing is drawn on it, and rhwp then puts the table where 한글 does.
 //
-// - Equation lines (#143): in paragraphs without stored lines (Word equations written by Filee) rhwp draws a fraction,
+// - Equation lines (#143): in paragraphs without stored lines (Word equations written by TsuFiles) rhwp draws a fraction,
 //   matrix or sum partly below its line, over the next line. Those paragraphs get the overhang as space after them.
 //
 // - Floating pictures in headers and footers (#1152): rhwp's way with them left out what comes after them; see
@@ -65,7 +65,7 @@ internal static partial class RhwpInput
 
     /// <summary>
     /// A copy of the HWPX in <paramref name="workDirectory"/> with the changes above, or null when nothing needs
-    /// changing (or the file is not an HWPX package Filee can read).
+    /// changing (or the file is not an HWPX package TsuFiles can read).
     /// </summary>
     /// <param name="lookup">Installed fonts by name (tests pass a fake computer).</param>
     public static string? Prepare(string hwpx, string workDirectory, Func<string, InstalledFont?>? lookup = null)
@@ -128,7 +128,7 @@ internal static partial class RhwpInput
         }
         catch (Exception ex) when (ex is InvalidDataException or System.Xml.XmlException)
         {
-            return null; // not a package Filee can read: rhwp reports the problem itself
+            return null; // not a package TsuFiles can read: rhwp reports the problem itself
         }
     }
 
@@ -231,7 +231,7 @@ internal static partial class RhwpInput
     /// rhwp lays out a floating picture in a header or footer as if it took up room: what comes after it moves down, or
     /// is left out past the end of the area (issue #1152). The text beside it and any shapes are not drawn at all, and a
     /// position on the paper is taken from the header's corner. As the one object of a group, the picture goes the way
-    /// of a shape, which has none of this. Only paragraphs without stored lines (written by Filee): for a file saved by
+    /// of a shape, which has none of this. Only paragraphs without stored lines (written by TsuFiles): for a file saved by
     /// 한글 rhwp's reading of the position stays. A paragraph without text keeps its line with a space. True when
     /// something changed.
     /// </summary>
@@ -308,7 +308,7 @@ internal static partial class RhwpInput
     }
 
     /// <summary>
-    /// Paragraphs without stored lines (written by Filee) that hold equations: room above and below for what rhwp
+    /// Paragraphs without stored lines (written by TsuFiles) that hold equations: room above and below for what rhwp
     /// draws outside the line. rhwp makes a line as tall as its tallest equation, puts the line's baseline at 85 % of
     /// that height and the equation's own baseline on it, so an equation whose baseline is higher (a fraction, a matrix,
     /// a sum with limits) reaches below the line into the next one. The paragraph gets that much more space after it

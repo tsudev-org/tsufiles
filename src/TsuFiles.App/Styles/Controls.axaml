@@ -1,4 +1,4 @@
-<!-- Styles for Filee's own controls, kept out of Soft.axaml, which the installer shares. -->
+<!-- Styles for TsuFiles's own controls, kept out of Soft.axaml, which the installer shares. -->
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:c="using:TsuFiles.App.Controls">

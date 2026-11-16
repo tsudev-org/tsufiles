@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  Downloads the Noto Sans fonts (SIL Open Font License 1.1) used by the Filee UI.
+  Downloads the Noto Sans fonts (SIL Open Font License 1.1) used by the TsuFiles UI.
 
 .DESCRIPTION
   Fonts are not committed to git (≈36 MB). Run this once after cloning, and CI runs it before publishing.
@@ -26,7 +26,7 @@ $arabic = "$noto/NotoSansArabic/hinted/ttf"
 $thai = "$noto/NotoSansThai/hinted/ttf"
 $cjk = 'https://raw.githubusercontent.com/notofonts/noto-cjk/Sans2.004/Sans/SubsetOTF'
 
-# The same files on Filee's download mirror (R2 bucket filee-downloads), kept under their SHA-256 so that a new version
+# The same files on TsuFiles's download mirror (R2 bucket filee-downloads), kept under their SHA-256 so that a new version
 # never replaces one an older branch pins. Copy a new or bumped file there too:
 #   npx wrangler r2 object put filee-downloads/fonts/<SHA-256>/<name> --file <file> --remote
 $mirror = 'https://dl.filee.sh/fonts'

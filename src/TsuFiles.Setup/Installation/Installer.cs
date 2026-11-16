@@ -1,14 +1,14 @@
 // Installs or updates Filee, in this order (installer/Filee.iss did the same in 1.x):
 //  1. checks free space and the payload's checksum: nothing has changed yet;
 //  2. closes a running Filee ("Filee.exe --quit", which saves and exits), then ends what still runs from the folder;
-//  3. removes Filee 1.1's per-user Velopack copy (settings and engines stay);
+//  3. removes TsuFiles 1.1's per-user Velopack copy (settings and engines stay);
 //  4. unpacks into a work folder inside the install folder, checking every file, with the uninstaller and its list;
 //  5. swaps the files in (FileSwap: replaced and obsolete files go to a backup, Inno Setup's unins000.* too);
 //  6. writes the uninstall entry (the same key Inno Setup used, so Apps & Features keeps one Filee), the shortcuts and
 //     PATH; on Windows 11 registers the top-level Explorer menu package;
 //  7. deletes the backup, or on any failure in 4-6 puts everything back.
-// Filee's own settings (Explorer menu entry, start at sign-in, engines, language) are handed to Filee when Setup
-// starts it, as before: Filee applies them for the signed-in user. After an update Filee goes back to the tray and
+// TsuFiles's own settings (Explorer menu entry, start at sign-in, engines, language) are handed to TsuFiles when Setup
+// starts it, as before: TsuFiles applies them for the signed-in user. After an update TsuFiles goes back to the tray and
 // shows the new version's "What's new" slides (--background --whats-new).
 
 using TsuFiles.Platform.Windows;
@@ -24,7 +24,7 @@ public sealed class Installer(SetupContext context, SetupPayload payload)
     private SetupPaths Paths => context.Paths;
     private SetupLog Log => context.Log;
 
-    /// <summary>How long Filee may take to save and exit when asked (its own limit is 20 s).</summary>
+    /// <summary>How long TsuFiles may take to save and exit when asked (its own limit is 20 s).</summary>
     public static TimeSpan QuitTimeout { get; } = TimeSpan.FromSeconds(40);
 
     /// <summary>Space needed besides the files themselves (the uninstaller, Windows' own bookkeeping).</summary>
@@ -35,7 +35,7 @@ public sealed class Installer(SetupContext context, SetupPayload payload)
     {
         var folder = Path.TrimEndingDirectorySeparator(Path.GetFullPath(choices.Folder));
         var update = previous is not null && string.Equals(previous.Folder, folder, StringComparison.OrdinalIgnoreCase);
-        Log.Info($"{(update ? "Update" : choices.Portable ? "Portable copy" : "Install")} of Filee {payload.Manifest.Version} " +
+        Log.Info($"{(update ? "Update" : choices.Portable ? "Portable copy" : "Install")} of TsuFiles {payload.Manifest.Version} " +
                  $"into {folder} for {(choices.Scope == InstallScope.Machine ? "all users" : "this user")}; " +
                  $"previous: {(previous is null ? "none" : $"{previous.Version} in {previous.Folder}{(previous.ByInno ? " (Inno Setup)" : "")}")}; " +
                  $"options: {choices.Tasks.ToInnoString()}; engines: {string.Join(',', choices.Engines)}; language: {choices.Language}");
@@ -169,9 +169,9 @@ public sealed class Installer(SetupContext context, SetupPayload payload)
     }
 
     /// <summary>
-    /// The arguments Filee starts with: the choices of a fresh install, or after an update the new version's "What's new"
+    /// The arguments TsuFiles starts with: the choices of a fresh install, or after an update the new version's "What's new"
     /// slides, back in the tray (/SILENT, the app's own updater) or over the main window (<paramref name="shown"/>: the
-    /// user clicked "Launch Filee"). <paramref name="updatedFrom"/>, the version updated from, tells Filee what is new.
+    /// user clicked "Launch TsuFiles"). <paramref name="updatedFrom"/>, the version updated from, tells TsuFiles what is new.
     /// </summary>
     public static string LaunchArguments(InstallChoices choices, bool update, bool shown = false, string? updatedFrom = null) => update
         ? (shown ? "" : "--background ") + "--whats-new" + (IsVersion(updatedFrom) ? "=" + updatedFrom : "")
@@ -211,7 +211,7 @@ public sealed class Installer(SetupContext context, SetupPayload payload)
         : string.Create(global::System.Globalization.CultureInfo.InvariantCulture, $"{Math.Max(1, bytes / 1_000_000)} MB");
 
     /// <summary>
-    /// Asks Filee to exit (it saves first and waits for running conversions to stop), then ends whatever still runs
+    /// Asks TsuFiles to exit (it saves first and waits for running conversions to stop), then ends whatever still runs
     /// from the install folder (tsufiles-cli, an engine), like Inno Setup's CloseApplications did.
     /// </summary>
     private void CloseFilee(string folder, bool force, bool velopack)
@@ -221,7 +221,7 @@ public sealed class Installer(SetupContext context, SetupPayload payload)
         if (File.Exists(exe))
         {
             var code = System.RunAndWait(exe, "--quit", QuitTimeout);
-            Log.Info($"Filee --quit: exit code {code}");
+            Log.Info($"TsuFiles --quit: exit code {code}");
         }
         var running = System.ProgramsIn(folder).ToList();
         if (velopack)
@@ -286,7 +286,7 @@ public sealed class Installer(SetupContext context, SetupPayload payload)
             if (!File.Exists(old))
                 continue;
             var bytes = File.ReadAllBytes(old);
-            undo.Push(("old Filee shortcut", () => File.WriteAllBytes(old, bytes)));
+            undo.Push(("old TsuFiles shortcut", () => File.WriteAllBytes(old, bytes)));
             File.Delete(old);
         }
 
@@ -362,7 +362,7 @@ public sealed class Installer(SetupContext context, SetupPayload payload)
 
     /// <summary>
     /// A fresh install registers the top-level menu when ticked (removing an older registration first, which may point
-    /// to another folder) and removes it when not; an update keeps what was chosen in Filee and refreshes it, unless
+    /// to another folder) and removes it when not; an update keeps what was chosen in TsuFiles and refreshes it, unless
     /// it is registered for this folder at this version already.
     /// Returns Windows' error when registering failed.
     /// </summary>

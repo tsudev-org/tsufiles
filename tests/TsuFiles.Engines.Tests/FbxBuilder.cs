@@ -1,6 +1,6 @@
 // FBX files for the tests, built in code: a node tree (FbxBuilder.Node) and writers for binary FBX 7.4 (32-bit
 // record offsets) and 7.5 (64-bit), with arrays plain or zlib-compressed, and for ASCII FBX 7.4. Just the nodes
-// Filee's reader looks at: FBXHeaderExtension, GlobalSettings, Definitions, Objects and Connections.
+// TsuFiles's reader looks at: FBXHeaderExtension, GlobalSettings, Definitions, Objects and Connections.
 
 using System.Collections;
 using System.Globalization;
@@ -97,7 +97,7 @@ internal static class FbxBuilder
         {
             new Node("FBXHeaderVersion", 1003),
             new Node("FBXVersion", version),
-            new Node("Creator", "Filee tests"),
+            new Node("Creator", "TsuFiles tests"),
         },
         new Node("GlobalSettings")
         {
@@ -337,7 +337,7 @@ internal static class FbxBuilder
 
     public static void WriteAscii(string path, IEnumerable<Node> nodes)
     {
-        var text = new StringBuilder("; FBX 7.4.0 project file\n; Written by the Filee tests\n\n");
+        var text = new StringBuilder("; FBX 7.4.0 project file\n; Written by the TsuFiles tests\n\n");
         foreach (var node in nodes)
             WriteAscii(text, node, 0);
         File.WriteAllText(path, text.ToString());

@@ -69,7 +69,7 @@ public abstract class WebDropItem : IDisposable
         }
     }
 
-    /// <summary>An address Filee downloads itself (without the browser's sign-in).</summary>
+    /// <summary>An address TsuFiles downloads itself (without the browser's sign-in).</summary>
     public static WebDropItem FromAddress(string name, Uri url) => new AddressItem(name, url);
 
     private sealed class StreamItem(string name, Func<CancellationToken, Task<Stream>> open, long? size, string? mime, IDisposable? owner)
@@ -112,7 +112,7 @@ public sealed class WebDrop : IDisposable
     private int _disposed;
 
     /// <param name="items">What the drag brought.</param>
-    /// <param name="workRoot">Folder for Filee's own copies (<see cref="DefaultWorkRoot"/>).</param>
+    /// <param name="workRoot">Folder for TsuFiles's own copies (<see cref="DefaultWorkRoot"/>).</param>
     public WebDrop(IReadOnlyList<WebDropItem> items, string workRoot)
     {
         WorkFolder = Path.Combine(workRoot, Guid.NewGuid().ToString("N")[..10]);

@@ -1103,7 +1103,7 @@ public sealed class BackgroundWindowTests : IDisposable
     public void Esc_closes_and_closing_with_the_title_bar_keeps_the_look_on_disk()
     {
         // The window works on the library's own tool: the look was put in it, then compared with itself, found the
-        // same and never written, so it was gone the next time Filee started.
+        // same and never written, so it was gone the next time TsuFiles started.
         TestServices.EnsureInitialized("en");
         var store = AppHost.Get<UserDataStore>();
         BackdropOptions Saved()

@@ -6,7 +6,7 @@ import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
 const DONUT_TITLE = 'TsuFiles Donut';
-// Filee reads the protocol version from each line and says on its Triggers page when it doesn't match, so the socket
+// TsuFiles reads the protocol version from each line and says on its Triggers page when it doesn't match, so the socket
 // name stays the same across versions.
 const PROTOCOL_VERSION = 1;
 const SOCKET_NAME = 'pointer.sock';
@@ -43,11 +43,11 @@ export default class TsuFilesDonutExtension extends Extension {
             }
             this._closeConnection();
             this._connection = connection;
-            // The donut is Filee's window: with native Wayland it has no WM class or app id, so match it by process.
+            // The donut is TsuFiles's window: with native Wayland it has no WM class or app id, so match it by process.
             try { this._peerPid = credentials.get_unix_pid(); } catch (_error) { this._peerPid = 0; }
             this._lastState = '';
             this._lastSent = 0;
-            // Poll the pointer only while Filee is connected; _closeConnection stops it.
+            // Poll the pointer only while TsuFiles is connected; _closeConnection stops it.
             this._pointerSource = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 16, () => {
                 this._sendPointer();
                 return GLib.SOURCE_CONTINUE;
@@ -141,7 +141,7 @@ export default class TsuFilesDonutExtension extends Extension {
     }
 
     _sendPointer() {
-        // One async write at a time: a slow/dead Filee must never block the desktop or build an unbounded queue.
+        // One async write at a time: a slow/dead TsuFiles must never block the desktop or build an unbounded queue.
         if (this._writing || !this._connection)
             return;
         const [x, y, mask] = global.get_pointer();
@@ -156,7 +156,7 @@ export default class TsuFilesDonutExtension extends Extension {
             (mask & Clutter.ModifierType.MOD1_MASK ? 2 : 0) |
             (mask & Clutter.ModifierType.SHIFT_MASK ? 4 : 0) |
             (mask & Clutter.ModifierType.SUPER_MASK ? 8 : 0);
-        // Clutter numbers middle before right; Filee numbers right before middle.
+        // Clutter numbers middle before right; TsuFiles numbers right before middle.
         const buttons = (mask & Clutter.ModifierType.BUTTON1_MASK ? 1 : 0) |
             (mask & Clutter.ModifierType.BUTTON3_MASK ? 2 : 0) |
             (mask & Clutter.ModifierType.BUTTON2_MASK ? 4 : 0) |

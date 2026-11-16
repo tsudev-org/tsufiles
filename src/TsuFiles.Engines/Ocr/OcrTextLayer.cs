@@ -1,4 +1,4 @@
-// The invisible text of a searchable PDF written by Filee itself (Apple Vision, VisionConverter): each page is the
+// The invisible text of a searchable PDF written by TsuFiles itself (Apple Vision, VisionConverter): each page is the
 // picture as it looks, with the recognized words on top in text render mode 3 (neither filled nor stroked), placed and
 // stretched over the words of the picture so they can be searched, selected and copied. PdfDocumentReader and
 // TesseractConverter.PagesWithText read it like Tesseract's own layer.

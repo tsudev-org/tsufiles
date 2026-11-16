@@ -22,7 +22,7 @@ internal sealed record DraggedItems(IReadOnlyList<string> Files, WebDrop? Web)
 internal static class DraggedFiles
 {
     /// <summary>
-    /// Whether the drag offers files or folders in a form Filee reads (they may still be missing, or a link to a web
+    /// Whether the drag offers files or folders in a form TsuFiles reads (they may still be missing, or a link to a web
     /// page).
     /// </summary>
     public static bool Offered(IDataTransfer data) =>
@@ -65,7 +65,7 @@ internal static class DraggedFiles
     internal static bool IsRoot(string path) =>
         string.Equals(Path.GetPathRoot(path), path, FileSystemPaths.Comparison);
 
-    /// <summary>The formats a drag offers, for the log when Filee finds no files in it.</summary>
+    /// <summary>The formats a drag offers, for the log when TsuFiles finds no files in it.</summary>
     public static string Describe(IDataTransfer data) =>
         data.Formats.Count == 0 ? "nothing" : string.Join(", ", data.Formats.Select(format => format.Identifier).Distinct());
 

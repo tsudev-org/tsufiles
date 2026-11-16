@@ -1,7 +1,7 @@
 # Puts the ImageMagick library built for macOS 13 (.github/workflows/magick-native-macos.yml) into the given folders,
 # as Magick.Native-Q8-<arch>.dll.dylib next to Magick.NET.
 #
-# Magick.NET's own macOS library needs a newer macOS than Filee supports (#600), and Magick.NET 15 has none for Intel
+# Magick.NET's own macOS library needs a newer macOS than TsuFiles supports (#600), and Magick.NET 15 has none for Intel
 # Macs at all. Its loader still picks Magick.Native-Q8-x64.dll in every x64 process, whatever the operating system,
 # and .NET finds that as Magick.Native-Q8-x64.dll.dylib in the app's folder. So the macOS packages
 # (build/build-portable.ps1) get this library in place of Magick.NET's own (Apple silicon) or added (Intel), and the

@@ -5,7 +5,7 @@
 //   × 1.4826) below the median, and a midtones transfer function takes the median to 0.2 of the output. A raw frame of
 //   a colour camera is debayered first (bilinear, from the BAYERPAT pattern and XBAYROFF / YBAYROFF), unless the preset
 //   keeps it mono; its channels are stretched one by one, so the sky comes out neutral.
-// - TIFF (Filee's own writer, as ImageMagick's Q8 build stores 8 bits): the data as it is, or stretched, at the file's
+// - TIFF (TsuFiles's own writer, as ImageMagick's Q8 build stores 8 bits): the data as it is, or stretched, at the file's
 //   own depth. 8- and 16-bit data stay so (BZERO / BSCALE applied: unsigned 16-bit is written as unsigned 16-bit),
 //   32-bit integer and floating-point data become 32-bit floating point. Never debayered: the mosaic stays for the
 //   program that processes it.

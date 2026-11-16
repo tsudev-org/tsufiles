@@ -227,7 +227,7 @@ jobs:
           mkdir "$RUNNER_TEMP/exiftool"
           tar -xzf "$RUNNER_TEMP/exiftool.tar.gz" -C "$RUNNER_TEMP/exiftool" --strip-components=1
           echo "TSUFILES_TEST_EXIFTOOL=$RUNNER_TEMP/exiftool/exiftool" >> "$GITHUB_ENV"
-          # On the PATH too: the conversion test goes through Filee's own search and the Perl check.
+          # On the PATH too: the conversion test goes through TsuFiles's own search and the Perl check.
           echo "$RUNNER_TEMP/exiftool" >> "$GITHUB_PATH"
 
       - name: Test

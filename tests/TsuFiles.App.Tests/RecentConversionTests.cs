@@ -402,7 +402,7 @@ public class RecentConversionTests
     [AvaloniaFact]
     public void A_built_in_preset_name_follows_the_language_filee_is_in_now()
     {
-        // #744: converted while Filee was in Chinese, looked at in English.
+        // #744: converted while TsuFiles was in Chinese, looked at in English.
         TestServices.EnsureInitialized("en");
         var loc = AppHost.Get<ILocalizer>();
         var platform = new OpeningPlatform(false);
@@ -411,7 +411,7 @@ public class RecentConversionTests
         Assert.Equal(loc["preset.long_image"], new HistoryItemViewModel(builtIn, loc, platform).Title);
         Assert.NotEqual("长图", loc["preset.long_image"]);
 
-        // The user's own name, an older entry and a key Filee no longer has keep the saved name.
+        // The user's own name, an older entry and a key TsuFiles no longer has keep the saved name.
         Assert.Equal("My PNG", new HistoryItemViewModel(Entry([], "My PNG"), loc, platform).Title);
         var gone = Entry([], "旧名");
         gone.PresetNameKey = "preset.no_such_preset";

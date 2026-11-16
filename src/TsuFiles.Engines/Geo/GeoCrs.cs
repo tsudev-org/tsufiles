@@ -66,7 +66,7 @@ internal abstract class GeoCrs
         };
     }
 
-    /// <summary>The system of an EPSG code, or null if it is not one Filee knows.</summary>
+    /// <summary>The system of an EPSG code, or null if it is not one TsuFiles knows.</summary>
     public static GeoCrs? FromEpsg(int code)
     {
         switch (code)

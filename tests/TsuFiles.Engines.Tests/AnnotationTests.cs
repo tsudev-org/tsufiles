@@ -119,7 +119,7 @@ public class AnnotationTests(EngineFixture fx) : IClassFixture<EngineFixture>
     // Left to right with Arabic in it: the Arabic words read right to left after "Save", the first on the right.
     [InlineData("Save مرحبا بالعالم", false, new[] { "Save", "بالعالم", "مرحبا" })]
     // Right to left with a name in it: the name is on the left, read left to right.
-    [InlineData("مرحبا Filee", true, new[] { "Filee", "مرحبا" })]
+    [InlineData("مرحبا TsuFiles", true, new[] { "TsuFiles", "مرحبا" })]
     // A number with its separator in Arabic text stays one number, read left to right, in the right place.
     [InlineData("المجموع 1,200 ريال", true, new[] { "ريال", "1,200", "المجموع" })]
     [InlineData("Total: 1,200 ريال (approx.)", false, new[] { "Total: 1,200", "ريال", "(approx.)" })]

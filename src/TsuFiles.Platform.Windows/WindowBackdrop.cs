@@ -1,4 +1,4 @@
-// What the desktop compositor (DWM) shows behind a transparent Filee window. Filee never asks it for a material (Mica,
+// What the desktop compositor (DWM) shows behind a transparent TsuFiles window. TsuFiles never asks it for a material (Mica,
 // Acrylic), so the transparent pixels around the donut show the windows behind it. Programs that restyle every
 // window can still put one there: the donut then stands on a blurred, tinted rectangle (issue #269). Read says what the
 // window got; ClearForeign takes such a material away again. The older way to the same look, the undocumented accent
@@ -18,7 +18,7 @@ public readonly record struct WindowBackdropState(bool Redirected, bool Layered,
     // DWM_SYSTEMBACKDROP_TYPE: 0 auto, 1 none, 2 Mica, 3 Acrylic, 4 Mica Alt.
     public const int BackdropNone = 1;
 
-    /// <summary>A backdrop material Filee didn't ask for.</summary>
+    /// <summary>A backdrop material TsuFiles didn't ask for.</summary>
     public bool HasForeignMaterial => SystemBackdrop > BackdropNone;
 
     public override string ToString() =>
@@ -55,7 +55,7 @@ public static partial class WindowBackdrop
     }
 
     /// <summary>
-    /// Sets the backdrop back to none. True when Windows took the change. Only for windows Filee never gives a material.
+    /// Sets the backdrop back to none. True when Windows took the change. Only for windows TsuFiles never gives a material.
     /// </summary>
     [SupportedOSPlatform("windows")]
     public static unsafe bool ClearForeign(nint hwnd)

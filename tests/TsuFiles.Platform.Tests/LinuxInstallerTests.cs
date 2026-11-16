@@ -153,7 +153,7 @@ exec ""$REAL_MV"" ""$@""
         Assert.Contains("Installed TsuFiles at", output); // TsuFiles: tên hiển thị
 
         var installDir = Path.Combine(env.DataDir, "filee", "application");
-        Assert.True(File.Exists(Path.Combine(installDir, "Filee")));
+        Assert.True(File.Exists(Path.Combine(installDir, "TsuFiles")));
         Assert.True(File.Exists(Path.Combine(installDir, "tsufiles-cli")));
         Assert.Equal("v1.0.0", File.ReadAllText(Path.Combine(installDir, "version.txt")).Trim());
 
@@ -203,13 +203,13 @@ exec ""$REAL_MV"" ""$@""
         var installDir = Path.Combine(env.DataDir, "filee", "application");
 
         // Simulate user downloaded engines in ~/.local/share/Filee/engines
-        var engineDir = Path.Combine(env.DataDir, "Filee", "engines", "ffmpeg");
+        var engineDir = Path.Combine(env.DataDir, "TsuFiles", "engines", "ffmpeg");
         Directory.CreateDirectory(engineDir);
         var mockEngineBinary = Path.Combine(engineDir, "ffmpeg");
         File.WriteAllText(mockEngineBinary, "ffmpeg-binary-data");
 
         // Simulate user settings in ~/.config/Filee
-        var configDir = Path.Combine(env.HomeDir, ".config", "Filee");
+        var configDir = Path.Combine(env.HomeDir, ".config", "TsuFiles");
         Directory.CreateDirectory(configDir);
         var mockSettings = Path.Combine(configDir, "settings.json");
         File.WriteAllText(mockSettings, "{\"custom\": true}");
@@ -275,7 +275,7 @@ exec ""$REAL_MV"" ""$@""
         var installDir = Path.Combine(env.DataDir, "filee", "application");
         File.Delete(Path.Combine(installDir, "TsuFiles"));
         var quitLog = Path.Combine(env.DataDir, "quit.log");
-        var old = Path.Combine(installDir, "Filee");
+        var old = Path.Combine(installDir, "TsuFiles");
         File.WriteAllText(old, $"#!/bin/sh\nif [ \"$1\" = \"--quit\" ]; then echo quit >> \"{quitLog}\"; fi\nexit 0\n");
         var applications = Path.Combine(env.DataDir, "applications");
         File.Move(Path.Combine(applications, "com.tsudev.tsufiles.desktop"), Path.Combine(applications, "com.filee.app.desktop"));
@@ -452,7 +452,7 @@ exec ""$REAL_MV"" ""$@""
         Assert.Contains("Restored the previous TsuFiles installation", output + error); // TsuFiles: tên hiển thị
 
         // Original installation must be safely restored
-        Assert.True(File.Exists(Path.Combine(installDir, "Filee")));
+        Assert.True(File.Exists(Path.Combine(installDir, "TsuFiles")));
         Assert.Equal("v1.0.0", File.ReadAllText(Path.Combine(installDir, "version.txt")).Trim());
         Assert.Equal("com.filee.app", File.ReadAllText(Path.Combine(installDir, ".filee-package")).Trim());
     }
@@ -480,7 +480,7 @@ exec ""$REAL_MV"" ""$@""
         Assert.Contains("Restored the previous TsuFiles installation", output + error); // TsuFiles: tên hiển thị
 
         // Original installation must be safely restored
-        Assert.True(File.Exists(Path.Combine(installDir, "Filee")));
+        Assert.True(File.Exists(Path.Combine(installDir, "TsuFiles")));
         Assert.Equal("v1.0.0", File.ReadAllText(Path.Combine(installDir, "version.txt")).Trim());
         Assert.Equal("com.filee.app", File.ReadAllText(Path.Combine(installDir, ".filee-package")).Trim());
     }
@@ -512,7 +512,7 @@ exec ""$REAL_MV"" ""$@""
         var backupDirs = Directory.GetDirectories(fileeDir, ".backup-*");
         Assert.NotEmpty(backupDirs);
         var backupDir = backupDirs[0];
-        Assert.True(File.Exists(Path.Combine(backupDir, "Filee")));
+        Assert.True(File.Exists(Path.Combine(backupDir, "TsuFiles")));
         Assert.Equal("v1.0.0", File.ReadAllText(Path.Combine(backupDir, "version.txt")).Trim());
 
         // Verify that the occupied conflict file was preserved and not overwritten
@@ -547,7 +547,7 @@ exec ""$REAL_MV"" ""$@""
         var backupDirs = Directory.GetDirectories(fileeDir, ".backup-*");
         Assert.NotEmpty(backupDirs);
         var backupDir = backupDirs[0];
-        Assert.True(File.Exists(Path.Combine(backupDir, "Filee")));
+        Assert.True(File.Exists(Path.Combine(backupDir, "TsuFiles")));
         Assert.Equal("v1.0.0", File.ReadAllText(Path.Combine(backupDir, "version.txt")).Trim());
 
         // Verify that the unmanaged conflict was not touched
@@ -582,7 +582,7 @@ exec ""$REAL_MV"" ""$@""
         var backupDirs = Directory.GetDirectories(fileeDir, ".backup-*");
         Assert.NotEmpty(backupDirs);
         var backupDir = backupDirs[0];
-        Assert.True(File.Exists(Path.Combine(backupDir, "Filee")));
+        Assert.True(File.Exists(Path.Combine(backupDir, "TsuFiles")));
         Assert.Equal("v1.0.0", File.ReadAllText(Path.Combine(backupDir, "version.txt")).Trim());
 
         var installDir = Path.Combine(fileeDir, "application");
@@ -614,14 +614,14 @@ exec ""$REAL_MV"" ""$@""
 
         // Verify that the destination was NOT deleted or removed via fallback
         var installDir = Path.Combine(env.DataDir, "filee", "application");
-        Assert.True(File.Exists(Path.Combine(installDir, "Filee")));
+        Assert.True(File.Exists(Path.Combine(installDir, "TsuFiles")));
 
         // Verify that the backup directory still exists and holds the original installation
         var fileeDir = Path.Combine(env.DataDir, "filee");
         var backupDirs = Directory.GetDirectories(fileeDir, ".backup-*");
         Assert.NotEmpty(backupDirs);
         var backupDir = backupDirs[0];
-        Assert.True(File.Exists(Path.Combine(backupDir, "Filee")));
+        Assert.True(File.Exists(Path.Combine(backupDir, "TsuFiles")));
         Assert.Equal("v1.0.0", File.ReadAllText(Path.Combine(backupDir, "version.txt")).Trim());
     }
 
@@ -647,7 +647,7 @@ exec ""$REAL_MV"" ""$@""
 
         // Verify that the old installation was successfully restored to application directory
         var installDir = Path.Combine(env.DataDir, "filee", "application");
-        Assert.True(File.Exists(Path.Combine(installDir, "Filee")));
+        Assert.True(File.Exists(Path.Combine(installDir, "TsuFiles")));
         Assert.Equal("v1.0.0", File.ReadAllText(Path.Combine(installDir, "version.txt")).Trim());
 
         // Verify that the quarantined failed directory still exists on disk and was preserved
@@ -736,7 +736,7 @@ exec ""$REAL_MV"" ""$@""
         var backupDirs = Directory.GetDirectories(fileeDir, ".backup-*");
         Assert.NotEmpty(backupDirs);
         var backupDir = backupDirs[0];
-        Assert.True(File.Exists(Path.Combine(backupDir, "Filee")));
+        Assert.True(File.Exists(Path.Combine(backupDir, "TsuFiles")));
         Assert.Equal("v1.0.0", File.ReadAllText(Path.Combine(backupDir, "version.txt")).Trim());
     }
 
@@ -784,7 +784,7 @@ exec ""$REAL_MV"" ""$@""
         Assert.Contains("Installed TsuFiles at", output1); // TsuFiles: tên hiển thị
 
         var installDir = Path.Combine(dataDir, "filee", "application");
-        Assert.True(File.Exists(Path.Combine(installDir, "Filee")));
+        Assert.True(File.Exists(Path.Combine(installDir, "TsuFiles")));
         Assert.Equal("v1.0.0", File.ReadAllText(Path.Combine(installDir, "version.txt")).Trim());
 
         // Upgrade with spaces
@@ -811,7 +811,7 @@ exec ""$REAL_MV"" ""$@""
         var installDir = Path.Combine(env.DataDir, "filee", "application");
         var activeFilee = Path.Combine(installDir, "TsuFiles");
 
-        // Make the installed Filee binary fail if --quit is invoked
+        // Make the installed TsuFiles binary fail if --quit is invoked
         File.WriteAllText(activeFilee, "#!/bin/sh\nif [ \"$1\" = \"--quit\" ]; then exit 42; fi\nexit 0\n");
         File.SetUnixFileMode(activeFilee, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
 
@@ -819,7 +819,7 @@ exec ""$REAL_MV"" ""$@""
         var v2Dir = Path.Combine(_root, "source-v2-" + Guid.NewGuid().ToString("N")[..8]);
         CreateMockPayload(v2Dir, "v2.0.0");
 
-        // Upgrade calls Filee --quit, which fails with code 42
+        // Upgrade calls TsuFiles --quit, which fails with code 42
         var (failCode, failOut, failErr) = RunInstaller(v2Dir, env.DataDir, env.HomeDir, args: ["--upgrade"]);
         Assert.NotEqual(0, failCode);
         Assert.Contains("Could not gracefully shut down", failOut + failErr);
@@ -841,10 +841,10 @@ exec ""$REAL_MV"" ""$@""
     private void CreateMockPayload(string dir, string version)
     {
         Directory.CreateDirectory(dir);
-        var filee = Path.Combine(dir, "Filee");
+        var filee = Path.Combine(dir, "TsuFiles");
         var app = Path.Combine(dir, "TsuFiles");
         var cli = Path.Combine(dir, "tsufiles-cli");
-        var icon = Path.Combine(dir, "filee.png");
+        var icon = Path.Combine(dir, "tsufiles.png");
         var ver = Path.Combine(dir, "version.txt");
         var script = Path.Combine(dir, "install.sh");
 

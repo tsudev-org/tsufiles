@@ -1,5 +1,5 @@
-// How Filee draws its transparent windows on Windows (issue #269): the TSUFILES_RENDERING escape hatch, the log line
-// describing what Avalonia picked, Avalonia's own graphics errors in Filee's log, and backdrops Filee never asked for.
+// How TsuFiles draws its transparent windows on Windows (issue #269): the TSUFILES_RENDERING escape hatch, the log line
+// describing what Avalonia picked, Avalonia's own graphics errors in TsuFiles's log, and backdrops TsuFiles never asked for.
 
 using System.Runtime.InteropServices;
 using Avalonia;
@@ -40,7 +40,7 @@ public class WindowsRenderingTests
     [Fact]
     public void Defaults_keep_transparency_in_every_fallback()
     {
-        // The reason Filee doesn't reorder them: WinUI composition, DirectComposition and the redirection surface all
+        // The reason TsuFiles doesn't reorder them: WinUI composition, DirectComposition and the redirection surface all
         // keep per-pixel alpha; the low-latency swap chain (which doesn't) isn't in the list.
         var defaults = new Win32PlatformOptions();
         Assert.DoesNotContain(Win32CompositionMode.LowLatencyDxgiSwapChain, defaults.CompositionMode);

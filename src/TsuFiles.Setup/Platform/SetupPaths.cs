@@ -10,7 +10,7 @@ namespace TsuFiles.Setup.Platform;
 /// <param name="CommonDesktop">All users' desktop.</param>
 /// <param name="UserDesktop">This user's desktop.</param>
 /// <param name="AppData">%APPDATA%: TsuFiles's settings are in AppData\TsuFiles (2.4.0-vn.*: AppData\Filee).</param>
-/// <param name="LocalAppData">%LocalAppData%: downloaded engines (LocalAppData\TsuFiles\engines), Filee 1.1's Velopack copy.</param>
+/// <param name="LocalAppData">%LocalAppData%: downloaded engines (LocalAppData\TsuFiles\engines), TsuFiles 1.1's Velopack copy.</param>
 /// <param name="Temp">Setup's temporary files.</param>
 /// <param name="SystemFolder">System32 (the Microsoft C++ runtime, if installed).</param>
 public sealed record SetupPaths(

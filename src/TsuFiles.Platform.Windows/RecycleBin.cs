@@ -45,7 +45,7 @@ internal static class RecycleBin
         }
 
         TrashRefusal? refusal = null;
-        var thread = new Thread(() => refusal = Recycle(full)) { IsBackground = true, Name = "Filee Recycle Bin" };
+        var thread = new Thread(() => refusal = Recycle(full)) { IsBackground = true, Name = "TsuFiles Recycle Bin" };
         thread.SetApartmentState(ApartmentState.STA);
         thread.Start();
         thread.Join();
@@ -120,7 +120,7 @@ internal static class RecycleBin
     {
     }
 
-    /// <summary>IFileOperation in vtable order; only the methods Filee calls are typed, the others are never called.</summary>
+    /// <summary>IFileOperation in vtable order; only the methods TsuFiles calls are typed, the others are never called.</summary>
     [ComImport, Guid("947AAB5F-0A5C-4C13-B4D6-4BF7836FC9F8"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     private interface IFileOperation
     {

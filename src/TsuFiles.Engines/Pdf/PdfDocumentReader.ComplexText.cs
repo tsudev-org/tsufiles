@@ -7,7 +7,7 @@
 //    the glyphs it covers, on every page.
 //  * On a page with such text, words are built from the glyphs in content-stream order, not by their positions:
 //    combining marks sit on or before their letter (zero width, overlapping), so sorting by position mixes them up, and
-//    rhwp's PDFs (made by Filee before it routed these documents to LibreOffice) place them anywhere. Marks join the
+//    rhwp's PDFs (made by TsuFiles before it routed these documents to LibreOffice) place them anywhere. Marks join the
 //    letter before them in the stream; a vowel sign that is drawn before its consonant in the stream (Word's PDFs)
 //    joins the consonant after it.
 //  * A right-to-left word is read from right to left (its clusters by position), with numbers and Latin words in it

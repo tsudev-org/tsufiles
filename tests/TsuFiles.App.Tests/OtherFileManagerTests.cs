@@ -1,5 +1,5 @@
 // macOS file managers other than Finder (issue #160): drags offering NSFilenamesPboardType instead of file URLs, and
-// a click-mode donut opened for another process that loses focus once as Filee becomes the active app.
+// a click-mode donut opened for another process that loses focus once as TsuFiles becomes the active app.
 
 using System.Text;
 using Avalonia.Input;

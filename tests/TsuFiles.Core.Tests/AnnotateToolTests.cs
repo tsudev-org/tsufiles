@@ -67,7 +67,7 @@ public class AnnotateToolTests
         Assert.Equal([AnnotationKind.Arrow, AnnotationKind.Text, AnnotationKind.Number], read.Image.Annotations!.Select(m => m.Kind));
         Assert.Equal((0.8, AnnotationWidth.Thick), (read.Image.Annotations![0].Points[1].X, read.Image.Annotations[0].Width));
         Assert.Equal(("Hi 안녕", 3), (read.Image.Annotations![1].Text!, read.Image.Annotations[2].Number));
-        // A kind a newer Filee draws is read without failing the whole file, and isn't drawn as something it isn't.
+        // A kind a newer TsuFiles draws is read without failing the whole file, and isn't drawn as something it isn't.
         var later = json.Replace("\"kind\": \"Arrow\"", "\"kind\": \"Ellipse\"", StringComparison.Ordinal);
         var unknown = System.Text.Json.JsonSerializer.Deserialize(later, TsuFilesJsonContext.Default.ListPreset)!.Single().Image.Annotations![0];
         Assert.Equal(AnnotationKind.Unknown, unknown.Kind);

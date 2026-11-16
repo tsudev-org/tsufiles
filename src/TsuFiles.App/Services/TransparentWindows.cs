@@ -1,7 +1,7 @@
 // Windows: looks at every transparent window (the donut, the toast, the notices) as it shows. The first time each kind
 // shows, the log gets the transparency Avalonia reports next to the one asked for, and what the desktop compositor
 // puts behind it. A system backdrop on such a window turns its transparent area into a blurred, tinted rectangle, the
-// look of issue #269, and so does an accent blur. Filee never sets either, so one found there came from another program
+// look of issue #269, and so does an accent blur. TsuFiles never sets either, so one found there came from another program
 // (tools that restyle every window do this): a backdrop is logged and set back to none; the accent, which can't be read
 // back, is turned off each time. Such tools react to a window showing from their own process, so the window is looked
 // at again a moment later.
@@ -48,7 +48,7 @@ internal static class TransparentWindows
             return;
         var cleared = WindowBackdrop.ClearForeign(hwnd);
         if (Warned.Add(kind))
-            log.LogWarning("{Window} got a backdrop Filee didn't ask for ({State}), probably from a program that restyles " +
+            log.LogWarning("{Window} got a backdrop TsuFiles didn't ask for ({State}), probably from a program that restyles " +
                            "windows; {Result}", kind, state, cleared ? "set it back to none" : "could not set it back to none");
     }
 }

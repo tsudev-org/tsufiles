@@ -1,6 +1,6 @@
 // "Add background": settings schema 64 brings the tool to existing libraries (in the palette only, after Annotate), its
 // look is kept in the tool apart from the conversion's and read leniently, the conversion it starts carries the look
-// and is applied once, a route that can't is refused, History offers no Retry an older Filee would run without it, and
+// and is applied once, a route that can't is refused, History offers no Retry an older TsuFiles would run without it, and
 // a picture of one's own never leaves in an export.
 
 using System.Text.Json;
@@ -61,7 +61,7 @@ public class BackgroundToolTests
         Assert.True(SettingsMigrations.ApplyToLibrary(63, presets, profiles));
         Assert.Equal(BuiltInData.BackgroundId, presets[^1].Id);
 
-        // Already there (a library a newer Filee saved): nothing changes.
+        // Already there (a library a newer TsuFiles saved): nothing changes.
         var count = presets.Count;
         Assert.False(SettingsMigrations.ApplyToLibrary(63, presets, profiles));
         Assert.Equal(count, presets.Count);
@@ -96,7 +96,7 @@ public class BackgroundToolTests
     }
 
     [Theory]
-    [InlineData("\"kind\": \"Color\"", "\"kind\": \"Pattern\"")]          // a kind a newer Filee knows
+    [InlineData("\"kind\": \"Color\"", "\"kind\": \"Pattern\"")]          // a kind a newer TsuFiles knows
     [InlineData("\"kind\": \"Color\"", "\"kind\": 7")]
     [InlineData("\"canvas\": \"Portrait\"", "\"canvas\": \"Story\"")]
     [InlineData("\"color\": \"#123456\"", "\"color\": null")]

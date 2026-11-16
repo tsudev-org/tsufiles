@@ -1,5 +1,5 @@
 // Writes archives. ZIP (and the game packs that are ZIPs, see GamePacks), TAR and TAR.GZ are written in-process (System.IO.Compression / System.Formats.Tar), so file
-// names are exactly what Filee chooses: UTF-8 in ZIP (with the language encoding flag), PAX headers in TAR. 7Z, the
+// names are exactly what TsuFiles chooses: UTF-8 in ZIP (with the language encoding flag), PAX headers in TAR. 7Z, the
 // bzip2 / xz TAR variants and single-file GZ / BZ2 / XZ are written by the bundled 7-Zip.
 
 using System.Formats.Tar;
@@ -74,7 +74,7 @@ internal sealed class ArchivePacker(SevenZip? sevenZip)
                     await RunSevenZipAsync(type, await NamedAsAsync(items, workDirectory, cancellationToken), temp, level, workDirectory, progress, 0, cancellationToken);
                     break;
                 default:
-                    throw new NotSupportedException($"Filee cannot write {format} archives.");
+                    throw new NotSupportedException($"TsuFiles cannot write {format} archives.");
             }
             File.Move(temp, outputPath, overwrite: true);
         }

@@ -69,7 +69,7 @@ public class EnginesPageTests
             var text = EngineDownloadService.ErrorText(loc, new TsuFiles.Engines.Infrastructure.EngineBusyException("libreoffice"));
             Assert.Equal(loc["error.engine_busy"], text);
             Assert.NotEqual("error.engine_busy", text);
-            Assert.DoesNotContain("being installed by another Filee", text);
+            Assert.DoesNotContain("being installed by another TsuFiles", text);
         }
         finally
         {

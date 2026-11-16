@@ -20,7 +20,7 @@ namespace TsuFiles.Engines.Hwp.Hwpx;
 internal static class DocumentReaders
 {
     /// <summary>
-    /// Readers built into Filee: (input file, folder for extracted pictures) → document. Office Open XML variants
+    /// Readers built into TsuFiles: (input file, folder for extracted pictures) → document. Office Open XML variants
     /// (macro-enabled files, templates, slide shows) share the reader of their family.
     /// </summary>
     private static readonly Dictionary<string, Func<string, string, HDocument>> BuiltIn = new(StringComparer.OrdinalIgnoreCase)

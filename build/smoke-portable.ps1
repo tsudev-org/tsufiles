@@ -39,7 +39,7 @@ $cli = Join-Path $bin 'tsufiles-cli'
 
 Invoke-Checked 'CLI start' { & $cli version }
 # TsuFiles 2.4.1: the Filee launcher that the updater of 2.4.0-vn.1 starts (ADR-0003 section 5).
-if (-not $IsMacOS -and -not (Select-String -LiteralPath (Join-Path $bin 'Filee') -SimpleMatch '/TsuFiles"' -Quiet)) { throw 'The Filee launcher is missing.' }
+if (-not $IsMacOS -and -not (Select-String -LiteralPath (Join-Path $bin 'TsuFiles') -SimpleMatch '/TsuFiles"' -Quiet)) { throw 'The TsuFiles launcher is missing.' }
 Invoke-Checked 'rhwp start' { & (Join-Path $bin 'engines/rhwp/rhwp') --version }
 Invoke-Checked '7-Zip start' { & (Join-Path $bin 'engines/7zip/7zz') i | Out-Null }
 
@@ -57,7 +57,7 @@ function Convert-Smoke([string]$source, [string]$target) {
 }
 
 $inputFile = Join-Path $smoke 'sample.txt'
-'Filee 한글 conversion smoke test' | Set-Content -LiteralPath $inputFile -Encoding utf8NoBOM
+'TsuFiles 한글 conversion smoke test' | Set-Content -LiteralPath $inputFile -Encoding utf8NoBOM
 $hwpx = Convert-Smoke $inputFile 'hwpx'
 # HWPX -> HWP and HWP -> PDF are rhwp's routes: they run the bundled rhwp from the package.
 $hwp = Convert-Smoke $hwpx 'hwp'
@@ -72,7 +72,7 @@ if ($IsLinux) {
     Invoke-Checked 'Load libuiohook-xrecord.so' {
         python3 -c 'import ctypes, sys; ctypes.CDLL(sys.argv[1]); print("Loaded " + sys.argv[1])' $backend
     }
-    # Unhwp: from its package on x64, Filee's own build on ARM64 (build/build-native.py, -UnhwpOverride).
+    # Unhwp: from its package on x64, TsuFiles's own build on ARM64 (build/build-native.py, -UnhwpOverride).
     Invoke-Checked 'Load libunhwp.so' {
         python3 -c 'import ctypes, sys; f = ctypes.CDLL(sys.argv[1]).unhwp_version; f.restype = ctypes.c_char_p; print("Loaded " + sys.argv[1] + ", unhwp " + f().decode())' (Join-Path $bin 'libunhwp.so')
     }

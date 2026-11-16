@@ -180,7 +180,7 @@ public class UiZoomTests
             Assert.Empty(writes);
             Assert.True(UiZoom.SavePending);
 
-            UiZoom.Flush(); // as when the moment has passed, or Filee exits
+            UiZoom.Flush(); // as when the moment has passed, or TsuFiles exits
             Assert.Equal(1.3, Assert.Single(writes), 6);
             Assert.False(UiZoom.SavePending);
             Assert.Equal(0, changed);
