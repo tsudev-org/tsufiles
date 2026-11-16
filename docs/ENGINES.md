@@ -1480,13 +1480,13 @@ bundled with the installer), never a 7-Zip installed on the PC. It runs as a sep
 | TAR.GZ | 7-Zip, in two stages | in-process (PAX TAR + GZipStream) |
 | TAR.BZ2, TAR.XZ | 7-Zip, in two stages | TAR in-process, compressed by 7-Zip |
 | TAR.7Z, TAR.Z | 7-Zip, in two stages | — |
-| LZ, TAR.LZ (lzip) | TsuFiles: each member rewritten as a .lzma file for 7-Zip's LZMA decoder, stopped at the size its trailer states, CRC checked | — |
+| LZ, TAR.LZ (lzip) | TsuFiles: each member rewritten as a .lzma file for 7-Zip's LZMA decoder, stopped at the size its trailer states, CRC checked | - |
 | GZ, BZ2, XZ | 7-Zip | 7-Zip; one file only (from another single-file format, or "Compress into one archive" with one file) |
 | LZMA, Z | 7-Zip | — |
 | RAR 4/5, CAB, CPIO, DEB, RPM, DMG, ISO, IMG, LHA/LZH, ARJ | 7-Zip (an RPM's payload is unpacked until the files appear) | — |
 | Split archives (.001, .7z.001, .zip.001, .tar.001) | 7-Zip (combining .002, .003 … automatically) | — |
-| ALZ (ALZip) | TsuFiles: store, deflate and ALZip's bzip2 variant | — |
-| EGG (ALZip) | TsuFiles: store, deflate, bzip2, LZMA (decoded by 7-Zip); several blocks per file | — |
+| ALZ (ALZip) | TsuFiles: store, deflate and ALZip's bzip2 variant | - |
+| EGG (ALZip) | TsuFiles: store, deflate, bzip2, LZMA (decoded by 7-Zip); several blocks per file | - |
 
 - **Extract** (target `folder`): the archive is unpacked into a hidden folder next to the result and moved into place
   when complete. When the archive holds exactly one top folder, its content becomes the result folder (`photos.zip`
