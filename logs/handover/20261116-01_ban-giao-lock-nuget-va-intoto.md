@@ -28,6 +28,9 @@
     10.0.403 -> 10.0.14, runner -> 10.0.15) ⇒ Setup tắt lock file riêng; gói của nó đã khóa qua lock của Setup.Tests.
   - BẪY 3: comment XML trong `.props` không được chứa `--`.
   - `tools/cap-nhat-lock-nuget.sh` sinh lại cả hai loại lock file (`--kiem` để kiểm như CI); CONTRIBUTING ghi cách dùng.
+  - #88 (`b44b9056`): Scorecard đo ở `16315b50` hạ Pinned-Dependencies về 8 vì `dotnet restore --force-evaluate`
+    trong script (alert #22, #23; alert #17 cũ đã `fixed`) ⇒ script gọi `dotnet msbuild -t:Restore
+    -p:RestoreForceEvaluate=true`. KHÔNG thêm `dotnet restore` thiếu `--locked-mode` vào repo nữa.
   - CI 19/19 xanh ở `0ed1a428` (mọi nền tảng restore ở chế độ khóa); WSL: `--kiem` khớp, build Release 0 lỗi.
 
 ## 2. Việc tiếp theo (👤 = chỉ chủ dự án)
@@ -36,12 +39,13 @@
   Windows/macOS sẽ đỏ vì `packages.lock.no-wayland.json` cũ: checkout nhánh, chạy `tools/cap-nhat-lock-nuget.sh`,
   commit lock file, đẩy lên rồi mới gộp.
 - [ ] 2.2. Agent: đo lại Scorecard sau khi lịch chạy lại (`curl -s
-  https://api.securityscorecards.dev/projects/github.com/tsudev-org/tsufiles`). Kỳ vọng Pinned-Dependencies 10 (alert
-  code scanning #17 tự đóng); Signed-Releases chỉ lên 10 sau bản phát hành tới có `*.intoto.jsonl`.
+  https://api.securityscorecards.dev/projects/github.com/tsudev-org/tsufiles`). Kỳ vọng Pinned-Dependencies 10 sau #88 (alert
+  #22, #23 tự đóng); Signed-Releases chỉ lên 10 sau bản phát hành tới có `*.intoto.jsonl`.
 - [ ] 2.3. Agent, ở bản phát hành tới: xác nhận bản nháp có hai tệp `*.intoto.jsonl` và
   `gh attestation verify <gói> -R tsudev-org/tsufiles --bundle <tệp>` đạt.
 - [ ] 2.4. 👤 Secret `WINGET_TOKEN` (PAT `public_repo`) - có rồi thì agent nộp winget qua komac.
-- [ ] 2.5. 👤 Cloudflare JavaScript Detections cho `files.tsudev.com` (quyết định 10/11/2026 là KHÔNG tắt; chủ dự án chọn lại).
+- [x] 2.5. Cloudflare JavaScript Detections: ĐÃ TẮT 16/11/2026 cho cả zone (phiên tsudev-swico-34 báo; console
+  files.tsudev.com sạch). Không cần làm gì thêm.
 - [ ] 2.6. 👤 #42 (repo `tsudev-org/tsufiles-assets`) và #44 (khóa ký dự phòng).
 - [ ] 2.7. 👤 SignPath (D5) khi đủ ngưỡng.
 - [ ] 2.8. 👤 Ruleset bắt buộc 1 người duyệt (Branch-Protection/Code-Review) - chỉ khi có người duyệt thứ hai.
