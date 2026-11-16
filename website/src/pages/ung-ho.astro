@@ -1,6 +1,7 @@
 ---
 // Trang Ủng hộ: nơi DUY NHẤT liệt kê cách ủng hộ TsuFiles (ứng dụng, README, nút Sponsor GitHub đều trỏ về đây).
 import TaiLieu from '../components/TaiLieu.astro';
+import KhoiUngHo from '../components/KhoiUngHo.astro';
 import { REPO_URL } from '../lib/noi-dung';
 import { KENH, NHA_TAI_TRO, NGUOI_UNG_HO } from '../lib/ung-ho';
 ---
@@ -10,17 +11,7 @@ import { KENH, NHA_TAI_TRO, NGUOI_UNG_HO } from '../lib/ung-ho';
 
   <h2 id="kenh-ung-ho">Kênh ủng hộ</h2>
   {KENH.length > 0 ? (
-    <ul class="kenh-ung-ho">
-      {KENH.map((k) => (
-        <li>
-          {k.url ? <a href={k.url} target="_blank" rel="noopener noreferrer"><strong>{k.ten}</strong></a> : <strong>{k.ten}</strong>}
-          <span>{k.moTa}</span>
-          {k.chiTiet.length > 0 && <span class="kenh-ung-ho__chi-tiet">{k.chiTiet.map((d) => <span>{d}</span>)}</span>}
-          {k.anhQr && <img src={k.anhQr} alt={k.vietqr ? `Mã QR chuyển khoản tới tài khoản ${k.vietqr.soTaiKhoan}` : `Mã QR ${k.ten}`} width="200" height="200" loading="lazy">}
-        </li>
-      ))}
-    </ul>
-    <p>Đây là kênh ủng hộ duy nhất của TsuFiles. Trước khi chuyển, hãy kiểm tra tên chủ tài khoản ứng dụng ngân hàng hiển thị khớp với thông tin trên; đừng chuyển tiền theo số tài khoản hay mã QR ở bất kỳ nơi nào khác tự nhận là tsudev.</p>
+    <KhoiUngHo kenh={KENH} ten="TsuFiles" />
   ) : (
     <p>Kênh ủng hộ tài chính chính thức của tsudev đang được chuẩn bị và sẽ được công bố tại trang này. Trang này là nơi duy nhất công bố kênh ủng hộ: đừng chuyển tiền theo đường dẫn ở bất kỳ nơi nào khác tự nhận là TsuFiles.</p>
   )}

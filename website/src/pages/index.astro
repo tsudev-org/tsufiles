@@ -1,6 +1,6 @@
 ---
 import Trang from '../layouts/Trang.astro';
-import { banMoiNhat, REPO_URL, UPSTREAM_URL } from '../lib/noi-dung';
+import { banMoiNhat, REPO_URL } from '../lib/noi-dung';
 
 const ban = await banMoiNhat();
 const buoc = [
@@ -14,7 +14,7 @@ const tinhNang = [
   { t: 'Nhiều tệp cùng lúc', d: 'Chuyển song song cả loạt tệp. Đường đi nhiều bước (HWP sang HWPX sang DOCX) được tự tìm.' },
   { t: 'Preset theo loại tệp', d: 'Mỗi loại tệp một thanh công cụ riêng: chất lượng, kích thước, DPI, trang PDF, nén, video, thư mục và tên tệp đầu ra.' },
   { t: 'Thư mục theo dõi', d: 'Tệp nào rơi vào thư mục đã chọn đều được chuyển tự động, kết quả gom vào một chỗ.' },
-  { t: 'Dòng lệnh filee', d: 'Dùng chung engine và preset với ứng dụng, có đầu ra JSON cho script. Xem trang Dòng lệnh.' },
+  { t: 'Dòng lệnh tsufiles', d: 'Dùng chung engine và preset với ứng dụng, có đầu ra JSON cho script. Xem trang Dòng lệnh.' },
   { t: 'Tiếng Việt mặc định', d: 'Giao diện, trình cài đặt và dòng lệnh đều bằng tiếng Việt ngay lần chạy đầu; đổi được sang 21 ngôn ngữ khác.' },
   { t: 'Sáng, tối, màu nhấn riêng', d: 'Chọn chế độ nền, màu nhấn và độ trong của vòng tròn theo ý bạn.' },
 ];
@@ -68,7 +68,7 @@ const baoMat = [
   <section class="muc" aria-labelledby="tinh-nang">
     <div class="khung">
       <h2 id="tinh-nang">Tính năng</h2>
-      <p class="muc__dan">Giữ trọn tính năng của Filee, thêm tiếng Việt và các lớp bảo vệ riêng của tsudev.</p>
+      <p class="muc__dan">Đầy đủ tính năng chuyển đổi, giao diện tiếng Việt và các lớp bảo vệ riêng của tsudev.</p>
       <ul class="the-luoi">
         {tinhNang.map((x) => <li class="the"><h3>{x.t}</h3><p>{x.d}</p></li>)}
       </ul>
@@ -123,7 +123,7 @@ const baoMat = [
   <section class="muc" aria-labelledby="nguon-goc">
     <div class="khung">
       <h2 id="nguon-goc">Mã nguồn và ghi công</h2>
-      <p class="muc__dan">TsuFiles là bản phái sinh của <a href={UPSTREAM_URL} target="_blank" rel="noopener noreferrer">Filee</a>, tác phẩm của Myeonggu Kim (KnifeLemon) và cộng đồng, phát hành theo giấy phép MIT. tsudev phát triển tiếp độc lập: Việt hóa, gia cố bảo mật và tính năng riêng của hệ sinh thái tsudev. Muốn ủng hộ TsuFiles, xem trang <a href="/ung-ho/">Ủng hộ</a>.</p>
+      <p class="muc__dan">TsuFiles do tsudev xây dựng và phát triển độc lập tại Việt Nam, mã nguồn mở theo giấy phép MIT (thông báo bản quyền đầy đủ ở trang <a href="/ban-quyen/">Bản quyền</a>). Muốn ủng hộ TsuFiles, xem trang <a href="/ung-ho/">Ủng hộ</a>.</p>
       <div class="mo-dau__nut">
         <a class="nut nut--phu" href={REPO_URL} target="_blank" rel="noopener noreferrer">Mã nguồn trên GitHub</a>
         <a class="nut nut--phu" href="/ban-quyen/">Bản quyền</a>
