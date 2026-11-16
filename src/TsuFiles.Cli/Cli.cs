@@ -40,6 +40,8 @@ internal static class Cli
             case "version":
                 output.WriteLine($"tsufiles {Help.Version}");
                 return Success;
+            case "share":
+                return await ShareCommand.RunAsync(options, output, errors, cancellationToken);
         }
 
         await using var host = (createHost ?? (() => CliHost.Create()))();

@@ -25,6 +25,7 @@ internal static class Help
         "presets" => "Usage: tsufiles presets [--json]\n\nLists the presets saved in Filee (built-in and your own).\n" +
                      "With --json, prints the same as JSON (for scripts and other programs).\n",
         "engines" => Engines,
+        "share" => Share,
         _ => General,
     };
 
@@ -37,11 +38,36 @@ internal static class Help
         "presets" => "Cách dùng: tsufiles presets [--json]\n\nLiệt kê các preset đã lưu trong Filee (có sẵn và do bạn tạo).\n" +
                      "Với --json, in cùng nội dung dưới dạng JSON (cho script và chương trình khác).\n",
         "engines" => EnginesVi,
+        "share" => ShareVi,
         _ => GeneralVi,
     };
 
+    private const string ShareVi = """
+        Cách dùng: tsufiles share [<tệp...>] [-o <thư mục nhận>]
+
+        Gửi và nhận tệp với điện thoại (kể cả iPhone 8 / iOS 16) hay máy khác trong cùng mạng nội bộ, không cần cài
+        gì: mở địa chỉ in ra trên trình duyệt của điện thoại. Tệp liệt kê ở đây điện thoại tải về được; tệp điện
+        thoại gửi lên lưu vào thư mục -o (mặc định thư mục hiện tại), không bao giờ ghi đè. Mỗi thiết bị mới phải
+        được bạn đồng ý (gõ y). Phiên tự tắt sau 15 phút không dùng; Ctrl+C để tắt ngay.
+
+        Chỉ dùng trong mạng tin cậy: đường truyền trong mạng nội bộ chưa mã hóa.
+
+        """;
+
+    private const string Share = """
+        Usage: tsufiles share [<files...>] [-o <receive folder>]
+
+        Send and receive files with a phone (iPhone 8 / iOS 16 included) or another computer on the same local
+        network, nothing to install: open the printed address in the phone's browser. Files listed here can be
+        downloaded; files the phone sends go to the -o folder (default: the current folder) and never overwrite.
+        Every new device needs your consent (type y). The session stops after 15 idle minutes; Ctrl+C stops it now.
+
+        Use on a trusted network only: traffic on the local network is not encrypted.
+
+        """;
+
     private const string GeneralVi = """
-        TsuFiles (bản Việt hóa của KnifeLemon/Filee): chuyển đổi tệp ngoại tuyến từ dòng lệnh.
+        TsuFiles (hệ sinh thái tsudev): chuyển đổi tệp ngoại tuyến từ dòng lệnh.
 
         Cách dùng:
           tsufiles convert <tệp hoặc thư mục...> --to <định dạng> [tùy chọn]
@@ -51,6 +77,7 @@ internal static class Help
           tsufiles presets [--json]
           tsufiles engines [--json]
           tsufiles engines (install | remove) <engine> [--json]
+          tsufiles share [<tệp...>] [-o <thư mục nhận>]
           tsufiles help [<lệnh>]
           tsufiles version
 
@@ -141,7 +168,7 @@ internal static class Help
         """);
 
     private const string General = """
-        TsuFiles (a fork of KnifeLemon/Filee): convert files offline from the command line.
+        TsuFiles (tsudev ecosystem): convert files offline from the command line.
 
         Usage:
           tsufiles convert <files or folders...> --to <format> [options]
@@ -151,6 +178,7 @@ internal static class Help
           tsufiles presets [--json]
           tsufiles engines [--json]
           tsufiles engines (install | remove) <engine> [--json]
+          tsufiles share [<files...>] [-o <receive folder>]
           tsufiles help [<command>]
           tsufiles version
 
