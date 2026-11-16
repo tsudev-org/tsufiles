@@ -7,7 +7,7 @@
 
 - [ ] ⚡ TIẾP THEO: phiếu `logs/handover/20261116-01_ban-giao-lock-nuget-va-intoto.md` (đọc mục 2). Phần agent: chạy
       `tools/cap-nhat-lock-nuget.sh` trên mỗi PR Dependabot NuGet, đo lại Scorecard, kiểm `*.intoto.jsonl` ở bản phát
-      hành tới; còn lại là việc 👤: `WINGET_TOKEN`, Cloudflare JavaScript Detections, #42/#44, SignPath, ruleset duyệt.
+      hành tới; còn lại là việc 👤: `WINGET_TOKEN`, #42/#44, SignPath, ruleset duyệt.
 
 - [ ] Kế hoạch gia cố + hard fork (11/11/2026), mỗi phase một PR, làm theo thứ tự:
   - P1 PR #42 tải tệp build từ `tsudev-org/tsufiles-assets` - CHỜ chủ dự án tạo repo assets (job win-arm64 đỏ tới lúc đó).
@@ -60,6 +60,7 @@
   #86 (`09535dad`): lock file NuGet + CI `--locked-mode` (Pinned-Dependencies); App/App.Tests/Setup.Tests thêm
   `packages.lock.no-wayland.json`, Setup không lock riêng (ILLink.Tasks ngầm theo SDK). Sinh lại:
   `tools/cap-nhat-lock-nuget.sh` - BẮT BUỘC trên PR Dependabot NuGet. Phiếu `20261115-02` ĐÓNG, bàn giao `20261116-01`.
+  #88 (`b44b9056`): script sinh lock file gọi `msbuild -t:Restore` (Scorecard bắt `dotnet restore --force-evaluate`).
 - 16/11/2026 - Scorecard 7.1/10 (đo 15/11/2026 ở `3467de31`, đạt chỉ tiêu >= 7 của phiếu toàn hệ `20261115-01`).
   PR #83 gộp (`04e420da`): ghim `rustup-init` 1.29.3 theo SHA-256 ở `portable.yml` và `windows-arm64-native.yml`
   (bỏ `curl | sh`). 15/11/2026: Best Practices dự án 16719 passing (#81, #82). Phiếu `20261114-03` ĐÓNG.
@@ -186,7 +187,10 @@
   được DNS cho CNAME của Pages. Deploy: chủ dự án chạy `cd website && npm run deploy`. JavaScript phía trình duyệt chỉ
   có `public/theme.js` (CSP `script-src 'self'`, không script nội tuyến). Giao diện: từ 10/11/2026 theo quyết định chung
   của hệ sinh thái (phiếu `20261110-05`): đen tuyền + tím, chỉ Sáng/Tối/Hệ thống, mặc định Tối.
-- 10/11/2026 - KHÔNG tắt JavaScript Detections của Cloudflare (thiết lập cấp zone, ảnh hưởng mọi site *.tsudev.com;
+- 16/11/2026 - JavaScript Detections zone tsudev.com ĐÃ TẮT (`enable_js=false`, chủ dự án giao phiên tsudev-swico-34;
+  lý do: tsuswico `logs/STATE.md`, PR tsuswico#25). Console files.tsudev.com sạch, CSP giữ nguyên. Bật lại Bot Fight
+  Mode thì phải bật lại `enable_js`. THAY quyết định 10/11/2026 dưới đây.
+- 10/11/2026 - ~~KHÔNG tắt JavaScript Detections~~ (lỗi thời từ 16/11/2026) - của Cloudflare (thiết lập cấp zone, ảnh hưởng mọi site *.tsudev.com;
   Bot Fight Mode cần nó nếu bật lại). Hệ quả chấp nhận: console files.tsudev.com báo CSP chặn script nội tuyến
   `/cdn-cgi/challenge-platform` do Cloudflare chèn; trang không ảnh hưởng. Không nới CSP. Hết lỗi khi site có phần
   chạy phía máy chủ sinh nonce (như tsudev.com). Web Analytics và Bot Fight Mode đã tắt (chủ dự án, 10/11).
