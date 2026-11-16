@@ -167,7 +167,7 @@ public partial class App : Application
 
         AppHost.Get<TrayService>().Create(this);
         AppHost.Get<WindowService>().EnsureToast();
-        AppHost.Get<ConversionService>().FeedbackDue += (_, _) => AppHost.Get<WindowService>().ShowFeedbackNotice();
+        // TsuFiles: không bật thẻ "Gắn sao trên GitHub" sau vài lần chuyển đổi (ứng dụng nội bộ, chủ dự án 16/11/2026).
         AppHost.Get<WatchFolderService>().Start();
         // Originals of files from a browser that a crash kept from being deleted ("Save only the converted file").
         _ = Task.Run(() => TsuFiles.Core.Web.WebDrop.DeleteStale(TsuFiles.Core.Web.WebDrop.DefaultWorkRoot, TimeSpan.FromDays(1)));

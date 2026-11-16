@@ -461,6 +461,10 @@ internal static class SettingsMigrations
         if (settings.SchemaVersion < 21)
             InsertBefore(settings.EnginePriority, "wic", settings.EnginePriority.Contains("ffmpeg") ? "ffmpeg" : "pandoc");
 
+        // v75 (TsuFiles): closing the window keeps TsuFiles in the tray by default. Users who never answered the
+        //      question ("Ask", the old default) get the new default; a choice made in Settings (Quit) stays.
+        if (settings.SchemaVersion < 75 && settings.CloseAction == CloseAction.Ask)
+            settings.CloseAction = CloseAction.Tray;
 
         if (settings.Triggers.Count == 0)
             settings.Triggers = TriggerGesture.Defaults();

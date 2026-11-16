@@ -31,14 +31,6 @@
                     ToolTip.Tip="{Binding UpdateTip}" ToolTip.Placement="Right">
               <PathIcon Width="14" Height="14" Data="{StaticResource Icon.Download}" />
             </Button>
-            <Button Classes="navlink" HorizontalAlignment="Stretch" Click="OnOpenGitHub"
-                    ToolTip.Tip="{Binding RepositoryUrl}" ToolTip.Placement="Right">
-              <PathIcon Width="13" Height="13" Data="{StaticResource Icon.GitHub}" />
-            </Button>
-            <Button Classes="navlink" HorizontalAlignment="Stretch" Click="OnSponsor"
-                    ToolTip.Tip="{DynamicResource about.sponsor}" ToolTip.Placement="Right">
-              <PathIcon Width="13" Height="13" Data="{StaticResource Icon.Heart}" Foreground="#D4537E" />
-            </Button>
           </StackPanel>
           <!-- Expanded -->
           <StackPanel Spacing="8" IsVisible="{Binding !IsNavCollapsed}">
@@ -62,25 +54,10 @@
                 </StackPanel>
               </DockPanel>
             </Button>
-            <!-- The project on GitHub, and sponsoring it -->
-            <Grid ColumnDefinitions="*,6,*">
-              <Button Classes="navlink" HorizontalAlignment="Stretch" Click="OnOpenGitHub" ToolTip.Tip="{Binding RepositoryUrl}">
-                <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
-                  <PathIcon Width="13" Height="13" Data="{StaticResource Icon.GitHub}" />
-                  <TextBlock Text="GitHub" />
-                </StackPanel>
-              </Button>
-              <Button Grid.Column="2" Classes="navlink" HorizontalAlignment="Stretch" Click="OnSponsor">
-                <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
-                  <PathIcon Width="13" Height="13" Data="{StaticResource Icon.Heart}" Foreground="#D4537E" />
-                  <TextBlock Text="{DynamicResource about.sponsor}" />
-                </StackPanel>
-              </Button>
-            </Grid>
             <TextBlock x:Name="VersionLabel" Classes="caption" Margin="8,0,0,0" Text="{Binding VersionText}" />
           </StackPanel>
         </StackPanel>
-        <!-- Collapse / expand: sits just above the update / GitHub / Sponsor group; the logo and name stay at the top -->
+        <!-- Collapse / expand: sits just above the update button and the version; the logo and name stay at the top -->
         <Button DockPanel.Dock="Bottom" Classes="icon navtoggle" Margin="0,8,0,0" Command="{Binding ToggleNavCommand}"
                 ToolTip.Tip="{Binding NavToggleTip}" ToolTip.Placement="Right" AutomationProperties.Name="{Binding NavToggleTip}">
           <PathIcon Width="17" Height="17" Data="{StaticResource Icon.Sidebar}" />
