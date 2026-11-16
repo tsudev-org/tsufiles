@@ -79,16 +79,16 @@ public sealed class ShareServerTests
     public async Task A_shared_file_downloads_with_its_vietnamese_name()
     {
         using var dir = new TempDir();
-        var file = dir.File("Báo cáo <1>.txt", "nội dung");
+        var file = dir.File("Báo cáo & ghi chú.txt", "nội dung");
         var (server, http, root) = await StartAsync(new ShareOptions { ReceiveFolder = dir.Path, SharedFiles = [file] });
         await using var _ = server;
         using var __ = http;
 
         var page = await http.GetStringAsync(root, Ct);
-        Assert.Contains("Báo cáo &lt;1&gt;.txt", page);
+        Assert.Contains("Báo cáo &amp; ghi chú.txt", page);
         var response = await http.GetAsync(root + "f/0", Ct);
         Assert.Equal("nội dung", await response.Content.ReadAsStringAsync(Ct));
-        Assert.Equal("Báo cáo <1>.txt", response.Content.Headers.ContentDisposition?.FileNameStar);
+        Assert.Equal("Báo cáo & ghi chú.txt", response.Content.Headers.ContentDisposition?.FileNameStar);
         Assert.Equal(HttpStatusCode.NotFound, (await http.GetAsync(root + "f/1", Ct)).StatusCode);
         Assert.Equal(HttpStatusCode.NotFound, (await http.GetAsync(root + "f/-1", Ct)).StatusCode);
     }
