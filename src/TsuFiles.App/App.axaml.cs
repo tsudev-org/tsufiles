@@ -192,6 +192,7 @@ public partial class App : Application
             AppHost.Get<TriggerService>().Dispose();
             AppHost.Get<TrayService>().Dispose();
             AppHost.Get<WatchFolderService>().DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(5));
+            AppHost.Get<PhoneShareService>().DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(5));
             TsuFiles.App.ViewModels.OllamaModelManagerViewModel.StopFileeStartedServer();
         };
 
@@ -320,6 +321,7 @@ public partial class App : Application
         {
             AppHost.Get<TriggerService>().Dispose();
             _ = AppHost.Get<WatchFolderService>().DisposeAsync().AsTask();
+            _ = AppHost.Get<PhoneShareService>().DisposeAsync().AsTask();
         };
         Dispatcher.UIThread.Post(async () => await gate.CheckAsync());
     }

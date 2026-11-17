@@ -64,10 +64,12 @@ public sealed class ShareServer : IAsyncDisposable
     private Task? _accept;
     private Task? _idle;
     private int _disposed;
+    private IReadOnlyList<string> _shared;
 
     public ShareServer(ShareOptions options, ILogger? log = null)
     {
         _options = options;
+        _shared = [.. options.SharedFiles];
         _log = log ?? NullLogger.Instance;
         _listener = new TcpListener(IPAddress.Any, options.Port);
         Token = Convert.ToHexStringLower(_token);
@@ -77,6 +79,26 @@ public sealed class ShareServer : IAsyncDisposable
     public string Token { get; }
 
     public int Port => ((IPEndPoint)_listener.LocalEndpoint).Port;
+
+    /// <summary>Tệp đang mời điện thoại tải về; chỉ thêm vào cuối nên số thứ tự trong đường dẫn không đổi.</summary>
+    public IReadOnlyList<string> SharedFiles => Volatile.Read(ref _shared);
+
+    /// <summary>Thêm tệp (bỏ tệp đã có hoặc không tồn tại) khi phiên đang chạy; điện thoại thấy sau khi tải lại trang.</summary>
+    public void AddFiles(IEnumerable<string> paths)
+    {
+        ArgumentNullException.ThrowIfNull(paths);
+        lock (_gate)
+        {
+            var list = new List<string>(_shared);
+            foreach (var path in paths)
+            {
+                var full = Path.GetFullPath(path);
+                if (File.Exists(full) && !list.Contains(full, StringComparer.OrdinalIgnoreCase))
+                    list.Add(full);
+            }
+            Volatile.Write(ref _shared, list);
+        }
+    }
 
     public bool IsRunning => _accept is { IsCompleted: false };
 
@@ -210,7 +232,7 @@ public sealed class ShareServer : IAsyncDisposable
         {
             case ("GET", "/" or ""):
                 await ShareHttp.WriteAsync(stream, 200, "text/html; charset=utf-8",
-                    Encoding.UTF8.GetBytes(SharePage.Html(_options.SharedFiles.Select(Path.GetFileName).ToList()!, _options.MaxUploadBytes)),
+                    Encoding.UTF8.GetBytes(SharePage.Html(SharedFiles.Select(Path.GetFileName).ToList()!, _options.MaxUploadBytes)),
                     cancellationToken);
                 return;
             case ("GET", "/app.js"):
@@ -268,13 +290,14 @@ public sealed class ShareServer : IAsyncDisposable
 
     private async Task SendFileAsync(Stream stream, string index, CancellationToken cancellationToken)
     {
+        var shared = SharedFiles;
         if (!int.TryParse(index, System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out var n)
-            || n < 0 || n >= _options.SharedFiles.Count || !File.Exists(_options.SharedFiles[n]))
+            || n < 0 || n >= shared.Count || !File.Exists(shared[n]))
         {
             await ShareHttp.WriteTextAsync(stream, 404, "Not Found", cancellationToken);
             return;
         }
-        var file = _options.SharedFiles[n];
+        var file = shared[n];
         await using var source = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read, 1 << 16, useAsync: true);
         await ShareHttp.WriteFileHeadAsync(stream, Path.GetFileName(file), source.Length, cancellationToken);
         await CopyAsync(source, stream, source.Length, cancellationToken);
