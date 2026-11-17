@@ -1,15 +1,15 @@
 // Command line of Setup and the uninstaller. Setup takes the switches of the Inno Setup installer it replaces, because
-// Filee 1.x updates itself by running the new Setup with "/SILENT /NORESTART" (UpdateService.InstallerArguments) and
+// TsuFiles 1.x updates itself by running the new Setup with "/SILENT /NORESTART" (UpdateService.InstallerArguments) and
 // package managers (winget) pass Inno's silent switches:
 //
 //   /SILENT                 no wizard: only the progress window
 //   /VERYSILENT             no window at all
 //   /SUPPRESSMSGBOXES       no message boxes (errors are logged; the default answer is taken)
 //   /NORESTART /SP- /NOCANCEL /RESTARTEXITCODE= /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS (and their /NO… forms)
-//                           accepted; Setup never restarts Windows and always closes a running Filee
-//   /NOCLOSEAPPLICATIONS    don't force-close programs that still run from the install folder after "Filee --quit"
+//                           accepted; Setup never restarts Windows and always closes a running TsuFiles
+//   /NOCLOSEAPPLICATIONS    don't force-close programs that still run from the install folder after "TsuFiles --quit"
 //   /DIR="folder"           install folder (environment variables are expanded)
-//   /LANG=ko                language of Setup (and of a newly installed Filee): en, es, ja, ko, zh-CN (Inno: zhcn),
+//   /LANG=ko                language of Setup (and of a newly installed TsuFiles): en, es, ja, ko, zh-CN (Inno: zhcn),
 //                           zh-TW, pl, hi, ru, ar, pt-PT, pt-BR, fr, ne, th, tr, de, it, id, vi, fa, bn-BD
 //   /TASKS="a,b"            exactly these options; /MERGETASKS="a,!b" changes the defaults. "!" unticks, "*" ticks
 //                           the children too. Names: contextmenu, contextmenu\top, startup, cli, desktopicon
@@ -17,16 +17,16 @@
 //   /ALLUSERS               install for all users into Program Files (the default; needs administrator rights)
 //   /CURRENTUSER            install for this user only into %LocalAppData%\Programs (no administrator rights; the
 //                           Windows 11 top-level menu needs them and is left out)
-//   /PORTABLE=1             only unpack Filee into /DIR (no uninstaller, registry, shortcuts or PATH)
+//   /PORTABLE=1             only unpack TsuFiles into /DIR (no uninstaller, registry, shortcuts or PATH)
 //   /LOG, /LOG="file"       Setup always logs (%TEMP%\Filee-Setup-*.log); /LOG= names the file
-//   /COMPONENTS= /TYPE= /GROUP= /PASSWORD= /LOADINF= /SAVEINF=   accepted and ignored (Filee has none of these)
+//   /COMPONENTS= /TYPE= /GROUP= /PASSWORD= /LOADINF= /SAVEINF=   accepted and ignored (TsuFiles has none of these)
 //
-// Filee's own:
-//   /NOLAUNCH               don't start Filee at the end
+// TsuFiles's own:
+//   /NOLAUNCH               don't start TsuFiles at the end
 //   /SANDBOX="folder"       test run: everything (registry, Start menu, desktop, PATH, %APPDATA%) goes into this folder,
 //                           nothing on the PC is touched and no administrator rights are asked for
 //   /UNINSTALL              uninstall (uninstall.exe, which has no payload, does this without the switch)
-//   /LAUNCHFILE="file"      internal: the unelevated Setup that asked for administrator rights starts Filee as the
+//   /LAUNCHFILE="file"      internal: the unelevated Setup that asked for administrator rights starts TsuFiles as the
 //                           signed-in user from what the elevated one writes into this file
 //   /FIRSTPHASE=<id>        internal: the uninstaller's copy in %TEMP% lets the uninstaller in the install folder
 //                           (process <id>) end before it deletes its file
@@ -46,7 +46,7 @@ public enum SetupUi
     VerySilent,
 }
 
-/// <summary>Where Filee goes and who it is installed for.</summary>
+/// <summary>Where TsuFiles goes and who it is installed for.</summary>
 public enum InstallScope
 {
     /// <summary>All users, Program Files, HKLM (administrator rights).</summary>

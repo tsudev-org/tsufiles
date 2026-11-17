@@ -1,6 +1,6 @@
 // One compact card in a few states: Welcome (the logo, one Install button and an Options sheet with the folder, the
-// options, the engines and the language) → Progress (the new version's "What's new" slides while the files go in) → Done ("Launch Filee") or
-// Failed ("Copy details"). An update shows only what it may change (desktop icon, PATH); Filee's own settings stay as
+// options, the engines and the language) → Progress (the new version's "What's new" slides while the files go in) → Done ("Launch TsuFiles") or
+// Failed ("Copy details"). An update shows only what it may change (desktop icon, PATH); TsuFiles's own settings stay as
 // they are. The uninstaller uses the same card: Uninstall (keep or delete the settings) → Progress → Uninstalled.
 
 using System.Collections.ObjectModel;
@@ -63,7 +63,7 @@ public sealed partial class SetupViewModel : ObservableObject
     private SlideDeck? _deck;
     private bool _deckRead;
 
-    /// <param name="version">The Filee version Setup installs (or the uninstaller removes).</param>
+    /// <param name="version">The TsuFiles version Setup installs (or the uninstaller removes).</param>
     /// <param name="initial">The choices from the command line and the defaults.</param>
     /// <param name="engines">Packages offered on a fresh install, with whether each is installed already.</param>
     /// <param name="modernMenuSupported">Windows 11 x64 and administrator rights: the top-level menu can be offered.</param>
@@ -199,7 +199,7 @@ public sealed partial class SetupViewModel : ObservableObject
     /// <summary>Exit code for Setup (Inno Setup's: 0 done, 2 cancelled before installing, 4 failed during installing).</summary>
     public int ExitCode { get; private set; } = 2;
 
-    /// <summary>What to start when the window closes ("Launch Filee").</summary>
+    /// <summary>What to start when the window closes ("Launch TsuFiles").</summary>
     public LaunchRequest? Launch { get; private set; }
 
     public InstallResult? Result => _result;
@@ -215,7 +215,7 @@ public sealed partial class SetupViewModel : ObservableObject
         }
     }
 
-    /// <summary>Filee's settings folder (named on the uninstall card).</summary>
+    /// <summary>TsuFiles's settings folder (named on the uninstall card).</summary>
     public string SettingsFolder
     {
         get;
@@ -316,7 +316,7 @@ public sealed partial class SetupViewModel : ObservableObject
     [RelayCommand]
     private Task Uninstall() => UninstallAsync();
 
-    /// <summary>"Launch Filee" on the Done card: after an update the main window, not the tray, so the slides show over it.</summary>
+    /// <summary>"Launch TsuFiles" on the Done card: after an update the main window, not the tray, so the slides show over it.</summary>
     [RelayCommand]
     private void LaunchAndClose()
     {
@@ -369,7 +369,7 @@ public sealed partial class SetupViewModel : ObservableObject
             ExitCode = 0;
             Percent = 100;
             WarningText = string.Join(Environment.NewLine + Environment.NewLine, _result.Warnings.Select(WarningMessage));
-            // With a warning to read, the card leaves out how to use Filee (Filee shows that itself).
+            // With a warning to read, the card leaves out how to use TsuFiles (TsuFiles shows that itself).
             DoneText = string.Join(Environment.NewLine + Environment.NewLine, new[]
             {
                 IsUpdate ? _texts["installer.done.updated"] : WarningText.Length > 0 ? "" : _texts["installer.done.text"],
@@ -401,7 +401,7 @@ public sealed partial class SetupViewModel : ObservableObject
         {
             ExitCode = 0;
             Percent = 100;
-            // Files still in use (the Explorer menu, Filee in the tray) go at the next restart: nothing is left to delete
+            // Files still in use (the Explorer menu, TsuFiles in the tray) go at the next restart: nothing is left to delete
             // by hand (#519).
             UninstalledText = _texts["installer.uninstall.done"]
                               + (result.DeletedAtRestart > 0 ? Environment.NewLine + Environment.NewLine + _texts["installer.uninstall.restart"] : "")

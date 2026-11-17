@@ -1,9 +1,9 @@
 // Update check against GitHub Releases. When a newer version is out the app says so (sidebar, notice, tray). In an
 // installed copy "Update" downloads the new installer, checks it against the release's SHA256SUMS file and that the
 // publisher who signed this copy signed it too (Authenticode), and runs it;
-// Setup closes Filee, updates it in place (settings are kept) and starts it again. A portable copy, a copy run from
+// Setup closes TsuFiles, updates it in place (settings are kept) and starts it again. A portable copy, a copy run from
 // source, or a failed download opens a download page instead. The check works in every build.
-// An official build also carries the public half of Filee's update key: the SHA256SUMS file must then be signed with
+// An official build also carries the public half of TsuFiles's update key: the SHA256SUMS file must then be signed with
 // it (UpdateSignature), on every platform, and a Windows installer must come from the publisher the build names.
 
 using System.ComponentModel;
@@ -31,7 +31,7 @@ public enum UpdateStep
 {
     Idle,
     Downloading,
-    /// <summary>The installer is running (it shows its own progress window and closes Filee).</summary>
+    /// <summary>The installer is running (it shows its own progress window and closes TsuFiles).</summary>
     Installing,
     /// <summary>The update did not work; the download page was opened instead.</summary>
     Failed,
@@ -41,7 +41,7 @@ public enum UpdateStep
 
 public sealed partial class UpdateService : ObservableObject
 {
-    /// <summary>How often a running Filee (it lives in the tray for days) looks for a new version.</summary>
+    /// <summary>How often a running TsuFiles (it lives in the tray for days) looks for a new version.</summary>
     private static readonly TimeSpan CheckInterval = TimeSpan.FromHours(6);
 
     /// <summary>A download that receives nothing for this long is given up.</summary>
@@ -52,7 +52,7 @@ public sealed partial class UpdateService : ObservableObject
 
     /// <summary>
     /// Setup without the wizard: only its progress window shows. Updates keep the earlier choices anyway, and Setup
-    /// starts Filee again when it is done.
+    /// starts TsuFiles again when it is done.
     /// </summary>
     internal const string InstallerArguments = "/SILENT /NORESTART";
 
@@ -72,7 +72,7 @@ public sealed partial class UpdateService : ObservableObject
         _log = log;
         // Downloads use their own stall timeout (StallTimeout); this one covers the API call and the response headers.
         _http = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(20) };
-        _http.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Filee", CurrentVersion));
+        _http.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("TsuFiles", CurrentVersion));
         _http.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
     }
 
@@ -176,7 +176,7 @@ public sealed partial class UpdateService : ObservableObject
     /// </summary>
     internal Func<string, bool, AuthenticodeSigner?> SignerOf { get; init; } = Authenticode.TrustedSigner;
 
-    /// <summary>This copy of Filee, whose publisher must have signed the installer too (tests set it).</summary>
+    /// <summary>This copy of TsuFiles, whose publisher must have signed the installer too (tests set it).</summary>
     internal string? OwnProgram { get; init; } = Environment.ProcessPath;
 
     /// <summary>
@@ -282,7 +282,7 @@ public sealed partial class UpdateService : ObservableObject
             });
             return true;
         }
-        // Offline, DNS failure, timeout, a connection dropped while reading, or an unexpected answer: Filee works
+        // Offline, DNS failure, timeout, a connection dropped while reading, or an unexpected answer: TsuFiles works
         // offline, so a failed check is only logged and the next one is tried later.
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or IOException or JsonException
                                        or InvalidOperationException)
@@ -466,7 +466,7 @@ public sealed partial class UpdateService : ObservableObject
                 startInfo.ArgumentList.Add("-c");
                 startInfo.ArgumentList.Add(
                     "for _ in $(seq 1 600); do if ! kill -0 \"$1\" 2>/dev/null; then break; fi; sleep 0.1; done; " +
-                    "if kill -0 \"$1\" 2>/dev/null; then echo \"Update aborted: Filee (PID $1) did not exit within timeout\" >> \"$4\"; rm -rf \"$5\" 2>/dev/null; exit 1; fi; " +
+                    "if kill -0 \"$1\" 2>/dev/null; then echo \"Update aborted: TsuFiles (PID $1) did not exit within timeout\" >> \"$4\"; rm -rf \"$5\" 2>/dev/null; exit 1; fi; " +
                     "\"$2\" --upgrade >> \"$4\" 2>&1; " +
                     "status=$?; " +
                     "rm -rf \"$5\" 2>/dev/null; " +
@@ -475,7 +475,7 @@ public sealed partial class UpdateService : ObservableObject
                     "else " +
                     "echo \"Update failed with status $status\" >> \"$4\"; " +
                     "echo \"$4\" > \"$6.tmp\" 2>/dev/null && mv -f \"$6.tmp\" \"$6\" 2>/dev/null || true; " +
-                    "if [ -x \"$3\" ]; then exec \"$3\" --background; else echo \"Cannot restart Filee: '$3' is not executable after rollback\" >> \"$4\"; exit $status; fi; " +
+                    "if [ -x \"$3\" ]; then exec \"$3\" --background; else echo \"Cannot restart TsuFiles: '$3' is not executable after rollback\" >> \"$4\"; exit $status; fi; " +
                     "fi"
                 );
                 startInfo.ArgumentList.Add("_");
@@ -566,11 +566,11 @@ public sealed partial class UpdateService : ObservableObject
             throw new UpdateVerificationException($"The release has no {name}");
         }
         if (!UpdateSignature.Verify(sums, Encoding.ASCII.GetString(signature), publicKey))
-            throw new UpdateVerificationException($"{name} is not a valid signature of {checksums.Name} by Filee's update key");
+            throw new UpdateVerificationException($"{name} is not a valid signature of {checksums.Name} by TsuFiles's update key");
         var version = VersionInName().Match(installer.Name);
         if (!version.Success || !IsNewer(version.Groups[1].Value, CurrentVersion))
             throw new UpdateVerificationException($"{installer.Name} is not a newer version than {CurrentVersion}");
-        _log.LogInformation("{Name} is signed with Filee's update key", checksums.Name);
+        _log.LogInformation("{Name} is signed with TsuFiles's update key", checksums.Name);
     }
 
     /// <summary>"Filee-2.4.0-win-Setup.exe" → 2.4.0.</summary>
@@ -581,7 +581,7 @@ public sealed partial class UpdateService : ObservableObject
     /// <summary>
     /// Throws <see cref="UpdateVerificationException"/> (and deletes the installer) unless <paramref name="installer"/>
     /// is signed by the publisher this build names (<see cref="ExpectedPublisher"/>) or, without one, by the publisher
-    /// that signed this copy of Filee. The checksum file sits on the same release as the installer, so it can't tell a
+    /// that signed this copy of TsuFiles. The checksum file sits on the same release as the installer, so it can't tell a
     /// replaced installer from the real one; the signature can. A subject is only text, so the certificate authority
     /// that issued the certificate must match too. A copy that is not signed itself and names no publisher (built from
     /// source) has nothing to compare with and keeps to the checksum.
@@ -602,7 +602,7 @@ public sealed partial class UpdateService : ObservableObject
         }
         else
         {
-            _log.LogInformation("This copy of Filee is not signed: the installer is checked by its SHA-256 only");
+            _log.LogInformation("This copy of TsuFiles is not signed: the installer is checked by its SHA-256 only");
             return;
         }
         var signer = SignerOf(installer, true);
@@ -981,7 +981,7 @@ public sealed partial class UpdateService : ObservableObject
             }
             else
             {
-                throw new InvalidDataException("Archive does not contain a single valid Filee payload with install.sh");
+                throw new InvalidDataException("Archive does not contain a single valid TsuFiles payload with install.sh");
             }
         }
 
@@ -1212,7 +1212,7 @@ public sealed partial class UpdateService : ObservableObject
     /// </summary>
     public static void DeleteStaleWorkspaces(string? root = null, TimeSpan? age = null, ILogger? log = null)
     {
-        // Workspaces are only made on Linux, under Filee's own data folder. Elsewhere the default root is the shared
+        // Workspaces are only made on Linux, under TsuFiles's own data folder. Elsewhere the default root is the shared
         // temp folder, where other programs' folders live.
         if (root is null && !OperatingSystem.IsLinux())
             return;
@@ -1258,7 +1258,7 @@ public sealed partial class UpdateService : ObservableObject
     }
 
     /// <summary>
-    /// The app's executable on Linux (TsuFiles from 2.4.1, ADR-0003). Packages also carry a "Filee" launcher for the
+    /// The app's executable on Linux (TsuFiles from 2.4.1, ADR-0003). Packages also carry a "TsuFiles" launcher for the
     /// updater of 2.4.0-vn.1, which checks for and starts that name.
     /// </summary>
     internal const string AppExecutable = "TsuFiles";

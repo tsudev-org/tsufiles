@@ -4,7 +4,7 @@
 
 namespace TsuFiles.Core.Formats;
 
-/// <summary>Lookup table of every format Filee knows about.</summary>
+/// <summary>Lookup table of every format TsuFiles knows about.</summary>
 public static class FormatRegistry
 {
     /// <summary>Pseudo format for archive extraction outputs and folders explicitly classified at input handling.</summary>
@@ -48,7 +48,7 @@ public static class FormatRegistry
         new("pcd", "Photo CD", FormatCategory.Image, ["pcd"], Writable: false),
         new("exr", "OpenEXR", FormatCategory.Image, ["exr"], Writable: false),
         new("hdr", "Radiance HDR", FormatCategory.Image, ["hdr"], Writable: false),
-        // Astronomy pictures from telescope cameras and stacking software, read by Filee itself (issue #460). ".fit" is
+        // Astronomy pictures from telescope cameras and stacking software, read by TsuFiles itself (issue #460). ".fit" is
         // left to Garmin's FIT activity files (issue #451).
         new("fits", "FITS", FormatCategory.Image, ["fits", "fts"], Writable: false),
         // Read on Windows only, with its own codec (HDR screenshots of Windows are JPEG XR).
@@ -172,7 +172,7 @@ public static class FormatRegistry
         new("opml", "OPML", FormatCategory.Text, ["opml"]),
 
         // Structured data. CSV stays a spreadsheet (its donut and routes); the data engine adds CSV ↔ JSON / YAML /
-        // TOML / XML edges. ".xml" means a data document here: XML-based formats Filee converts have their own
+        // TOML / XML edges. ".xml" means a data document here: XML-based formats TsuFiles converts have their own
         // extensions (.svg, .fb2, .dbk, ...).
         new("json", "JSON", FormatCategory.Data, ["json"]),
         new("jsonl", "JSON Lines", FormatCategory.Data, ["jsonl", "ndjson"]),
@@ -411,7 +411,7 @@ public static class FormatRegistry
 
     /// <summary>
     /// The file name without its (possibly two-part) extension: "backup.tar.gz" → "backup". An envelope's name loses
-    /// the extension of the file inside too, when it has one Filee knows: "invoice.pdf.p7m" → "invoice".
+    /// the extension of the file inside too, when it has one TsuFiles knows: "invoice.pdf.p7m" → "invoice".
     /// </summary>
     public static string NameWithoutExtension(string path)
     {

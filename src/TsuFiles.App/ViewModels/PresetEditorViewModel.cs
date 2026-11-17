@@ -1048,7 +1048,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     public bool ShowPdfTablesNote => TargetId == "xlsx";
     public bool ShowPdfCompressionOptions => ShowPdfCompression && CompressionLevel.Value != PdfCompression.None;
 
-    /// <summary>Text from scans goes into the formats Filee writes from a PDF's text itself (PdfOptions.OcrTargets).</summary>
+    /// <summary>Text from scans goes into the formats TsuFiles writes from a PDF's text itself (PdfOptions.OcrTargets).</summary>
     public bool ShowOcr => !IsTool && PdfOptions.OcrTargets.Contains(TargetId);
 
     /// <summary>PDF → a single-image format: the pages can be stacked into one tall image (TIFF, GIF, APNG and MNG keep pages).</summary>
@@ -1313,7 +1313,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         }
 
         var output = _original.Output;
-        // Asking keeps the location it had: a Filee that can't ask (or one from before it) saves there.
+        // Asking keeps the location it had: a TsuFiles that can't ask (or one from before it) saves there.
         output.AskEveryTime = Location.Value is null;
         if (Location.Value is { } location)
             output.Location = location;

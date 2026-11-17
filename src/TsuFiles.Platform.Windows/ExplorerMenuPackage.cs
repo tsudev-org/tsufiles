@@ -1,4 +1,4 @@
-// The sparse ("packaged with external location") MSIX that puts "Convert with Filee" into the top-level Windows 11
+// The sparse ("packaged with external location") MSIX that puts "Convert with TsuFiles" into the top-level Windows 11
 // File Explorer context menu. The package holds only AppxManifest.xml and a logo; the COM server it declares is the
 // native FileeExplorerMenu.dll in the Filee install folder (src/Filee.ExplorerMenu).
 
@@ -53,7 +53,7 @@ public static class ExplorerMenuPackage
 
     /// <summary>
     /// Processor architecture of the DLL (it is loaded into explorer.exe, so it must match Explorer) when the build
-    /// names none: x64. ARM64 builds of Filee ship an ARM64 DLL in an "arm64" package.
+    /// names none: x64. ARM64 builds of TsuFiles ship an ARM64 DLL in an "arm64" package.
     /// </summary>
     public const string Architecture = "x64";
 

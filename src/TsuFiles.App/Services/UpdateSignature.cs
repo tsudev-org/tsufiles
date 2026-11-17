@@ -1,9 +1,9 @@
 // Signatures over a release's SHA256SUMS files. The checksum file only shows that a download arrived intact: it sits on
 // the same release as the installer, so whoever could replace one could replace the other. Each checksum file is
-// therefore signed with Filee's update key (ECDSA P-256 over SHA-256) on the maintainer's PC
+// therefore signed with TsuFiles's update key (ECDSA P-256 over SHA-256) on the maintainer's PC
 // (build/sign-checksums.ps1, run by build/sign-release.ps1), and the signature is attached to the release next to it
 // as <name>.sig. Official builds carry the public half (TsuFilesUpdatePublicKey in Directory.Build.props), so the updater
-// can tell a checksum file Filee wrote from any other, on every platform.
+// can tell a checksum file TsuFiles wrote from any other, on every platform.
 
 using System.Security.Cryptography;
 
@@ -39,7 +39,7 @@ internal static class UpdateSignature
 }
 
 /// <summary>
-/// The update was downloaded but is not Filee's: the checksum file is not signed with the update key, or the installer
-/// is not signed by Filee's publisher. The app says so instead of "couldn't download".
+/// The update was downloaded but is not TsuFiles's: the checksum file is not signed with the update key, or the installer
+/// is not signed by TsuFiles's publisher. The app says so instead of "couldn't download".
 /// </summary>
 internal sealed class UpdateVerificationException(string message) : IOException(message);

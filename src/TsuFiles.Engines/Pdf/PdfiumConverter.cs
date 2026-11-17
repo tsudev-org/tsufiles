@@ -12,7 +12,7 @@ using TsuFiles.Engines.Magick;
 using TsuFiles.Engines.Vector;
 
 // PDFtoImage marks its API for the platforms PDFium ships for (Windows, macOS, Linux, mobile).
-// Filee only targets desktop platforms that are all covered.
+// TsuFiles only targets desktop platforms that are all covered.
 #pragma warning disable CA1416
 
 namespace TsuFiles.Engines.Pdf;

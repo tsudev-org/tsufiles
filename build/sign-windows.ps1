@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-  Signs Windows programs with Filee's code signing certificate: Authenticode, SHA-256, with a timestamp from Certum.
+  Signs Windows programs with TsuFiles's code signing certificate: Authenticode, SHA-256, with a timestamp from Certum.
 
 .DESCRIPTION
-  Signs every .exe and .dll under -Path (files or folders) that has no valid signature yet: Filee's own programs, and
+  Signs every .exe and .dll under -Path (files or folders) that has no valid signature yet: TsuFiles's own programs, and
   the bundled ones that come unsigned (rhwp, 7-Zip, most NuGet libraries). Files their makers signed (.NET, Microsoft,
   ImageMagick …) keep their signature. Afterwards every program under -Path must have a valid signature.
 

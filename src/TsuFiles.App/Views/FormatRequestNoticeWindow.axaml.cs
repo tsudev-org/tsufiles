@@ -5,7 +5,7 @@ using TsuFiles.App.Services;
 
 namespace TsuFiles.App.Views;
 
-/// <summary>Bottom-right card for files of a type Filee doesn't know: "Request this format" opens the GitHub form.</summary>
+/// <summary>Bottom-right card for files of a type TsuFiles doesn't know: "Request this format" opens the GitHub form.</summary>
 public partial class FormatRequestNoticeWindow : Window
 {
     private const int ScreenMargin = 12;

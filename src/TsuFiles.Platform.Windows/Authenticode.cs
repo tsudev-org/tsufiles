@@ -2,7 +2,7 @@
 //
 // The in-app updater checks the installer it downloaded with this before running it. The SHA-256 from the release's
 // checksum file only shows the download arrived intact; whoever could replace the installer on the release could
-// replace that file too. The signature shows the installer comes from the publisher that signed this copy of Filee.
+// replace that file too. The signature shows the installer comes from the publisher that signed this copy of TsuFiles.
 // WinVerifyTrust checks the signature and its chain, and the signer is read from the same check, so the certificate
 // compared is the one Windows verified. A subject is only text that any certificate authority could write into a
 // certificate, so the signer comes with its issuer and a hash of its public key to compare as well.

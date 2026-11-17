@@ -12,7 +12,7 @@
       <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="6" MaxWidth="470" Margin="24,0">
         <c:AppLogo Width="96" Height="96" HorizontalAlignment="Center" Margin="0,0,0,10" />
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
-          <!-- TsuFiles: tên hiển thị (ADR-0001), không viết cứng "Filee". -->
+          <!-- TsuFiles: tên hiển thị (ADR-0001), không viết cứng "TsuFiles". -->
           <TextBlock Classes="title" Text="{x:Static fork:ForkDefaults.DisplayName}" />
           <Border Classes="pill">
             <TextBlock Text="{Binding Version}" />
@@ -52,7 +52,7 @@
     </Grid>
   </DataTemplate>
 
-  <!-- Done: the check mark bursts, "Launch Filee". -->
+  <!-- Done: the check mark bursts, "Launch TsuFiles". -->
   <DataTemplate x:Key="Setup.Done" x:DataType="vm:SetupViewModel">
     <Grid RowDefinitions="*,Auto" Margin="32,0,32,24">
       <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="8" MaxWidth="500" Margin="0,0,0,12">

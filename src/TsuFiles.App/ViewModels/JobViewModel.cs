@@ -87,7 +87,7 @@ public sealed partial class JobViewModel : ObservableObject
     [ObservableProperty] private string? _missingFontsText;
     public bool HasMissingFonts => MissingFonts.Count > 0;
     public bool CanGetFonts => MissingFonts.Any(family => FontSources.Url(family) is not null);
-    /// <summary>Extensions of failed files Filee can't read (".ncm"), for "Request this format".</summary>
+    /// <summary>Extensions of failed files TsuFiles can't read (".ncm"), for "Request this format".</summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanRequestFormat))]
     private IReadOnlyList<string> _unknownExtensions = [];

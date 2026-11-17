@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <AssemblyName>tsufiles-cli</AssemblyName>
     <RootNamespace>TsuFiles.Cli</RootNamespace>
-    <ApplicationIcon>..\TsuFiles.App\Assets\Icons\filee.ico</ApplicationIcon>
+    <ApplicationIcon>..\TsuFiles.App\Assets\Icons\tsufiles.ico</ApplicationIcon>
     <!-- The Recycle Bin is IFileOperation, a COM interface (TsuFiles.Platform.Windows). -->
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
   </PropertyGroup>

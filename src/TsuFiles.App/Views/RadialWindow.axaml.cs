@@ -33,7 +33,7 @@ public partial class RadialWindow : Window
     /// <summary>Files entered the window during a drag.</summary>
     public event Action<IReadOnlyList<string>>? FilesEntered;
 
-    /// <summary>A drag without files Filee reads entered the window: the formats it offered (for the log).</summary>
+    /// <summary>A drag without files TsuFiles reads entered the window: the formats it offered (for the log).</summary>
     public event Action<string>? DragWithoutFiles;
 
     /// <summary>A drop landed on the donut: (hit, what it brought). The handler owns the browser drop in it.</summary>

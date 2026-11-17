@@ -71,7 +71,7 @@ public sealed partial class WhisperConverter : IConverter
         if (EngineEnvironment.OwnProgram("whisper", "whisper-cli.exe") is { } own && File.Exists(own))
             return own;
 
-        // 2. Filee bundled or downloaded engine folder
+        // 2. TsuFiles bundled or downloaded engine folder
         if (EngineEnvironment.BundledProgram("whisper", "whisper-cli.exe") is { } bundled && File.Exists(bundled))
             return bundled;
 

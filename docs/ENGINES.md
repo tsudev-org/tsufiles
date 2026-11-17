@@ -1,11 +1,11 @@
 # Conversion engines
 
-Filee chooses engines automatically. Settings → *Engines* shows their status, lets you change the priority
+TsuFiles chooses engines automatically. Settings → *Engines* shows their status, lets you change the priority
 (higher wins when two engines can do the same conversion), and install or remove the optional engines.
 
 | Engine | How it gets there | Handles |
 |---|---|---|
-| ImageMagick (Magick.NET) | built in (library) | JPG, PNG, WEBP, TIFF, BMP, GIF, ICO, AVIF, JPEG XL, JPEG 2000, PSD/PSB, TGA, PPM, MNG, QOI, DDS, PCX, CUR, XPM, XBM, WBMP, PAM, PFM, SGI, Sun Raster, MIFF ↔ each other, and **APNG** (Filee's own reader and writer); HEIC (written with FFmpeg), XCF, camera RAW (LibRaw), DICOM (uncompressed ones by Filee's own reader), **FITS** (Filee's own reader; TIFF at the file's own depth by Filee's own writer), Photo CD, OpenEXR, Radiance HDR, EMF/WMF (Windows), the photo of an iPhone LIVP and the merged picture of a Krita KRA read |
+| ImageMagick (Magick.NET) | built in (library) | JPG, PNG, WEBP, TIFF, BMP, GIF, ICO, AVIF, JPEG XL, JPEG 2000, PSD/PSB, TGA, PPM, MNG, QOI, DDS, PCX, CUR, XPM, XBM, WBMP, PAM, PFM, SGI, Sun Raster, MIFF ↔ each other, and **APNG** (TsuFiles's own reader and writer); HEIC (written with FFmpeg), XCF, camera RAW (LibRaw), DICOM (uncompressed ones by TsuFiles's own reader), **FITS** (TsuFiles's own reader; TIFF at the file's own depth by TsuFiles's own writer), Photo CD, OpenEXR, Radiance HDR, EMF/WMF (Windows), the photo of an iPhone LIVP and the merged picture of a Krita KRA read |
 | Windows Imaging Component | part of Windows (Windows only) | **JPEG XR** (JXR, WDP, HDP; HDR screenshots of Windows) → the images ImageMagick writes, and PDF, ICNS, HEIC and SVG through PNG; HDR tone-mapped to SDR |
 | Vector graphics | built in (Svg.Skia, SkiaSharp, ACadSharp) | **SVG/SVGZ → PDF (vector) and images**, SVG ↔ SVGZ, **SVG → DXF** (→ DWG with the CAD engine), **raster images → SVG (tracing)**, PDF-compatible AI → PDF, **HP-GL / HP-GL/2 plot files (PLT) → SVG**, PDF and images (pen moves, packed PE polylines, arcs and filled polygons; text labels are not drawn), **Tajima DST embroidery → SVG** (stitches as lines, a palette colour per thread; → PNG, JPG, PDF from there) |
 | ICNS | built in | images → ICNS (16–1024 px), ICNS → images |
@@ -60,7 +60,7 @@ LibreOffice to convert correctly" and the script's name instead of becoming a br
 text rhwp has no widths for: its width tables cover only ASCII and Latin-1, general punctuation, math, the CJK forms
 and Hangul (rhwp#8143), so a letter of any other script — Polish, Turkish, Vietnamese, Greek, Cyrillic, ... — or a
 combining mark is laid out at a fixed half-em. Such a document takes a route without unshaped edges when one exists
-and is never refused when none does: Filee then gives those letters a letter spacing that takes rhwp's half-em to the
+and is never refused when none does: TsuFiles then gives those letters a letter spacing that takes rhwp's half-em to the
 real width in the font rhwp draws them with (LATIN for Latin Extended, HANGUL for other scripts; issue #1262), so
 they don't overlap. Combining marks keep the half-em. Only letters inside words
 count (an extended Latin letter next to any letter, a letter of another script next to one of its own script), so a
@@ -72,16 +72,16 @@ All built-in document readers are registered in one place, `Hwp/Hwpx/DocumentRea
 which formats need Pandoc). The HWPX writer and the DOCX writer take their input formats from it: adding a reader
 there is one line and makes both writers (and every route through them) accept the format.
 
-Every engine is built in, bundled with the installer or downloaded into Filee's own folder, so a conversion behaves
+Every engine is built in, bundled with the installer or downloaded into TsuFiles's own folder, so a conversion behaves
 the same on every PC. An external engine is looked for in this order:
 
 1. a copy the user picked in Settings → *Engines*;
-2. Filee's own copy (bundled or downloaded);
+2. TsuFiles's own copy (bundled or downloaded);
 3. a copy already on the computer: on `PATH`, in Homebrew's and the usual Unix folders, or where the LibreOffice,
    calibre, Ghostscript and Tesseract installers put it. Settings → *Engines* shows it as "Found on this PC", with a note when
-   its version is older than the one Filee downloads.
+   its version is older than the one TsuFiles downloads.
 
-Where Filee has no download of an engine (FFmpeg, Ghostscript and Tesseract on macOS, LibreOffice, Ghostscript and
+Where TsuFiles has no download of an engine (FFmpeg, Ghostscript and Tesseract on macOS, LibreOffice, Ghostscript and
 Tesseract on Linux),
 step 3 is how it is found. Microsoft Office
 and Hancom Office are never used, even when installed. Running from source, the repository's `engines/` folder
@@ -89,7 +89,7 @@ and Hancom Office are never used, even when installed. Running from source, the 
 
 ## Optional engines
 
-The installer contains only the small engines. On first start Filee asks which of the large ones to download;
+The installer contains only the small engines. On first start TsuFiles asks which of the large ones to download;
 they can be installed or removed later in Settings → *Engines*. A conversion that needs a missing engine shows
 "Needs LibreOffice …" on its donut slice.
 
@@ -98,7 +98,7 @@ they can be installed or removed later in Settings → *Engines*. A conversion t
   name the oldest macOS it runs on (`minimumMacOS`); an older Mac isn't offered it.
 - `EngineInstaller` verifies the SHA-256 before unpacking and unpacks into a staging folder that replaces the
   engine folder only when complete. Redirects to mirrors (even plain HTTP) are followed, because the hash decides.
-- Engines go to `%LOCALAPPDATA%\TsuFiles\engines`: outside the app folder, so updates keep them, and inside Filee's
+- Engines go to `%LOCALAPPDATA%\TsuFiles\engines`: outside the app folder, so updates keep them, and inside TsuFiles's
   install root, so uninstalling removes them.
 - LibreOffice and calibre come as MSIs and are unpacked with an administrative install (`msiexec /a`): files only,
   no registry entries, no admin rights. LibreOffice's help, gallery and most dictionaries are removed afterwards
@@ -109,7 +109,7 @@ they can be installed or removed later in Settings → *Engines*. A conversion t
   Its fonts and resources are compiled into `gsdll64.dll`. The Microsoft C++ runtime it was built against
   (`vcruntime` component) is copied next to `gswin64c.exe`, so it runs on PCs without the VC++ Redistributable.
 - Tesseract is UB Mannheim's Windows build (the one Tesseract's documentation points to), published only as an NSIS
-  installer. It is never run: Filee's own 7-Zip unpacks it (`nsis` kind), and the training programs, manuals,
+  installer. It is never run: TsuFiles's own 7-Zip unpacks it (`nsis` kind), and the training programs, manuals,
   installer files and bundled language data are removed (`TrimTesseract`, ~80 MB). The languages come from
   `tessdata_fast` 4.1.0, pinned like the engines in `Infrastructure/ocr-languages.json` (`traineddata` kind, one
   folder per language under `engines/ocr-languages`), and are downloaded the first time a preset uses one.
@@ -120,7 +120,7 @@ they can be installed or removed later in Settings → *Engines*. A conversion t
 ### Microsoft C++ runtime (Windows)
 
 Programs built with Visual C++ import `MSVCP140.dll` / `VCRUNTIME140.dll`, which a fresh Windows does not have (they
-come with the Visual C++ Redistributable). Windows looks for a program's DLLs in its own folder first, so Filee puts
+come with the Visual C++ Redistributable). Windows looks for a program's DLLs in its own folder first, so TsuFiles puts
 the runtime next to every program that needs it and does not ship it (`Infrastructure/AppLocalRuntime.cs`):
 
 | Binary | Runtime |
@@ -128,11 +128,11 @@ the runtime next to every program that needs it and does not ship it (`Infrastru
 | `engines/rhwp/rhwp.exe` (bundled) | `vcruntime` component copied next to it by `fetch-engines.ps1` (#248) |
 | `unhwp.dll` (NuGet, loaded into Filee.exe and tsufiles-cli.exe) | `vcruntime` component copied next to `Filee.exe` (`build-installer.ps1` → `fetch-engines.ps1 -RuntimeTo`) |
 | Ghostscript (download) | `vcruntime` component copied next to `gswin64c.exe` (`EngineInstaller`, `fetch-engines.ps1`) |
-| LibreOffice (download) | its own copy, which the administrative install leaves in `System64`, copied into `program/` (`EngineInstaller`, `fetch-engines.ps1`; `LibreOfficeConverter` also repairs a copy installed by an earlier Filee) |
+| LibreOffice (download) | its own copy, which the administrative install leaves in `System64`, copied into `program/` (`EngineInstaller`, `fetch-engines.ps1`; `LibreOfficeConverter` also repairs a copy installed by an earlier TsuFiles) |
 | calibre, Java (downloads) | ship their own next to their programs (`app/bin`, `bin`) |
 | 7-Zip, FFmpeg (GyanD), Tesseract (UB Mannheim, MinGW), Pandoc, PDFium, SkiaSharp / HarfBuzz, Magick.Native, the Explorer menu DLL, .NET | import neither (static runtime or MinGW / GHC builds) |
 
-The installer and the portable zip are made from the same publish folder, so both have the DLLs. Filee installed in
+The installer and the portable zip are made from the same publish folder, so both have the DLLs. TsuFiles installed in
 Program Files cannot repair its own bundled files, so an older installation gets them by installing the new version.
 When a DLL is still missing, Windows does not start the program and reports `0xC0000135` (STATUS_DLL_NOT_FOUND;
 `0xC0000139` for an outdated one) as its exit code: `ProcessRunner` and `FfmpegRunner` turn that into
@@ -208,7 +208,7 @@ in it also builds the package (artifact `windows-arm64-package`).
   #988) and becomes a multi-page TIFF;
   other targets get the first frame. Multi-page TIFFs and PDFs stay one image per page in WebP and AVIF.
   - **Animated AVIF** (#1200) needs no FFmpeg, but goes much faster with it. ImageMagick reads the frames and applies
-    the preset either way. With FFmpeg and its libaom-av1 encoder (Filee's FFmpeg download has it),
+    the preset either way. With FFmpeg and its libaom-av1 encoder (TsuFiles's FFmpeg download has it),
     `Media/AvifSequenceWriter.cs` packs the frames into an APNG in the work folder (`Magick/Apng.cs`, exact delays) and
     FFmpeg's avif muxer writes the image sequence (`avis`): FFmpeg encodes 60 busy 480 × 270 frames in about 3 s, where
     ImageMagick's writer takes 50 s or more. Cancelling stops it, and the loop count stays (the muxer's `-loop`, the edit list's repeat). Only
@@ -236,9 +236,9 @@ in it also builds the package (artifact `windows-arm64-package`).
   disposal stay; 1× (also every preset saved before the option) leaves the timing untouched. Video → GIF / APNG
   (FFmpeg) puts `setpts=PTS/<speed>` before the `fps` filter, so the frame rate limits stay. The speed changes only in
   the step that writes the output (`JobQueue`), never twice on a longer route.
-- **APNG** (`Magick/Apng.cs`) is Filee's own code, written from the APNG specification: ImageMagick reads only an
+- **APNG** (`Magick/Apng.cs`) is TsuFiles's own code, written from the APNG specification: ImageMagick reads only an
   APNG's default image and writes APNG through an external FFmpeg. Every frame is an ordinary PNG decoded or encoded by
-  ImageMagick; Filee handles the chunks around them.
+  ImageMagick; TsuFiles handles the chunks around them.
   - Reading composes each frame onto the canvas as a player shows it: `fcTL` regions and offsets, blend `SOURCE` / `OVER`,
     dispose `NONE` / `BACKGROUND` / `PREVIOUS`, delays (a denominator of 0 means hundredths) and the loop count. A
     default image that comes before the first `fcTL` is not part of the animation and is skipped. Animated PNGs saved
@@ -361,7 +361,7 @@ in it also builds the package (artifact `windows-arm64-package`).
 
 ## Tracing (raster images → SVG)
 
-Built in (`Vector/Tracing`), no Potrace or other program: Filee's own code, written from published descriptions of the
+Built in (`Vector/Tracing`), no Potrace or other program: TsuFiles's own code, written from published descriptions of the
 steps (no code of Potrace, AutoTrace or VTracer is used). Every raster format ImageMagick reads (PNG, JPG, BMP, GIF,
 WEBP, TIFF, HEIC, PSD, RAW, DICOM, …) is traced, and other raster images through PNG (ICNS, APNG). Only raster images are traced:
 PDF, EPS, PS, AI, EMF/WMF, CDR, documents and videos are never redrawn from a rendering, so without a real vector
@@ -420,7 +420,7 @@ nested `<svg>`, CSS and text are resolved the same way.
 
 ## HWPX writer
 
-Filee writes OWPML (HWPX) itself, so saving as HWPX needs no Hancom Office and shows no approval dialog.
+TsuFiles writes OWPML (HWPX) itself, so saving as HWPX needs no Hancom Office and shows no approval dialog.
 Readers turn the source into a small document model (`Hwp/Hwpx/HwpxModel.cs`) and `HwpxWriter` writes the package:
 
 - **DOCX** is read directly (`Hwp/Hwpx/Docx/DocxReader*.cs`) so the layout survives:
@@ -470,7 +470,7 @@ Readers turn the source into a small document model (`Hwp/Hwpx/HwpxModel.cs`) an
   HTML; it refers to nothing but data: URIs, so no file outside the job's scratch folder is looked at.
 - **ODT, RTF** are parsed by Pandoc into its JSON AST (`PandocAstReader.cs`, following
   [pypandoc-hwpx](https://github.com/msjang/pypandoc-hwpx)), in Pandoc's `--sandbox`: Pandoc reads nothing but the
-  file, so include directives stay unread and pictures the document links to are found by Filee.
+  file, so include directives stay unread and pictures the document links to are found by TsuFiles.
 - Markdown, HTML and Pandoc keep structure only, so page setup comes from the built-in template (A4).
 - Pictures (and HTML style sheets) a Markdown, HTML or Pandoc document links to are read only from the document's
   own folder and its subfolders (`DocumentFiles.cs`, also for e-books, MHTML and translation): `../`, absolute paths
@@ -550,7 +550,7 @@ this interactive tool always requires LibreOffice regardless of engine priority:
 makes one disposable copy per selected sheet region, applies that region's print settings, and asks LibreOffice to
 render it. PDFsharp combines the resulting PDFs. The live preview follows this exact studio export path and uses
 PDFium/PDFtoImage for lazy thumbnails and the selected large page; the ordinary donut's PDF can differ because its
-built-in XLSX route reads the workbook into Filee's document model.
+built-in XLSX route reads the workbook into TsuFiles's document model.
 
 ## Fonts
 
@@ -561,7 +561,7 @@ extension, and the file must then have an NE header with FNT resources.
 - **WOFF 1.0**: every table zlib-compressed (stored as-is when that isn't smaller). Lossless both ways.
 - **WOFF2**: one Brotli stream at the highest quality with the glyf/loca transform and, where it applies, the hmtx
   transform, so files come out the size of Google's reference encoder's. Reading handles both transforms, the
-  overlap bitmap, untransformed tables and the first font of a WOFF2 collection. Like other encoders, Filee drops
+  overlap bitmap, untransformed tables and the first font of a WOFF2 collection. Like other encoders, TsuFiles drops
   the DSIG signature and sets bit 11 of head.flags. Brotli is slow on big fonts (about 10 s per MB, so about a
   minute for a 4.6 MB CJK font); the job shows progress and can be cancelled.
 - **EOT**: written as version 0x00020001 (names and OS/2 fields in the header, no MicroType Express compression, no
@@ -576,7 +576,7 @@ extension, and the file must then have an NE header with FNT resources.
   CID fonts) are built; head, hhea, hmtx and, from VORG, vmtx are updated; CFF, VORG and DSIG are dropped; every
   other table (cmap, name, OS/2, GSUB, GPOS, kern, ...) is kept. PostScript hints are not converted: the font gets a
   gasp table (smoothing at every size) and a prep that switches on dropout control instead.
-- **FON → TTF, OTF, WOFF, WOFF2, EOT** (input only): Filee reads the monochrome FNT v2/v3 bitmap resources of an NE
+- **FON → TTF, OTF, WOFF, WOFF2, EOT** (input only): TsuFiles reads the monochrome FNT v2/v3 bitmap resources of an NE
   executable and turns each lit pixel into a straight, grid-aligned TrueType outline. The result retains the
   original pixel shape, per-glyph advance, ascent and baseline; there is no smoothing or curve tracing. A FON with a
   single font resource produces `Name.ttf` (or the corresponding OTF/WOFF/WOFF2/EOT extension). Several resources
@@ -826,7 +826,7 @@ editable**: there are no text boxes to change, the PDF's layout is not rebuilt. 
   that PDFium renders, the deck is written without notes.
 - The package (`Pdf/PictureDeckWriter.cs`) is written by hand: presentation, one slide master with a blank layout,
   a theme, the slides with their pictures, a notes master and notes slides, and the document properties. The tests
-  validate it with the Open XML SDK and read it back with Filee's own PPTX reader.
+  validate it with the Open XML SDK and read it back with TsuFiles's own PPTX reader.
 - The edge is `DirectOnly`: the route planner uses it only for a PDF converted to PPTX. A Word document or an image is
   never turned into picture slides through PDF, and a picture deck is never a step towards ODP, PPSX or another
   format (a test checks that every other pair of formats keeps its route).
@@ -1041,14 +1041,14 @@ options: the output is always pretty-printed.
 | HAR (`.har`, read only, #328) | System.Text.Json (`Data/HarData.cs`) | the HTTP Archive a browser's developer tools save: as JSON for JSON, YAML, TOML, XML and JSON Lines; as a table for CSV (and spreadsheets, Markdown, PDF through it), one row per request of `log.entries`: started, method, URL, status, time (ms), size (bytes), type. Pages, timings and headers stay in the JSON. A file without `log.entries` fails as no HAR | — (not written) |
 | JSON Lines (`.jsonl`, `.ndjson`) | System.Text.Json | one value per line, blank lines skipped, read as an array | one compact line per record (the array, or the array inside wrappers, see CSV) |
 | YAML (`.yaml`, `.yml`) | YamlDotNet (MIT) | YAML 1.2 core schema: unquoted `true`, `null` / `~`, numbers (`0x`, `0o`, `.inf`, `.nan`) are typed, the rest and anything quoted is text (`yes` / `no` stay text); explicit `!!str` / `!!int` … tags; anchors and aliases resolved (copied), merge keys (`<<`) applied; several documents (`---`) become an array; comments dropped; alias "bombs" (more than 5 million values) and nesting deeper than 256 refused | block style; text that would read back as another type (`"true"`, `"007"`, `""`, YAML 1.1's `yes` / `on`, dates) is quoted; multi-line text as a literal block (`\|`) |
-| TOML (`.toml`) | Tomlyn (BSD-2-Clause, TOML 1.1) | dates and times keep their TOML spelling (text in JSON / YAML) | written by Filee: plain keys, then `[tables]` and `[[arrays of tables]]`; **null values are left out** (TOML has none); a root that is not an object goes under `items` (`[[items]]`); integers beyond 64 bits as text |
+| TOML (`.toml`) | Tomlyn (BSD-2-Clause, TOML 1.1) | dates and times keep their TOML spelling (text in JSON / YAML) | written by TsuFiles: plain keys, then `[tables]` and `[[arrays of tables]]`; **null values are left out** (TOML has none); a root that is not an object goes under `items` (`[[items]]`); integers beyond 64 bits as text |
 | XML (`.xml`) | System.Xml | root element = an object with one key; attributes as `@name`, text next to attributes or children as `#text`, repeated elements as an array (**one child is no array**), `<a/>` → null, `<a></a>` → empty text, CDATA as text; all values are text (XML has no types); comments, processing instructions and the DTD dropped, external entities never loaded; the encoding from the declaration (EUC-KR …) | a root that is not one object with one key goes into `<root>`, items of nested arrays into `<item>`; names that are not XML names are escaped (`first name` → `first_x0020_name`, unescaped when read back); `x:name` keeps its namespace when `@xmlns:x` declares it; control characters XML 1.0 can't hold are removed |
-| CSV (`.csv`) | Filee (`Office/Sheets/CsvFormat.cs`) | first row = keys, one object per row; plain numbers (not `007`) and `true` / `false` typed, the rest text; delimiter and encoding detected as for spreadsheets | only tables: an array of objects (columns = every key, first seen first; an object inside a row becomes `parent.child` columns, one level only), an object of arrays (columns), an array of arrays (rows) or one flat object (one row); objects that only wrap the array (`{"users": […]}`, `<rows><row/>…</rows>`) are looked through. Anything else stops with a message saying what is not a table |
+| CSV (`.csv`) | TsuFiles (`Office/Sheets/CsvFormat.cs`) | first row = keys, one object per row; plain numbers (not `007`) and `true` / `false` typed, the rest text; delimiter and encoding detected as for spreadsheets | only tables: an array of objects (columns = every key, first seen first; an object inside a row becomes `parent.child` columns, one level only), an object of arrays (columns), an array of arrays (rows) or one flat object (one row); objects that only wrap the array (`{"users": […]}`, `<rows><row/>…</rows>`) are looked through. Anything else stops with a message saying what is not a table |
 
 **`.csv` and `.xml` ownership.** CSV stays a spreadsheet format: the spreadsheets donut, XLSX / ODS routes and
 "Merge into PDF" are unchanged. The data engine adds `csv ↔ json / jsonl / yaml / toml / xml` edges, and vCard and
 iCalendar each convert to and from CSV. Routes combine: XLSX → CSV → JSON, YAML → CSV → XLSX, vCard → CSV → JSON,
-and ICS → CSV → JSON. The spreadsheets donut gets "JSON". `.xml` had no owner before; XML-based formats Filee
+and ICS → CSV → JSON. The spreadsheets donut gets "JSON". `.xml` had no owner before; XML-based formats TsuFiles
 converts have their own extensions (`.svg`, `.fb2`, `.dbk`, `.opml` …), so a plain `.xml` file is treated as data
 and opens the data donut.
 
@@ -1077,11 +1077,11 @@ VALARM, X-properties, VJOURNAL, VFREEBUSY, binary attachments and other unsuppor
 ## CAD drawings (DWG, DXF)
 
 Built in, no AutoCAD or ODA software (`TsuFiles.Engines/Cad`). [ACadSharp](https://github.com/DomCR/ACadSharp) reads
-and writes the files; Filee's own renderer draws them with SkiaSharp (one drawing routine for PDF, SVG and images).
+and writes the files; TsuFiles's own renderer draws them with SkiaSharp (one drawing routine for PDF, SVG and images).
 
 - **Reading**: DWG from R14 (AC1014) to the AutoCAD 2018 format (AC1032, still current in AutoCAD 2026); DXF R12 to
   2018, ASCII and binary. DWG R13 and older fail with "version not supported". Korean AutoCAD writes pre-2007 DXF with
-  the code page name `ANSI_949`, which ACadSharp 3.8 does not map; Filee rewrites that header in memory so the text
+  the code page name `ANSI_949`, which ACadSharp 3.8 does not map; TsuFiles rewrites that header in memory so the text
   is decoded as CP949 (`CadFile.OpenDxf`, covered by a test that fails once ACadSharp handles it).
 - **Writing** (DWG ↔ DXF, and DWG → DWG / DXF → DXF in another version): **AutoCAD 2018 (AC1032)** by default — the
   current DWG format (AutoCAD 2018 and later, DWG TrueView, BricsCAD, ODA tools); 2018 DXF stores text as UTF-8.
@@ -1157,7 +1157,7 @@ managed code: every reader
 fills one in-memory model (`Model3D`: parts with positions, normals, UVs, vertex colours and triangles; materials
 with a base colour and a base colour texture) and every writer takes it, so each pair is one step. glTF and GLB are
 read and written with [SharpGLTF](https://github.com/vpenades/SharpGLTF) (MIT); STL, OBJ/MTL, PLY, 3MF and the FBX
-reader are Filee's own code. No native library (Assimp, the FBX SDK) and no download.
+reader are TsuFiles's own code. No native library (Assimp, the FBX SDK) and no download.
 
 - **Units**: STL, OBJ and PLY have none; they are read and written as **millimetres**, as slicers and CAD programs
   treat them. 3MF has a `unit` attribute (micron to metre) and is written in millimetres. glTF is metres. So a 20 mm
@@ -1192,7 +1192,7 @@ What each format keeps:
 Lost on the way (no place in the target): **STL** keeps only the triangles (no colours, UVs, normals or materials);
 **PLY** has no materials (their colours become vertex colours, textures are dropped); **OBJ** has no standard vertex
 colours (the common `v x y z r g b` extension is written and read; alpha is lost); **3MF** output has no normals, UVs or
-textures; and every format drops what Filee's model has no place for: animations, skins, morph targets, cameras,
+textures; and every format drops what TsuFiles's model has no place for: animations, skins, morph targets, cameras,
 lights, metallic / roughness / normal / emissive maps, and lines and points. Draco- and meshopt-compressed glTF fail with
 a clear message, as do damaged files ("cut short", an index that does not exist, no triangles).
 
@@ -1332,14 +1332,14 @@ counted as they are read (`LimitedStream`), since a ZIP header can understate it
 Shapefiles are checked against the record before anything is allocated, the attribute table is read only as far as there
 are shapes, rings are sorted into polygons smallest outer ring first with the cancellation token honoured, nesting of
 JSON, WKT and WKT definitions is limited, and every failure is a reason the user can act on: a damaged file, a system
-Filee can't convert, a CSV with no coordinates (`error.geo_*` in the language files). Nothing is written when a
+TsuFiles can't convert, a CSV with no coordinates (`error.geo_*` in the language files). Nothing is written when a
 conversion fails.
 
 Tests: `GeoFormatTests`, `GeoShapefileTests`, `GeoCrsTests`, `GeoHostileInputTests`, `GeoZipTests` and
 `GeoRobustnessTests` in `tests/TsuFiles.Engines.Tests`. The Shapefiles in `tests/TsuFiles.Engines.Tests/Geo` were written by
-GDAL (synthetic data; `Geo/make-test-geo.py` recreates them), so Filee's reader and writer are not only checked against
+GDAL (synthetic data; `Geo/make-test-geo.py` recreates them), so TsuFiles's reader and writer are not only checked against
 each other. Everything else is written in the tests: `GeoBuilders.cs` has GeoJSON, KML and GPX text and a Shapefile and
-dBASE builder that follows the ESRI specification for the cases GDAL won't write, and the Shapefiles Filee writes are
+dBASE builder that follows the ESRI specification for the cases GDAL won't write, and the Shapefiles TsuFiles writes are
 parsed in the tests from the specification, not read back with the engine. `GeoRobustnessTests` reads every file
 truncated at several lengths and with random bytes changed; `GeoHostileInputTests` keeps each input that once crashed the
 process, took minutes or used gigabytes.
@@ -1350,7 +1350,7 @@ Not here yet: raster data (GeoTIFF, bands), GeoPackage, zipped Shapefiles as inp
 
 `Hwp/Hwpx/HwpxReader*.cs` is the inverse of the writer: it reads an HWPX package into the same document model, so
 HWPX (and HWP, which rhwp turns into HWPX first) can be written as DOCX, HTML or EPUB without Hancom Office or
-LibreOffice. It reads files saved by 한글, by rhwp's `export-hwpx` and by Filee itself:
+LibreOffice. It reads files saved by 한글, by rhwp's `export-hwpx` and by TsuFiles itself:
 
 - elements are matched by local name (any prefix or namespace version); `hp:switch` takes the `hp:case` for
   HwpUnitChar / 2016 paragraphs, else `hp:default`, whose lengths 한글 doubles (as are margins and tab stops
@@ -1410,12 +1410,12 @@ writer, so every e-book also reaches HWPX, PDF and images. The document model is
 - **Comics**: CBZ, CBR, CB7, CBT and CBC (a ZIP of CBZ files) are opened with SharpCompress; pages are sorted
   naturally ("page2" before "page10"). → PDF has one page per picture sized like the picture (JPEGs are embedded
   as they are), → EPUB is fixed-layout, → CBZ repacks. PDF → CBZ renders the pages with PDFium at the preset DPI.
-- Books with DRM (Adobe, Apple, Kindle) are refused with a clear message; Filee does not remove DRM. KFX and
+- Books with DRM (Adobe, Apple, Kindle) are refused with a clear message; TsuFiles does not remove DRM. KFX and
   Topaz books are recognised and refused too.
 
 ## Calibre
 
-calibre's `ebook-convert` (GPL-3.0) is an optional download for the formats Filee does not read or write itself:
+calibre's `ebook-convert` (GPL-3.0) is an optional download for the formats TsuFiles does not read or write itself:
 LIT, LRF, CHM, PDB, PML, RB, SNB, TCR and OEB → EPUB, and EPUB → MOBI, AZW3, LIT, LRF, PDB, PML, RB, SNB and TCR.
 EPUB is the hub, so for example FB2 → AZW3 is FB2 → EPUB (built in) → AZW3 (calibre). Its edges cost 20, so
 built-in routes always win where they exist.
@@ -1428,12 +1428,12 @@ stays the default so results don't change under users. The PDF edges cost 23: in
 built-in route costs 31 (HWPX writer 10 + 8, rhwp 10 + 3) and calibre 23 + 9, so the built-in route wins by one; once
 the user moves calibre above the HWPX writer in Settings → *Engines*, calibre costs at most 31 and the built-in route
 at least 32. LIT, LRF and the other formats only calibre reads go straight to PDF instead of calibre → EPUB → HWPX
-writer → rhwp. When rhwp runs out of time and calibre is installed, the error says to rank calibre higher; Filee
+writer → rhwp. When rhwp runs out of time and calibre is installed, the error says to rank calibre higher; TsuFiles
 never switches engines by itself.
 
 - The pinned `calibre-64bit-<version>.msi` from download.calibre-ebook.com is unpacked like LibreOffice; the folder
   with `ebook-convert.exe` becomes `engines/calibre`.
-- On macOS the pinned calibre needs macOS 14 (`minimumMacOS` in engines.json). Filee runs on macOS 13, where the
+- On macOS the pinned calibre needs macOS 14 (`minimumMacOS` in engines.json). TsuFiles runs on macOS 13, where the
   download isn't offered; Settings → *Engines* points to calibre 7.26, the last version for macOS 13, as the user's
   own copy.
 - Each run gets its own configuration, cache and temp folders in the job's work directory
@@ -1445,7 +1445,7 @@ never switches engines by itself.
 rhwp converts between the two 한글 formats without Hancom Office (`export-hwpx` and `convert`). Anything → HWP goes
 through the HWPX writer and then rhwp.
 
-For HWP / HWPX → PDF, rhwp renders a copy of the HWPX (an HWP is exported with `export-hwpx` first) when Filee has to
+For HWP / HWPX → PDF, rhwp renders a copy of the HWPX (an HWP is exported with `export-hwpx` first) when TsuFiles has to
 change something for it (`Hwp/RhwpInput.cs`): fonts that are installed, the laid-out size of boxes sized relative to
 the column, spaced equation commands, and, in an HWPX exported from an HWP (rhwp's `META-INF/rhwp-hwp5-origin`
 marker), the stored line of a cell paragraph that holds only a floating table moved up to the paragraph's top, so the
@@ -1467,7 +1467,7 @@ minutes, Ghostscript 5, Pandoc 2 and calibre 10 (it made the 640-page novel's PD
 
 ## Archives
 
-The archive engine (`Archives/ArchiveConverter.cs`, id `archive`) uses Filee's own copy of the 7-Zip console program
+The archive engine (`Archives/ArchiveConverter.cs`, id `archive`) uses TsuFiles's own copy of the 7-Zip console program
 (`7z.exe` + `7z.dll`, taken from the official x64 MSI with `msiexec /a` by `build/fetch-engines.ps1 -Only 7zip` and
 bundled with the installer), never a 7-Zip installed on the PC. It runs as a separate process (LGPL).
 
@@ -1480,13 +1480,13 @@ bundled with the installer), never a 7-Zip installed on the PC. It runs as a sep
 | TAR.GZ | 7-Zip, in two stages | in-process (PAX TAR + GZipStream) |
 | TAR.BZ2, TAR.XZ | 7-Zip, in two stages | TAR in-process, compressed by 7-Zip |
 | TAR.7Z, TAR.Z | 7-Zip, in two stages | — |
-| LZ, TAR.LZ (lzip) | Filee: each member rewritten as a .lzma file for 7-Zip's LZMA decoder, stopped at the size its trailer states, CRC checked | — |
+| LZ, TAR.LZ (lzip) | TsuFiles: each member rewritten as a .lzma file for 7-Zip's LZMA decoder, stopped at the size its trailer states, CRC checked | - |
 | GZ, BZ2, XZ | 7-Zip | 7-Zip; one file only (from another single-file format, or "Compress into one archive" with one file) |
 | LZMA, Z | 7-Zip | — |
 | RAR 4/5, CAB, CPIO, DEB, RPM, DMG, ISO, IMG, LHA/LZH, ARJ | 7-Zip (an RPM's payload is unpacked until the files appear) | — |
 | Split archives (.001, .7z.001, .zip.001, .tar.001) | 7-Zip (combining .002, .003 … automatically) | — |
-| ALZ (ALZip) | Filee: store, deflate and ALZip's bzip2 variant | — |
-| EGG (ALZip) | Filee: store, deflate, bzip2, LZMA (decoded by 7-Zip); several blocks per file | — |
+| ALZ (ALZip) | TsuFiles: store, deflate and ALZip's bzip2 variant | - |
+| EGG (ALZip) | TsuFiles: store, deflate, bzip2, LZMA (decoded by 7-Zip); several blocks per file | - |
 
 - **Extract** (target `folder`): the archive is unpacked into a hidden folder next to the result and moved into place
   when complete. When the archive holds exactly one top folder, its content becomes the result folder (`photos.zip`
@@ -1507,18 +1507,18 @@ bundled with the installer), never a 7-Zip installed on the PC. It runs as a sep
   (or hard links) with `..`, a drive or a leading slash stop the job ("points outside the target folder", nothing is
   written); symbolic links are never unpacked and any link left afterwards is deleted; archives with more than
   1,000,000 entries or more data than the drive has free are refused (a listing without sizes still needs the 64 MB
-  reserve); Filee's own readers also stop when data unpacks to more than the entry declares, and check CRCs.
+  reserve); TsuFiles's own readers also stop when data unpacks to more than the entry declares, and check CRCs.
 - **Single compressed streams** (GZ, BZ2, XZ, LZMA, Z, and the first stage of TAR.GZ, TAR.BZ2, TAR.XZ, TAR.Z) state
   no size (bzip2) or one their author chose (gzip, modulo 4 GiB), so the listing can't be trusted: 7-Zip writes them
-  to its standard output (`x -so`) and Filee writes the file, stopping 7-Zip and deleting what was written once it
+  to its standard output (`x -so`) and TsuFiles writes the file, stopping 7-Zip and deleting what was written once it
   passes the room on the drive less a tenth of the free space ("unpacks to more than …, but only … is free").
 - **Mark of the Web** (Windows): unpacked files get the archive's `Zone.Identifier` stream, so a ZIP a browser saved
-  still gives SmartScreen prompts and Office's macro block once unpacked. 7-Zip copies it (`-snz`); for files Filee
+  still gives SmartScreen prompts and Office's macro block once unpacked. 7-Zip copies it (`-snz`); for files TsuFiles
   writes itself (ALZ, EGG, lzip, single streams) it is copied after unpacking (`Core/Platform/MarkOfTheWeb`). A drive
   without NTFS streams (FAT32, exFAT) gets none, and that never fails the job.
 - **Not supported**: encrypted archives, split (multi-volume) ALZ and EGG, solid EGG, EGG entries compressed with
   ESTsoft's own AZO method, LZO / TAR.LZO (lzop; 7-Zip has no reader either), and writing RAR, ALZ or EGG.
-- The ALZ and EGG readers are Filee's own code, written from the format descriptions of unalz (zlib licence), the
+- The ALZ and EGG readers are TsuFiles's own code, written from the format descriptions of unalz (zlib licence), the
   `unalz` Rust crate, EggDotNet and unegg (MIT). ALZip's bzip2 has no `BZh` header, starts every block with `DLZ\x01`
   instead of the block magic, CRC and randomised bit, and ends with `DLZ\x02` (`Archives/Bzip2Decoder.cs`).
 - Tests (`ArchiveTests.cs`) build ALZ, EGG and lzip files in code (`ArchiveBuilders.cs`, with bzip2 and LZMA streams
@@ -1528,7 +1528,7 @@ bundled with the installer), never a 7-Zip installed on the PC. It runs as a sep
 
 A dropped folder opens a small **Folders** donut with **ISO image**. Each selected folder creates a separate ISO,
 with its contents at the disc root. The ISO preset is available in Settings > Toolbar for users to add to the
-Archives donut; it is not on that donut by default. Supported archives can also be converted to ISO: Filee
+Archives donut; it is not on that donut by default. Supported archives can also be converted to ISO: TsuFiles
 safely extracts them into its temporary work folder, then writes their contents into the image.
 Password-protected archives fail with a clear message.
 
@@ -1551,7 +1551,7 @@ all expected bytes have been written; failures and cancellation preserve any pre
 
 - Each parallel worker gets its own profile under `%APPDATA%\TsuFiles\libreoffice-profiles` (LibreOffice silently
   fails when two conversions share a profile).
-- Before every start the profile's `user/registrymodifications.xcu` gets Filee's settings (`LibreOfficeProfile`): no
+- Before every start the profile's `user/registrymodifications.xcu` gets TsuFiles's settings (`LibreOfficeProfile`): no
   macros (`MacroSecurityLevel` 3, `DisableMacrosExecution`, no trusted locations), Word and Excel VBA not executable,
   links never updated (Writer and Calc), and `BlockUntrustedRefererLinks`, which keeps LibreOffice from loading
   anything a document links to: linked pictures, files and addresses, in every application. A document with macros
@@ -1565,9 +1565,9 @@ all expected bytes have been written; failures and cancellation preserve any pre
   files (DOC, XLS, PPT) are left to the profile. Later changes to the copy (`DocxNoteMarks`) start from this copy.
   Every copy of a package is written by `PackageRepacker`, which refuses one that unpacks to over 2 GB, or to over
   twice its own size when that is more (`error.document_too_large`).
-- HWP/HWPX import comes from the H2Orestart extension, which is written in Java; Filee points LibreOffice at the
+- HWP/HWPX import comes from the H2Orestart extension, which is written in Java; TsuFiles points LibreOffice at the
   downloaded JRE (`-env:UNO_JAVA_JFW_JREHOME`).
-- When LibreOffice can't load an Office Open XML or OpenDocument file ("source file could not be loaded"), Filee
+- When LibreOffice can't load an Office Open XML or OpenDocument file ("source file could not be loaded"), TsuFiles
   converts once more from a copy in the job folder with the same parts in a plainly written ZIP (`PackageRepacker`):
   LibreOffice 26.2 refuses some valid containers, e.g. uncompressed entries with data descriptors (Tencent Docs, #141).
 - It is the only reader of rarer formats, converted to PDF and to the editable formats of their kind: DOT, Works /
@@ -1578,13 +1578,13 @@ all expected bytes have been written; failures and cancellation preserve any pre
   Publisher, CorelDRAW, Visio, CGM, ODG and flat ODG (`.fodg`) (→ ODG, SVG, PNG, EMF, WMF). The `--convert-to`
   filter follows the application that opens the file (checked against LibreOffice's filter registry): Publisher,
   CorelDRAW and Visio open in Draw, CGM in Impress, and "SDA" files in Draw (.sda) or Impress (.sdd). ClarisWorks
-  files can also be spreadsheets or drawings; Filee treats them as text documents, the common case. SVG, PNG, EMF
+  files can also be spreadsheets or drawings; TsuFiles treats them as text documents, the common case. SVG, PNG, EMF
   and WMF export the first page.
 - Written only by LibreOffice: FODT (`OpenDocument Text Flat XML`), the OpenDocument templates OTT / OTS / OTP
   (`writer8_template`, `calc8_template`, `impress8_template`) and XLT (`MS Excel 97 Vorlage/Template`). XLT is read
   by the built-in spreadsheet engine like XLS.
 - SVG opens in Draw only for EMF, WMF and ODG; the vector engine keeps SVG → PDF and images. PDF opens in Draw
-  (`draw_pdf_import`) only for SVG and ODG: Draw's SVG export draws every page of a PDF on top of each other, so Filee
+  (`draw_pdf_import`) only for SVG and ODG: Draw's SVG export draws every page of a PDF on top of each other, so TsuFiles
   first copies the first page of the preset's page range into a PDF of its own (PDFsharp). EPS and PS reach SVG
   through Ghostscript's PDF; Draw would only show their preview picture.
 - Checked with LibreOffice 26.2.6 (`LibreOfficeFormatTests`): FODT, FODS, FODP, FODG, T602 and SVG inputs, the
@@ -1594,7 +1594,7 @@ all expected bytes have been written; failures and cancellation preserve any pre
 
 ## Pandoc
 
-`Office/PandocConverter.cs` runs Pandoc for the markup languages Filee doesn't read itself: reStructuredText,
+`Office/PandocConverter.cs` runs Pandoc for the markup languages TsuFiles doesn't read itself: reStructuredText,
 LaTeX, Org (`.org`), AsciiDoc (`.adoc`, `.asciidoc`), Typst (`.typ`), MediaWiki (`.mediawiki`, `.wiki`),
 DocBook (`.dbk`, `.docbook`; written as DocBook 5), Jupyter notebooks (`.ipynb`), Textile (`.textile`), man pages
 (`.man`) and OPML (`.opml`). Pandoc 3.12 reads and writes all of them.
@@ -1616,7 +1616,7 @@ DocBook (`.dbk`, `.docbook`; written as DocBook 5), Jupyter notebooks (`.ipynb`)
   be moved together. EMF and WMF pictures, common in Word documents, become PNG (ImageMagick draws metafiles on
   Windows only; elsewhere they stay).
 - Pandoc runs twice, both times in its `--sandbox` (it reads nothing but the file it is given, so `\input` and
-  `.. include::` stay unread): the source → JSON AST, whose pictures Filee checks (only from the source's folder,
+  `.. include::` stay unread): the source → JSON AST, whose pictures TsuFiles checks (only from the source's folder,
   see *HWPX writer*), then the AST → the result, with those pictures handed over by a Lua filter. Pictures on the
   web aren't fetched.
 - Markdown is GitHub-flavoured and kept free of HTML, which many Markdown editors show as code (#391). A Lua filter
@@ -1656,7 +1656,7 @@ Not supported: DjVuLibre (GPL) has no pinned, redistributable Windows build in a
 The official Windows release is an NSIS installer (`DjVuLibre-3.5.29_DjView-4.12_Setup.exe` on SourceForge), which
 would have to be run (a system install) or unpacked with 7-Zip; MSYS2's packages are `.pkg.tar.zst` archives with
 five dependency packages. A DjVu engine needs a zip of `ddjvu.exe` / `djvutxt.exe` and their DLLs published for
-Filee (with the GPL source offer), then an `engines.json` component and an optional package.
+TsuFiles (with the GPL source offer), then an `engines.json` component and an optional package.
 
 ## FFmpeg
 
@@ -1675,7 +1675,7 @@ be read and fail with FFmpeg's error.
 A self-contained `.m4s` (read only, #354), a fragmented MP4 that starts with `ftyp` + `moov` and then holds
 `styp` / `sidx` / `moof` / `mdat` fragments (GPAC and some downloaders save them), is read by FFmpeg's mp4 demuxer
 and goes to every video and audio target. A DASH media segment, whose top-level boxes reach a `moof` before any
-`moov`, plays only with a separate init segment; Filee refuses it before FFmpeg runs, with its own message
+`moov`, plays only with a separate init segment; TsuFiles refuses it before FFmpeg runs, with its own message
 (`error.m4s_needs_init`), instead of FFmpeg's demuxer error.
 Dahua DVR / NVR recordings (`.dav`, read only, #594) are read by FFmpeg's `dhav` demuxer, which finds them by the
 `DHAV` chunks they are made of, and go to every video and audio target. Their H.264 / H.265 video is copied where
@@ -1694,7 +1694,7 @@ format, and FFmpeg reads what the file holds, so a `.dat` with no video in it fa
   It is smaller than the "essentials" build (100 vs 115 MB download, 272 vs 329 MB on disk, because ffmpeg.exe and
   ffprobe.exe share their libraries) and has a superset of its encoders. It links only Windows system DLLs; GPU
   and Vulkan libraries are loaded only if present. Being over 60 MB, it is offered but not ticked on first run.
-- The Cut a clip window's preview plays its sound through `ffplay` when it sits next to Filee's FFmpeg (the gyan.dev
+- The Cut a clip window's preview plays its sound through `ffplay` when it sits next to TsuFiles's FFmpeg (the gyan.dev
   build has it); without it, the preview plays silently. Nothing else uses ffplay.
 - Crop video (#830) cuts the frame with the `crop` filter, to a ratio or to the box `cropdetect` finds inside the black
   bars (`Media/MediaEncoding.Crop.cs`); the video is encoded again in its own format and the sound copied.
@@ -1766,7 +1766,7 @@ format, and FFmpeg reads what the file holds, so a `.dat` with no video in it fa
   encode fails and SVT-AV1 encodes as before. FFmpeg lists encoders the computer can't run (NVENC without an NVIDIA
   card), so only the ones `ffmpeg -encoders` lists are tried, each first with a test encode with the real options
   (0.1 s of `testsrc` at 256 × 144 to the null muxer, 15 s limit). The first that succeeds is used; results are kept
-  per FFmpeg executable, encoder, rate control and bit depth until Filee restarts, and written to the log
+  per FFmpeg executable, encoder, rate control and bit depth until TsuFiles restarts, and written to the log
   ("Hardware encoder av1_qsv (Quality, 8-bit) works" / "is not usable: …"). Quality: *High/Balanced/Small* become
   quantizer 19/24/29 for H.264 and 23/27/31 for HEVC (one above x264's and x265's CRF: hardware encoders spend bits
   less wisely) as NVENC `-rc vbr -cq N -b:v 0 -preset p5`, Quick Sync `-global_quality N -preset medium` (ICQ), AMF
@@ -1842,11 +1842,11 @@ format, and FFmpeg reads what the file holds, so a `.dat` with no video in it fa
     both carry the same content identifier (tag 17 of Apple's maker note, `com.apple.quicktime.content.identifier`);
     a LIVP (the ZIP iCloud downloads give) takes its one MOV, whose identifier is only checked for the log.
   - The video is copied into the work directory (at most 512 MB; JPEG metadata is read only from the first 8 MB, XMP
-    without DTDs; LIVP entries are copied to names of Filee's own, never extracted by their names), converted there
+    without DTDs; LIVP entries are copied to names of TsuFiles's own, never extracted by their names), converted there
     like any video (copied as it is into MP4/MOV when its codecs fit) and moved into place when finished: a failed or
     cancelled run never touches a file "overwrite" would replace, and the output never replaces the iPhone MOV it was
     read from (IMG_0001.HEIC → `IMG_0001 (2).mov`). A photo without a video fails with "This photo has no video
-    Filee can read"; why goes to the log.
+    TsuFiles can read"; why goes to the log.
   - Not read: vendor formats without this metadata (Huawei's "LIVE_" trailer, for one).
 - **Making Live / Motion Photos** (experimental until confirmed on phones; *A video becomes* on a JPG or HEIC preset,
   `MediaOptions.LivePhoto`; the presets "Live Photo (iPhone)" and "Motion Photo (Android)", JPG, on the back of the
@@ -1890,7 +1890,7 @@ format, and FFmpeg reads what the file holds, so a `.dat` with no video in it fa
     hidden name, then renamed over it: a failed or cancelled run never touches an existing file. The pair keeps one
     name: when the MOV's name is taken (another file, or the video being converted, which is never written over) both
     take the next number (`clip (2).jpg` + `clip (2).mov`); a MOV is only written over together with the photo
-    "overwrite" replaces; "skip" skips the pair when the photo exists. Filee's own extraction (above) reads both kinds
+    "overwrite" replaces; "skip" skips the pair when the photo exists. TsuFiles's own extraction (above) reads both kinds
     back.
 - Pictures → MP4/WEBM/MOV go through a full-size PNG from the image engines (HEIC → PNG → MOV): a 5-second still at
   30 fps, one quality step above the preset (identical frames cost almost nothing; x264 `-tune stillimage`). The
@@ -1903,7 +1903,7 @@ format, and FFmpeg reads what the file holds, so a `.dat` with no video in it fa
   through it.
 - **Images → HEIC** (`Heic/HeicWriter.cs`): ImageMagick has no HEVC encoder and FFmpeg no HEIF muxer, so the work is
   split. ImageMagick reads any image it knows and applies the preset (orientation, resize, metadata; transparency is
-  flattened onto the background colour, HEIC alpha needs an auxiliary picture Filee does not write) and writes an
+  flattened onto the background colour, HEIC alpha needs an auxiliary picture TsuFiles does not write) and writes an
   8-bit PNG. FFmpeg pads it to whole 512 × 512 tiles with its own edge pixels (`fillborders`), converts to BT.601
   full-range 4:2:0 like JPEG and cameras, cuts the tiles (`untile`) and has x265 encode each as an IDR picture of
   the Main profile (`-force_key_frames expr:1 -forced-idr 1`, `open-gop=0`; with `keyint=1` x265 would signal the
@@ -1924,7 +1924,7 @@ scans and pictures with Tesseract (`Ocr/TesseractConverter.cs`), in the language
 Text that mixes languages (issue #1123) has several codes in that one setting, the main language first, joined with
 `+` as Tesseract's `-l` takes them (`chi_sim+eng`). `OcrLanguages.Parse` is the only reader: a code not in the list is
 left out, repeats count once, and with none left English is read. Settings from before this hold one code and read as
-they always did; an older Filee reads a joined value as a code it doesn't know, so English. Each language is its own
+they always did; an older TsuFiles reads a joined value as a code it doesn't know, so English. Each language is its own
 download and is fetched before the file is read; a download that fails refuses the file and names that language. Every
 language makes Tesseract slower (it tries the others on words the first one reads badly), so the editor's "Other
 languages in the text" says to add only what the text has.
@@ -1947,7 +1947,7 @@ languages in the text" says to add only what the text has.
 - PDFs merged into one ("Merge PDF" with OCR) are recognized before they are merged.
 - Pictures without a resolution are read at 300 dpi; Tesseract would otherwise assume 70 dpi and make a huge page.
 - The language data is copied into the job's folder and passed with `--tessdata-dir`, so a system Tesseract reads
-  only Filee's pinned files; `-c tessedit_create_pdf=1` replaces the `pdf` config file that lives in Tesseract's own
+  only TsuFiles's pinned files; `-c tessedit_create_pdf=1` replaces the `pdf` config file that lives in Tesseract's own
   tessdata folder.
 
 ### Apple Vision on macOS
@@ -1983,7 +1983,7 @@ Tesseract and is registered before it, so the route planner takes it; on Windows
 
 ## Whisper
 
-Filee transcribes speech in video and audio files into SRT subtitle files using OpenAI Whisper (`whisper.cpp`).
+TsuFiles transcribes speech in video and audio files into SRT subtitle files using OpenAI Whisper (`whisper.cpp`).
 Transcription runs entirely locally and offline on your computer; no audio or data is sent to external servers.
 
 - **Platform**: Windows only (x64). On macOS and Linux, the Whisper package is not offered and the engine reports
@@ -1998,9 +1998,9 @@ Transcription runs entirely locally and offline on your computer; no audio or da
 
 ## Document & Book Translator (Offline AI)
 
-Filee translates documents, books, and text files locally using a local Ollama instance over loopback (`http://127.0.0.1:11434`). Translation runs entirely on the user's computer: no text or document data is ever uploaded or sent to third-party web services.
+TsuFiles translates documents, books, and text files locally using a local Ollama instance over loopback (`http://127.0.0.1:11434`). Translation runs entirely on the user's computer: no text or document data is ever uploaded or sent to third-party web services.
 
-- **Offline privacy**: Adheres strictly to Filee's offline promise: "Filee converts files on your own computer and never uploads them." Translation exclusively uses local Ollama over loopback (`127.0.0.1:11434`). Cloud-forwarded models (`*-cloud` or models reporting remote endpoints) are refused with a security block to ensure privacy. No external web services or network calls outside loopback are ever made.
+- **Offline privacy**: Adheres strictly to TsuFiles's offline promise: "TsuFiles converts files on your own computer and never uploads them." Translation exclusively uses local Ollama over loopback (`127.0.0.1:11434`). Cloud-forwarded models (`*-cloud` or models reporting remote endpoints) are refused with a security block to ensure privacy. No external web services or network calls outside loopback are ever made.
 - **Where it lives**:
   - Available as the **Translate** preset in Settings → *Presets*, where the target language (e.g. English, Spanish, Hindi, French, German, Chinese, Japanese, etc.) is configured as the single source of truth.
   - Sits cleanly on the back face (`BackPresetIds`) of document and text profiles for fresh installs, keeping front faces clean and untouched (#806 compliance).
@@ -2008,13 +2008,13 @@ Filee translates documents, books, and text files locally using a local Ollama i
 - **Supported formats and layout preservation**:
   - **Documents & E-books**: DOCX, HWPX, EPUB, KEPUB, FB2, HTMLZ, TXTZ, MD, TXT, and HTML are translated in place, preserving document structure, headings, bold/italic runs, tables, lists, images, and notes.
   - **Kindle e-books**: MOBI, AZW, AZW3, and PRC formats are translated via EPUB, and can then be routed to any supported target format.
-  - **PDF target**: When a document is translated with PDF as the target format, the route planner translates the document model first and then routes the translated document through Filee's standard document-to-PDF export pipeline.
+  - **PDF target**: When a document is translated with PDF as the target format, the route planner translates the document model first and then routes the translated document through TsuFiles's standard document-to-PDF export pipeline.
 
 ## Image Quality Models (Offline AI Upscaler)
 
-Filee upscales and restores images locally using an offline AI super-resolution engine based on Vulkan/NCNN (`upscayl-bin` / `upscayl-ncnn`) and curated open-source neural network models (`upscayl/custom-models`). All processing runs 100% offline on your computer; no image data is ever uploaded or sent to external servers.
+TsuFiles upscales and restores images locally using an offline AI super-resolution engine based on Vulkan/NCNN (`upscayl-bin` / `upscayl-ncnn`) and curated open-source neural network models (`upscayl/custom-models`). All processing runs 100% offline on your computer; no image data is ever uploaded or sent to external servers.
 
-- **Offline privacy & local execution**: Like all Filee features, image upscaling processes every pixel locally on your machine via direct Vulkan GPU acceleration. No network connection is used during upscaling. Requires a Vulkan-compatible graphics device.
+- **Offline privacy & local execution**: Like all TsuFiles features, image upscaling processes every pixel locally on your machine via direct Vulkan GPU acceleration. No network connection is used during upscaling. Requires a Vulkan-compatible graphics device.
 - **Models catalog**: Curated selection of high-quality image models for photos, digital art, illustration, and restoration:
   - Fast & lightweight models (integrated and entry-level GPUs): `4xLSDIRCompactC3`, `RealESRGAN_General_x4_v3`, `RealESRGAN_General_WDN_x4_v3`.
   - Detailed & high-fidelity models (recommended for dedicated GPUs): `4x_NMKD-Siax_200k`, `4x_NMKD-Superscale-SP_178000_G`, `4xLSDIR`, `4xLSDIRplusC`, `4xNomos8kSC`, `4xHFA2k`.

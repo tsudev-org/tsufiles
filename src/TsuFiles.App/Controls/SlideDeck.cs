@@ -46,7 +46,7 @@ public sealed record SlideDeck(Version Version, IReadOnlyList<Slide> Slides)
 
     /// <summary>
     /// Every deck in the resources of <paramref name="assembly"/> ("TsuFiles", "TsuFiles.Setup"), oldest first. A broken
-    /// manifest is skipped: the slides are a nicety and must never stop Filee from starting.
+    /// manifest is skipped: the slides are a nicety and must never stop TsuFiles from starting.
     /// </summary>
     public static IReadOnlyList<SlideDeck> LoadAll(string assembly)
     {

@@ -45,12 +45,12 @@ gốc build: `gh attestation verify <tệp> -R tsudev-org/tsufiles`.
 
 ## Khác biệt so với bản gốc
 
-| Hạng mục | Bản gốc Filee | TsuFiles |
+| Hạng mục | Dự án gốc | TsuFiles |
 | --- | --- | --- |
 | Ngôn ngữ mặc định | Theo ngôn ngữ hệ điều hành, dự phòng tiếng Anh | **Tiếng Việt** cho giao diện, trình cài đặt và dòng lệnh; đổi được trong Cài đặt (`auto`, `en`, ...) |
 | Dòng lệnh `tsufiles` | Chỉ tiếng Anh | Tiếng Việt mặc định, `TSUFILES_LANG=en` để dùng tiếng Anh; khóa JSON giữ nguyên cho script |
 | Kiểm tra cập nhật | `KnifeLemon/Filee` + khóa ký của tác giả gốc | `tsudev-org/tsufiles` + **khóa ký ECDSA P-256 riêng**; bản phát hành của repo khác bị từ chối |
-| Tên sản phẩm | Filee | **TsuFiles** - logo con cú, kiểu giao diện Cú đêm ([ADR-0003](docs/adr/0003-ten-san-pham-tsufiles.md)); tệp chạy, lệnh `tsufiles`, thư mục dữ liệu, lối tắt và tệp phát hành đổi sang `tsufiles` ở bản 2.4.1 kèm di trú |
+| Tên sản phẩm | TsuFiles | **TsuFiles** - logo con cú, kiểu giao diện Cú đêm ([ADR-0003](docs/adr/0003-ten-san-pham-tsufiles.md)); tệp chạy, lệnh `tsufiles`, thư mục dữ liệu, lối tắt và tệp phát hành đổi sang `tsufiles` ở bản 2.4.1 kèm di trú |
 | Trang tải khi cập nhật lỗi | filee.sh | Trang phát hành của repo này |
 | GitHub Actions | Ghim theo tag | **Ghim theo SHA commit** (chống tag bị sửa) |
 | Cổng kiểm bảo mật | CI + test | Thêm CodeQL (security-extended), gitleaks, soát lỗ hổng NuGet, kiểm tra bản dịch, Dependabot |
@@ -90,12 +90,12 @@ Quy ước làm việc (cho người và agent AI): đọc [AGENTS.md](AGENTS.md
 
 ## Bản vá từ upstream
 
-TsuFiles đã tách hẳn khỏi Filee ([ADR-0002](docs/adr/0002-hard-fork-doi-ten-toan-bo-tsudev.md)): không gộp
+TsuFiles đã tách hẳn khỏi dự án gốc ([ADR-0002](docs/adr/0002-hard-fork-doi-ten-toan-bo-tsudev.md)): không gộp
 `upstream/main` nữa. Bản vá bảo mật của upstream được chép thủ công:
 
 ```bash
 git format-patch -1 <commit> -o /tmp/va                       # từ remote upstream
-python3 -I tools/doi-ten-tsudev.py --tep /tmp/va/*.patch       # đổi tên Filee.* -> TsuFiles.*
+python3 -I tools/doi-ten-tsudev.py --tep /tmp/va/*.patch       # đổi tên TsuFiles.* -> TsuFiles.*
 git apply /tmp/va/*.patch                                      # ghi nguồn (commit upstream) trong thông điệp commit
 ```
 
@@ -112,6 +112,6 @@ TsuFiles miễn phí và sẽ luôn miễn phí. Mọi kênh ủng hộ chính t
 
 ## Giấy phép và ghi công
 
-Phát hành theo giấy phép MIT, giữ nguyên [LICENSE](LICENSE) của các tác giả Filee ("Filee contributors").
+Phát hành theo giấy phép MIT, giữ nguyên [LICENSE](LICENSE) của các tác giả TsuFiles ("TsuFiles contributors").
 Mọi công lao của phần mềm gốc thuộc về [KnifeLemon/Filee](https://github.com/KnifeLemon/Filee) và cộng đồng đóng góp.
 Thành phần bên thứ ba: [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).

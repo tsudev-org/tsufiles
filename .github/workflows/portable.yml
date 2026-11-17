@@ -226,7 +226,7 @@ jobs:
         shell: bash
         run: python3 build/smoke-launch-app.py
 
-      - name: Collect Filee logs
+      - name: Collect TsuFiles logs
         if: always()
         shell: bash
         run: |
@@ -304,7 +304,7 @@ jobs:
         shell: bash
         run: python3 build/smoke-launch-app.py
 
-      - name: Collect Filee logs
+      - name: Collect TsuFiles logs
         if: always()
         shell: bash
         run: |

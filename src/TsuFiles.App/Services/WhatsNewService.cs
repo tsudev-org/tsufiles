@@ -1,12 +1,12 @@
 // "What's new" slides after an update: decides once per start whether this version's slides are due, shows them when
-// the user sees Filee, and remembers the version so they show once.
+// the user sees TsuFiles, and remembers the version so they show once.
 //
 // How an update is told from a fresh install: the first-run flag. A start before FirstRunCompleted is a new install
-// (the first-run setup introduces Filee; the slides would only repeat it), so the current version counts as seen.
-// After that, WhatsNewSeenVersion says which version's slides were seen; null means the settings come from a Filee
+// (the first-run setup introduces TsuFiles; the slides would only repeat it), so the current version counts as seen.
+// After that, WhatsNewSeenVersion says which version's slides were seen; null means the settings come from a TsuFiles
 // older than the slides, i.e. it was updated. A version at or below the one seen (same version, downgrade) shows nothing
 // and never lowers what was seen. Started by the installer after an update (--whats-new), it is an update whatever the
-// settings say: they may have been deleted, or come from a Filee older than the first-run flag.
+// settings say: they may have been deleted, or come from a TsuFiles older than the first-run flag.
 
 using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
@@ -22,13 +22,13 @@ public sealed class WhatsNewService(UserDataStore store, WindowService windows, 
     /// <summary>The assembly whose resources hold the decks.</summary>
     internal const string Assembly = "TsuFiles";
 
-    /// <summary>Every deck Filee ships, oldest first.</summary>
+    /// <summary>Every deck TsuFiles ships, oldest first.</summary>
     public IReadOnlyList<SlideDeck> Decks => _decks ??= SlideDeck.LoadAll(Assembly);
 
     /// <summary>The version running now (three parts).</summary>
     internal Version CurrentVersion { get; set; } = SlideDeck.TryParseVersion(UpdateService.CurrentVersion) ?? new Version(0, 0, 0);
 
-    /// <summary>The deck waiting for the user to open Filee (it started in the background).</summary>
+    /// <summary>The deck waiting for the user to open TsuFiles (it started in the background).</summary>
     public SlideDeck? Pending { get; private set; }
 
     /// <summary>The newest deck up to this version: what About → "What's new" shows. Null when there is none.</summary>
@@ -42,7 +42,7 @@ public sealed class WhatsNewService(UserDataStore store, WindowService windows, 
     /// <summary>The rules described at the top of this file, without side effects.</summary>
     /// <param name="updatedFrom">
     /// The version the installer updated from: what was running before, so it decides what is new over a remembered
-    /// version (going back to an older Filee and updating again shows the slides again).
+    /// version (going back to an older TsuFiles and updating again shows the slides again).
     /// </param>
     internal static Decision Decide(string? seenSetting, bool firstRunCompleted, Version current, IEnumerable<SlideDeck> decks,
         bool updated = false, string? updatedFrom = null)
@@ -59,7 +59,7 @@ public sealed class WhatsNewService(UserDataStore store, WindowService windows, 
     /// <summary>
     /// Called once at start-up, before the first run is marked complete. <paramref name="background"/> (started at
     /// sign-in, or after an update without <c>--whats-new</c>) keeps the slides until the main window opens.
-    /// <paramref name="updated"/>: the installer started Filee after an update (<c>--whats-new</c>), from
+    /// <paramref name="updated"/>: the installer started TsuFiles after an update (<c>--whats-new</c>), from
     /// <paramref name="updatedFrom"/> when it says.
     /// </summary>
     public void CheckAtStartup(bool background, bool updated = false, string? updatedFrom = null)

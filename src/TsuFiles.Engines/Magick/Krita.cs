@@ -1,5 +1,5 @@
 // Krita's own file (.kra, issue #903) is a ZIP of the layers, the document's XML and, at its top, mergedimage.png: the
-// whole picture as Krita shows it, written for other programs (the OpenRaster convention). Filee reads only that picture,
+// whole picture as Krita shows it, written for other programs (the OpenRaster convention). TsuFiles reads only that picture,
 // in memory; the entry's name is never used as a path.
 
 using System.IO.Compression;

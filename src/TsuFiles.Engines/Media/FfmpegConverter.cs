@@ -1,7 +1,7 @@
 // Video and audio conversion with FFmpeg (GPL-3.0 build, an optional download run as a separate program in
 // engines/ffmpeg): video ↔ video (H.264, HEVC, AV1, …), video → animated GIF / APNG, a still frame or every frame
 // (FrameSequenceWriter), audio extraction, subtitle extraction (the first text track as SRT / ASS / WebVTT), audio ↔
-// audio and GIF, APNG or a still picture → video, and images → HEIC (FFmpeg's HEVC encoder, Filee's own container
+// audio and GIF, APNG or a still picture → video, and images → HEIC (FFmpeg's HEVC encoder, TsuFiles's own container
 // writer). Container and codec choices live in MediaEncoding, the process handling in FfmpegRunner, hardware encoders
 // in HardwareVideo (options) and HardwareProbe (which one works here).
 // Live / Motion Photos (Android, iPhone) give their video when a preset asks for it (LivePhotoSource, MotionPhoto), and
@@ -22,7 +22,7 @@ using TsuFiles.Engines.Magick;
 
 namespace TsuFiles.Engines.Media;
 
-/// <summary>Converts video and audio files with Filee's own copy of FFmpeg.</summary>
+/// <summary>Converts video and audio files with TsuFiles's own copy of FFmpeg.</summary>
 /// <param name="logger">Receives which hardware encoders work and why a hardware encode was redone in software.</param>
 public sealed partial class FfmpegConverter(ILogger? logger = null) : IConverter, IImageTransformer, IMediaJoiner
 {
@@ -90,7 +90,7 @@ public sealed partial class FfmpegConverter(ILogger? logger = null) : IConverter
             .. MediaEncoding.PictureToVideoTargets.Select(target => new ConversionEdge("gif", target)),
             .. MediaEncoding.PictureToVideoTargets.Select(target => new ConversionEdge("apng", target, 11)),
             .. MediaEncoding.PictureToVideoTargets.Select(target => new ConversionEdge("png", target, 11)),
-            // HEIC: ImageMagick reads, x265 encodes, Filee writes the container (see Heic/HeicWriter).
+            // HEIC: ImageMagick reads, x265 encodes, TsuFiles writes the container (see Heic/HeicWriter).
             .. ImageEncoder.Sources.Select(source => new ConversionEdge(source, "heic")),
             // The video of a Live / Motion Photo, only when a preset asks for it (see ConversionEdge.MotionPhoto).
             .. from source in MediaOptions.MotionPhotoSources from target in MediaOptions.MotionPhotoTargets
@@ -623,7 +623,7 @@ public sealed partial class FfmpegConverter(ILogger? logger = null) : IConverter
 
     /// <summary>
     /// The encoders of <paramref name="ffmpeg"/> (<c>ffmpeg -encoders</c>), cached per executable: a copy the user
-    /// picked may lack x265 or SVT-AV1. Null (assume Filee's build) when the list can't be read.
+    /// picked may lack x265 or SVT-AV1. Null (assume TsuFiles's build) when the list can't be read.
     /// Queried once at a time and kept when read; asked again after a failure.
     /// </summary>
     internal static Task<IReadOnlySet<string>?> EncodersOfAsync(string ffmpeg, TimeSpan? timeout = null) =>

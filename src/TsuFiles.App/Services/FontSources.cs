@@ -1,4 +1,4 @@
-// Trusted places offered for fonts a document references but the computer doesn't have. Filee never downloads an
+// Trusted places offered for fonts a document references but the computer doesn't have. TsuFiles never downloads an
 // arbitrary search result: open/free families go to Google Fonts, and proprietary Microsoft families to Microsoft's
 // own typography pages, where the user can see how they are licensed and supplied.
 

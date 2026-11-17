@@ -3,7 +3,7 @@
 // Word Pro, AbiWord, Apple Pages / Numbers / Keynote, StarOffice, WPS Office, ClarisWorks / AppleWorks, MacWrite, T602,
 // Pocket Word, flat OpenDocument, Publisher, CorelDRAW, Visio, CGM. It also writes the OpenDocument templates, FODT,
 // XLT and EMF / WMF, and turns SVG into EMF / WMF / ODG and a PDF page into SVG.
-// Uses a selected installation, Filee's downloaded copy, or the system installation.
+// Uses a selected installation, TsuFiles's downloaded copy, or the system installation.
 //
 // Gotchas handled here:
 //  * Each concurrent soffice process needs its own user profile (-env:UserInstallation), otherwise
@@ -475,7 +475,7 @@ public sealed class LibreOfficeConverter : IConverter
     }
 
     /// <summary>
-    /// The user's own LibreOffice when they chose one in Settings → Engines, else Filee's copy (engines/libreoffice),
+    /// The user's own LibreOffice when they chose one in Settings → Engines, else TsuFiles's copy (engines/libreoffice),
     /// else a LibreOffice installed on the PC. Each conversion uses its own profile, so an open LibreOffice is untouched.
     /// </summary>
     private void Locate()
@@ -487,7 +487,7 @@ public sealed class LibreOfficeConverter : IConverter
     }
 
     /// <summary>
-    /// Filee's copy as earlier versions installed it has LibreOffice's C++ runtime only in System64, where soffice.exe
+    /// TsuFiles's copy as earlier versions installed it has LibreOffice's C++ runtime only in System64, where soffice.exe
     /// does not look (see <see cref="AppLocalRuntime.CopyLibreOfficeRuntime"/>): copied next to it once, so LibreOffice
     /// also starts on PCs without the Visual C++ Redistributable.
     /// </summary>

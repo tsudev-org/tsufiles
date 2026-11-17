@@ -11,7 +11,7 @@ namespace TsuFiles.Engines.Magick;
 internal static class ImageJoiner
 {
     /// <summary>
-    /// The largest merged image Filee makes, the size of the longest "Long image" (PdfiumConverter.MaxStackedPixels):
+    /// The largest merged image TsuFiles makes, the size of the longest "Long image" (PdfiumConverter.MaxStackedPixels):
     /// about 800 MB of memory while it is put together.
     /// </summary>
     internal const long MaxPixels = Pdf.PdfiumConverter.MaxStackedPixels;

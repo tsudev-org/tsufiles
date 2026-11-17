@@ -46,7 +46,7 @@ public sealed partial class HistoryItemViewModel : ObservableObject
         FailureSummary = loc.Format("home.failed_files", Failures.Count);
         _output = entry.Outputs.FirstOrDefault(ConversionService.Exists);
         HasOutputs = _output is not null;
-        // Only a file of a format Filee knows is opened (never a program a changed history could point to); an
+        // Only a file of a format TsuFiles knows is opened (never a program a changed history could point to); an
         // output folder ("Extract") opens in the file manager.
         CanOpen = _output is not null && (FormatRegistry.Detect(_output) is not null || Directory.Exists(_output));
         CanOpenWith = CanOpen && platform.SupportsOpenWith && !Directory.Exists(_output!);
@@ -57,13 +57,13 @@ public sealed partial class HistoryItemViewModel : ObservableObject
         FormatBadge = extension.Length > 4 ? extension[..4] : extension;
         var picture = _output ?? entry.Sources.FirstOrDefault(s => HistoryThumbnails.CanShow(s) && ConversionService.Exists(s));
         ThumbnailSource = picture is not null && HistoryThumbnails.CanShow(picture) ? picture : null;
-        // Only entries that remember their preset (Filee 1.8 and later) and still have a failed file to convert.
+        // Only entries that remember their preset (TsuFiles 1.8 and later) and still have a failed file to convert.
         CanRetry = conversions is not null && entry.Preset is not null && entry.Failures.Any(f => ConversionService.Exists(f.Source));
         CanUndo = store is not null && UndoLeft();
         UndoneText = entry.Undone ? loc[entry.OriginalsInTrash ? "home.undone_original" : "home.undone"] : "";
     }
 
-    /// <summary>The preset's name in the language Filee is in now when it is a built-in one, else as it was saved.</summary>
+    /// <summary>The preset's name in the language TsuFiles is in now when it is a built-in one, else as it was saved.</summary>
     internal static string NameOf(HistoryEntry entry, ILocalizer loc) =>
         entry.PresetNameKey is { } key && loc[key] is var name && name != key ? name : entry.PresetName;
 
@@ -80,7 +80,7 @@ public sealed partial class HistoryItemViewModel : ObservableObject
     public bool HasErrors { get; }
     public bool HasOutputs { get; }
 
-    /// <summary>"Open file": the output is a file of a format Filee knows, or an output folder.</summary>
+    /// <summary>"Open file": the output is a file of a format TsuFiles knows, or an output folder.</summary>
     public bool CanOpen { get; }
 
     /// <summary>"Open with": an output file, on a system with an "Open with" dialog.</summary>
@@ -267,7 +267,7 @@ public sealed partial class HomePageViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(ElevationRestartFailed));
 
     /// <summary>
-    /// Windows: Filee runs as administrator while Explorer doesn't, so drops, the Explorer menu and the shortcut can't
+    /// Windows: TsuFiles runs as administrator while Explorer doesn't, so drops, the Explorer menu and the shortcut can't
     /// reach it (the warning above the drop zone).
     /// </summary>
     public bool IsElevated => _elevation?.ShellCannotReachFilee == true;

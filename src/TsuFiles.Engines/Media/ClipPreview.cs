@@ -1,5 +1,5 @@
 // The clip window's preview: plays a clip as it will be written (its parts, speeds, volumes, pauses and fades), the
-// pictures as raw frames from FFmpeg, the sound through ffplay (FFmpeg's player, part of Filee's FFmpeg download;
+// pictures as raw frames from FFmpeg, the sound through ffplay (FFmpeg's player, part of TsuFiles's FFmpeg download;
 // without it the preview plays silent). Also the sound's loudness over the video for the timeline, and where it is
 // silent, for "Remove silence".
 
@@ -35,7 +35,7 @@ public static partial class ClipPreview
     /// <summary>Told how many bytes of sound reached the player once a clip has played (tests).</summary>
     internal static Action<long>? SoundPlayed { get; set; }
 
-    /// <summary>True when the preview plays sound: ffplay is next to Filee's FFmpeg.</summary>
+    /// <summary>True when the preview plays sound: ffplay is next to TsuFiles's FFmpeg.</summary>
     public static bool HasSound => Player() is not null;
 
     private static string? Player() =>

@@ -13,7 +13,7 @@
      SHA-256 sums;
   3. installs the signed Setup into a sandbox (nothing on the PC is touched) and checks that TsuFiles.exe and
      uninstall.exe come out signed, then uninstalls it;
-  4. signs every SHA256SUMS file of the release (Windows, and the Linux and macOS ones from the draft) with Filee's
+  4. signs every SHA256SUMS file of the release (Windows, and the Linux and macOS ones from the draft) with TsuFiles's
      update key (build/sign-checksums.ps1, -UpdateKey), which writes a .sig file next to each;
   5. uploads Filee-<version>-win-Setup.exe, the portable zip, Filee-<version>-SHA256SUMS.txt and the .sig files to
      the draft;
@@ -26,7 +26,7 @@
   without signed checksums: the script then stops early without -UpdateKey, checks that the private key belongs to
   that public key, and doesn't publish while a SHA256SUMS file on the draft has no .sig next to it.
 
-  Needs gh (signed in), git, the .NET SDK, and Node.js with Wrangler signed in to Filee's Cloudflare account
+  Needs gh (signed in), git, the .NET SDK, and Node.js with Wrangler signed in to TsuFiles's Cloudflare account
   (npx wrangler login, once) unless -NoMirror. Output: build/.cache/release-<version>/out.
 
 .EXAMPLE

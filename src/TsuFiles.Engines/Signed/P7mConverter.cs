@@ -1,5 +1,5 @@
 // Signed files (.p7m, #1010): a CMS / PKCS #7 SignedData envelope (RFC 5652; CAdES, as Italian e-invoices and signed
-// PDFs are made) with the signed file inside. Filee takes that file out as it is, with .NET's SignedCms
+// PDFs are made) with the signed file inside. TsuFiles takes that file out as it is, with .NET's SignedCms
 // (System.Security.Cryptography.Pkcs): DER or BER, or the same as Base64 or PEM text, as some signing tools and mail
 // programs save it. An envelope signed again (a second signature around the first) is opened again, up to MaxDepth.
 //
@@ -44,7 +44,7 @@ public sealed class P7mConverter : IConverter, IEnvelopeOpener
     public string DisplayName => "Signed files (P7M)";
     public int MaxParallelism => 0;
 
-    /// <summary>The file inside can be of any format Filee reads: which one is known only from the file (<see cref="InnerFormat"/>).</summary>
+    /// <summary>The file inside can be of any format TsuFiles reads: which one is known only from the file (<see cref="InnerFormat"/>).</summary>
     public IReadOnlyList<ConversionEdge> Edges { get; } =
         [.. FormatRegistry.Known.Where(f => f.Id != "p7m").Select(f => new ConversionEdge("p7m", f.Id))];
 
@@ -178,7 +178,7 @@ public sealed class P7mConverter : IConverter, IEnvelopeOpener
     }
 
     /// <summary>
-    /// The format id of the signed file: its name's when that is a format Filee knows, else the one its first bytes
+    /// The format id of the signed file: its name's when that is a format TsuFiles knows, else the one its first bytes
     /// show; null when neither says.
     /// </summary>
     internal static string? FormatOf(string name, ReadOnlySpan<byte> content)
@@ -242,7 +242,7 @@ public sealed class P7mConverter : IConverter, IEnvelopeOpener
         }
         catch (InvalidDataException)
         {
-            // Not a ZIP Filee reads after all: the archive engine says what is wrong with it.
+            // Not a ZIP TsuFiles reads after all: the archive engine says what is wrong with it.
         }
         return "zip";
     }

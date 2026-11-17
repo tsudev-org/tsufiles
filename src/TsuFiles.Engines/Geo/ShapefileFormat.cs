@@ -30,7 +30,7 @@ internal sealed class ShapefileGroup(ShapeKind kind, List<GeoFeature> records)
 
 internal static class ShapefileFormat
 {
-    /// <summary>ESRI's definition of WGS 84, written to the .prj of every shapefile Filee makes.</summary>
+    /// <summary>ESRI's definition of WGS 84, written to the .prj of every shapefile TsuFiles makes.</summary>
     internal const string Wgs84Prj =
         "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]]";
 

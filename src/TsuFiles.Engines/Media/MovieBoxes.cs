@@ -1,4 +1,4 @@
-// Small, bounds-checked ISO BMFF box readers for photo metadata, and the writers of the few boxes Filee adds; media
+// Small, bounds-checked ISO BMFF box readers for photo metadata, and the writers of the few boxes TsuFiles adds; media
 // payloads are streamed, never loaded whole.
 
 using System.Buffers.Binary;

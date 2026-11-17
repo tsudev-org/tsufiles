@@ -12,13 +12,13 @@ public static class SetupNames
 
     public const string UninstallKey = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\{" + AppGuid + "}_is1";
 
-    /// <summary>Filee 1.1 and earlier: Velopack installed it per user and registered it here (HKCU).</summary>
+    /// <summary>TsuFiles 1.1 and earlier: Velopack installed it per user and registered it here (HKCU).</summary>
     public const string VelopackUninstallKey = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\Filee";
 
     public const string MachineEnvironmentKey = @"SYSTEM\CurrentControlSet\Control\Session Manager\Environment";
     public const string UserEnvironmentKey = "Environment";
 
-    /// <summary>Filee's startup entry is the value <see cref="AppName"/> here (HKCU; WindowsPlatformServices writes it).</summary>
+    /// <summary>TsuFiles's startup entry is the value <see cref="AppName"/> here (HKCU; WindowsPlatformServices writes it).</summary>
     public const string RunKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
 
     public const string AppName = TsuFiles.Core.ForkDefaults.DisplayName;

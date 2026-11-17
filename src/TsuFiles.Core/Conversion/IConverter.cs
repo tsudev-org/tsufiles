@@ -237,7 +237,7 @@ public interface IEnvelopeOpener
 
     /// <summary>
     /// The format id of the file inside <paramref name="path"/> (an envelope of <paramref name="format"/>). Throws
-    /// <see cref="ConversionRefusedException"/> when it can't be opened or holds nothing Filee converts.
+    /// <see cref="ConversionRefusedException"/> when it can't be opened or holds nothing TsuFiles converts.
     /// </summary>
     string InnerFormat(string path, string format);
 }

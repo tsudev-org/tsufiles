@@ -1,9 +1,9 @@
-<!-- "Filee is running as administrator" card in the bottom-right corner, shown once per run when Filee runs elevated
+<!-- "TsuFiles is running as administrator" card in the bottom-right corner, shown once per run when TsuFiles runs elevated
      while Explorer doesn't (ElevationService): Explorer's drops, menu and selection can't reach it. -->
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="TsuFiles.App.Views.ElevationNoticeWindow"
-        Title="Filee"
+        Title="TsuFiles"
         Width="380"
         SizeToContent="Height"
         WindowDecorations="None"
@@ -15,7 +15,7 @@
         CanResize="False">
   <Border Classes="card" Margin="12" Padding="16,14">
     <DockPanel>
-      <Image DockPanel.Dock="Left" Source="avares://TsuFiles/Assets/Icons/filee.png" Width="36" Height="36"
+      <Image DockPanel.Dock="Left" Source="avares://TsuFiles/Assets/Icons/tsufiles.png" Width="36" Height="36"
              VerticalAlignment="Top" Margin="0,2,12,0" />
       <StackPanel Spacing="8">
         <DockPanel>

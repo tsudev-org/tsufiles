@@ -49,7 +49,7 @@ internal static class DesktopShellView
     private const uint SVGIO_BACKGROUND = 0;
     private static readonly Guid IID_IDispatch = new("00020400-0000-0000-C000-000000000046");
 
-    // Only the methods Filee calls are typed; the slots before them keep the vtable order and are never called.
+    // Only the methods TsuFiles calls are typed; the slots before them keep the vtable order and are never called.
 
     [ComImport, Guid("85CB6900-4D95-11CF-960C-0080C7F4EE85"), InterfaceType(ComInterfaceType.InterfaceIsDual)]
     private interface IShellWindows

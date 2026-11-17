@@ -9,7 +9,7 @@
 //
 // Pandoc runs in its sandbox, where it reads nothing but the file it is given: include directives (\input,
 // .. include::) stay unread, and so do pictures the document refers to. The document is read into Pandoc's JSON AST
-// first, its pictures are checked by Filee's own rule (DocumentFiles: only from the source's folder, never from
+// first, its pictures are checked by TsuFiles's own rule (DocumentFiles: only from the source's folder, never from
 // another computer), and the result is written from the AST with those pictures alone.
 
 using System.Text.Json.Nodes;

@@ -70,9 +70,9 @@ internal sealed record Book(HDocument Document, BookMetadata Metadata)
 /// <summary>Helpers shared by the e-book readers and writers.</summary>
 internal static class EbookFiles
 {
-    /// <summary>Message for books with DRM: Filee never removes copy protection.</summary>
+    /// <summary>Message for books with DRM: TsuFiles never removes copy protection.</summary>
     public const string DrmMessage =
-        "This book is protected with DRM (copy protection), so it cannot be converted. Filee does not remove DRM; " +
+        "This book is protected with DRM (copy protection), so it cannot be converted. TsuFiles does not remove DRM; " +
         "open it in the reading app it was bought for.";
 
     /// <summary>More entries than this are refused: a book has a few per chapter and picture.</summary>

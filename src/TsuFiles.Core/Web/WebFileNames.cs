@@ -9,11 +9,11 @@ namespace TsuFiles.Core.Web;
 
 public static class WebFileNames
 {
-    /// <summary>Longest name Filee gives a downloaded file, extension included (paths stay well under 260 characters).</summary>
+    /// <summary>Longest name TsuFiles gives a downloaded file, extension included (paths stay well under 260 characters).</summary>
     public const int MaxLength = 120;
 
     /// <summary>
-    /// Programs, installers and scripts. Filee converts none of them; a drag or a server that offers one is refused
+    /// Programs, installers and scripts. TsuFiles converts none of them; a drag or a server that offers one is refused
     /// rather than saved.
     /// </summary>
     private static readonly HashSet<string> Blocked = new(StringComparer.OrdinalIgnoreCase)
@@ -41,7 +41,7 @@ public static class WebFileNames
         "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
     };
 
-    /// <summary>True for a program, installer or script (by extension), which Filee never saves from the web.</summary>
+    /// <summary>True for a program, installer or script (by extension), which TsuFiles never saves from the web.</summary>
     public static bool IsBlocked(string name) => Blocked.Contains(LastExtension(name));
 
     /// <summary>True for the extension of a web page (.html, .php, …).</summary>

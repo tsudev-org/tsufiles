@@ -140,7 +140,7 @@ pwsh build/sign-release.ps1 -Version X.Y.Z -CertificateThumbprint <sha1> -Update
 
 It signs every unsigned program in the build and the Setup program, packs and signs `Filee-X.Y.Z-win-Setup.exe`, zips
 the portable copy, checks the signed Setup in a sandbox install and uploads the files with their SHA-256 sums. It signs
-every `SHA256SUMS` file of the release (Windows, Linux and macOS) with Filee's update key and uploads the `.sig` files
+every `SHA256SUMS` file of the release (Windows, Linux and macOS) with TsuFiles's update key and uploads the `.sig` files
 next to them (`build/sign-checksums.ps1`; it asks for the key's passphrase). It also copies the Windows files to the
 download mirror `https://dl.filee.sh/X.Y.Z/` (Cloudflare R2; needs `npx wrangler login` once), which the Microsoft
 Store listing points at because GitHub's download links redirect. Look over the draft and publish it (or pass
@@ -157,7 +157,7 @@ issuers.
 
 ### "What's new" slides for a release
 
-A release with features worth showing gets slides, which Filee shows once after updating to it (see
+A release with features worth showing gets slides, which TsuFiles shows once after updating to it (see
 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#whats-new-slides)). A release without slides shows nothing.
 
 1. Write the CHANGELOG section with its `<!-- update -->` lines first: the slides are the visual version of it.
@@ -189,6 +189,6 @@ engines, the C++ runtime and the Zig toolchain for the Explorer menu into `build
 first). `pwsh build/build-installer.ps1 -CheckOnly` builds Setup around a stub app and installs, updates and
 uninstalls it in a sandbox. To run the real Setup without touching your PC, give it a scratch folder:
 `Filee-X.Y.Z-win-Setup.exe /SANDBOX=D:\scratch` (registry, Program Files, Start menu, desktop, PATH and `%APPDATA%`
-all go into that folder; no administrator rights are asked for and Filee is not started). Setup's texts are the
+all go into that folder; no administrator rights are asked for and TsuFiles is not started). Setup's texts are the
 `installer.*` keys of the app's translation files; its engine page uses the app's engine names. See
 [Architecture](docs/ARCHITECTURE.md#windows-installer).

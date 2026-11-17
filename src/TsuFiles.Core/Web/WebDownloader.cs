@@ -1,5 +1,5 @@
 // Saves files from the web: the bytes a browser handed over with a drag, or, when a drag brought only an address, the
-// file downloaded from it. Downloads are plain GET requests without the browser's cookies or sign-in (Filee has
+// file downloaded from it. Downloads are plain GET requests without the browser's cookies or sign-in (TsuFiles has
 // neither): only http and https, a few redirects, a size cap and timeouts, and only to the public internet (never to
 // this computer or the local network, LocalNetwork, unless Settings → General allows it). Whatever arrives is named by what it really is, never replaces
 // an existing file, and programs or web pages are refused instead of saved.
@@ -14,7 +14,7 @@ namespace TsuFiles.Core.Web;
 
 public sealed class WebDownloader : IDisposable
 {
-    /// <summary>Largest file Filee saves from the web.</summary>
+    /// <summary>Largest file TsuFiles saves from the web.</summary>
     public const long DefaultMaxBytes = 2L * 1024 * 1024 * 1024;
 
     /// <summary>Connects only to public addresses.</summary>
@@ -30,7 +30,7 @@ public sealed class WebDownloader : IDisposable
     /// For tests; by default a handler without cookies, credentials or automatic redirects that connects only to public
     /// addresses.
     /// </param>
-    /// <param name="userAgent">"Filee/1.13.0"; some servers refuse requests without one.</param>
+    /// <param name="userAgent">"TsuFiles/1.13.0"; some servers refuse requests without one.</param>
     public WebDownloader(HttpMessageHandler? handler = null, string? userAgent = null)
     {
         _http = Client(handler ?? Handler(publicOnly: true), userAgent);
@@ -186,7 +186,7 @@ public sealed class WebDownloader : IDisposable
         }
     }
 
-    /// <summary>True for an http or https address, the only ones Filee downloads.</summary>
+    /// <summary>True for an http or https address, the only ones TsuFiles downloads.</summary>
     public static bool IsWebAddress(Uri url) =>
         url.IsAbsoluteUri && (url.Scheme == Uri.UriSchemeHttps || url.Scheme == Uri.UriSchemeHttp);
 

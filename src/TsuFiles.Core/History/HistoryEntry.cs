@@ -14,7 +14,7 @@ public sealed class HistoryEntry
     public string PresetName { get; set; } = "";
 
     /// <summary>
-    /// The built-in preset's name key when the job showed its translated name, so the entry follows the language Filee
+    /// The built-in preset's name key when the job showed its translated name, so the entry follows the language TsuFiles
     /// is in now (#744); null for the user's own names and in entries from before.
     /// </summary>
     public string? PresetNameKey { get; set; }
@@ -35,7 +35,7 @@ public sealed class HistoryEntry
     /// </summary>
     public Preset? Preset { get; set; }
 
-    /// <summary>"file: error" lines written by Filee 1.7 and earlier; read for entries without <see cref="Failures"/>.</summary>
+    /// <summary>"file: error" lines written by TsuFiles 1.7 and earlier; read for entries without <see cref="Failures"/>.</summary>
     public List<string> Errors { get; set; } = [];
 
     /// <summary>
@@ -67,7 +67,7 @@ public sealed class HistoryEntry
             Outputs = [.. job.Outputs],
             Failures = failures,
             // history.json isn't the place for a PDF password: a retry takes it from the preset again. No Retry for
-            // parts of a picture to hide, marks drawn on it, a background set behind it or metadata changes: a Filee
+            // parts of a picture to hide, marks drawn on it, a background set behind it or metadata changes: a TsuFiles
             // from before them would write the file as it is.
             Preset = failures.Count > 0 && !job.Preset.Image.HidesAreas && !job.Preset.Image.HasAnnotations
                      && !job.Preset.Image.AddsBackdrop && !job.Preset.EditsMetadata

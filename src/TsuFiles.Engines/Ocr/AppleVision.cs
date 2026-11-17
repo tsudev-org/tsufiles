@@ -1,9 +1,9 @@
 // Text recognition with Apple's Vision framework (VNRecognizeTextRequest), part of macOS: nothing to download, and
-// it runs on the Neural Engine or GPU. Called through the Objective-C runtime (objc_msgSend) so Filee needs no
+// it runs on the Neural Engine or GPU. Called through the Objective-C runtime (objc_msgSend) so TsuFiles needs no
 // bridging library; the framework is loaded only on macOS, the first time it is asked for.
 //
 // A CGRect (four doubles, 32 bytes) comes back in registers on Apple silicon but through memory on Intel Macs, where
-// it needs objc_msgSend_stret. Objects Filee creates with alloc/init are released, the ones Vision hands back are
+// it needs objc_msgSend_stret. Objects TsuFiles creates with alloc/init are released, the ones Vision hands back are
 // autoreleased and go with the autorelease pool of each call.
 
 using System.Runtime.InteropServices;

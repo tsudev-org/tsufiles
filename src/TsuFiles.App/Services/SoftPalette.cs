@@ -1,4 +1,4 @@
-// The resources behind Filee's look that are computed rather than written in Styles/Soft.axaml: the accent colour
+// The resources behind TsuFiles's look that are computed rather than written in Styles/Soft.axaml: the accent colour
 // with its shades, the corner radii, the UI font order and the reading direction. ThemeService applies them with the user's choices; the
 // installer (src/TsuFiles.Setup links this file) applies the defaults, so Setup looks like the app.
 

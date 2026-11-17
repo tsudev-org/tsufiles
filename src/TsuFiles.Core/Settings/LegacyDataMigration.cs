@@ -1,4 +1,4 @@
-// TsuFiles (ADR-0003 T3b, bản 2.4.1): chuyển dữ liệu của bản đã cài từ thư mục mang tên cũ "Filee" sang "TsuFiles"
+// TsuFiles (ADR-0003 T3b, bản 2.4.1): chuyển dữ liệu của bản đã cài từ thư mục mang tên cũ "TsuFiles" sang "TsuFiles"
 // một lần, lúc ứng dụng hoặc dòng lệnh khởi động (trước khi có gì ghi vào thư mục mới):
 //   %APPDATA%\Filee            -> %APPDATA%\TsuFiles            (cài đặt, preset, lịch sử, nhật ký)
 //   %LOCALAPPDATA%\Filee\engines -> %LOCALAPPDATA%\TsuFiles\engines (engine đã tải, có thể vài GB)

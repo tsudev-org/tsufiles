@@ -28,7 +28,7 @@ public enum PresetKind
 }
 
 /// <summary>
-/// Reads an enum by name. A value this version doesn't know (a newer Filee's, or a number outside the enum) becomes
+/// Reads an enum by name. A value this version doesn't know (a newer TsuFiles's, or a number outside the enum) becomes
 /// <see cref="Unknown"/>, the first value unless a subclass says otherwise: the preset still loads, instead of the
 /// whole preset file failing to read (which resets every preset to the defaults).
 /// </summary>
@@ -58,7 +58,7 @@ public class LenientEnumJsonConverter<TEnum> : JsonConverter<TEnum> where TEnum 
 }
 
 /// <summary>
-/// An unknown mark kind (a newer Filee's) is read as <see cref="AnnotationKind.Unknown"/>: never drawn.
+/// An unknown mark kind (a newer TsuFiles's) is read as <see cref="AnnotationKind.Unknown"/>: never drawn.
 /// </summary>
 public sealed class AnnotationKindJsonConverter : LenientEnumJsonConverter<AnnotationKind>
 {
@@ -146,7 +146,7 @@ public sealed class Preset
     /// <summary>Where and how output files are written.</summary>
     public OutputRule Output { get; set; } = new();
 
-    /// <summary>A conversion or a group. A kind this version doesn't know (from a newer Filee) is read as a group.</summary>
+    /// <summary>A conversion or a group. A kind this version doesn't know (from a newer TsuFiles) is read as a group.</summary>
     [JsonConverter(typeof(PresetKindJsonConverter))]
     public PresetKind Kind { get; set; } = PresetKind.Convert;
 
@@ -154,7 +154,7 @@ public sealed class Preset
     public const int MaxSubPresets = 6;
 
     /// <summary>
-    /// <see cref="TargetFormat"/> of a group: no format at all. A Filee from before groups reads a group as a
+    /// <see cref="TargetFormat"/> of a group: no format at all. A TsuFiles from before groups reads a group as a
     /// conversion; with this it finds no route and greys the slice out instead of re-encoding files "as the same format".
     /// </summary>
     public const string GroupTarget = "group";
@@ -307,7 +307,7 @@ public sealed class Preset
     /// <see cref="PresetKind.Tool"/>: which window it opens, <see cref="CropTool"/> (or null, as saved before there
     /// were other tools), <see cref="ClipTool"/>, <see cref="ImageEditTool"/>, <see cref="HideTool"/>,
     /// <see cref="AnnotateTool"/>, <see cref="BackgroundTool"/>, <see cref="MetadataTool"/> or <see cref="UpscaleTool"/>.
-    /// A tool this version doesn't know (from a newer Filee) opens nothing. Ignored for other kinds.
+    /// A tool this version doesn't know (from a newer TsuFiles) opens nothing. Ignored for other kinds.
     /// </summary>
     public string? Tool { get; set; }
 
@@ -498,7 +498,7 @@ public enum HideStyle
     /// <summary>A strong blur.</summary>
     Blur,
     /// <summary>
-    /// Solid, opaque black: nothing of what was there is left. An older Filee reads it as <see cref="Pixelate"/>.
+    /// Solid, opaque black: nothing of what was there is left. An older TsuFiles reads it as <see cref="Pixelate"/>.
     /// </summary>
     Box,
 }
@@ -524,7 +524,7 @@ public sealed class HiddenArea
 /// <summary>What an "Annotate" mark is (<see cref="Annotation.Kind"/>).</summary>
 public enum AnnotationKind
 {
-    /// <summary>A kind from a newer Filee: not drawn, rather than drawn as something it isn't.</summary>
+    /// <summary>A kind from a newer TsuFiles: not drawn, rather than drawn as something it isn't.</summary>
     Unknown = -1,
     /// <summary>A freehand line through <see cref="Annotation.Points"/>.</summary>
     Pen,
@@ -908,7 +908,7 @@ public sealed class ImageOptions
     /// </summary>
     public bool JoinIntoOne { get; set; }
 
-    /// <summary>With <see cref="JoinIntoOne"/>: one under another or side by side. A direction from a newer Filee reads as vertical.</summary>
+    /// <summary>With <see cref="JoinIntoOne"/>: one under another or side by side. A direction from a newer TsuFiles reads as vertical.</summary>
     [JsonConverter(typeof(LenientEnumJsonConverter<ImageJoinDirection>))]
     public ImageJoinDirection JoinDirection { get; set; }
 
@@ -954,7 +954,7 @@ public sealed class ImageOptions
     /// <summary>
     /// "Pixelate / blur": how <see cref="HiddenAreas"/> without a <see cref="HiddenArea.Style"/> of their own are
     /// covered. Kept in the tool as the last style picked, so its window opens with it. A field of its own (not a value
-    /// added to another option), read leniently: an older Filee skips it.
+    /// added to another option), read leniently: an older TsuFiles skips it.
     /// </summary>
     [JsonConverter(typeof(LenientEnumJsonConverter<HideStyle>))]
     public HideStyle HideStyle { get; set; }
@@ -1171,7 +1171,7 @@ public sealed class PdfOptions
     /// count and takes the range, and for a PDF target whether it becomes one PDF or one file per page
     /// (<see cref="AskedPages"/>). <see cref="PageRange"/> is what the window starts with, and what applies where
     /// nothing can ask (watch folders, the command line). Off by default, so a preset saved before it reads unchanged
-    /// and a Filee from before it ignores it; on for "Split PDF" in a new install.
+    /// and a TsuFiles from before it ignores it; on for "Split PDF" in a new install.
     /// </summary>
     public bool AskPageRange { get; set; }
 
@@ -1232,7 +1232,7 @@ public sealed class PdfOptions
     public bool SplitTallImage { get; set; }
 
     /// <summary>
-    /// For PDF → PDF: make the file smaller (also with a page range or one file per page). A level from a newer Filee
+    /// For PDF → PDF: make the file smaller (also with a page range or one file per page). A level from a newer TsuFiles
     /// reads as <see cref="PdfCompression.None"/>.
     /// </summary>
     [JsonConverter(typeof(LenientEnumJsonConverter<PdfCompression>))]
@@ -1272,7 +1272,7 @@ public sealed class PdfOptions
     [JsonIgnore]
     public bool FinishesPdf => !string.IsNullOrWhiteSpace(Watermark) || PageNumbers || Password.Length > 0 || PasswordLeftOut;
 
-    /// <summary>Formats text read from scans can go into (<see cref="Ocr"/>): those Filee writes from a PDF's text itself.</summary>
+    /// <summary>Formats text read from scans can go into (<see cref="Ocr"/>): those TsuFiles writes from a PDF's text itself.</summary>
     public static readonly IReadOnlyList<string> OcrTargets = ["pdf", "docx", "txt", "md", "hwpx"];
 
     /// <summary>
@@ -1691,13 +1691,13 @@ public enum CadColors
 /// <summary>Options for DWG and DXF: the version they are written in and the colours they are drawn in.</summary>
 public sealed class CadOptions
 {
-    /// <summary>A version from a newer Filee reads as <see cref="CadVersion.AutoCad2018"/>.</summary>
+    /// <summary>A version from a newer TsuFiles reads as <see cref="CadVersion.AutoCad2018"/>.</summary>
     [JsonConverter(typeof(LenientEnumJsonConverter<CadVersion>))]
     public CadVersion Version { get; set; }
 
     /// <summary>
     /// Colours of a drawing rendered to PDF, SVG or a picture. Filee 2.1.0 skips the property it doesn't know, and
-    /// a choice from a newer Filee reads as <see cref="CadColors.AsDrawn"/>.
+    /// a choice from a newer TsuFiles reads as <see cref="CadColors.AsDrawn"/>.
     /// </summary>
     [JsonConverter(typeof(LenientEnumJsonConverter<CadColors>))]
     public CadColors Colors { get; set; }

@@ -326,7 +326,7 @@ else
 fi
 
 # GNOME Shell extension. A first install puts it in place on GNOME and asks GNOME to enable it. An upgrade refreshes
-# a copy that Filee installed, and on GNOME adds a missing one without enabling it (the Triggers page says how).
+# a copy that TsuFiles installed, and on GNOME adds a missing one without enabling it (the Triggers page says how).
 gnome_extension_note=''
 legacy_gnome_enabled=false
 legacy_gnome_replaced=false
@@ -386,7 +386,7 @@ desktop.write_text(
     '[Desktop Entry]\nType=Application\nName=TsuFiles\n'
     'Comment=Convert files with TsuFiles\nComment[vi]=Chuyển đổi tệp bằng TsuFiles\n'
     f'Exec={quoted_exec(str(app / "TsuFiles"))} --convert %F\n'
-    f'Icon={desktop_value(app / "filee.png")}\n'
+    f'Icon={desktop_value(app / "tsufiles.png")}\n'
     'Terminal=false\nCategories=Utility;\nStartupWMClass=TsuFiles\nX-Filee-Managed=true\n', encoding='utf-8')
 PY
 

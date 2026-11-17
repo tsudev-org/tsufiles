@@ -29,7 +29,7 @@ public static class MacOSServicesProvider
 
     /// <summary>
     /// Answers the service from now on; <paramref name="handler"/> gets the files (on the main thread). Call it on the
-    /// main thread early at start: a service picked while Filee wasn't running is delivered once this is set. When the
+    /// main thread early at start: a service picked while TsuFiles wasn't running is delivered once this is set. When the
     /// pasteboard names no existing file, <paramref name="nothingUsable"/> gets the types it offered instead.
     /// </summary>
     [SupportedOSPlatform("macos")]

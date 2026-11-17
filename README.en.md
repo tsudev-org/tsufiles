@@ -40,13 +40,13 @@ and build provenance: `gh attestation verify <file> -R tsudev-org/tsufiles`.
 - Security vulnerabilities: see [SECURITY.md](SECURITY.md) (do NOT open a public issue)
 - Support the project: <https://files.tsudev.com/ung-ho/>
 
-## How it differs from Filee
+## How it differs from the original project
 
-| Area | Filee | TsuFiles |
+| Area | TsuFiles | TsuFiles |
 | --- | --- | --- |
 | Default language | The operating system's, English as fallback | **Vietnamese** for the app, the installer and the CLI; changeable in Settings |
 | `tsufiles` command line | English only | Vietnamese by default, `TSUFILES_LANG=en` for English; JSON keys unchanged for scripts |
-| Product name | Filee | **TsuFiles**, owl logo, Night Owl theme ([ADR-0003](docs/adr/0003-ten-san-pham-tsufiles.md)); executable, `tsufiles` command, data folder, shortcuts and release files move to `tsufiles` in 2.4.1 with migration |
+| Product name | TsuFiles | **TsuFiles**, owl logo, Night Owl theme ([ADR-0003](docs/adr/0003-ten-san-pham-tsufiles.md)); executable, `tsufiles` command, data folder, shortcuts and release files move to `tsufiles` in 2.4.1 with migration |
 | Updates | `KnifeLemon/Filee` and its author's signing key | `tsudev-org/tsufiles` and **its own ECDSA P-256 signing key**; releases of other repositories are refused |
 | GitHub Actions | Pinned by tag | **Pinned by commit SHA** |
 | Security gates | CI + tests | Also CodeQL (security-extended), gitleaks, NuGet vulnerability audit, SBOM and build provenance, Dependabot |

@@ -1,6 +1,6 @@
 // SharpHook's EventLoopGlobalHook, except that the native callback never throws (#528). Its Dispose closes the event
 // queue before it stops the native hook, and its queue thread disposes the queue once drained; an input event in
-// between (or after a failed stop) threw on the OS hook thread and ended Filee. Here the hook stops first, and an
+// between (or after a failed stop) threw on the OS hook thread and ended TsuFiles. Here the hook stops first, and an
 // event that finds the queue closed is dropped: the hook is going away anyway.
 
 using System.Collections.Concurrent;
@@ -18,7 +18,7 @@ internal sealed class QueuedGlobalHook(IGlobalHookProvider? provider = null) : G
     protected override void BeforeRun()
     {
         if (Interlocked.Exchange(ref _loopStarted, 1) == 0)
-            new Thread(RunEventLoop) { IsBackground = true, Name = "Filee input events" }.Start();
+            new Thread(RunEventLoop) { IsBackground = true, Name = "TsuFiles input events" }.Start();
     }
 
     // The OS hook thread: Windows holds the cursor until this returns, so it only queues.

@@ -1,6 +1,6 @@
 // .m4s files (#354): a fragmented MP4 with its own moov (ftyp + moov, then styp / sidx / moof / mdat fragments) is read
 // by FFmpeg like any MP4. A DASH media segment holds only fragments and plays with a separate init segment (the moov);
-// on its own FFmpeg fails with a demuxer error, so Filee refuses it first with a message that says why.
+// on its own FFmpeg fails with a demuxer error, so TsuFiles refuses it first with a message that says why.
 
 using TsuFiles.Core.Conversion;
 

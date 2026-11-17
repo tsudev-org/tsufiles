@@ -12,7 +12,7 @@
   Setup itself (src/TsuFiles.Setup) is published as one self-contained, trimmed program (no .NET needed on the PC);
   build/tools/make-setup.cs appends the publish folder to it as an LZMA payload with a SHA-256 manifest, and the
   engines Setup offers from EngineDownloads. The portable zip is the publish folder as it is: without Setup's
-  uninstall.exe next to TsuFiles.exe, Filee knows it is a portable copy.
+  uninstall.exe next to TsuFiles.exe, TsuFiles knows it is a portable copy.
 
 .PARAMETER Runtime
   win-x64 (default) or win-arm64. The ARM64 build (Filee-<version>-win-arm64-Setup.exe and -Portable.zip) has an ARM64
@@ -145,7 +145,7 @@ if ($sign) {
     & $sign -Path $PublishDir, $SetupProgram -CertificateThumbprint $CertificateThumbprint
 }
 
-# The x64 names are the ones Filee's updater looks for (-win-Setup.exe, -SHA256SUMS.txt).
+# The x64 names are the ones TsuFiles's updater looks for (-win-Setup.exe, -SHA256SUMS.txt).
 # TsuFiles: tệp phát hành mang tên hiển thị (ForkDefaults.ReleaseFilePrefix).
 $prefix = if ($Runtime -eq 'win-x64') { "tsudev-files-$Version-win" } else { "tsudev-files-$Version-$Runtime" }
 $setupExe = Join-Path $OutputDir "$prefix-Setup.exe"

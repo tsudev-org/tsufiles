@@ -31,7 +31,7 @@ internal static class EnginesCommand
 
     /// <summary>What install or remove did: <paramref name="State"/> is installed, removed, skipped, failed or cancelled.</summary>
     /// <param name="Message">The line for people: what was done, why nothing was, or the error.</param>
-    /// <param name="Version">The version of Filee's download, once it is installed.</param>
+    /// <param name="Version">The version of TsuFiles's download, once it is installed.</param>
     private sealed record Result(string Id, string State, string Message, string? Version = null, string? ErrorKey = null);
 
     private static void Report(Result result, CliOptions options, TextWriter output, TextWriter errors)
@@ -98,7 +98,7 @@ internal static class EnginesCommand
                 _ when downloadable => CliLanguage.T($"tải {Bytes(DownloadSize(engines, package))}, {Bytes(package.InstalledSize)} trên đĩa", $"{Bytes(DownloadSize(engines, package))} download, {Bytes(package.InstalledSize)} on disk"),
                 _ => UnavailableReason(package),
             };
-            // The version Filee downloads; next to a copy Filee didn't download it would read as that copy's version.
+            // The version TsuFiles downloads; next to a copy TsuFiles didn't download it would read as that copy's version.
             var version = downloadable && copy.Status != EngineCopyStatus.OwnCopy ? Version(engines, package) : "";
             lines.Add((package.Id, status, version, size));
         }
@@ -113,7 +113,7 @@ internal static class EnginesCommand
 
     /// <summary>
     /// One package in the JSON of 'engines'; fields that don't apply are left out, as in 'convert --json'. "version" is
-    /// the version Filee downloads, also next to "owncopy" (what 'install' would put in place of a copy on the PC).
+    /// the version TsuFiles downloads, also next to "owncopy" (what 'install' would put in place of a copy on the PC).
     /// </summary>
     private static void WriteEngine(Utf8JsonWriter json, EngineInstaller engines, EnginePackage package, EngineCopy copy)
     {
@@ -147,7 +147,7 @@ internal static class EnginesCommand
     // ───────────────────────── Install and remove ─────────────────────────
 
     /// <summary>
-    /// As the Engines page offers it: a package not installed, Filee's download of an outdated one, and Filee's download
+    /// As the Engines page offers it: a package not installed, TsuFiles's download of an outdated one, and TsuFiles's download
     /// over a copy found on the PC (it is the tested version). The user's own copy is left in use.
     /// </summary>
     private static async Task<Result> InstallAsync(EnginePackage package, CliOptions options, CliHost host, TextWriter errors,
@@ -189,14 +189,14 @@ internal static class EnginesCommand
             copy.Outdated ? CliLanguage.T($"Đã cập nhật {package.Id} lên {version}.", $"Updated {package.Id} to {version}.") : CliLanguage.T($"Đã cài {package.Id} {version}.", $"Installed {package.Id} {version}."), version);
     }
 
-    /// <summary>Removes Filee's download, as the Engines page allows it; a copy Filee didn't download is never touched.</summary>
+    /// <summary>Removes TsuFiles's download, as the Engines page allows it; a copy TsuFiles didn't download is never touched.</summary>
     private static Result Remove(EnginePackage package, EngineInstaller engines)
     {
         var copy = engines.StatusOf(package);
         if (copy.Status == EngineCopyStatus.OwnCopy)
             return new Result(package.Id, "skipped", copy.FromSystem
-                ? CliLanguage.T($"{package.Id} đang dùng bản tìm thấy tại {copy.Folder}; Filee không tải bản này.", $"{package.Id} uses the copy found at {copy.Folder}; Filee didn't download it.")
-                : CliLanguage.T($"{package.Id} đang dùng bản riêng của bạn tại {copy.Folder}; Filee không tải bản này.", $"{package.Id} uses your own copy at {copy.Folder}; Filee didn't download it."));
+                ? CliLanguage.T($"{package.Id} đang dùng bản tìm thấy tại {copy.Folder}; TsuFiles không tải bản này.", $"{package.Id} uses the copy found at {copy.Folder}; TsuFiles didn't download it.")
+                : CliLanguage.T($"{package.Id} đang dùng bản riêng của bạn tại {copy.Folder}; TsuFiles không tải bản này.", $"{package.Id} uses your own copy at {copy.Folder}; TsuFiles didn't download it."));
         if (copy.Status == EngineCopyStatus.NotInstalled)
             return new Result(package.Id, "skipped", CliLanguage.T($"{package.Id} chưa được cài.", $"{package.Id} is not installed."));
         try
@@ -210,7 +210,7 @@ internal static class EnginesCommand
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            return new Result(package.Id, "failed", CliLanguage.T($"{package.Id} đang được sử dụng; hãy đóng Filee hoặc chờ chuyển đổi xong.", $"{package.Id} is in use; close Filee or wait for the conversion to finish."));
+            return new Result(package.Id, "failed", CliLanguage.T($"{package.Id} đang được sử dụng; hãy đóng TsuFiles hoặc chờ chuyển đổi xong.", $"{package.Id} is in use; close TsuFiles or wait for the conversion to finish."));
         }
     }
 
@@ -226,14 +226,14 @@ internal static class EnginesCommand
     private static bool CanDownload(EngineInstaller engines, EnginePackage package) =>
         package.Components.Count > 0 && package.Components.All(engines.Components.ContainsKey);
 
-    /// <summary>The version Filee downloads: its main component's (the first).</summary>
+    /// <summary>The version TsuFiles downloads: its main component's (the first).</summary>
     private static string Version(EngineInstaller engines, EnginePackage package) => engines.Components[package.Components[0]].Version;
 
     private static long DownloadSize(EngineInstaller engines, EnginePackage package) =>
         package.Components.Sum(c => engines.Components[c].Size);
 
     private static string UnavailableReason(EnginePackage package) =>
-        EngineDownloads.UnavailableReason(package) ?? CliLanguage.T($"Filee không có bản tải {package.Id} cho {EngineDownloads.RuntimeIdentifier}.", $"No Filee download of {package.Id} is available for {EngineDownloads.RuntimeIdentifier}.");
+        EngineDownloads.UnavailableReason(package) ?? CliLanguage.T($"TsuFiles không có bản tải {package.Id} cho {EngineDownloads.RuntimeIdentifier}.", $"No TsuFiles download of {package.Id} is available for {EngineDownloads.RuntimeIdentifier}.");
 
     /// <summary>"297 MB", "1.3 GB", as Settings → Engines shows sizes.</summary>
     private static string Bytes(long bytes) => bytes >= 1_000_000_000

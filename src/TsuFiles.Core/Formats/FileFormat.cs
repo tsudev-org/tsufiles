@@ -1,4 +1,4 @@
-// Describes a file format Filee understands (e.g. "png", "hwpx") and groups formats into categories.
+// Describes a file format TsuFiles understands (e.g. "png", "hwpx") and groups formats into categories.
 
 namespace TsuFiles.Core.Formats;
 
@@ -26,7 +26,7 @@ public enum FormatCategory
 }
 
 /// <summary>
-/// A file format known to Filee.
+/// A file format known to TsuFiles.
 /// </summary>
 /// <param name="Id">Stable lower-case identifier used in presets and converter edges (e.g. <c>"jpg"</c>).</param>
 /// <param name="DisplayName">Short label shown in the UI (e.g. <c>"JPG"</c>).</param>
@@ -35,7 +35,7 @@ public enum FormatCategory
 /// File extensions without the dot; the first one is used for output files. Compound extensions such as
 /// <c>"tar.gz"</c> are allowed.
 /// </param>
-/// <param name="Writable">False for formats Filee only reads (camera RAW, Apple Pages, ...): not offered as a target.</param>
+/// <param name="Writable">False for formats TsuFiles only reads (camera RAW, Apple Pages, ...): not offered as a target.</param>
 public sealed record FileFormat(string Id, string DisplayName, FormatCategory Category, IReadOnlyList<string> Extensions, bool Writable = true)
 {
     /// <summary>Extension (without dot) used when writing a file of this format.</summary>

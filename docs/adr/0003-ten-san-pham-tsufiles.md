@@ -85,3 +85,18 @@ Hệ quả (thay dòng "Tệp phát hành" ở bảng mục 2): **tiền tố t�
   mất ngay và bản 2.4.0-vn.1 đã cài sẽ cập nhật từ repo sai. Đã ghi vào `~/.claude/CLAUDE.md` của máy phát triển.
 - Mã, tài liệu, website trỏ địa chỉ mới; nhật ký (`logs/`), CHANGELOG bản cũ, ADR cũ giữ nguyên (lịch sử).
 - Worker Cloudflare `tsudev-files` và thư mục cục bộ `~/projects/tsudev-files` đổi tên do chủ dự án làm (phiếu bàn giao).
+
+## 8. Bổ sung 16/11/2026 - bỏ tên cũ khỏi chữ hiển thị, chú thích và tài liệu
+
+Chủ dự án yêu cầu TsuFiles không còn mang tên sản phẩm cũ. `tools/xoa-ten-cu.py` đổi chữ "Filee" đứng riêng thành
+"TsuFiles" trong bản dịch, chú thích mã, tiêu đề cửa sổ, thông báo và tài liệu, đổi `filee.ico`/`filee.png` thành
+`tsufiles.ico`/`tsufiles.png`; `--kiem` phải ra 0.
+
+GIỮ NGUYÊN (không phải sót):
+
+- Thông báo bản quyền MIT trong `LICENSE`, `THIRD-PARTY-NOTICES.md` và trang `/ban-quyen/`: giấy phép bắt buộc giữ
+  trong mọi bản sao, xóa đi là vi phạm bản quyền. Lịch sử (`logs/`, `CHANGELOG.md`, các ADR) cũng giữ.
+- Định danh lúc chạy mà bản đã cài còn dùng (mục 5, 6): `Filee.exe`, `Filee.app`, tiền tố tệp phát hành, AppId Inno
+  Setup, `Filee.ExplorerMenu`... Gói Linux chép thêm `filee.png` vì lối tắt menu của bản cài trước 2.4.2 trỏ vào tên đó
+  và trình cập nhật trong app không chạy lại `install.sh`.
+- `ForkDefaults.Brand()` vẫn đổi tên lúc chạy (lưới an toàn cho chuỗi còn sót), test của nó cố ý dùng chữ "Filee".

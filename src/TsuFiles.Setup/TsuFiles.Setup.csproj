@@ -12,7 +12,7 @@
     <AssemblyName>TsuFiles.Setup</AssemblyName>
     <RootNamespace>TsuFiles.Setup</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <ApplicationIcon>..\TsuFiles.App\Assets\Icons\filee.ico</ApplicationIcon>
+    <ApplicationIcon>..\TsuFiles.App\Assets\Icons\tsufiles.ico</ApplicationIcon>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <!-- Kept trim- and AOT-safe (no reflection, compiled bindings, source-generated COM), so the publish can be
@@ -66,8 +66,8 @@
     <Compile Include="..\TsuFiles.App\Controls\SlideShow.cs" Link="Shared\SlideShow.cs" />
     <AvaloniaResource Include="..\TsuFiles.App\Assets\WhatsNew\**" Link="Assets\WhatsNew\%(RecursiveDir)%(Filename)%(Extension)" />
     <AvaloniaResource Include="..\TsuFiles.App\Styles\Soft.axaml" Link="Styles\Soft.axaml" />
-    <AvaloniaResource Include="..\TsuFiles.App\Assets\Icons\filee.ico" Link="Assets\Icons\filee.ico" />
-    <AvaloniaResource Include="..\TsuFiles.App\Assets\Icons\filee.png" Link="Assets\Icons\filee.png" />
+    <AvaloniaResource Include="..\TsuFiles.App\Assets\Icons\tsufiles.ico" Link="Assets\Icons\tsufiles.ico" />
+    <AvaloniaResource Include="..\TsuFiles.App\Assets\Icons\tsufiles.png" Link="Assets\Icons\tsufiles.png" />
     <EmbeddedResource Include="..\TsuFiles.App\Assets\i18n\*.json" Link="i18n\%(Filename)%(Extension)" LogicalName="i18n.%(Filename)%(Extension)" />
   </ItemGroup>
 

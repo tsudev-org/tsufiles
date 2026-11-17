@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace TsuFiles.Core.Settings;
 
-/// <summary>Colours from <c>theme.json</c>, by variant. Missing keys keep Filee's own colours.</summary>
+/// <summary>Colours from <c>theme.json</c>, by variant. Missing keys keep TsuFiles's own colours.</summary>
 public sealed partial class CustomTheme
 {
     /// <summary>File name inside the data directory (<see cref="UserDataStore.Directory"/>).</summary>
@@ -36,7 +36,7 @@ public sealed partial class CustomTheme
 
     /// <summary>
     /// Reads <c>theme.json</c> from <paramref name="directory"/>. Unknown names and values that are not hex colours
-    /// are dropped (and logged); a missing, empty or unreadable file gives null, so Filee's own colours apply.
+    /// are dropped (and logged); a missing, empty or unreadable file gives null, so TsuFiles's own colours apply.
     /// The file is the user's: unlike settings.json it is never renamed or rewritten.
     /// </summary>
     public static CustomTheme? Load(string directory, ILogger? log = null)
@@ -71,7 +71,7 @@ public sealed partial class CustomTheme
         if (theme is null || theme.IsEmpty)
         {
             // Also covers "Dark" or "Light" with a capital: variant names are case-sensitive, colour names are not.
-            log.LogWarning("Custom theme {Path} sets no colours Filee can use (expected \"light\"/\"dark\" objects of #RRGGBB values)", path);
+            log.LogWarning("Custom theme {Path} sets no colours TsuFiles can use (expected \"light\"/\"dark\" objects of #RRGGBB values)", path);
             return null;
         }
         return theme;

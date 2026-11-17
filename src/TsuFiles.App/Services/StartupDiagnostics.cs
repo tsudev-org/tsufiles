@@ -1,5 +1,5 @@
-// What Filee writes to its log before and around start-up: one line describing this launch, and every exception that
-// would otherwise end the process (or vanish in a task) without a trace. A report of a Filee that ignored every
+// What TsuFiles writes to its log before and around start-up: one line describing this launch, and every exception that
+// would otherwise end the process (or vanish in a task) without a trace. A report of a TsuFiles that ignored every
 // gesture came with an empty log; these lines are what tells such cases apart.
 
 using System.Runtime.InteropServices;
@@ -14,7 +14,7 @@ internal static class StartupDiagnostics
 {
     /// <summary>
     /// A logger for Program, before the service container exists. It writes to the same daily file. A log folder that
-    /// can't be created gives a logger that drops everything: logging must never stop Filee from starting.
+    /// can't be created gives a logger that drops everything: logging must never stop TsuFiles from starting.
     /// </summary>
     public static ILogger CreateEarlyLogger(string logDirectory)
         => CreateEarlyLogger(logDirectory, out _);
@@ -41,7 +41,7 @@ internal static class StartupDiagnostics
     /// </summary>
     public static string Describe(string version, string? executable, string installKind, ElevationState elevation,
         string operatingSystem, int argumentCount) =>
-        $"Filee {version} starting: {executable ?? "(unknown path)"} ({installKind}), {elevation}, {operatingSystem}, " +
+        $"TsuFiles {version} starting: {executable ?? "(unknown path)"} ({installKind}), {elevation}, {operatingSystem}, " +
         $"{argumentCount} argument(s)";
 
     /// <summary>How this copy got here: Setup, a release archive, or a build from source.</summary>

@@ -1,4 +1,4 @@
-// System.Text.Json source generation for everything Filee persists. Reflection-free and trim-safe.
+// System.Text.Json source generation for everything TsuFiles persists. Reflection-free and trim-safe.
 
 using System.Text.Json.Serialization;
 using TsuFiles.Core.History;

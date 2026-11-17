@@ -1,5 +1,5 @@
 // What the clip window reads of a video: its length and pictures of its frames, the loudness of its sound and where
-// it is silent, and the clip played with its sound. Filee's FFmpeg does it; tests stand in for it.
+// it is silent, and the clip played with its sound. TsuFiles's FFmpeg does it; tests stand in for it.
 
 using TsuFiles.Core.Presets;
 using TsuFiles.Engines.Media;
@@ -34,7 +34,7 @@ public interface IVideoFrameSource
     Task PlayAsync(string path, ClipEdit clip, int height, Action<byte[], int, int, double> onFrame, CancellationToken cancellationToken);
 }
 
-/// <summary>All of it with Filee's FFmpeg (<see cref="VideoFrames"/>, <see cref="ClipPreview"/>).</summary>
+/// <summary>All of it with TsuFiles's FFmpeg (<see cref="VideoFrames"/>, <see cref="ClipPreview"/>).</summary>
 public sealed class FfmpegFrameSource : IVideoFrameSource
 {
     public Task<VideoSummary> ProbeAsync(string path, CancellationToken cancellationToken) =>

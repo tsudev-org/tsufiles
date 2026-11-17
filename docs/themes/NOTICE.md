@@ -1,6 +1,6 @@
 # Theme example sources and notices
 
-The JSON files in this folder map these palettes to Filee's existing colour roles. They are optional
+The JSON files in this folder map these palettes to TsuFiles's existing colour roles. They are optional
 documentation examples. The light/dark mappings and foreground adjustments are Filee-specific adaptations.
 
 | Example | Palette source (fixed revision) | License notice |

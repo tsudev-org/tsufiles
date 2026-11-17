@@ -1,6 +1,6 @@
-// Material Design 3 dynamic tonal palette generator for Filee.
+// Material Design 3 dynamic tonal palette generator for TsuFiles.
 // Generates variant-specific theme resources (surfaces, text, borders, shadows, and accent roles)
-// from a seed colour using perceptual HSL tonal mapping. Built strictly on Filee's existing theme resource keys.
+// from a seed colour using perceptual HSL tonal mapping. Built strictly on TsuFiles's existing theme resource keys.
 
 using Avalonia;
 using Avalonia.Controls;
@@ -28,7 +28,7 @@ public sealed class MaterialYouPalette
     public required Color AccentStrong { get; init; }
     public required Color OnAccent { get; init; }
 
-    /// <summary>Creates an Avalonia ResourceDictionary mapping standard Filee theme keys to solid brushes and resources.</summary>
+    /// <summary>Creates an Avalonia ResourceDictionary mapping standard TsuFiles theme keys to solid brushes and resources.</summary>
     public ResourceDictionary ToResourceDictionary()
     {
         var resources = new ResourceDictionary

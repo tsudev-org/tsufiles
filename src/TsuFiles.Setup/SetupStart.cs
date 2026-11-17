@@ -2,7 +2,7 @@
 // uninstaller's name (uninstall.exe: what Setup writes next to Filee.exe, and the copy it runs from %TEMP%), under the
 // build output's name (TsuFiles.Setup.exe, a development build) or with /UNINSTALL. Any other program without a payload is
 // a Setup.exe whose download didn't finish: the payload's trailer is the last part of the file (only the signature
-// comes after it), so a cut file has none. Run as the uninstaller, it said Filee isn't installed in the Downloads
+// comes after it), so a cut file has none. Run as the uninstaller, it said TsuFiles isn't installed in the Downloads
 // folder (#599).
 
 using TsuFiles.Setup.Installation;

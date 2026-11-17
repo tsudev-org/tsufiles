@@ -14,10 +14,10 @@ public interface IPlatformServices
     /// </summary>
     bool PressCarriesPosition => true;
 
-    /// <summary>Whether this platform can show or hide Filee in the Dock.</summary>
+    /// <summary>Whether this platform can show or hide TsuFiles in the Dock.</summary>
     bool SupportsDockVisibility => false;
 
-    /// <summary>Sets whether Filee appears in the Dock, returning whether the platform accepted the change.</summary>
+    /// <summary>Sets whether TsuFiles appears in the Dock, returning whether the platform accepted the change.</summary>
     bool TrySetShowInDock(bool show) => false;
 
     /// <summary>True if the window at the screen point belongs to the file manager or desktop. Coordinates are pixels on Windows/Linux and desktop points on macOS.</summary>
@@ -46,13 +46,13 @@ public interface IPlatformServices
 
     /// <summary>
     /// Names of the apps that have a window open now, as <see cref="ProcessNameAt"/> reports them, sorted, without
-    /// Filee. Windows reports a main window per process; macOS and Linux list the windows on screen.
+    /// TsuFiles. Windows reports a main window per process; macOS and Linux list the windows on screen.
     /// </summary>
     IReadOnlyList<string> RunningAppNames() => AppNames(System.Diagnostics.Process.GetProcesses()
         .Where(p => { try { return p.MainWindowHandle != 0; } catch (InvalidOperationException) { return false; } })
         .Select(p => { using (p) return p.ProcessName; }));
 
-    /// <summary>Distinct, sorted, Filee itself left out.</summary>
+    /// <summary>Distinct, sorted, TsuFiles itself left out.</summary>
     static IReadOnlyList<string> AppNames(IEnumerable<string?> names)
     {
         var own = System.Diagnostics.Process.GetCurrentProcess().ProcessName;
@@ -62,13 +62,13 @@ public interface IPlatformServices
 
     /// <summary>
     /// The existing file or folder the shortcut at <paramref name="path"/> points to (a .lnk on Windows, a Finder
-    /// alias on macOS); null for anything else, a broken shortcut, or a platform whose shortcuts Filee doesn't follow
+    /// alias on macOS); null for anything else, a broken shortcut, or a platform whose shortcuts TsuFiles doesn't follow
     /// (Linux .desktop links aren't followed yet).
     /// </summary>
     string? ShortcutTarget(string path) => null;
 
     /// <summary>
-    /// <paramref name="paths"/> with every shortcut replaced by what it points to, for files that come into Filee
+    /// <paramref name="paths"/> with every shortcut replaced by what it points to, for files that come into TsuFiles
     /// (drops, the file manager's menu and selection). A broken shortcut stays, so it is reported as unsupported.
     /// </summary>
     IReadOnlyList<string> ResolveShortcuts(IReadOnlyList<string> paths) => ResolveShortcuts(paths, ShortcutTarget);
@@ -127,7 +127,7 @@ public interface IPlatformServices
     /// </summary>
     void SetStartWithSystem(bool enabled, string executablePath);
 
-    /// <summary>Adds or removes the file manager context-menu entry ("Convert with Filee") and Send To shortcut.</summary>
+    /// <summary>Adds or removes the file manager context-menu entry ("Convert with TsuFiles") and Send To shortcut.</summary>
     void SetContextMenu(bool enabled, string executablePath, string label);
 
     /// <summary>State of the Windows 11 top-level File Explorer menu entry for the app at <paramref name="executablePath"/>.</summary>
@@ -213,7 +213,7 @@ public sealed record ClipboardContent(IReadOnlyList<string> Files, byte[]? Pictu
 /// <summary>The window in front: its process name as <see cref="IPlatformServices.ProcessNameAt"/> reports it, and whether it belongs to the file manager or desktop.</summary>
 public sealed record ForegroundWindowInfo(string? ProcessName, bool IsFileManager);
 
-/// <summary>Whether "Convert with Filee" is in the top-level Windows 11 File Explorer menu (not just "Show more options").</summary>
+/// <summary>Whether "Convert with TsuFiles" is in the top-level Windows 11 File Explorer menu (not just "Show more options").</summary>
 public enum ModernContextMenuState
 {
     /// <summary>Not possible here: another OS, Windows 10, ARM64, or a build without the Explorer extension files.</summary>

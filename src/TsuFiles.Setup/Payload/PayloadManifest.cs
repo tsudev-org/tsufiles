@@ -1,4 +1,4 @@
-// What Setup carries: the published Filee (every file with its size and SHA-256), the version, and the conversion
+// What Setup carries: the published TsuFiles (every file with its size and SHA-256), the version, and the conversion
 // engines Setup can offer (from EngineDownloads, written at build time by build/tools/make-setup.cs).
 
 using System.Text;

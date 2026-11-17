@@ -88,7 +88,7 @@ public partial class MainWindow : Window
         (Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown());
 
     /// <summary>
-    /// Leaves Filee in the tray: hides the window at once, then closes it for real, so its pages, visuals and images
+    /// Leaves TsuFiles in the tray: hides the window at once, then closes it for real, so its pages, visuals and images
     /// don't stay in memory until the next time (issue #119). <see cref="WindowService.ShowMain"/> opens a new one.
     /// </summary>
     internal void HideToTray()

@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  Signs every SHA256SUMS file of a release folder with Filee's update key: writes <name>.sig next to each one.
+  Signs every SHA256SUMS file of a release folder with TsuFiles's update key: writes <name>.sig next to each one.
 
 .DESCRIPTION
   The signature is ECDSA P-256 over the SHA-256 of the file's bytes, as base64 of r and s (64 bytes) on one line. The

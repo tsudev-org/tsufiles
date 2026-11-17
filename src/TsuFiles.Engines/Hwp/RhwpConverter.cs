@@ -32,7 +32,7 @@ public sealed class RhwpConverter : IConverter, ITextShapingCheck
     // one text element per character and converts that to PDF, a few ms per character. Its "direct" backend paints the
     // same layout straight into the PDF 30 to 100 times faster (a 65-page workbook of 180 000 characters: 24 minutes →
     // 20-45 s), but refuses pages with what it can't paint (gradients, patterns, shadows, connectors) and takes neither
-    // the generic fallback families nor the equation font of RhwpInput.PdfOptions. Documents Filee writes from a
+    // the generic fallback families nor the equation font of RhwpInput.PdfOptions. Documents TsuFiles writes from a
     // spreadsheet (text in table cells, borders, fills; SheetDocument) use it, with the SVG backend when it fails.
     private static readonly TimeSpan BaseTimeLimit = TimeSpan.FromMinutes(2);
     private static readonly TimeSpan TimeLimitPerMegabyte = TimeSpan.FromMinutes(30);
@@ -176,7 +176,7 @@ public sealed class RhwpConverter : IConverter, ITextShapingCheck
 
     /// <summary>
     /// Whether the PDF of a document converted from <paramref name="sourcePath"/> is drawn with rhwp's direct backend:
-    /// one Filee wrote from a spreadsheet.
+    /// one TsuFiles wrote from a spreadsheet.
     /// </summary>
     internal static bool UsesDirectBackend(string sourcePath) =>
         FormatRegistry.Detect(sourcePath) is { } format && SheetDocument.SourceFormats.Contains(format.Id);
@@ -277,7 +277,7 @@ public sealed class RhwpConverter : IConverter, ITextShapingCheck
         return new FileInfo(path).Length * 3;
     }
 
-    /// <summary>Filee's own copy (engines/rhwp), never one found elsewhere on the system.</summary>
+    /// <summary>TsuFiles's own copy (engines/rhwp), never one found elsewhere on the system.</summary>
     private static string? Locate() =>
         EngineEnvironment.FindBundled("rhwp") is { } bundled
             ? EngineEnvironment.FirstExisting(Path.Combine(bundled, OperatingSystem.IsWindows() ? "rhwp.exe" : "rhwp"))

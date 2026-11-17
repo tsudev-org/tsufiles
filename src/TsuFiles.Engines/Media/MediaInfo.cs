@@ -119,7 +119,7 @@ internal sealed record MediaInfo(TimeSpan? Duration, VideoStreamInfo? Video, Aud
     }
 
     /// <summary>
-    /// The audio track Filee maps for the file (the first one FFmpeg can decode); 0 when it can't be probed,
+    /// The audio track TsuFiles maps for the file (the first one FFmpeg can decode); 0 when it can't be probed,
     /// so FFmpeg reports the problem as before.
     /// </summary>
     internal static async Task<int> AudioTrackAsync(string ffprobe, string input, CancellationToken cancellationToken)

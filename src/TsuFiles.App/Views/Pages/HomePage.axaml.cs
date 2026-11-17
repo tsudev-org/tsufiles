@@ -28,7 +28,7 @@ public partial class HomePage : UserControl
 
     /// <summary>
     /// The first drag over the drop zone of this run is logged: a log without it after "drops don't work" means the
-    /// drag never reached Filee (Windows refuses drops from Explorer into a Filee running as administrator).
+    /// drag never reached TsuFiles (Windows refuses drops from Explorer into a TsuFiles running as administrator).
     /// </summary>
     private static int _dragEnterLogged;
 

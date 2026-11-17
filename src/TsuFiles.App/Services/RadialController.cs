@@ -120,7 +120,7 @@ public sealed class RadialController(
     /// <summary>
     /// Opens the donut for known files (click mode). Shortcuts among them stand for the files they point to.
     /// <paramref name="forAnotherProcess"/>: the files came from a later launch or the Services menu, so on macOS the
-    /// donut may lose focus once while Filee becomes the active app. <paramref name="web"/>: the files are placeholders
+    /// donut may lose focus once while TsuFiles becomes the active app. <paramref name="web"/>: the files are placeholders
     /// of this browser drop (the drop zone, a picture on the clipboard), which the donut now owns.
     /// <paramref name="toClipboard"/>: the files came from the clipboard, and their results go back on it.
     /// </summary>
@@ -179,10 +179,10 @@ public sealed class RadialController(
         if (!_visible || viewModel.IsClickMode)
             return;
         // No drag ever entered the donut's window: nothing was dragged (a rubber-band selection), or Windows kept
-        // Explorer's drag out (Filee runs as administrator). Tells "the donut didn't react" reports apart.
+        // Explorer's drag out (TsuFiles runs as administrator). Tells "the donut didn't react" reports apart.
         if (!_dragReachedDonut && Throttle.TryEnter("no-drag-enter", out var held))
             log.LogInformation("Drag gesture ended without a drag entering the donut{Elevation}{Held}",
-                Program.Elevation.ShellCannotReachFilee ? " (Filee runs as administrator: Windows blocks drops from Explorer)" : "",
+                Program.Elevation.ShellCannotReachFilee ? " (TsuFiles runs as administrator: Windows blocks drops from Explorer)" : "",
                 LogThrottle.HeldText(held));
         // Nothing was brought to the donut: the window is invisible but catches clicks, so go right away.
         if (!viewModel.HasFiles && !_window!.DonutControl.IsInProgressMode)
@@ -239,8 +239,8 @@ public sealed class RadialController(
     }
 
     /// <summary>
-    /// The donut closed on files Filee can't read at all (".ncm"): offer to request the format, once per extension
-    /// while Filee runs. Files it reads, even mixed with unknown ones, get a conversion and the toast instead.
+    /// The donut closed on files TsuFiles can't read at all (".ncm"): offer to request the format, once per extension
+    /// while TsuFiles runs. Files it reads, even mixed with unknown ones, get a conversion and the toast instead.
     /// </summary>
     private void OfferFormatRequest()
     {
@@ -249,7 +249,7 @@ public sealed class RadialController(
         var extensions = FormatRequest.UnknownExtensions(viewModel.Files).Where(_formatRequestsOffered.Add).ToList();
         if (extensions.Count == 0)
             return;
-        log.LogInformation("Donut closed on files Filee can't read: {Extensions}", FormatRequest.Label(extensions));
+        log.LogInformation("Donut closed on files TsuFiles can't read: {Extensions}", FormatRequest.Label(extensions));
         windows.ShowFormatRequestNotice(extensions);
     }
 
@@ -287,7 +287,7 @@ public sealed class RadialController(
         window.DragWithoutFiles += formats =>
         {
             if (Throttle.TryEnter("drag-without-files", out var held))
-                log.LogInformation("A drag without files Filee reads entered the donut; it offered: {Formats}{Held}",
+                log.LogInformation("A drag without files TsuFiles reads entered the donut; it offered: {Formats}{Held}",
                     formats, LogThrottle.HeldText(held));
         };
         window.FilesEntered += files =>
@@ -753,7 +753,7 @@ public sealed class RadialController(
     /// background) macOS gives no keys to a global hook, only to the key window and app in front. The drag carries on;
     /// the keyboard goes back to the app that had it once the conversion starts or the donut closes (<see cref="ReturnKeyboard"/>),
     /// releasing key window status so typing returns to the previous app while the conversion ring finishes, and stays
-    /// with Filee when the drop opens a window of its own: a tool, the merge order, the save dialog (<see cref="KeepKeyboard"/>).
+    /// with TsuFiles when the drop opens a window of its own: a tool, the merge order, the save dialog (<see cref="KeepKeyboard"/>).
     /// Not on Windows, where a window taking the keyboard during a drag breaks Explorer's drag.
     /// </summary>
     private void TakeKeyboard(RadialWindow window)
@@ -768,7 +768,7 @@ public sealed class RadialController(
             window.Activate();
     }
 
-    /// <summary>The drop opens a window of Filee's own: the keyboard stays with Filee for it, not given back on close.</summary>
+    /// <summary>The drop opens a window of TsuFiles's own: the keyboard stays with TsuFiles for it, not given back on close.</summary>
     private void KeepKeyboard() => _tookKeyboard = false;
 
     /// <summary>Gives the keyboard back to the app the donut took it from, if the donut still has it.</summary>

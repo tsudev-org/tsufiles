@@ -1,4 +1,4 @@
-// TsuFiles: tên hiển thị "TsuFiles" trên mọi tiêu đề cửa sổ, kể cả tiêu đề đặt sẵn trong .axaml (Title="Filee")
+// TsuFiles: tên hiển thị "TsuFiles" trên mọi tiêu đề cửa sổ, kể cả tiêu đề đặt sẵn trong .axaml (Title="TsuFiles")
 // và tiêu đề ghép lúc chạy, mà không phải sửa từng tệp giao diện của upstream. Cửa sổ donut đặt sẵn tiêu đề
 // "TsuFiles Donut" (RadialWindow.axaml) - luật cửa sổ GNOME/KWin/Hyprland dựa vào đúng tiêu đề đó.
 

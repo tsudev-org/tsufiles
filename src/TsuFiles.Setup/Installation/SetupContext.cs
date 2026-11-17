@@ -4,18 +4,18 @@ using TsuFiles.Setup.Platform;
 
 namespace TsuFiles.Setup.Installation;
 
-/// <param name="Sandbox">A /SANDBOX run: Filee is never started.</param>
+/// <param name="Sandbox">A /SANDBOX run: TsuFiles is never started.</param>
 public sealed record SetupContext(ISetupRegistry Registry, ISetupSystem System, SetupPaths Paths, SetupLog Log, bool Sandbox = false);
 
 /// <summary>What the user chose (or the command line said).</summary>
 /// <param name="Folder">The install folder.</param>
-/// <param name="Engines">Engine packages Filee downloads when it starts (a fresh install's choice).</param>
+/// <param name="Engines">Engine packages TsuFiles downloads when it starts (a fresh install's choice).</param>
 /// <param name="Language">Setup's language.</param>
-/// <param name="LanguagePicked">The user picked <paramref name="Language"/> (or /LANG= did): a fresh Filee starts in
-/// it too. Otherwise Filee keeps following Windows' language.</param>
+/// <param name="LanguagePicked">The user picked <paramref name="Language"/> (or /LANG= did): a fresh TsuFiles starts in
+/// it too. Otherwise TsuFiles keeps following Windows' language.</param>
 /// <param name="NoIcons">/NOICONS: no Start menu or desktop shortcut.</param>
 /// <param name="Portable">/PORTABLE=1: only the files.</param>
-/// <param name="ForceClose">Programs still running from the install folder after "Filee --quit" are ended.</param>
+/// <param name="ForceClose">Programs still running from the install folder after "TsuFiles --quit" are ended.</param>
 public sealed record InstallChoices(
     string Folder,
     InstallScope Scope,
@@ -42,16 +42,16 @@ public enum SetupStep
 
 public sealed record SetupProgress(SetupStep Step, double Fraction);
 
-/// <summary>Something that didn't work but leaves a working Filee.</summary>
+/// <summary>Something that didn't work but leaves a working TsuFiles.</summary>
 public abstract record SetupWarning;
 
-/// <summary>Windows didn't register the top-level Explorer menu (Filee is still under "Show more options").</summary>
+/// <summary>Windows didn't register the top-level Explorer menu (TsuFiles is still under "Show more options").</summary>
 public sealed record ExplorerMenuWarning(string Error) : SetupWarning;
 
 /// <summary>Programs that need a Microsoft Visual C++ runtime this PC doesn't have.</summary>
 public sealed record RuntimeWarning(IReadOnlyList<MissingRuntime> Missing) : SetupWarning;
 
-/// <summary>Start Filee as the signed-in user with these arguments.</summary>
+/// <summary>Start TsuFiles as the signed-in user with these arguments.</summary>
 public sealed record LaunchRequest(string Executable, string Arguments);
 
 /// <summary>A problem with a message for the user (the key of a translated text and its arguments).</summary>
@@ -62,10 +62,10 @@ public sealed class SetupException(string textKey, string message, params string
 }
 
 /// <param name="Error">Why it failed; null when it worked.</param>
-/// <param name="RolledBack">The install folder is as it was before (the previous Filee still works).</param>
+/// <param name="RolledBack">The install folder is as it was before (the previous TsuFiles still works).</param>
 /// <summary>How an uninstall went: <paramref name="Error"/> is null when it worked.</summary>
 /// <param name="DeletedAtRestart">Files and folders still in use, which Windows deletes at the next restart.</param>
-/// <param name="CleanupFailed">Filee is gone, but what it registered for the user (see <see cref="Uninstaller.CleanupFailed"/>) may be left.</param>
+/// <param name="CleanupFailed">TsuFiles is gone, but what it registered for the user (see <see cref="Uninstaller.CleanupFailed"/>) may be left.</param>
 /// <param name="FilesLeftIn">The folder where files that do nothing now stay until the user deletes them (see <see cref="Uninstaller.FilesLeftIn"/>).</param>
 public sealed record UninstallResult(Exception? Error = null, int DeletedAtRestart = 0, bool CleanupFailed = false, string? FilesLeftIn = null);
 

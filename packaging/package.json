@@ -5,8 +5,8 @@
   "homepage": "https://files.tsudev.com",
   "license": "MIT",
   "description": {
-    "vi": "Chuyển đổi tệp ngoại tuyến 260+ định dạng - bản Việt hóa, gia cố bảo mật của Filee",
-    "en": "Offline file converter for 260+ formats - Vietnamese, security-hardened Filee"
+    "vi": "Chuyển đổi tệp ngoại tuyến 260+ định dạng - bản Việt hóa, gia cố bảo mật của TsuFiles",
+    "en": "Offline file converter for 260+ formats - Vietnamese, security-hardened TsuFiles"
   },
   "release": {
     "repo": "tsudev-org/tsufiles",
@@ -60,7 +60,7 @@
     "links": {
       "tsufiles": "tsufiles-cli"
     },
-    "icon": "filee.png",
+    "icon": "tsufiles.png",
     "desktop": {
       "name": "TsuFiles",
       "exec": "TsuFiles --convert %F",

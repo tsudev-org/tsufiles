@@ -24,7 +24,7 @@ using TsuFiles.Engines.Pdf;
 using UglyToad.PdfPig.Core;
 using UglyToad.PdfPig.Exceptions;
 
-// PDFtoImage marks its API for the platforms PDFium ships for; Filee only targets desktop platforms, all covered.
+// PDFtoImage marks its API for the platforms PDFium ships for; TsuFiles only targets desktop platforms, all covered.
 #pragma warning disable CA1416
 
 namespace TsuFiles.Engines.Ocr;
@@ -47,7 +47,7 @@ public sealed class TesseractConverter : IConverter
     internal static readonly IReadOnlyList<string> ImageSources = ["png", "jpg", "tiff", "bmp", "webp", "gif"];
 
     /// <summary>
-    /// One thread per Tesseract: Filee runs several pages at a time, and Tesseract's own threads would only compete
+    /// One thread per Tesseract: TsuFiles runs several pages at a time, and Tesseract's own threads would only compete
     /// (its documentation recommends this). TESSDATA_PREFIX of the system is not used, the job's folder is.
     /// </summary>
     private static readonly Dictionary<string, string> Environment = new()
@@ -76,7 +76,7 @@ public sealed class TesseractConverter : IConverter
             : EngineStatus.Available(_executable, EngineEnvironment.UsesFileesCopy("tesseract") ? EngineVersions.Component("tesseract") : null);
     }
 
-    /// <summary>The user's chosen copy, Filee's download, then one installed on the system.</summary>
+    /// <summary>The user's chosen copy, TsuFiles's download, then one installed on the system.</summary>
     internal static string? Locate() =>
         EngineEnvironment.OwnProgram("tesseract", "tesseract.exe") ?? EngineEnvironment.BundledProgram("tesseract", "tesseract.exe")
         ?? EngineEnvironment.SystemProgram("tesseract", "tesseract.exe");

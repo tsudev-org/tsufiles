@@ -2,7 +2,7 @@
 // XMP-dc, a PDF's document info …), searchable; with ExifTool, for a kind of file it writes, each value can be edited,
 // removed or added and Remove location / Remove everything clear many at once. Saving starts an ordinary conversion
 // (MetadataTool) that writes only the metadata, into a copy or in the original's place, shown in the toast. Without
-// ExifTool the window offers it and reads nothing: a file can make a reader inside Filee hang or fill the memory, and
+// ExifTool the window offers it and reads nothing: a file can make a reader inside TsuFiles hang or fill the memory, and
 // ExifTool runs apart, under limits, and stops when the window closes.
 
 using System.Collections.ObjectModel;

@@ -31,7 +31,7 @@ public sealed class TriggerService : IDisposable
     /// TSUFILES_TRACE_GESTURES=1 logs each mouse press and scope decision, to find why a gesture doesn't fire, each
     /// release with how far the mouse went while held, each drag gesture that fired and each time the gestures are set
     /// again (a press waiting to become a drag is dropped then, #739), and on Windows each mouse move that reached
-    /// Filee late (a stuck cursor, #511).
+    /// TsuFiles late (a stuck cursor, #511).
     /// </summary>
     private static readonly bool Trace = Environment.GetEnvironmentVariable("TSUFILES_TRACE_GESTURES") == "1";
 
@@ -90,7 +90,7 @@ public sealed class TriggerService : IDisposable
     /// <summary>
     /// On while the drag-mode donut shows files: the flip key (Tab unless set otherwise) and the mouse wheel are
     /// reported (<see cref="FlipKeyPressed"/>, once per press, not for the repeats of a held key;
-    /// <see cref="FlipWheelTurned"/>). During an OS drag the donut's window has no keyboard focus, so they reach Filee
+    /// <see cref="FlipWheelTurned"/>). During an OS drag the donut's window has no keyboard focus, so they reach TsuFiles
     /// only through the hook. Nothing is swallowed: the hook only listens (it runs on its own thread and can't hold an
     /// event back), Explorer and Finder ignore Tab during a drag, and with the donut closed neither is looked at.
     /// </summary>
@@ -128,7 +128,7 @@ public sealed class TriggerService : IDisposable
 
     public bool IsRunning => GnomeExtensionStatus == GnomeBridgeStatus.Connected || _hook?.IsRunning == true;
 
-    /// <summary>Where the GNOME Shell extension connection stands, or null when Filee doesn't use it.</summary>
+    /// <summary>Where the GNOME Shell extension connection stands, or null when TsuFiles doesn't use it.</summary>
     internal GnomeBridgeStatus? GnomeExtensionStatus { get; private set; }
     public string? Error { get; private set; }
 
@@ -161,9 +161,9 @@ public sealed class TriggerService : IDisposable
 
     /// <summary>
     /// macOS: whether to show the system's Accessibility alert: gestures wait for the permission, a drag gesture is
-    /// on, and Filee hasn't asked before. Once, not at every start (#316): after an update of the ad-hoc signed app,
-    /// the list can show Filee switched on while macOS still denies it, and the alert came back at every start. The
-    /// Home reminder stays until the permission is given and says to remove Filee from the list and add it again.
+    /// on, and TsuFiles hasn't asked before. Once, not at every start (#316): after an update of the ad-hoc signed app,
+    /// the list can show TsuFiles switched on while macOS still denies it, and the alert came back at every start. The
+    /// Home reminder stays until the permission is given and says to remove TsuFiles from the list and add it again.
     /// </summary>
     internal static bool ShouldAskForPermission(AppSettings settings, bool needsPermission) =>
         needsPermission && !settings.AccessibilityPromptShown
@@ -194,7 +194,7 @@ public sealed class TriggerService : IDisposable
         LinuxBackendMissing = false;
         try
         {
-            // Background threads: a hook that fails to stop can never keep Filee running after it quits.
+            // Background threads: a hook that fails to stop can never keep TsuFiles running after it quits.
             _hook = _createHook();
             _hook.HookEnabled += (_, _) => { _log.LogInformation("Global input hook started"); NotifyStatus(); };
             _hook.HookDisabled += (_, _) => { _log.LogInformation("Global input hook stopped"); NotifyStatus(); };
@@ -244,7 +244,7 @@ public sealed class TriggerService : IDisposable
                 }
             })
             // Highest: Windows holds every mouse move until this thread has queued it (#511). It does nothing else.
-            { IsBackground = true, Name = "Filee global input", Priority = ThreadPriority.Highest };
+            { IsBackground = true, Name = "TsuFiles global input", Priority = ThreadPriority.Highest };
             _hookThread.Start();
         }
         catch (Exception ex)
@@ -293,7 +293,7 @@ public sealed class TriggerService : IDisposable
                 _gnomeInput?.Reset(LastCursor.X, LastCursor.Y);
             GnomeExtensionStatus = status;
             if (status == GnomeBridgeStatus.VersionMismatch)
-                _log.LogWarning("GNOME pointer extension speaks another protocol version than this Filee ({Version}); " +
+                _log.LogWarning("GNOME pointer extension speaks another protocol version than this TsuFiles ({Version}); " +
                     "sign out and in to load the installed extension", GnomePointerState.ProtocolVersion);
             else
                 _log.LogInformation("GNOME pointer extension {State}",
@@ -301,7 +301,7 @@ public sealed class TriggerService : IDisposable
             NotifyStatus();
         }));
         _gnomeBridge = bridge;
-        _log.LogInformation("Waiting for the Filee GNOME pointer extension (no input-device permission required)");
+        _log.LogInformation("Waiting for the TsuFiles GNOME pointer extension (no input-device permission required)");
         NotifyStatus();
     }
 
@@ -330,10 +330,10 @@ public sealed class TriggerService : IDisposable
 
     private void OnMove(MouseHookEventArgs e)
     {
-        // How long Windows held the cursor for Filee (#511): the event's time is in Unix milliseconds there.
+        // How long Windows held the cursor for TsuFiles (#511): the event's time is in Unix milliseconds there.
         if (Trace && OperatingSystem.IsWindows()
             && DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - (long)e.RawEvent.Time is > LateMove and var late)
-            _log.LogInformation("Trace: a mouse move reached Filee {Late} ms late", late);
+            _log.LogInformation("Trace: a mouse move reached TsuFiles {Late} ms late", late);
         (_estX, _estY) = (e.Data.X, e.Data.Y);
         LastCursor = (e.Data.X, e.Data.Y);
         if (Trace && HeldButton(e.RawEvent.Mask) != TriggerMouseButton.None)
@@ -415,7 +415,7 @@ public sealed class TriggerService : IDisposable
     }
 
     /// <summary>
-    /// Checks every two seconds whether the user switched Filee on under Accessibility, then starts the gestures;
+    /// Checks every two seconds whether the user switched TsuFiles on under Accessibility, then starts the gestures;
     /// no restart needed.
     /// </summary>
     private void WatchForPermission()

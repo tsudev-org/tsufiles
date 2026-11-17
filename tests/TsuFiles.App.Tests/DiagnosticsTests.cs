@@ -170,7 +170,7 @@ public class StartupDiagnosticsTests
     {
         var line = StartupDiagnostics.Describe("1.11.0", "/opt/filee/Filee", "portable",
             new ElevationState(IntegrityLevel.High, IntegrityLevel.Medium, true), "Microsoft Windows 10.0.26200 X64", 3);
-        Assert.Equal("Filee 1.11.0 starting: /opt/filee/Filee (portable), integrity High (elevated), Explorer Medium, " +
+        Assert.Equal("TsuFiles 1.11.0 starting: /opt/filee/Filee (portable), integrity High (elevated), Explorer Medium, " +
                      "Microsoft Windows 10.0.26200 X64, 3 argument(s)", line);
     }
 
@@ -178,7 +178,7 @@ public class StartupDiagnosticsTests
     public void An_unknown_path_and_state_still_give_a_line()
     {
         var line = StartupDiagnostics.Describe("1.0.0", null, "development build", ElevationState.Unknown, "Linux", 0);
-        Assert.Equal("Filee 1.0.0 starting: (unknown path) (development build), integrity unknown, Linux, 0 argument(s)", line);
+        Assert.Equal("TsuFiles 1.0.0 starting: (unknown path) (development build), integrity unknown, Linux, 0 argument(s)", line);
     }
 
     [Theory]

@@ -1,4 +1,4 @@
-// Removes per-user integration and downloaded engines after Filee exits. User settings remain for reinstalling.
+// Removes per-user integration and downloaded engines after TsuFiles exits. User settings remain for reinstalling.
 
 using TsuFiles.Core.Platform;
 using TsuFiles.Core.Settings;

@@ -1,4 +1,4 @@
-// Everything in Filee's windows larger or smaller, as a browser zooms a page: Ctrl + mouse wheel, Ctrl + plus / minus,
+// Everything in TsuFiles's windows larger or smaller, as a browser zooms a page: Ctrl + mouse wheel, Ctrl + plus / minus,
 // Ctrl + 0 back to normal (Cmd on a Mac), and Theme → Window size. Each tracked window's content is scaled by a layout
 // transform (so layouts that adapt to their width see the room they really have), every window at once, and the size
 // is remembered (written a moment after the last change, without re-applying the other settings).
@@ -104,7 +104,7 @@ public static class UiZoom
 
     public static void Reset() => Set(1);
 
-    /// <summary>Writes a size still waiting for its moment (when Filee exits).</summary>
+    /// <summary>Writes a size still waiting for its moment (when TsuFiles exits).</summary>
     public static void Flush()
     {
         if (_saveTimer is not { IsEnabled: true } timer)

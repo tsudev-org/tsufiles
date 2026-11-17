@@ -1,5 +1,5 @@
 // COM interfaces of Explorer's shell browser, shared by the de-elevated restart (Elevation) and the selection lookup
-// (ExplorerTabs). Only the methods Filee calls are typed; the slots before them keep the vtable order and are never
+// (ExplorerTabs). Only the methods TsuFiles calls are typed; the slots before them keep the vtable order and are never
 // called.
 
 using System.Runtime.InteropServices;

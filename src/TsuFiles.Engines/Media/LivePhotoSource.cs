@@ -26,7 +26,7 @@ internal static class LivePhotoSource
     /// next to an iPhone photo with the same name and content identifier.
     /// </summary>
     /// <returns>The copy, and the iPhone MOV it was copied from (null for the others): no output may replace it.</returns>
-    /// <exception cref="ConversionRefusedException"><c>error.no_motion_photo</c>: the photo has no video Filee can read.</exception>
+    /// <exception cref="ConversionRefusedException"><c>error.no_motion_photo</c>: the photo has no video TsuFiles can read.</exception>
     public static async Task<(string Video, string? Companion)> ExtractAsync(string input, string from, string workDirectory,
         ILogger logger, CancellationToken ct)
     {
@@ -176,7 +176,7 @@ internal static class LivePhotoSource
     {
         if (entry.Length <= 0 || entry.Length > limit)
             throw new InvalidDataException("Live Photo archive entry is empty or too large.");
-        // The target is a name of Filee's own in the work directory, whatever the entry is called.
+        // The target is a name of TsuFiles's own in the work directory, whatever the entry is called.
         await using var source = entry.Open();
         await using var output = File.Create(target);
         await MovieBoxes.CopyRangeAsync(source, output, entry.Length, ct);

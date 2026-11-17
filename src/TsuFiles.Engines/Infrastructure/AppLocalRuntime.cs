@@ -1,7 +1,7 @@
 // The Microsoft C++ runtime (MSVCP140.dll, VCRUNTIME140.dll, ...) that engines built with Visual C++ need.
 //
 // Windows has no copy of its own: a PC gets one from the Visual C++ Redistributable, which many programs install but a
-// fresh Windows lacks. Filee therefore puts the runtime next to the programs that need it (app-local deployment,
+// fresh Windows lacks. TsuFiles therefore puts the runtime next to the programs that need it (app-local deployment,
 // Windows looks in a program's folder first): the "vcruntime" download (conda-forge) next to rhwp.exe, Filee.exe
 // (for unhwp.dll) and gswin64c.exe, LibreOffice's own copy next to soffice.exe (see CopyLibreOfficeRuntime).
 // When a DLL is still missing, Windows does not start the program at all and reports STATUS_DLL_NOT_FOUND as its

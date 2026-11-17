@@ -1,5 +1,5 @@
 // Mark of the Web: the "Zone.Identifier" stream Windows browsers attach to the files they download. SmartScreen,
-// Office's block on macros from the internet and Protected View go by it, so files Filee saves from the web get it,
+// Office's block on macros from the internet and Protected View go by it, so files TsuFiles saves from the web get it,
 // and files made from a marked file (unpacked from an archive, converted) keep it. Windows only. A drive without
 // streams (FAT32, exFAT, many network shares) can't hold it: nothing is written there, and nothing fails.
 

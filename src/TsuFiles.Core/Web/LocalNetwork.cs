@@ -1,5 +1,5 @@
 // Addresses on the user's own computer and network. A web page can put any address in a link it lets you drag, and
-// Filee downloads it without the browser, whose Private Network Access rules would stop a public page from reaching a
+// TsuFiles downloads it without the browser, whose Private Network Access rules would stop a public page from reaching a
 // router, a printer or a service on localhost. So a dragged link may only lead to the public internet.
 
 using System.Buffers.Binary;

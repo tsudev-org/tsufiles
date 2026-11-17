@@ -28,14 +28,14 @@ public static class EngineDownloads
 
     /// <summary>
     /// The downloads for this computer. On a Mac older than a download's minimumMacOS (calibre 9 needs macOS 14) that
-    /// download is left out, so the package is offered like one Filee has no download of.
+    /// download is left out, so the package is offered like one TsuFiles has no download of.
     /// </summary>
     public static IReadOnlyDictionary<string, EngineComponent> Components { get; } =
         ComponentsForRuntime(DownloadRuntime(RuntimeIdentifier, OperatingSystem.IsWindows() ? Environment.OSVersion.Version.Build : 0),
             OperatingSystem.IsMacOS() ? Environment.OSVersion.Version : null);
 
     /// <summary>
-    /// The downloads a Windows build runs: Filee has no ARM64 builds of the engines it downloads, and Windows 11 on ARM64
+    /// The downloads a Windows build runs: TsuFiles has no ARM64 builds of the engines it downloads, and Windows 11 on ARM64
     /// (build 22000 and later) runs the x64 ones under emulation, so win-arm64 gets the win-x64 list there. Windows 10 on
     /// ARM64 can't run x64 programs and gets none. The bundled rhwp and 7-Zip are ARM64 builds of the same versions.
     /// </summary>
@@ -76,8 +76,8 @@ public static class EngineDownloads
                 "ghostscript" => "Install Ghostscript with Homebrew (brew install ghostscript), then check again or select its bin folder.",
                 "tesseract" => "Install Tesseract with Homebrew (brew install tesseract), then check again or select its bin folder.",
                 "exiftool" => "Install ExifTool with Homebrew (brew install exiftool), then check again or select its folder.",
-                "calibre" => "The calibre Filee downloads needs macOS 14 or later. Install calibre 7.26 from calibre-ebook.com and select its .app folder.",
-                _ => $"No Filee download is available for {RuntimeIdentifier}. Install {package.Id} for this Mac and select its program or .app folder.",
+                "calibre" => "The calibre TsuFiles downloads needs macOS 14 or later. Install calibre 7.26 from calibre-ebook.com and select its .app folder.",
+                _ => $"No TsuFiles download is available for {RuntimeIdentifier}. Install {package.Id} for this Mac and select its program or .app folder.",
             };
         if (OperatingSystem.IsLinux())
             return package.Id switch
@@ -85,9 +85,9 @@ public static class EngineDownloads
                 "libreoffice" => "Install LibreOffice using your distribution's package manager (Ubuntu/Debian: sudo apt install libreoffice), then check again. HWP import through LibreOffice also needs Java and the H2Orestart extension.",
                 "ghostscript" => "Install Ghostscript using your distribution's package manager (Ubuntu/Debian: sudo apt install ghostscript), then check again.",
                 "tesseract" => "Install Tesseract using your distribution's package manager (Ubuntu/Debian: sudo apt install tesseract-ocr), then check again.",
-                _ => $"No Filee download is available for {RuntimeIdentifier}. Install {package.Id} using your distribution's package manager and select its program folder.",
+                _ => $"No TsuFiles download is available for {RuntimeIdentifier}. Install {package.Id} using your distribution's package manager and select its program folder.",
             };
-        return $"No Filee download is available for {RuntimeIdentifier}. Select a compatible installed copy.";
+        return $"No TsuFiles download is available for {RuntimeIdentifier}. Select a compatible installed copy.";
     }
 
     /// <summary>Packages whose download is smaller than this (bytes) are suggested, see <see cref="IsSuggested"/>.</summary>

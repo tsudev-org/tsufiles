@@ -844,7 +844,7 @@ exec ""$REAL_MV"" ""$@""
         var filee = Path.Combine(dir, "Filee");
         var app = Path.Combine(dir, "TsuFiles");
         var cli = Path.Combine(dir, "tsufiles-cli");
-        var icon = Path.Combine(dir, "filee.png");
+        var icon = Path.Combine(dir, "tsufiles.png");
         var ver = Path.Combine(dir, "version.txt");
         var script = Path.Combine(dir, "install.sh");
 

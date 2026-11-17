@@ -78,7 +78,7 @@ internal sealed partial class OfdReader
         }
     }
 
-    /// <summary>The seal picture of a signature as a file in the media folder; null when there is none Filee can show.</summary>
+    /// <summary>The seal picture of a signature as a file in the media folder; null when there is none TsuFiles can show.</summary>
     private string? SealFile(byte[] signed)
     {
         if (SealPicture(signed) is not { } data)

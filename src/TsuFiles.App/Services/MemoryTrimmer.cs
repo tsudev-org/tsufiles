@@ -1,6 +1,6 @@
-// Gives memory back while Filee waits in the tray (issues #119, #957): a while after the last conversion finished, after
+// Gives memory back while TsuFiles waits in the tray (issues #119, #957): a while after the last conversion finished, after
 // the main window was released, and after a start without a window. Large images grow the managed heap and the engines' caches, and the garbage collector
-// keeps that memory committed for the next allocation, so Filee stayed hundreds of MB above its idle size.
+// keeps that memory committed for the next allocation, so TsuFiles stayed hundreds of MB above its idle size.
 
 using System.Diagnostics;
 using Microsoft.Extensions.Logging;
@@ -93,7 +93,7 @@ public sealed class MemoryTrimmer : IDisposable
             // allocation (hundreds of MB after a large conversion), and only this one decommits them all. It compacts.
             // Compaction was once blamed for a CI crash in Skia (sk_pngencoder_encode) after a trim; the cause was tests
             // that let a captured frame be collected while Avalonia encoded it (WriteableBitmap.Save encodes a snapshot
-            // that doesn't own the pixels, and the finalizers this trim runs freed them). Nothing in Filee leaves native
+            // that doesn't own the pixels, and the finalizers this trim runs freed them). Nothing in TsuFiles leaves native
             // code with a pointer into managed memory: NativeMemoryStressTests converts under constant compaction.
             GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, blocking: true, compacting: true);
             ProcessMemory.TrimWorkingSet();

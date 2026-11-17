@@ -107,7 +107,7 @@ public static partial class ExifTool
         "-QuickTime:GPSCoordinates=", "-Keys:GPSCoordinates=", "-UserData:GPSCoordinates=", "-ItemList:GPSCoordinates=",
     ];
 
-    /// <summary>Groups worked out from the file or describing Filee's view of it, not stored in it.</summary>
+    /// <summary>Groups worked out from the file or describing TsuFiles's view of it, not stored in it.</summary>
     public static readonly IReadOnlySet<string> NotInTheFile = new HashSet<string> { "Composite", "System", "ExifTool" };
 
     /// <summary>
@@ -208,7 +208,7 @@ public static partial class ExifTool
     /// </summary>
     internal static bool PathsInArgumentFile { get; set; } = OperatingSystem.IsWindows();
 
-    /// <summary>The program of the ExifTool in use (the user's, Filee's download, one on the PC), or null.</summary>
+    /// <summary>The program of the ExifTool in use (the user's, TsuFiles's download, one on the PC), or null.</summary>
     public static string? Locate() =>
         EngineEnvironment.OwnProgram("exiftool", "exiftool.exe") ?? EngineEnvironment.BundledProgram("exiftool", "exiftool.exe")
         ?? EngineEnvironment.SystemProgram("exiftool", "exiftool.exe");
@@ -622,5 +622,5 @@ public static partial class ExifTool
 /// </summary>
 public sealed class MetadataRefusedException(string message) : IOException(message);
 
-/// <summary>A file that holds far more metadata than Filee takes in; it can be fine otherwise.</summary>
+/// <summary>A file that holds far more metadata than TsuFiles takes in; it can be fine otherwise.</summary>
 public sealed class MetadataTooLargeException(string message) : IOException(message);

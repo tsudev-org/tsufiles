@@ -62,7 +62,7 @@ internal static class HistoryThumbnails
 
     /// <summary>
     /// The thumbnail of <paramref name="path"/>, from the cache while the file is unchanged. Null when the file is gone,
-    /// too large or not a picture/video Filee reads. Reads the disk: never call it on the UI thread.
+    /// too large or not a picture/video TsuFiles reads. Reads the disk: never call it on the UI thread.
     /// </summary>
     public static Bitmap? Load(string path)
     {

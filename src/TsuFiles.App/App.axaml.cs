@@ -44,21 +44,21 @@ public partial class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 
-    /// <summary>Ends Filee as the tray's Quit does.</summary>
+    /// <summary>Ends TsuFiles as the tray's Quit does.</summary>
     public static void Quit() => (Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown();
 
     private void Start(IClassicDesktopStyleApplicationLifetime desktop)
     {
         var log = AppHost.Get<ILogger<App>>();
-        // macOS: "Convert with Filee" in Finder's right-click menu. Registered first, so a service picked while
-        // Filee wasn't running is delivered as soon as it starts. A request without files Filee can find (another
-        // file manager put its selection on the pasteboard in a form Filee doesn't read) is logged with what it held.
+        // macOS: "Convert with TsuFiles" in Finder's right-click menu. Registered first, so a service picked while
+        // TsuFiles wasn't running is delivered as soon as it starts. A request without files TsuFiles can find (another
+        // file manager put its selection on the pasteboard in a form TsuFiles doesn't read) is logged with what it held.
         if (OperatingSystem.IsMacOS())
             TsuFiles.Platform.MacOS.MacOSServicesProvider.Register(
                 files => Dispatcher.UIThread.Post(() => HandleCommandLine(CommandLine.Parse(["--convert", .. files]))),
-                types => log.LogWarning("Convert with Filee was picked, but the request named no existing file; it held: {Types}",
+                types => log.LogWarning("Convert with TsuFiles was picked, but the request named no existing file; it held: {Types}",
                     types.Count == 0 ? "nothing" : string.Join(", ", types)));
-        // Exceptions in UI event handlers end Filee; write them down first (they are not marked handled).
+        // Exceptions in UI event handlers end TsuFiles; write them down first (they are not marked handled).
         Dispatcher.UIThread.UnhandledException += (_, e) =>
             log.LogCritical(e.Exception, "Unhandled exception on the UI thread");
         var watchdog = new UiWatchdog(action => Dispatcher.UIThread.Post(action), AppHost.Get<ILogger<UiWatchdog>>());
@@ -123,7 +123,7 @@ public partial class App : Application
                 else if (files.Count == 0 && Throttle.TryEnter("empty-selection", out var held))
                     log.LogInformation("The selection shortcut found no selected files in {Window}{Elevation}{Held}",
                         platform.DescribeForegroundWindow() is { Length: > 0 } window ? window : "the foreground window",
-                        Program.Elevation.ShellCannotReachFilee ? " (Filee runs as administrator and can't read Explorer)" : "",
+                        Program.Elevation.ShellCannotReachFilee ? " (TsuFiles runs as administrator and can't read Explorer)" : "",
                         LogThrottle.HeldText(held));
             }
             catch (Exception ex) when (ex is not OutOfMemoryException)
@@ -139,7 +139,7 @@ public partial class App : Application
             }
         };
         triggers.Start();
-        log.LogInformation("Filee {Version} started", UpdateService.CurrentVersion);
+        log.LogInformation("TsuFiles {Version} started", UpdateService.CurrentVersion);
         // Which way the transparent windows (donut, toast) are drawn, for reports of one that isn't see-through (#269).
         if (OperatingSystem.IsWindows())
         {
@@ -148,7 +148,7 @@ public partial class App : Application
         }
         else if (Program.LinuxDrawsInSoftware)
             log.LogInformation("Rendering: software ({Variable})", WindowsRendering.Variable);
-        // macOS: ask for Accessibility with the system's own alert when the user opened Filee (not at sign-in) and
+        // macOS: ask for Accessibility with the system's own alert when the user opened TsuFiles (not at sign-in) and
         // a drag gesture is on, once ever (see ShouldAskForPermission). The home page keeps a reminder until it is
         // given. Asked once the main window is up: asked earlier, the alert ends up behind it.
         if (OperatingSystem.IsMacOS() && !Program.Options.Background
@@ -197,7 +197,7 @@ public partial class App : Application
 
         // Before HandleCommandLine marks the first run complete: a fresh install gets no slides (an update by the
         // installer does, even when its settings are gone). Without the main window (sign-in, the Explorer menu) they
-        // wait until the user opens Filee, unless the installer asked for them.
+        // wait until the user opens TsuFiles, unless the installer asked for them.
         AppHost.Get<WhatsNewService>().CheckAtStartup(
             background: Program.Options.Background && !Program.Options.ShowSettings && !Program.Options.WhatsNew
                         || Program.Options.ConvertFiles.Count > 0,
@@ -209,19 +209,19 @@ public partial class App : Application
                 if (e.Kind == ActivationKind.Reopen)
                     Dispatcher.UIThread.Post(() =>
                     {
-                        // Clicking the Dock icon or opening Filee again in Finder brings the window back, as Mac apps do
+                        // Clicking the Dock icon or opening TsuFiles again in Finder brings the window back, as Mac apps do
                         // (#232), also while it only runs in the background.
                         AppHost.Get<WindowService>().ShowMain(store.Settings.FirstRunCompleted ? null : "home");
                         if (!store.Settings.ShowInDock && !platform.TrySetShowInDock(false))
-                            log.LogWarning("Could not restore the macOS Dock visibility policy after reopening Filee");
+                            log.LogWarning("Could not restore the macOS Dock visibility policy after reopening TsuFiles");
                     });
             };
         WatchForUpdates(store);
         CheckMinimumVersion();
-        // Started to the tray (at sign-in): no job or window would ask for a trim, however long Filee waits there (#957).
+        // Started to the tray (at sign-in): no job or window would ask for a trim, however long TsuFiles waits there (#957).
         if (AppHost.Get<WindowService>().Main is null)
             AppHost.Get<MemoryTrimmer>().Request();
-        // Filee runs as administrator while Explorer doesn't (an installer started "as administrator" started it):
+        // TsuFiles runs as administrator while Explorer doesn't (an installer started "as administrator" started it):
         // say so once, next to the tray, and on the Home page for as long as it lasts.
         if (AppHost.Get<ElevationService>().ShellCannotReachFilee)
             DispatcherTimer.RunOnce(() => AppHost.Get<WindowService>().ShowElevationNotice(), TimeSpan.FromSeconds(2));
@@ -289,7 +289,7 @@ public partial class App : Application
     {
         var updates = AppHost.Get<UpdateService>();
         updates.RequestApplicationShutdown = Quit;
-        // Required: the card every time Filee starts (UpdateFound fires once per run). Recommended: once per version.
+        // Required: the card every time TsuFiles starts (UpdateFound fires once per run). Recommended: once per version.
         // Optional: no card, the sidebar button only. Frequent releases no longer ask every day.
         updates.UpdateFound += (_, version) =>
         {
@@ -301,7 +301,7 @@ public partial class App : Application
             AppHost.Get<WindowService>().ShowUpdateNotice(version);
         };
         updates.UpdateFailed += async (_, _) => await AppHost.Get<WindowService>().ShowUpdateFailedAsync();
-        // The last run's update failed after Filee closed (Linux): the installer rolled back and started this copy.
+        // The last run's update failed after TsuFiles closed (Linux): the installer rolled back and started this copy.
         if (updates.CheckPendingFailure(store.Directory))
             Dispatcher.UIThread.Post(async () => await AppHost.Get<WindowService>().ShowUpdateRolledBackAsync(updates.LastFailureLogPath));
         updates.StartPeriodicChecks(() => store.Settings.CheckForUpdates, TimeSpan.FromSeconds(20));
@@ -325,7 +325,7 @@ public partial class App : Application
     }
 
     /// <summary>
-    /// Engines the user downloaded that are older than the versions this Filee pins (it was updated since): one
+    /// Engines the user downloaded that are older than the versions this TsuFiles pins (it was updated since): one
     /// notice per new version, only to people who installed that engine, and only while update checks are on.
     /// </summary>
     private static void NotifyEngineUpdates(UserDataStore store)
@@ -380,11 +380,11 @@ public partial class App : Application
         // Pairs with "A later launch handed over …": the request reached the UI thread too.
         if (forwarded && Throttle.TryEnter("forwarded-handled", out var held))
             AppHost.Get<ILogger<App>>().LogInformation("Handling a later launch: {Request}{Held}",
-                options.Quit ? "quit" : options.ConvertFiles.Count > 0 ? $"convert {options.ConvertFiles.Count} file(s)" : "show Filee",
+                options.Quit ? "quit" : options.ConvertFiles.Count > 0 ? $"convert {options.ConvertFiles.Count} file(s)" : "show TsuFiles",
                 LogThrottle.HeldText(held));
         if (options.Quit)
         {
-            // The installer is about to replace or remove Filee's files (Program.RunInstallerCommand waits for this).
+            // The installer is about to replace or remove TsuFiles's files (Program.RunInstallerCommand waits for this).
             (ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown();
             return;
         }
@@ -435,7 +435,7 @@ public partial class App : Application
     /// </summary>
     private static void ApplyInstallerChoices(CommandLine options, UserDataStore store)
     {
-        // Only Filee's languages; anything else keeps the setting (normally "auto", Windows' language).
+        // Only TsuFiles's languages; anything else keeps the setting (normally "auto", Windows' language).
         var language = LocalizationService.Languages.FirstOrDefault(l => l.Code.Equals(options.Language, StringComparison.OrdinalIgnoreCase)).Code;
         if (options.StartWithWindows is null && options.ContextMenu is null && language is null)
             return;

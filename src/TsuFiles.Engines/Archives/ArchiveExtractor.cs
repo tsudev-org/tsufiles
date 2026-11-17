@@ -1,7 +1,7 @@
-// Unpacks every archive format Filee reads into a folder: the bundled 7-Zip for most of them, Filee's own readers for
+// Unpacks every archive format TsuFiles reads into a folder: the bundled 7-Zip for most of them, TsuFiles's own readers for
 // ALZ, EGG and lzip. Compressed TARs (.tar.gz, .tar.lz …) and RPM payloads are unpacked stage by stage until the
 // files appear. Every stage is checked first (encryption, paths leaving the folder, disk space) and links are removed.
-// A single compressed stream (.gz, .bz2 …) is written by Filee as 7-Zip decodes it, so it can't fill the drive. The
+// A single compressed stream (.gz, .bz2 …) is written by TsuFiles as 7-Zip decodes it, so it can't fill the drive. The
 // archive's Mark of the Web goes onto the unpacked files.
 
 using TsuFiles.Core.Formats;
@@ -24,7 +24,7 @@ internal sealed class ArchiveExtractor(SevenZip? sevenZip, Func<string, long>? s
         "mcpack", "mcaddon", "mcworld", "mctemplate", "mrpack",
     ];
 
-    /// <summary>Formats read by Filee's own code (lzip still needs 7-Zip's LZMA decoder).</summary>
+    /// <summary>Formats read by TsuFiles's own code (lzip still needs 7-Zip's LZMA decoder).</summary>
     public static readonly IReadOnlyList<string> BuiltInFormats = ["alz", "egg", "lz", "tlz"];
 
     /// <summary>Everything that can be unpacked.</summary>
@@ -137,7 +137,7 @@ internal sealed class ArchiveExtractor(SevenZip? sevenZip, Func<string, long>? s
     }
 
     /// <summary>
-    /// Gives the files Filee's own code unpacked into <paramref name="folder"/> the archive's Mark of the Web, if it has
+    /// Gives the files TsuFiles's own code unpacked into <paramref name="folder"/> the archive's Mark of the Web, if it has
     /// one (7-Zip does this itself for the files it writes).
     /// </summary>
     private static void PassOnMark(string archive, string folder) =>

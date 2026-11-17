@@ -1,4 +1,4 @@
-// Keeps one Filee per Windows session, or per user across Unix launcher/terminal sessions.
+// Keeps one TsuFiles per Windows session, or per user across Unix launcher/terminal sessions.
 // Later launches forward arguments through a named pipe.
 
 using System.IO.Pipes;
@@ -36,7 +36,7 @@ public sealed class SingleInstance : IDisposable
 
     /// <summary>
     /// The mutex and pipe name for a user. A copy started with TSUFILES_DATA_DIR (<paramref name="dataDirectoryOverride"/>)
-    /// gets a name of its own, so it neither forwards to nor receives from the Filee the user runs.
+    /// gets a name of its own, so it neither forwards to nor receives from the TsuFiles the user runs.
     /// </summary>
     internal static string NameFor(string userName, string? dataDirectoryOverride)
     {
@@ -44,7 +44,7 @@ public sealed class SingleInstance : IDisposable
         return "Filee-" + Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(key)))[..12];
     }
 
-    /// <summary>The instance under another name (tests, which must not reach a Filee that is running).</summary>
+    /// <summary>The instance under another name (tests, which must not reach a TsuFiles that is running).</summary>
     internal static SingleInstance Acquire(string name)
     {
         bool createdNew;
@@ -100,11 +100,11 @@ public sealed class SingleInstance : IDisposable
                     }
                     catch (Exception ex)
                     {
-                        // The pipe name is still held by a Filee with other rights (one that just restarted this one
+                        // The pipe name is still held by a TsuFiles with other rights (one that just restarted this one
                         // without administrator rights and is closing), a peer of another user was refused, the process
                         // is out of file handles and can't accept the launches that wait, a launch never sent its
                         // arguments, or a handler threw. Listening has to outlive any of this, or every later launch
-                        // fails until Filee restarts: try again in a moment.
+                        // fails until TsuFiles restarts: try again in a moment.
                         try
                         {
                             // On macOS an accept without a free file handle drops the launch it took from the queue.
@@ -186,7 +186,7 @@ public sealed class SingleInstance : IDisposable
     public bool ForwardToFirst(string[] args, TimeSpan wait) => Forward(args, wait) == ForwardResult.Delivered;
 
     /// <summary>
-    /// Like <see cref="ForwardToFirst"/>, telling why it failed. A pipe that keeps refusing access belongs to a Filee
+    /// Like <see cref="ForwardToFirst"/>, telling why it failed. A pipe that keeps refusing access belongs to a TsuFiles
     /// running with other rights (as administrator, while this one isn't): that never changes, so it gives up after a
     /// few tries instead of waiting the whole time.
     /// </summary>
@@ -274,18 +274,18 @@ public sealed class SingleInstance : IDisposable
 public enum ForwardResult
 {
     /// <summary>
-    /// The arguments are sent. On macOS and Linux they can still wait on the socket of the running Filee, which takes
-    /// them even while that Filee hangs. They are lost if it closes before reading them, or on macOS when it has no
+    /// The arguments are sent. On macOS and Linux they can still wait on the socket of the running TsuFiles, which takes
+    /// them even while that TsuFiles hangs. They are lost if it closes before reading them, or on macOS when it has no
     /// file handle free to take them.
     /// </summary>
     Delivered,
 
     /// <summary>
-    /// Nobody took them in time: the running Filee is starting, shutting down or hung, or this launch can't open a
+    /// Nobody took them in time: the running TsuFiles is starting, shutting down or hung, or this launch can't open a
     /// connection.
     /// </summary>
     NoAnswer,
 
-    /// <summary>The running Filee's pipe refuses this process: it runs with other rights (as administrator).</summary>
+    /// <summary>The running TsuFiles's pipe refuses this process: it runs with other rights (as administrator).</summary>
     AccessDenied,
 }

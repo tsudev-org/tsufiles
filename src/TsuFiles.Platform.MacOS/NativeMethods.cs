@@ -162,7 +162,7 @@ internal static class NativeMethods
         behavior &= ~((1 << 16) | (1 << 17) | (1 << 18));
         // Finder can occupy a full-screen Space that would otherwise hide another app's toolbar.
         SendInteger(window, sel_registerName("setCollectionBehavior:"), behavior);
-        // A non-activating panel can join another app's full-screen Space while Filee remains in the Dock (#251).
+        // A non-activating panel can join another app's full-screen Space while TsuFiles remains in the Dock (#251).
         // Restore AvnWindow when hidden and before close so AppKit's KVO cleanup sees the initialized class (#805).
         var panel = objc_getClass("AvnPanel");
         if (panel != 0 && object_getClass(window) == objc_getClass("AvnWindow"))
@@ -247,7 +247,7 @@ internal static class NativeMethods
     }
 
     /// <summary>
-    /// Sets whether Filee appears in the Dock by changing the application activation policy. Changing the policy
+    /// Sets whether TsuFiles appears in the Dock by changing the application activation policy. Changing the policy
     /// deactivates the app, so activate it again when the change succeeds.
     /// </summary>
     internal static bool SetShowInDock(bool show)
@@ -318,7 +318,7 @@ internal static class NativeMethods
             var buffer = new byte[4096];
             if (!CFURLGetFileSystemRepresentation(target, true, buffer, buffer.Length))
                 return null;
-            // The file system representation is decomposed (NFD); dropped paths and the names Filee writes are
+            // The file system representation is decomposed (NFD); dropped paths and the names TsuFiles writes are
             // composed, and APFS and HFS+ find the file either way, so a "보고서" alias and its target match.
             var resolved = System.Text.Encoding.UTF8.GetString(buffer, 0, Array.IndexOf(buffer, (byte)0))
                 .Normalize(System.Text.NormalizationForm.FormC);
@@ -429,8 +429,8 @@ internal static class NativeMethods
     internal static extern bool AXIsProcessTrusted();
 
     /// <summary>
-    /// Whether Filee may watch input; when not, macOS shows its own alert (Open System Settings / Deny) and lists
-    /// Filee under Accessibility, switched off, so the user only has to switch it on.
+    /// Whether TsuFiles may watch input; when not, macOS shows its own alert (Open System Settings / Deny) and lists
+    /// TsuFiles under Accessibility, switched off, so the user only has to switch it on.
     /// </summary>
     internal static bool RequestAccessibility()
     {

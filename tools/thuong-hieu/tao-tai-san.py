@@ -53,8 +53,8 @@ OUTPUTS: dict[Path, tuple[int, int] | None] = {
     BRAND / "tsufiles-mark.webp": None,
     BRAND / "tsufiles-mark.avif": None,
     BRAND / "tsufiles-mark-512.png": (512, 512),
-    APP_ICONS / "filee.png": (512, 512),
-    APP_ICONS / "filee.ico": (256, 256),
+    APP_ICONS / "tsufiles.png": (512, 512),
+    APP_ICONS / "tsufiles.ico": (256, 256),
     WEB / "favicon.ico": (256, 256),
     WEB / "favicon-16x16.png": (16, 16),
     WEB / "favicon-32x32.png": (32, 32),
@@ -314,8 +314,8 @@ def build() -> None:
     save(icon(512), BRAND / "tsufiles-mark-512.png")
 
     # Ứng dụng desktop, Setup, CLI, gói Linux/macOS, gói menu Explorer (đều đọc hai tệp này)
-    save(icon(512), APP_ICONS / "filee.png")
-    save_ico(APP_ICONS / "filee.ico")
+    save(icon(512), APP_ICONS / "tsufiles.png")
+    save_ico(APP_ICONS / "tsufiles.ico")
 
     # Website files.tsudev.com
     save_ico(WEB / "favicon.ico")

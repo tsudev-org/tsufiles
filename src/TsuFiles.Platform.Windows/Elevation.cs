@@ -1,8 +1,8 @@
-// Integrity levels of Filee and Explorer, and starting a program with Explorer's rights instead of Filee's.
+// Integrity levels of TsuFiles and Explorer, and starting a program with Explorer's rights instead of TsuFiles's.
 //
-// Filee runs as administrator when something elevated started it: an installer the user ran "as administrator" starts
-// Filee with its own token at the end, and the in-app updater inherits that. Explorer then can't drop files on Filee
-// or hand files to it (see ElevationState). Starting Filee again "as the user" goes through Explorer itself: the
+// TsuFiles runs as administrator when something elevated started it: an installer the user ran "as administrator" starts
+// TsuFiles with its own token at the end, and the in-app updater inherits that. Explorer then can't drop files on TsuFiles
+// or hand files to it (see ElevationState). Starting TsuFiles again "as the user" goes through Explorer itself: the
 // desktop's shell view gives out its Shell.Application object, and ShellExecute on that object runs inside Explorer,
 // so the new process gets Explorer's token. This is the documented way back down (no API lowers a running process).
 
@@ -58,11 +58,11 @@ public static class Elevation
             }
             catch (Exception ex) when (ex is not OutOfMemoryException)
             {
-                // Anything Explorer or the COM binder throws: report it, never take Filee down from this thread.
+                // Anything Explorer or the COM binder throws: report it, never take TsuFiles down from this thread.
                 failure = $"{ex.GetType().Name}: {ex.Message}";
             }
         })
-        { IsBackground = true, Name = "Filee shell relaunch" };
+        { IsBackground = true, Name = "TsuFiles shell relaunch" };
         thread.SetApartmentState(ApartmentState.STA);
         thread.Start();
         if (!thread.Join(TimeSpan.FromSeconds(15)))
@@ -92,11 +92,11 @@ public static class Elevation
             return true;
         });
 
-    /// <summary>Shows a plain Windows message box (for problems before Filee's own windows can open). No-op off Windows.</summary>
+    /// <summary>Shows a plain Windows message box (for problems before TsuFiles's own windows can open). No-op off Windows.</summary>
     public static void ShowWarning(string text)
     {
         if (OperatingSystem.IsWindows())
-            NativeMethods.MessageBox(0, text, "Filee",
+            NativeMethods.MessageBox(0, text, "TsuFiles",
                 NativeMethods.MB_OK | NativeMethods.MB_ICONWARNING | NativeMethods.MB_SETFOREGROUND | NativeMethods.MB_TOPMOST);
     }
 

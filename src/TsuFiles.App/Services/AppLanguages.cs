@@ -1,4 +1,4 @@
-// The languages Filee ships (Assets/i18n/<code>.json). The installer (src/TsuFiles.Setup) links this file, so a language
+// The languages TsuFiles ships (Assets/i18n/<code>.json). The installer (src/TsuFiles.Setup) links this file, so a language
 // added here is offered by Setup too.
 
 namespace TsuFiles.App.Services;

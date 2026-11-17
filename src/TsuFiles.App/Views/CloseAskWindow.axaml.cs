@@ -6,7 +6,7 @@ using TsuFiles.Core.Settings;
 namespace TsuFiles.App.Views;
 
 /// <summary>
-/// "Keep Filee running?" when the main window closes. <c>ShowDialog</c> returns <see cref="CloseAction.Tray"/>,
+/// "Keep TsuFiles running?" when the main window closes. <c>ShowDialog</c> returns <see cref="CloseAction.Tray"/>,
 /// <see cref="CloseAction.Quit"/>, or null when cancelled.
 /// </summary>
 public partial class CloseAskWindow : Window

@@ -35,7 +35,7 @@ public sealed class App : Application
     }
 
     /// <summary>
-    /// Filee's look in <paramref name="texts"/>' language: default accent, radius, Windows' fonts in the language's
+    /// TsuFiles's look in <paramref name="texts"/>' language: default accent, radius, Windows' fonts in the language's
     /// order, its reading direction; texts as resources.
     /// </summary>
     internal static void ApplyLook(Application app, SetupTexts texts)

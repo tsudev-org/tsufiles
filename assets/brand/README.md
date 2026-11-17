@@ -14,8 +14,8 @@ Script còn sinh (cùng nguồn):
 
 | Tệp | Dùng cho |
 | --- | --- |
-| `src/TsuFiles.App/Assets/Icons/filee.png` (512) | Trang Giới thiệu, đầu cửa sổ chính, hộp thoại, logo động của Setup (`AppLogo`), icon gói Linux, icon macOS (`build/build-portable.ps1` dựng `.icns`), logo gói menu Explorer |
-| `src/TsuFiles.App/Assets/Icons/filee.ico` | Icon cửa sổ, thanh tác vụ, khay hệ thống; icon `.exe` của ứng dụng, Setup, CLI |
+| `src/TsuFiles.App/Assets/Icons/tsufiles.png` (512) | Trang Giới thiệu, đầu cửa sổ chính, hộp thoại, logo động của Setup (`AppLogo`), icon gói Linux, icon macOS (`build/build-portable.ps1` dựng `.icns`), logo gói menu Explorer |
+| `src/TsuFiles.App/Assets/Icons/tsufiles.ico` | Icon cửa sổ, thanh tác vụ, khay hệ thống; icon `.exe` của ứng dụng, Setup, CLI |
 | `website/public/favicon.ico`, `favicon-{16,32,96}.png` | Favicon files.tsudev.com |
 | `website/public/apple-touch-icon.png` | iOS (180, nền `#0A0A0A`) |
 | `website/public/android-chrome-*.png` | PWA 192/512, bản `maskable` có nền và vùng an toàn |

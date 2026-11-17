@@ -1,5 +1,5 @@
 // Avalonia writes why a graphics path failed to start (ANGLE, WinUI composition, DirectComposition) to its own log,
-// which only reaches a debugger. These few areas go to Filee's log as well, so a report of a window drawn the wrong way
+// which only reaches a debugger. These few areas go to TsuFiles's log as well, so a report of a window drawn the wrong way
 // shows the reason. Everything still goes to the sink that was there before.
 
 using Avalonia.Logging;

@@ -48,19 +48,19 @@ with log_path.open('w') as log:
         if process.poll() is not None:
             raise RuntimeError('The desktop app exited before the startup check.')
         if is_macos:
-            # The real screen with Filee's window, as a person would see it (uploaded with the results).
+            # The real screen with TsuFiles's window, as a person would see it (uploaded with the results).
             subprocess.run(['screencapture', '-x', str(shots / 'settings.png')], check=False, timeout=30)
-            # A second start forwards to the running Filee, which brings its window to the front.
+            # A second start forwards to the running TsuFiles, which brings its window to the front.
             try:
                 subprocess.run([app], check=False, timeout=30)
             except subprocess.TimeoutExpired:
-                raise RuntimeError('A second start did not hand over to the running Filee.')
+                raise RuntimeError('A second start did not hand over to the running TsuFiles.')
             time.sleep(4)
             subprocess.run(['screencapture', '-x', str(shots / 'second-start.png')], check=False, timeout=30)
             if process.poll() is not None:
                 raise RuntimeError('The desktop app exited after a second start.')
         quit_code = 'import os, sys; os.setsid(); os.execv(sys.argv[1], [sys.argv[1], "--quit"])'
-        # Reap Filee as soon as it ends while --quit waits for it, as launchd or a shell would: a process
+        # Reap TsuFiles as soon as it ends while --quit waits for it, as launchd or a shell would: a process
         # that has ended but was not reaped by its parent (this script) still counts as running.
         quitter = subprocess.Popen([sys.executable, '-c', quit_code, app])
         quit_deadline = time.monotonic() + 30
@@ -72,7 +72,7 @@ with log_path.open('w') as log:
             time.sleep(0.05)
         if quitter.returncode != 0:
             raise RuntimeError(f'filee --quit exited with {quitter.returncode}.')
-        # --quit came back, so Filee has ended. On Linux this waits for xvfb-run to take Xvfb down too, which now and
+        # --quit came back, so TsuFiles has ended. On Linux this waits for xvfb-run to take Xvfb down too, which now and
         # then takes longer than 15 s on the arm64 runners.
         if process.wait(timeout=60) != 0:
             raise RuntimeError('The desktop app did not exit cleanly.')

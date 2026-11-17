@@ -162,7 +162,7 @@ public sealed class WindowService(ILocalizer loc, IServiceProvider services, Mem
             ShowActivated = !OperatingSystem.IsMacOS(),
             WindowDecorations = WindowDecorations.None,
             WindowStartupLocation = WindowStartupLocation.CenterScreen,
-            Title = "Filee",
+            Title = "TsuFiles",
         };
         var platform = services.GetRequiredService<TsuFiles.Core.Platform.IPlatformServices>();
         // Move to active Space before Show() so collection behavior is set before Avalonia maps the NSWindow onto WindowServer (#596).
@@ -628,7 +628,7 @@ public sealed class WindowService(ILocalizer loc, IServiceProvider services, Mem
     private bool _openingMain;
     private string? _openingMainPage;
 
-    /// <summary>Raised whenever <see cref="ShowMain"/> showed the main window (the user opened Filee).</summary>
+    /// <summary>Raised whenever <see cref="ShowMain"/> showed the main window (the user opened TsuFiles).</summary>
     public event EventHandler? MainShown;
 
     /// <summary>
@@ -795,7 +795,7 @@ public sealed class WindowService(ILocalizer loc, IServiceProvider services, Mem
         notice.Show();
     }
 
-    /// <summary>Shows the one-time "Is Filee helping you?" card in the bottom-right corner.</summary>
+    /// <summary>Shows the one-time "Is TsuFiles helping you?" card in the bottom-right corner.</summary>
     public void ShowFeedbackNotice()
     {
         if (_feedbackNotice is not null)
@@ -806,7 +806,7 @@ public sealed class WindowService(ILocalizer loc, IServiceProvider services, Mem
         _feedbackNotice.Show();
     }
 
-    /// <summary>Shows the "Filee is running as administrator" card in the bottom-right corner (once per run).</summary>
+    /// <summary>Shows the "TsuFiles is running as administrator" card in the bottom-right corner (once per run).</summary>
     public void ShowElevationNotice()
     {
         if (_elevationNoticeShown)
@@ -820,7 +820,7 @@ public sealed class WindowService(ILocalizer loc, IServiceProvider services, Mem
     private bool _elevationNoticeShown;
 
     /// <summary>
-    /// Shows the "Filee can't convert .ncm files yet" card with "Request this format", replacing an earlier one.
+    /// Shows the "TsuFiles can't convert .ncm files yet" card with "Request this format", replacing an earlier one.
     /// </summary>
     public void ShowFormatRequestNotice(IReadOnlyList<string> extensions)
     {
@@ -897,7 +897,7 @@ public sealed class WindowService(ILocalizer loc, IServiceProvider services, Mem
     public Task MessageAsync(Window? owner, string message) => ShowMessageAsync(owner, message, destructive: false, withCancel: false);
 
     /// <summary>
-    /// The in-app update failed: say so (that it wasn't Filee's, when the check refused it), then open the website to
+    /// The in-app update failed: say so (that it wasn't TsuFiles's, when the check refused it), then open the website to
     /// download the new version there.
     /// </summary>
     public async Task ShowUpdateFailedAsync()

@@ -1,5 +1,5 @@
 // What the clip window ("Cut a clip") needs of a video before anything is cut: how long it is and pictures of single
-// frames for its timeline and its large preview, taken with Filee's FFmpeg into the window's own work folder.
+// frames for its timeline and its large preview, taken with TsuFiles's FFmpeg into the window's own work folder.
 
 namespace TsuFiles.Engines.Media;
 
@@ -20,7 +20,7 @@ public sealed record VideoSummary(double Duration, int Width, int Height, double
     public double LastFrameTime => Math.Max(0, Duration - FrameLength);
 }
 
-/// <summary>Reads a video's length and takes pictures of single frames with Filee's FFmpeg.</summary>
+/// <summary>Reads a video's length and takes pictures of single frames with TsuFiles's FFmpeg.</summary>
 public static class VideoFrames
 {
     /// <summary>How long one frame may take: FFmpeg seeks to the key frame before it and decodes from there.</summary>
