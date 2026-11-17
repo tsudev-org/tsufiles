@@ -28,14 +28,14 @@ public sealed class ForkLanguageTests
     [Theory]
     [InlineData("vi")]
     [InlineData("en")]
-    public void Help_names_the_fork_and_credits_the_original(string language)
+    public void Help_names_only_tsufiles(string language)
     {
         var text = Help.Text(null, language);
         Assert.StartsWith("TsuFiles (", text.TrimStart());
-        Assert.Contains("KnifeLemon/Filee", text);
+        Assert.DoesNotContain("KnifeLemon", text); // chủ dự án 16/11/2026: tên cũ chỉ còn ở thông báo bản quyền (LICENSE)
         Assert.Contains("tsufiles ", text); // ADR-0003: lệnh đổi thành tsufiles, không bí danh filee
         Assert.DoesNotContain("filee ", text);
-        Assert.DoesNotMatch(@"(?<![\\/.])\bFilee\b(?![./\\])", text.Replace("KnifeLemon/Filee", ""));
+        Assert.DoesNotMatch(@"(?<![\\/.])\bFilee\b(?![./\\])", text);
     }
 
     [Fact]
