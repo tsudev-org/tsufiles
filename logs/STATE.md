@@ -5,11 +5,9 @@
 
 ## Hàng đợi task (làm từ trên xuống)
 
-- [ ] ⚡ TIẾP THEO (17/11/2026): ADR-0004 chia sẻ giữa thiết bị + iPhone 8 (`docs/adr/0004-chia-se-giua-thiet-bi-va-ios.md`),
-      mỗi phase một phiên/PR: **S1** máy chủ chia sẻ LAN (`TsuFiles.Core/Share/`, HTTP tối giản trên `TcpListener` - KHÔNG
-      `HttpListener` vì http.sys cần urlacl quản trị trên Windows; mã QR + duyệt thiết bị, tự tắt 15 phút, chặn IP công
-      khai, fuzz bộ đọc multipart), **S2** trang web gửi/nhận cho Safari iOS 16, **S3** tìm máy qua UDP multicast (+ cân
-      nhắc tương thích LocalSend), **S4** app iOS gốc - CHỜ chủ dự án quyết (Mac + Apple Developer 99 USD/năm).
+- [ ] ⚡ TIẾP THEO: phiếu `logs/handover/20261117-01_ban-giao-s1-chia-se-va-doi-ten.md` (đọc mục 2): **ADR-0004 S2**
+      nút "Chia sẻ với điện thoại" + mã QR + hộp duyệt thiết bị trong app desktop; rồi S3 (UDP multicast, LocalSend);
+      S4 app iOS gốc CHỜ chủ dự án quyết (Mac + Apple Developer 99 USD/năm).
   - Tệp mẫu của chủ dự án `So_Do.pdf`, `pdf-1.pdf`, `pptx-1.pptx` ở thư mục gốc: KHÔNG commit.
 
 - [ ] ⚡ TIẾP THEO: phiếu `logs/handover/20261116-01_ban-giao-lock-nuget-va-intoto.md` (đọc mục 2). Phần agent: chạy
@@ -62,6 +60,11 @@
 | --- | --- | --- |
 
 ## Đã hoàn thành (mới nhất trên cùng)
+
+- 17/11/2026 - #90 PDF -> DOCX giữ chữ ký số/con dấu/bảng không viền, icon taskbar, bỏ nút GitHub/Ủng hộ, đóng cửa sổ
+  vào khay; #91 trang Ủng hộ cùng khuôn tsudev.com + Chivo Mono + logo tsudev (phiếu `20261116-55` ĐÓNG); #92 bỏ tên
+  cũ Filee khỏi chữ hiển thị/tài liệu (ADR-0003 mục 8, `tools/xoa-ten-cu.py`); #93 ADR-0004; #94 S1 `Core/Share/` +
+  `tsufiles share` (iPhone 8 / Safari 16 gửi/nhận qua trình duyệt). Website deploy `db06ecac`. Bàn giao `20261117-01`.
 
 - 16/11/2026 - #85 (`ae8a223d`): Release đính kèm `*-provenance.intoto.jsonl`, `*-sbom.intoto.jsonl` (Signed-Releases).
   #86 (`09535dad`): lock file NuGet + CI `--locked-mode` (Pinned-Dependencies); App/App.Tests/Setup.Tests thêm
