@@ -1,0 +1,121 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:TsuFiles.App.ViewModels.Pages"
+             xmlns:s="using:TsuFiles.App.Services"
+             x:Class="TsuFiles.App.Views.Pages.SharePage"
+             x:DataType="vm:SharePageViewModel">
+  <StackPanel Spacing="18">
+    <TextBlock Classes="h1" Text="{DynamicResource share.title}" />
+    <TextBlock Classes="muted" TextWrapping="Wrap" Text="{DynamicResource share.description}" />
+
+    <!-- Thiết bị xin kết nối: hiện trên cùng để người dùng thấy ngay. -->
+    <ItemsControl ItemsSource="{Binding Pending}">
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+          <StackPanel Spacing="10" />
+        </ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+      <ItemsControl.ItemTemplate>
+        <DataTemplate x:DataType="s:ShareApproval">
+          <Border Classes="card">
+            <DockPanel>
+              <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" Margin="12,0,0,0">
+                <Button Classes="accent" Command="{Binding AllowCommand}" Content="{DynamicResource share.allow}" />
+                <Button Command="{Binding DenyCommand}" Content="{DynamicResource share.deny}" />
+              </StackPanel>
+              <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Text}" />
+            </DockPanel>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+
+    <Border Classes="card">
+      <StackPanel Spacing="12">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Button Classes="accent" Command="{Binding StartCommand}" IsVisible="{Binding IsStopped}" Content="{DynamicResource share.start}" />
+          <Button Classes="danger" Command="{Binding StopCommand}" IsVisible="{Binding IsRunning}" Content="{DynamicResource share.stop}" />
+          <Button Command="{Binding RefreshLinksCommand}" IsVisible="{Binding IsRunning}"
+                  ToolTip.Tip="{DynamicResource share.refresh}" AutomationProperties.Name="{DynamicResource share.refresh}">
+            <PathIcon Width="14" Height="14" Data="{StaticResource Icon.Refresh}" />
+          </Button>
+        </StackPanel>
+
+        <TextBlock Classes="muted" TextWrapping="Wrap" Text="{DynamicResource share.no_network}" IsVisible="{Binding NoNetwork}" />
+
+        <StackPanel Spacing="10" IsVisible="{Binding Link, Converter={x:Static ObjectConverters.IsNotNull}}">
+          <TextBlock TextWrapping="Wrap" Text="{DynamicResource share.scan}" />
+          <!-- Mã QR luôn đen trên trắng (camera đọc kém mã đảo màu), kể cả ở giao diện tối. -->
+          <Viewbox Width="220" Height="220" HorizontalAlignment="Left" Stretch="Uniform">
+            <Canvas Width="{Binding QrSize}" Height="{Binding QrSize}" Background="White">
+              <Path Fill="Black" Data="{Binding QrGeometry}" />
+            </Canvas>
+          </Viewbox>
+          <DockPanel>
+            <Button DockPanel.Dock="Right" Margin="8,0,0,0" Click="OnCopyLink"
+                    ToolTip.Tip="{DynamicResource share.copy_link}" AutomationProperties.Name="{DynamicResource share.copy_link}">
+              <PathIcon Width="14" Height="14" Data="{StaticResource Icon.Copy}" />
+            </Button>
+            <SelectableTextBlock VerticalAlignment="Center" FontFamily="Consolas, Menlo, monospace" TextWrapping="Wrap" Text="{Binding Link}" />
+          </DockPanel>
+          <ItemsControl ItemsSource="{Binding OtherLinks}" IsVisible="{Binding HasOtherLinks}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="x:String">
+                <SelectableTextBlock Classes="muted" FontFamily="Consolas, Menlo, monospace" Text="{Binding}" />
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+
+        <TextBlock Classes="muted" TextWrapping="Wrap" Text="{DynamicResource share.auto_stop}" />
+      </StackPanel>
+    </Border>
+
+    <StackPanel Spacing="6">
+      <TextBlock Classes="label" Text="{DynamicResource share.receive_folder}" />
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" Margin="8,0,0,0">
+          <Button Click="OnBrowseFolder" IsEnabled="{Binding IsStopped}" Content="{DynamicResource share.change_folder}" />
+          <Button Command="{Binding OpenReceiveFolderCommand}"
+                  ToolTip.Tip="{DynamicResource share.open_folder}" AutomationProperties.Name="{DynamicResource share.open_folder}">
+            <PathIcon Width="14" Height="14" Data="{StaticResource Icon.Folder}" />
+          </Button>
+        </StackPanel>
+        <TextBlock VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Text="{Binding ReceiveFolder}" ToolTip.Tip="{Binding ReceiveFolder}" />
+      </DockPanel>
+    </StackPanel>
+
+    <StackPanel Spacing="6" IsVisible="{Binding HasReceived}">
+      <TextBlock Classes="label" Text="{DynamicResource share.received}" />
+      <ItemsControl ItemsSource="{Binding Received}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="x:String">
+            <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding}" />
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </StackPanel>
+
+    <StackPanel Spacing="6">
+      <TextBlock Classes="label" Text="{DynamicResource share.files}" />
+      <Border x:Name="DropZone" Classes="card" DragDrop.AllowDrop="True" MinHeight="72">
+        <StackPanel Spacing="8">
+          <TextBlock Classes="muted" TextWrapping="Wrap" Text="{DynamicResource share.drop_hint}" />
+          <ItemsControl ItemsSource="{Binding SharedFiles}" IsVisible="{Binding HasSharedFiles}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="x:String">
+                <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding}" />
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+          <Button HorizontalAlignment="Left" Click="OnAddFiles">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+              <PathIcon Width="12" Height="12" Data="{StaticResource Icon.Plus}" />
+              <TextBlock Text="{DynamicResource share.add_files}" />
+            </StackPanel>
+          </Button>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

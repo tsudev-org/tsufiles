@@ -68,6 +68,7 @@ public static class AppHost
         services.AddSingleton<ConversionService>();
         services.AddSingleton<SpreadsheetPrintService>();
         services.AddSingleton<WatchFolderService>();
+        services.AddSingleton<PhoneShareService>(); // ADR-0004 S2
         services.AddSingleton<TriggerService>();
         services.AddSingleton<RadialController>();
         services.AddSingleton<StagedFiles>();

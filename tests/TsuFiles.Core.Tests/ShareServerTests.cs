@@ -94,6 +94,23 @@ public sealed class ShareServerTests
     }
 
     [Fact]
+    public async Task Files_added_while_sharing_keep_the_earlier_links()
+    {
+        using var dir = new TempDir();
+        var first = dir.File("a.txt", "một");
+        var second = dir.File("b.txt", "hai");
+        var (server, http, root) = await StartAsync(new ShareOptions { ReceiveFolder = dir.Path, SharedFiles = [first] });
+        await using var _ = server;
+        using var __ = http;
+
+        server.AddFiles([second, first, Path.Combine(dir.Path, "khong-co.txt")]);
+        Assert.Equal([first, second], server.SharedFiles);
+        Assert.Contains("b.txt", await http.GetStringAsync(root, Ct));
+        Assert.Equal("một", await http.GetStringAsync(root + "f/0", Ct));
+        Assert.Equal("hai", await http.GetStringAsync(root + "f/1", Ct));
+    }
+
+    [Fact]
     public async Task A_refused_device_is_asked_once_and_stays_refused()
     {
         using var dir = new TempDir();
