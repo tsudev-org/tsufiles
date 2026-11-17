@@ -158,6 +158,12 @@ public sealed class AppSettings
     [JsonConverter(typeof(LenientEnumJsonConverter<CloseAction>))]
     public CloseAction CloseAction { get; set; } = CloseAction.Tray;
 
+    /// <summary>
+    /// Thư mục lưu tệp điện thoại gửi lên ("Chia sẻ với điện thoại", ADR-0004 S2); null = Downloads/TsuFiles. Thêm
+    /// 18/11/2026, không cần di trú: tệp cài đặt cũ không có khóa này thì đọc ra null.
+    /// </summary>
+    public string? ShareReceiveFolder { get; set; }
+
     /// <summary>Record finished conversions in the history (home page). Off: nothing new is recorded.</summary>
     public bool KeepHistory { get; set; } = true;
 
