@@ -6,8 +6,8 @@
 ## Hàng đợi task (làm từ trên xuống)
 
 - [ ] ⚡ TIẾP THEO: phiếu `logs/handover/20261117-02_ban-giao-s2-ma-qr-va-trang-chia-se.md` (đọc mục 2): gộp
-      #97 -> #98 -> #99 khi CI xanh; rồi **S2c** (báo thiết bị khi cửa sổ ẩn ở khay, lưu thư mục nhận, Playwright
-      WebKit, hướng dẫn); S3 (UDP multicast, LocalSend); S4 iOS gốc CHỜ chủ dự án.
+      #99 -> #101 -> #102 nếu còn mở; rồi **S2d** (Playwright WebKit, CHANGELOG); S3 (UDP multicast, LocalSend); S4 iOS
+      gốc CHỜ chủ dự án.
 - [ ] Phiếu toàn hệ `20261117-V1` (thống nhất phiên bản): tsufiles là bước 5, CHỜ tsudev-standards v3.7.0. Khảo sát
       updater đã ghi ở mục 6 của bản sao (phải giữ thêm bộ tệp tên cũ `tsudev-files-*` cho updater 2.4.0-vn.1).
   - Tệp mẫu của chủ dự án `So_Do.pdf`, `pdf-1.pdf`, `pptx-1.pptx` ở thư mục gốc: KHÔNG commit.
@@ -63,8 +63,9 @@
 
 ## Đã hoàn thành (mới nhất trên cùng)
 
-- 17/11/2026 - #97 sửa 2 test chập chờn làm đỏ CI `main` (ShareServer, Setup); #98 S2a bộ sinh mã QR tự viết; #99 S2b
-  trang "Chia sẻ với điện thoại" (chờ gộp). CodeQL #24-#26 đóng false positive. Bàn giao `20261117-02`.
+- 17-18/11/2026 - #97 sửa 2 test chập chờn làm đỏ CI `main` (ShareServer, Setup); #98 S2a bộ sinh mã QR tự viết; #99
+  S2b trang "Chia sẻ với điện thoại"; #101 đồng bộ chuẩn v3.7.0 (P0); #102 S2c. CodeQL #24-#26 đóng false positive.
+  Bàn giao `20261117-02`.
 
 - 17/11/2026 - #90 PDF -> DOCX giữ chữ ký số/con dấu/bảng không viền, icon taskbar, bỏ nút GitHub/Ủng hộ, đóng cửa sổ
   vào khay; #91 trang Ủng hộ cùng khuôn tsudev.com + Chivo Mono + logo tsudev (phiếu `20261116-55` ĐÓNG); #92 bỏ tên
