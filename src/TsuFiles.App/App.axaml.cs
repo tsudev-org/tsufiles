@@ -169,6 +169,8 @@ public partial class App : Application
         AppHost.Get<WindowService>().EnsureToast();
         // TsuFiles: không bật thẻ "Gắn sao trên GitHub" sau vài lần chuyển đổi (ứng dụng nội bộ, chủ dự án 16/11/2026).
         AppHost.Get<WatchFolderService>().Start();
+        // ADR-0004 S2: điện thoại xin kết nối khi cửa sổ đang ẩn ở khay thì mở trang chia sẻ để người dùng duyệt.
+        AppHost.Get<PhoneShareService>().ApprovalRequested += () => AppHost.Get<WindowService>().ShowMain("share");
         // Originals of files from a browser that a crash kept from being deleted ("Save only the converted file").
         _ = Task.Run(() => TsuFiles.Core.Web.WebDrop.DeleteStale(TsuFiles.Core.Web.WebDrop.DefaultWorkRoot, TimeSpan.FromDays(1)));
         // Likewise the work folders of conversions that never got to clean up after themselves.

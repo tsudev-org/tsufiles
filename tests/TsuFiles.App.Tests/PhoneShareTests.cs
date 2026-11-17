@@ -38,10 +38,44 @@ public sealed class PhoneShareTests
         Assert.Equal(expected, ShareApproval.NameOf(userAgent));
 
     [AvaloniaFact]
+    public async Task The_receive_folder_is_remembered_and_the_default_is_not_written()
+    {
+        TestServices.EnsureInitialized("vi");
+        var directory = Directory.CreateTempSubdirectory("tsufiles-share-store-").FullName;
+        try
+        {
+            var store = new UserDataStore(directory);
+            store.Load();
+            await using (var share = new PhoneShareService(AppHost.Get<IPlatformServices>(), AppHost.Get<ILocalizer>(),
+                             NullLogger<PhoneShareService>.Instance, store))
+            {
+                Assert.Equal(share.DefaultReceiveFolder, share.ReceiveFolder);
+                share.ReceiveFolder = directory;
+            }
+
+            var nextStart = new UserDataStore(directory);
+            nextStart.Load();
+            Assert.Equal(directory, nextStart.Settings.ShareReceiveFolder);
+            await using var again = new PhoneShareService(AppHost.Get<IPlatformServices>(), AppHost.Get<ILocalizer>(),
+                NullLogger<PhoneShareService>.Instance, nextStart);
+            Assert.Equal(directory, again.ReceiveFolder);
+
+            again.ReceiveFolder = again.DefaultReceiveFolder; // back to the default: the key goes away
+            Assert.Null(nextStart.Settings.ShareReceiveFolder);
+        }
+        finally
+        {
+            Directory.Delete(directory, true);
+        }
+    }
+
+    [AvaloniaFact]
     public async Task A_new_device_waits_for_the_user_and_gets_the_page_once_allowed()
     {
         var folder = Directory.CreateTempSubdirectory("tsufiles-share-").FullName;
         await using var share = NewService(folder);
+        var asked = 0;
+        share.ApprovalRequested += () => asked++;
         share.Start();
         Assert.True(share.IsRunning);
 
@@ -56,6 +90,7 @@ public sealed class PhoneShareTests
             await Task.Delay(10, TestContext.Current.CancellationToken);
         }
         var approval = Assert.Single(share.Pending);
+        Assert.Equal(1, asked);
         Assert.StartsWith("iPhone (127.0.0.1)", approval.Text);
         approval.AllowCommand.Execute(null);
 

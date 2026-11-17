@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using TsuFiles.Core.Localization;
 using TsuFiles.Core.Platform;
+using TsuFiles.Core.Settings;
 using TsuFiles.Core.Share;
 
 namespace TsuFiles.App.Services;
@@ -16,18 +17,37 @@ public sealed partial class PhoneShareService : ObservableObject, IAsyncDisposab
 {
     private readonly ILogger<PhoneShareService> _log;
     private readonly ILocalizer _loc;
+    private readonly UserDataStore? _store;
     private ShareServer? _server;
 
-    public PhoneShareService(IPlatformServices platform, ILocalizer loc, ILogger<PhoneShareService> log)
+    public PhoneShareService(IPlatformServices platform, ILocalizer loc, ILogger<PhoneShareService> log, UserDataStore? store = null)
     {
         _log = log;
         _loc = loc;
-        _receiveFolder = Path.Combine(platform.DownloadsFolder, "TsuFiles");
+        _store = store;
+        DefaultReceiveFolder = Path.Combine(platform.DownloadsFolder, "TsuFiles");
+        _receiveFolder = string.IsNullOrWhiteSpace(store?.Settings.ShareReceiveFolder) ? DefaultReceiveFolder : store.Settings.ShareReceiveFolder;
     }
 
-    /// <summary>Thư mục lưu tệp điện thoại gửi lên; đổi được khi phiên chưa chạy.</summary>
+    public string DefaultReceiveFolder { get; }
+
+    /// <summary>Thư mục lưu tệp điện thoại gửi lên; đổi được khi phiên chưa chạy, nhớ qua các lần mở app.</summary>
     [ObservableProperty]
     private string _receiveFolder;
+
+    /// <summary>Một thiết bị mới đang chờ duyệt: app mở cửa sổ chính ở trang chia sẻ (kể cả khi đang ẩn ở khay).</summary>
+    public event Action? ApprovalRequested;
+
+    partial void OnReceiveFolderChanged(string value)
+    {
+        if (_store is null)
+            return;
+        var saved = string.Equals(value, DefaultReceiveFolder, StringComparison.OrdinalIgnoreCase) ? null : value;
+        if (_store.Settings.ShareReceiveFolder == saved)
+            return;
+        _store.Settings.ShareReceiveFolder = saved;
+        _store.SaveSettings();
+    }
 
     [ObservableProperty]
     private IReadOnlyList<Uri> _links = [];
@@ -107,7 +127,11 @@ public sealed partial class PhoneShareService : ObservableObject, IAsyncDisposab
     {
         var name = ShareApproval.NameOf(device.UserAgent) ?? _loc["share.device_unknown"];
         var approval = new ShareApproval(device, this, _loc.Format("share.approve", name, device.Address));
-        await Dispatcher.UIThread.InvokeAsync(() => Pending.Add(approval));
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            Pending.Add(approval);
+            ApprovalRequested?.Invoke();
+        });
         await using (cancellationToken.Register(() => approval.Answer(false)))
             return await approval.Result;
     }
