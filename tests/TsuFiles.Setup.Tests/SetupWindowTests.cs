@@ -106,7 +106,8 @@ public class SetupWindowTests
 
         runner.Hold = new TaskCompletionSource();
         var install = model.InstallAsync();
-        Pump();
+        // The runner reports from a worker thread; on a busy CI machine that can land after one pump.
+        PumpUntil(() => model.Percent == 62);
         Assert.True(model.IsProgress);
         Assert.False(model.OptionsOpen);
         Assert.Equal(62, model.Percent);
@@ -158,7 +159,7 @@ public class SetupWindowTests
                 Check(window, $"setup-dark-2-options-{language}.png", sheetMayScroll: true);
                 runner.Hold = new TaskCompletionSource();
                 var install = model.InstallAsync();
-                Pump();
+                PumpUntil(() => model.Percent == 62);
                 Check(window, $"setup-dark-3-installing-{language}.png");
                 runner.Hold.SetResult();
                 await install;
@@ -498,6 +499,20 @@ public class SetupWindowTests
         Directory.CreateDirectory(folder);
         using var stream = File.Create(Path.Combine(folder, name));
         frame.Save(stream, new Avalonia.Media.Imaging.PngBitmapEncoderOptions());
+    }
+
+    // Pumps until the condition holds or ten seconds pass; the caller's assert then reports the value.
+    private static void PumpUntil(Func<bool> done)
+    {
+        var deadline = DateTime.UtcNow.AddSeconds(10);
+        do
+        {
+            Pump();
+            if (done())
+                return;
+            Thread.Sleep(10);
+        }
+        while (DateTime.UtcNow < deadline);
     }
 
     private static void Pump(int times = 40)

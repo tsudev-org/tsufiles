@@ -314,8 +314,17 @@ public sealed class ShareServer : IAsyncDisposable
             var saved = WebFileNames.MoveUnique(part, _options.ReceiveFolder, name);
             MarkOfTheWeb.TryWrite(saved, MarkOfTheWeb.Internet(), _log);
             _log.LogInformation("Share received {Name} ({Length} bytes) from {Address}", Path.GetFileName(saved), length, device.Address);
+            // Tell listeners before answering, so the sender only sees 200 once the file is announced.
+            // A failing listener must not turn a saved upload into an error for the phone.
+            try
+            {
+                Received?.Invoke(new ShareReceived(saved, length, device));
+            }
+            catch (Exception ex)
+            {
+                _log.LogWarning(ex, "Share Received handler failed for {Name}", Path.GetFileName(saved));
+            }
             await ShareHttp.WriteTextAsync(stream, 200, Path.GetFileName(saved), cancellationToken);
-            Received?.Invoke(new ShareReceived(saved, length, device));
         }
         finally
         {
