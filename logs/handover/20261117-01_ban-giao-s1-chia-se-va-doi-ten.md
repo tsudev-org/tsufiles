@@ -24,6 +24,11 @@ Dòng đã sửa phải bỏ em-dash (mục 7.1) - cổng "Quy ước tsudev" b�
 1. (XONG 17/11) Gộp #92/#93/#94 và deploy website (`db06ecac`). Đầu phiên sau: xem CodeQL của `main` sau
    `2356154b`; nếu 3 cảnh báo `cs/cleartext-storage` ở `Program.cs` (log chẩn đoán khởi động) mở lại thì đóng là
    false positive như các bản trước.
+1b. **ƯU TIÊN - CI `main` đỏ** (run 43987129931, `778ee641`, job linux-arm64): test
+   `ShareServerTests.An_upload_lands_under_a_safe_name_and_never_overwrites` chập chờn (Expected 2, Actual 1).
+   Nguyên nhân: `ShareServer.ReceiveAsync` ghi phản hồi 200 TRƯỚC khi gọi `Received?.Invoke(...)`, nên client nhận
+   phản hồi và test đếm trước khi sự kiện lần 2 chạy. Sửa: gọi `Received?.Invoke` trước `WriteTextAsync(stream, 200, ...)`
+   (sự kiện chạy xong rồi mới trả lời). PR riêng, chạy lại CI.
 2. **ADR-0004 S2** - nút "Chia sẻ với điện thoại" trong app desktop: trang/hộp thoại hiện mã QR từ
    `ShareServer.Links()`, hộp thoại duyệt thiết bị (`ShareOptions.Approve`), danh sách tệp nhận (`Received`),
    kéo thả tệp vào để chia sẻ. Cần bộ sinh mã QR: tự viết (chế độ byte, sửa lỗi M) hoặc gói MIT (QRCoder) - nếu thêm

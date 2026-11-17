@@ -5,6 +5,7 @@
 
 ## Hàng đợi task (làm từ trên xuống)
 
+- [ ] ⚡ ƯU TIÊN: CI `main` đỏ do test chập chờn của S1 - phiếu `20261117-01` mục 1b (sửa thứ tự sự kiện `Received`).
 - [ ] ⚡ TIẾP THEO: phiếu `logs/handover/20261117-01_ban-giao-s1-chia-se-va-doi-ten.md` (đọc mục 2): **ADR-0004 S2**
       nút "Chia sẻ với điện thoại" + mã QR + hộp duyệt thiết bị trong app desktop; rồi S3 (UDP multicast, LocalSend);
       S4 app iOS gốc CHỜ chủ dự án quyết (Mac + Apple Developer 99 USD/năm).
