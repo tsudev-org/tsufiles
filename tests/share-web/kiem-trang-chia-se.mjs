@@ -93,7 +93,10 @@ try {
   const lienKet = trang.getByRole('link', { name: tenMoi });
   kiem((await lienKet.count()) === 1, 'liệt kê tệp máy tính mời');
   const [taiVe] = await Promise.all([trang.waitForEvent('download'), lienKet.click()]);
-  kiem(taiVe.suggestedFilename() === tenMoi, `tên tệp tải về giữ dấu (${taiVe.suggestedFilename()})`);
+  // WebKit GTK (Playwright) đổi khoảng trắng thành "_" khi lưu tệp; điều cần chứng minh là dấu tiếng Việt còn nguyên
+  // (trình duyệt dùng filename*=UTF-8, không rơi về bản ASCII thay dấu bằng "_").
+  const tenTai = taiVe.suggestedFilename();
+  kiem(tenTai.replaceAll('_', ' ') === tenMoi, `tên tệp tải về giữ dấu (${tenTai})`);
   const duongTai = join(tam, 'tai-ve.bin');
   await taiVe.saveAs(duongTai);
   kiem(readFileSync(duongTai, 'utf8') === noiDungMoi, 'nội dung tệp tải về khớp');
