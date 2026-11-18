@@ -10,7 +10,6 @@ using TsuFiles.Core.Localization;
 using TsuFiles.Core.Platform;
 using TsuFiles.Core.Settings;
 using TsuFiles.Core.Share;
-using TsuFiles.Core.Share.LocalSend;
 
 namespace TsuFiles.App.Services;
 
@@ -20,7 +19,6 @@ public sealed partial class PhoneShareService : ObservableObject, IAsyncDisposab
     private readonly ILocalizer _loc;
     private readonly UserDataStore? _store;
     private ShareServer? _server;
-    private CancellationTokenSource? _sending;
 
     public PhoneShareService(IPlatformServices platform, ILocalizer loc, ILogger<PhoneShareService> log, UserDataStore? store = null)
     {
@@ -68,20 +66,6 @@ public sealed partial class PhoneShareService : ObservableObject, IAsyncDisposab
     /// <summary>Thiết bị đang chờ người dùng cho phép.</summary>
     public ObservableCollection<ShareApproval> Pending { get; } = [];
 
-    /// <summary>Máy LocalSend tìm thấy khi đang chia sẻ (app LocalSend, TsuFiles khác), mới thấy nhất trước (ADR-0004 S3b).</summary>
-    public ObservableCollection<LocalSendPeer> Peers { get; } = [];
-
-    /// <summary>Đang gửi tệp tới một máy LocalSend (mỗi lần một máy).</summary>
-    [ObservableProperty]
-    private bool _isSending;
-
-    /// <summary>Kết quả lần gửi gần nhất, hiện dưới danh sách máy.</summary>
-    [ObservableProperty]
-    private string? _sendStatus;
-
-    /// <summary>Danh bạ LocalSend của phiên đang chạy (test dùng để thêm máy không cần multicast).</summary>
-    internal LocalSendDiscovery? Discovery => _server?.Discovery;
-
     /// <summary>Bật phiên mới (mã phiên mới, nên mã QR cũ hết hiệu lực).</summary>
     public void Start()
     {
@@ -99,8 +83,6 @@ public sealed partial class PhoneShareService : ObservableObject, IAsyncDisposab
         server.Stopped += () => Dispatcher.UIThread.Post(() => Forget(server));
         server.Start();
         _server = server;
-        if (server.Discovery is { } discovery)
-            discovery.PeersChanged += () => Dispatcher.UIThread.Post(() => SyncPeers(server));
         Links = server.Links();
         OnPropertyChanged(nameof(IsRunning));
     }
@@ -130,64 +112,7 @@ public sealed partial class PhoneShareService : ObservableObject, IAsyncDisposab
             Links = server.Links();
     }
 
-    /// <summary>Gửi lại gói thông báo để máy LocalSend xung quanh trả lời (nút làm mới cạnh danh sách máy).</summary>
-    public async Task FindPeersAsync()
-    {
-        if (_server?.Discovery is { } discovery)
-            await discovery.AnnounceAsync();
-    }
-
-    /// <summary>
-    /// Gửi các tệp trong <see cref="SharedFiles"/> tới <paramref name="peer"/>; máy kia phải đồng ý. Kết quả ghi vào
-    /// <see cref="SendStatus"/>. Tắt chia sẻ thì hủy lần gửi đang chạy.
-    /// </summary>
-    public async Task SendAsync(LocalSendPeer peer)
-    {
-        if (_server?.LocalSendSelf is not { } self || IsSending)
-            return;
-        var files = SharedFiles.Where(File.Exists).ToList();
-        if (files.Count == 0)
-            return;
-        using var sending = new CancellationTokenSource();
-        _sending = sending;
-        IsSending = true;
-        SendStatus = _loc.Format("share.sending", peer.Label);
-        try
-        {
-            var result = await LocalSendClient.SendAsync(self, peer, files, cancellationToken: sending.Token);
-            SendStatus = result.Status switch
-            {
-                LocalSendSendStatus.Sent or LocalSendSendStatus.NothingToSend =>
-                    _loc.Format("share.sent", result.SentFiles.Count, files.Count, peer.Label),
-                LocalSendSendStatus.Rejected => _loc.Format("share.send_declined", peer.Label),
-                LocalSendSendStatus.Busy => _loc.Format("share.send_busy", peer.Label),
-                LocalSendSendStatus.PinRequired => _loc.Format("share.send_pin", peer.Label),
-                _ => _loc.Format("share.send_failed", peer.Label, result.Error ?? "?"),
-            };
-            _log.LogInformation("Share (LocalSend): sent {Sent}/{Total} files to {Peer}: {Status}", result.SentFiles.Count, files.Count,
-                peer.Label, result.Status);
-        }
-        catch (OperationCanceledException)
-        {
-            SendStatus = null;
-        }
-        finally
-        {
-            _sending = null;
-            IsSending = false;
-        }
-    }
-
     public async ValueTask DisposeAsync() => await StopAsync();
-
-    private void SyncPeers(ShareServer server)
-    {
-        if (!ReferenceEquals(_server, server) || server.Discovery is not { } discovery)
-            return;
-        Peers.Clear();
-        foreach (var peer in discovery.Peers)
-            Peers.Add(peer);
-    }
 
     private void Forget(ShareServer server)
     {
@@ -195,15 +120,6 @@ public sealed partial class PhoneShareService : ObservableObject, IAsyncDisposab
             return;
         _server = null;
         Links = [];
-        Peers.Clear();
-        SendStatus = null;
-        try
-        {
-            _sending?.Cancel();
-        }
-        catch (ObjectDisposedException)
-        {
-        }
         foreach (var pending in Pending.ToList())
             pending.Answer(false);
         OnPropertyChanged(nameof(IsRunning));

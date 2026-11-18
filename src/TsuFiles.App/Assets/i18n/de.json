@@ -1625,16 +1625,5 @@
   "share.approve": "{0} ({1}) möchte sich verbinden. Erlauben?",
   "share.device_unknown": "Ein Gerät",
   "share.allow": "Erlauben",
-  "share.deny": "Ablehnen",
-  "share.nearby": "Geräte in der Nähe (LocalSend)",
-  "share.nearby_hint": "Telefone und Computer mit der kostenlosen App LocalSend sowie andere TsuFiles mit aktivierter Freigabe. Sie können Dateien hierher senden; Senden gibt ihnen die Dateien aus der Liste unten.",
-  "share.nearby_empty": "Noch keine Geräte gefunden. Öffne LocalSend auf dem anderen Gerät (gleiches WLAN) und aktualisiere dann.",
-  "share.nearby_refresh": "Erneut nach Geräten suchen",
-  "share.send": "Dateien senden",
-  "share.sending": "Warte, bis {0} annimmt…",
-  "share.sent": "{0} von {1} Dateien an {2} gesendet.",
-  "share.send_declined": "{0} hat abgelehnt.",
-  "share.send_busy": "{0} empfängt gerade von einem anderen Gerät. Versuche es gleich noch einmal.",
-  "share.send_pin": "{0} verlangt eine PIN. Schalte die PIN in LocalSend auf diesem Gerät aus, um von TsuFiles zu empfangen.",
-  "share.send_failed": "Senden an {0} fehlgeschlagen: {1}"
+  "share.deny": "Ablehnen"
 }

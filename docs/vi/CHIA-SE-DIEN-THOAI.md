@@ -27,10 +27,8 @@ Store (iOS 15 trở lên, gồm iPhone 8), Google Play và máy tính:
 
 - Điện thoại có LocalSend: mở app, máy tính hiện trong danh sách với tên `TsuFiles (<tên máy>)`; chọn tệp rồi chạm vào
   máy đó. Máy tính vẫn hỏi cho phép như với trình duyệt.
-- Gửi từ máy tính tới điện thoại/máy khác đang mở LocalSend (hoặc TsuFiles khác đang bật chia sẻ): khi đang chia sẻ,
-  mục **Thiết bị gần đây (LocalSend)** liệt kê các máy tìm thấy; thêm tệp vào ô **Tệp điện thoại tải về được** rồi bấm
-  **Gửi tệp** cạnh máy nhận (máy kia phải đồng ý). Dòng lệnh: `tsufiles send` để xem máy tìm thấy,
-  `tsufiles send <tệp...> --to "<tên | IP | IP:cổng>"` để gửi.
+- Gửi từ máy tính tới điện thoại/máy khác đang mở LocalSend (hoặc TsuFiles khác đang bật chia sẻ):
+  `tsufiles send` để xem máy tìm thấy, `tsufiles send <tệp...> --to "<tên hoặc IP>"` để gửi.
 - LocalSend dùng cổng UDP và TCP 53317 trong mạng nội bộ: tường lửa Windows hỏi thì cho phép ở mạng Riêng tư.
 
 ## 3. Khi điện thoại không mở được trang

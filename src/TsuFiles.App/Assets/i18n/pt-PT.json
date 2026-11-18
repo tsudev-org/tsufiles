@@ -1647,16 +1647,5 @@
   "share.approve": "{0} ({1}) quer ligar-se. Permitir?",
   "share.device_unknown": "Um dispositivo",
   "share.allow": "Permitir",
-  "share.deny": "Recusar",
-  "share.nearby": "Dispositivos próximos (LocalSend)",
-  "share.nearby_hint": "Telemóveis e computadores com a app gratuita LocalSend e outros TsuFiles com a partilha ativada. Podem enviar ficheiros para aqui; Enviar entrega-lhes os ficheiros da lista abaixo.",
-  "share.nearby_empty": "Ainda não foram encontrados dispositivos. Abra o LocalSend no outro dispositivo (mesma Wi-Fi) e atualize.",
-  "share.nearby_refresh": "Procurar dispositivos novamente",
-  "share.send": "Enviar ficheiros",
-  "share.sending": "A aguardar que {0} aceite…",
-  "share.sent": "{0} de {1} ficheiros enviados para {2}.",
-  "share.send_declined": "{0} recusou.",
-  "share.send_busy": "{0} está a receber de outro dispositivo. Tente novamente daqui a pouco.",
-  "share.send_pin": "{0} pede um PIN. Desative o PIN no LocalSend desse dispositivo para receber do TsuFiles.",
-  "share.send_failed": "Não foi possível enviar para {0}: {1}"
+  "share.deny": "Recusar"
 }

@@ -34,7 +34,7 @@ en: Closing the window keeps TsuFiles running in the system tray; the Windows ta
 
 - **Share with your phone** ([ADR-0004](https://github.com/tsudev-org/tsufiles/blob/main/docs/adr/0004-chia-se-giua-thiet-bi-va-ios.md)): turn on **Share with phone** in the sidebar and scan the QR code. The phone's browser sends files to the computer and downloads the files you drop in - iPhone 8 (Safari 16) and newer, Android, other computers. Nothing to install on the phone. Each new device must be allowed on the computer; only local network addresses are accepted, links carry a random 128-bit session code, sharing turns itself off after 15 minutes idle. The connection is plain HTTP inside the local network: use it on trusted Wi-Fi only.
 - **Headless:** `tsufiles share [files...] -o <folder>` serves the same page from the command line and asks before each device connects.
-- **LocalSend:** while sharing is on, the free LocalSend app (iPhone/iPad on iOS 15+, Android, computers) lists this computer as `TsuFiles (<computer name>)` and can send files to it, after the same consent prompt. The page also lists the LocalSend devices it finds, with a **Send files** button that sends them the files in the download list. `tsufiles send [files...] --to <name | IP | IP:port>` finds LocalSend devices and other TsuFiles and sends files to them. Uses UDP and TCP port 53317 on the local network.
+- **LocalSend:** while sharing is on, the free LocalSend app (iPhone/iPad on iOS 15+, Android, computers) lists this computer as `TsuFiles (<computer name>)` and can send files to it, after the same consent prompt. `tsufiles send [files...] --to <name | IP | IP:port>` finds LocalSend devices and other TsuFiles and sends files to them. Uses UDP and TCP port 53317 on the local network.
 - **PDF to DOCX** keeps signature and stamp annotations and turns side-by-side text blocks into borderless tables.
 - **Tray:** closing the window now keeps TsuFiles running in the tray (change it in Settings). The GitHub and Donate buttons left the sidebar.
 
@@ -52,8 +52,7 @@ en: Closing the window keeps TsuFiles running in the system tray; the Windows ta
 - **Dòng lệnh:** `tsufiles share [tệp...] -o <thư mục>` mở cùng trang đó trên máy không màn hình, hỏi `[y/N]` trước
   khi cho mỗi thiết bị kết nối.
 - **LocalSend:** khi bật chia sẻ, app LocalSend miễn phí (iPhone/iPad iOS 15+, Android, máy tính) thấy máy này với tên
-  `TsuFiles (<tên máy>)` và gửi tệp tới được, vẫn qua bước cho phép như trình duyệt. Trang chia sẻ liệt kê các máy LocalSend tìm thấy,
-  nút **Gửi tệp** chuyển cho máy đó các tệp trong ô tải về. Lệnh mới
+  `TsuFiles (<tên máy>)` và gửi tệp tới được, vẫn qua bước cho phép như trình duyệt. Lệnh mới
   `tsufiles send [tệp...] --to <tên | IP | IP:cổng>` tìm máy LocalSend và TsuFiles khác rồi gửi tệp. Dùng cổng UDP và
   TCP 53317 trong mạng nội bộ.
 - **PDF sang DOCX** giữ lớp chú thích (chữ ký số, con dấu) và gộp các khối chữ đặt cạnh nhau thành bảng không viền.

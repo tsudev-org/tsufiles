@@ -1627,16 +1627,5 @@
   "share.approve": "{0} ({1}) ต้องการเชื่อมต่อ อนุญาตหรือไม่?",
   "share.device_unknown": "อุปกรณ์",
   "share.allow": "อนุญาต",
-  "share.deny": "ปฏิเสธ",
-  "share.nearby": "อุปกรณ์ใกล้เคียง (LocalSend)",
-  "share.nearby_hint": "โทรศัพท์และคอมพิวเตอร์ที่เปิดแอป LocalSend ฟรี และ TsuFiles เครื่องอื่นที่เปิดการแชร์ไว้ ส่งไฟล์มาที่นี่ได้ ปุ่มส่งจะส่งไฟล์ในรายการด้านล่างให้เครื่องนั้น",
-  "share.nearby_empty": "ยังไม่พบอุปกรณ์ เปิด LocalSend บนอีกเครื่อง (Wi-Fi เดียวกัน) แล้วรีเฟรช",
-  "share.nearby_refresh": "ค้นหาอุปกรณ์อีกครั้ง",
-  "share.send": "ส่งไฟล์",
-  "share.sending": "กำลังรอ {0} ยอมรับ…",
-  "share.sent": "ส่งแล้ว {0} จาก {1} ไฟล์ไปยัง {2}",
-  "share.send_declined": "{0} ปฏิเสธ",
-  "share.send_busy": "{0} กำลังรับจากอุปกรณ์อื่น ลองอีกครั้งในอีกสักครู่",
-  "share.send_pin": "{0} ขอ PIN ปิด PIN ใน LocalSend บนอุปกรณ์นั้นเพื่อรับจาก TsuFiles",
-  "share.send_failed": "ส่งไปยัง {0} ไม่ได้: {1}"
+  "share.deny": "ปฏิเสธ"
 }

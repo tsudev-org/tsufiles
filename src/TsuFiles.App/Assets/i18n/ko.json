@@ -1647,16 +1647,5 @@
   "share.approve": "{0} ({1})이(가) 연결하려고 합니다. 허용할까요?",
   "share.device_unknown": "기기",
   "share.allow": "허용",
-  "share.deny": "거부",
-  "share.nearby": "주변 기기 (LocalSend)",
-  "share.nearby_hint": "무료 LocalSend 앱을 실행 중인 휴대폰과 컴퓨터, 공유를 켠 다른 TsuFiles입니다. 이 기기들은 여기로 파일을 보낼 수 있으며, 보내기를 누르면 아래 목록의 파일을 전달합니다.",
-  "share.nearby_empty": "아직 찾은 기기가 없습니다. 상대 기기에서 LocalSend를 열고(같은 Wi-Fi) 새로 고치세요.",
-  "share.nearby_refresh": "기기 다시 찾기",
-  "share.send": "파일 보내기",
-  "share.sending": "{0}의 수락을 기다리는 중…",
-  "share.sent": "{2}에 파일 {1}개 중 {0}개를 보냈습니다.",
-  "share.send_declined": "{0}이(가) 거절했습니다.",
-  "share.send_busy": "{0}이(가) 다른 기기에서 받는 중입니다. 잠시 후 다시 시도하세요.",
-  "share.send_pin": "{0}이(가) PIN을 요구합니다. TsuFiles에서 받으려면 그 기기의 LocalSend에서 PIN을 끄세요.",
-  "share.send_failed": "{0}에 보내지 못했습니다: {1}"
+  "share.deny": "거부"
 }

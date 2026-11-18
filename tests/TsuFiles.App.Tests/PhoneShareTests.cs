@@ -11,7 +11,6 @@ using TsuFiles.App.Views;
 using TsuFiles.Core.Localization;
 using TsuFiles.Core.Platform;
 using TsuFiles.Core.Settings;
-using TsuFiles.Core.Share;
 
 namespace TsuFiles.App.Tests;
 
@@ -171,107 +170,5 @@ public sealed class PhoneShareTests
             await share.StopAsync();
         }
         Assert.Empty(share.Pending); // stopping refuses whoever was still waiting
-    }
-
-    private static async Task PumpUntilAsync(Func<bool> done)
-    {
-        var deadline = DateTime.UtcNow.AddSeconds(15);
-        while (!done() && DateTime.UtcNow < deadline)
-        {
-            Dispatcher.UIThread.RunJobs();
-            await Task.Delay(10, TestContext.Current.CancellationToken);
-        }
-    }
-
-    [AvaloniaFact]
-    public async Task Files_in_the_list_go_to_a_nearby_LocalSend_device_after_it_accepts()
-    {
-        var folder = Directory.CreateTempSubdirectory("tsufiles-share-").FullName;
-        var inbox = Directory.CreateTempSubdirectory("tsufiles-share-in-").FullName;
-        var file = Path.Combine(folder, "Ảnh chụp.jpg");
-        await File.WriteAllTextAsync(file, "jpeg", TestContext.Current.CancellationToken);
-        var accept = true;
-        await using var other = new ShareServer(new ShareOptions
-        {
-            ReceiveFolder = inbox,
-            Approve = (_, _) => Task.FromResult(accept),
-            LocalSend = new LocalSendOptions { Alias = "iPhone của Su", Discover = false },
-        });
-        other.Start();
-        try
-        {
-            await using var share = NewService(folder);
-            using var page = new SharePageViewModel(share, AppHost.Get<IPlatformServices>());
-            page.StartCommand.Execute(null);
-            Assert.True(page.NoPeers);
-
-            // Máy kia trả lời gói thông báo (giả lập multicast): hiện trong danh sách.
-            Assert.True(share.Discovery!.Observe(IPAddress.Loopback, other.LocalSendSelf!));
-            await PumpUntilAsync(() => page.Peers.Count > 0);
-            var peer = Assert.Single(page.Peers);
-            Assert.False(page.NoPeers);
-            Assert.False(page.SendToCommand.CanExecute(peer)); // chưa có tệp nào để gửi
-
-            page.AddFiles([file]);
-            Assert.True(page.SendToCommand.CanExecute(peer));
-            await page.SendToCommand.ExecuteAsync(peer);
-            Assert.Equal("jpeg", await File.ReadAllTextAsync(Path.Combine(inbox, "Ảnh chụp.jpg"), TestContext.Current.CancellationToken));
-            Assert.Equal("Đã gửi 1/1 tệp tới iPhone của Su (127.0.0.1).", page.SendStatus);
-
-            accept = false;
-            await other.DisposeAsync(); // phiên mới của máy kia sẽ hỏi lại từ đầu
-            await using var refusing = new ShareServer(new ShareOptions
-            {
-                ReceiveFolder = inbox,
-                Approve = (_, _) => Task.FromResult(false),
-                LocalSend = new LocalSendOptions { Alias = "Máy từ chối", Discover = false },
-            });
-            refusing.Start();
-            share.Discovery.Observe(IPAddress.Loopback, refusing.LocalSendSelf!);
-            await PumpUntilAsync(() => page.Peers.Any(p => p.Info.Alias == "Máy từ chối"));
-            await page.SendToCommand.ExecuteAsync(page.Peers.First(p => p.Info.Alias == "Máy từ chối"));
-            Assert.Equal("Máy từ chối (127.0.0.1) đã từ chối.", page.SendStatus);
-
-            await page.StopCommand.ExecuteAsync(null);
-            Assert.Empty(page.Peers);
-            Assert.Null(page.SendStatus);
-        }
-        finally
-        {
-            Directory.Delete(folder, true);
-            Directory.Delete(inbox, true);
-        }
-    }
-
-    [AvaloniaFact]
-    public async Task While_sharing_the_page_lists_nearby_LocalSend_devices()
-    {
-        TestServices.EnsureInitialized("vi");
-        var share = AppHost.Get<PhoneShareService>();
-        share.Start();
-        try
-        {
-            share.Discovery!.Observe(IPAddress.Parse("192.168.1.23"), new TsuFiles.Core.Share.LocalSend.LocalSendInfo
-            {
-                Alias = "iPhone 8 của Su",
-                DeviceModel = "iPhone",
-                DeviceType = "mobile",
-                Fingerprint = "ab12",
-            });
-            await PumpUntilAsync(() => share.Peers.Count > 0);
-
-            using var vm = new MainWindowViewModel(AppHost.Services, AppHost.Get<ILocalizer>(), AppHost.Get<UpdateService>(), AppHost.Get<UserDataStore>());
-            vm.Navigate("share");
-            var window = new MainWindow { DataContext = vm, Width = 1080, Height = 1100 };
-            window.Show();
-            RenderTests.Pump();
-            RenderTests.Save(window, "page-share-nearby-vi.png");
-            window.Close();
-        }
-        finally
-        {
-            await share.StopAsync();
-        }
-        Assert.Empty(share.Peers);
     }
 }
