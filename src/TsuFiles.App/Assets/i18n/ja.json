@@ -1627,5 +1627,16 @@
   "share.approve": "{0} ({1}) が接続を求めています。許可しますか?",
   "share.device_unknown": "デバイス",
   "share.allow": "許可",
-  "share.deny": "拒否"
+  "share.deny": "拒否",
+  "share.nearby": "近くのデバイス (LocalSend)",
+  "share.nearby_hint": "無料アプリ LocalSend を使っているスマートフォンやコンピューター、共有をオンにした他の TsuFiles。ここへファイルを送れます。[送信] で下の一覧のファイルを相手に渡します。",
+  "share.nearby_empty": "まだデバイスが見つかりません。相手のデバイスで LocalSend を開き (同じ Wi-Fi)、更新してください。",
+  "share.nearby_refresh": "デバイスを再検索",
+  "share.send": "ファイルを送信",
+  "share.sending": "{0} の承認を待っています…",
+  "share.sent": "{2} に {1} 件中 {0} 件のファイルを送信しました。",
+  "share.send_declined": "{0} が拒否しました。",
+  "share.send_busy": "{0} は別のデバイスから受信中です。しばらくしてからもう一度お試しください。",
+  "share.send_pin": "{0} が PIN を求めています。TsuFiles から受信するには、そのデバイスの LocalSend で PIN をオフにしてください。",
+  "share.send_failed": "{0} に送信できませんでした: {1}"
 }

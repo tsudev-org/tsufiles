@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:TsuFiles.App.ViewModels.Pages"
              xmlns:s="using:TsuFiles.App.Services"
+             xmlns:ls="using:TsuFiles.Core.Share.LocalSend"
              x:Class="TsuFiles.App.Views.Pages.SharePage"
              x:DataType="vm:SharePageViewModel">
   <StackPanel Spacing="18">
@@ -70,6 +71,43 @@
         <TextBlock Classes="muted" TextWrapping="Wrap" Text="{DynamicResource share.auto_stop}" />
       </StackPanel>
     </Border>
+
+    <!-- ADR-0004 S3b: máy LocalSend xung quanh (app LocalSend trên điện thoại/máy tính, TsuFiles khác). -->
+    <StackPanel Spacing="6" IsVisible="{Binding IsRunning}">
+      <DockPanel>
+        <Button DockPanel.Dock="Right" Command="{Binding FindPeersCommand}"
+                ToolTip.Tip="{DynamicResource share.nearby_refresh}" AutomationProperties.Name="{DynamicResource share.nearby_refresh}">
+          <PathIcon Width="14" Height="14" Data="{StaticResource Icon.Refresh}" />
+        </Button>
+        <TextBlock Classes="label" VerticalAlignment="Center" Text="{DynamicResource share.nearby}" />
+      </DockPanel>
+      <TextBlock Classes="muted" TextWrapping="Wrap" Text="{DynamicResource share.nearby_hint}" />
+      <TextBlock Classes="muted" TextWrapping="Wrap" Text="{DynamicResource share.nearby_empty}" IsVisible="{Binding NoPeers}" />
+      <ItemsControl ItemsSource="{Binding Peers}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <StackPanel Spacing="8" />
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="ls:LocalSendPeer">
+            <Border Classes="card">
+              <DockPanel>
+                <Button DockPanel.Dock="Right" Margin="12,0,0,0" Classes="accent" Content="{DynamicResource share.send}"
+                        Command="{Binding $parent[UserControl].((vm:SharePageViewModel)DataContext).SendToCommand}"
+                        CommandParameter="{Binding}" />
+                <StackPanel VerticalAlignment="Center" Spacing="2">
+                  <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding Label}" />
+                  <TextBlock Classes="muted" TextTrimming="CharacterEllipsis" Text="{Binding Info.DeviceModel}"
+                             IsVisible="{Binding Info.DeviceModel, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                </StackPanel>
+              </DockPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+      <TextBlock TextWrapping="Wrap" Text="{Binding SendStatus}" IsVisible="{Binding SendStatus, Converter={x:Static ObjectConverters.IsNotNull}}" />
+    </StackPanel>
 
     <StackPanel Spacing="6">
       <TextBlock Classes="label" Text="{DynamicResource share.receive_folder}" />
