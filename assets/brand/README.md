@@ -22,7 +22,7 @@ Script còn sinh (cùng nguồn):
 | `website/public/brand/tsufiles-mark.{avif,webp,png}` | Logo đầu trang website (AVIF -> WebP -> PNG qua `<picture>`) |
 | `website/public/og-image.png` | Ảnh chia sẻ 1200x630 (màu theo token chế độ Tối) |
 
-`website/public/brand/logo-mark.png` là **con cú tsudev** (dây chuyền của repo `tsudev-org/tsudev`), chỉ dùng ở chân
+`website/public/brand/logo-mark.png` là **con cú TsuDEV** (dây chuyền của repo `tsudev-org/tsudev`), chỉ dùng ở chân
 trang cho liên kết về hệ sinh thái tsudev.com - script này không đụng tới nó.
 
 ## Đổi logo

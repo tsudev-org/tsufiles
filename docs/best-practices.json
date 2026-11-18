@@ -14,7 +14,7 @@
   ],
   "version_semver": [
    "Met",
-   "Versions use MAJOR.MINOR.PATCH plus a -vn.N revision suffix (e.g. 2.4.1-vn.1); from the next release the tsudev scheme vYY.M.DDNN (VERSIONING v3)."
+   "Versions use MAJOR.MINOR.PATCH plus a -vn.N revision suffix (e.g. 2.4.1-vn.1); from the next release the TsuDEV scheme vYY.M.DDNN (VERSIONING v3)."
   ],
   "version_tags": [
    "Met",

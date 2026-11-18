@@ -1,6 +1,6 @@
 # Bắt buộc cập nhật
 
-Chuẩn chung của hệ sinh thái tsudev (phiếu `~/projects/logs/handover/20261112-04`, mẫu `tsudev-org/lotus-share#39`):
+Chuẩn chung của hệ sinh thái TsuDEV (phiếu `~/projects/logs/handover/20261112-04`, mẫu `tsudev-org/lotus-share#39`):
 mở bản quá cũ thì hiện hộp thoại yêu cầu cập nhật, không dùng tiếp được. Có từ bản 2.4.1 (số build 2); bản 2.4.0-vn.1
 đã phát hành trước nên không tự hiện hộp thoại - chỉ hướng dẫn được trên website.
 

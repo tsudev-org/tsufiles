@@ -23,7 +23,7 @@ public static class ForkDefaults
     public const string RepositoryUrl = "https://github.com/tsudev-org/tsufiles";
 
     /// <summary>Nhà phát hành (ECOSYSTEM_IDENTITY mục 2.3): thương hiệu luôn viết thường.</summary>
-    public const string PublisherName = "tsudev";
+    public const string PublisherName = "TsuDEV";
 
     /// <summary>Trang chủ hệ sinh thái tsudev; hộp Giới thiệu phải có liên kết mở được tới đây (ECOSYSTEM_IDENTITY 2.3).</summary>
     public const string HomepageUrl = "https://tsudev.com";

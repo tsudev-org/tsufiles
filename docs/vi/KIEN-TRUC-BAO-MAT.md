@@ -23,7 +23,7 @@
 | Cập nhật giả mạo | Chiếm repo/CDN, MITM | HTTPS + SHA-256 + **chữ ký ECDSA P-256 riêng của fork** trên SHA256SUMS + chống hạ cấp (chỉ nhận số phiên bản lớn hơn) |
 | Engine tải về bị tráo | Chiếm nguồn tải FFmpeg/LibreOffice/... | SHA-256 ghim sẵn trong mã (`EngineDownloads`/`EngineInstaller`), sai thì hủy |
 | Chuỗi cung ứng CI | Tag action bị sửa, workflow bị lạm dụng | Action ghim SHA commit, `permissions` tối thiểu, `persist-credentials: false` ở workflow mới, `pull_request_target` không checkout mã PR |
-| Lộ bí mật trong repo | Commit nhầm khóa/token | gitleaks trong CI, `.gitignore` chuẩn tsudev, cổng kiểm `scripts/check-standards.sh` |
+| Lộ bí mật trong repo | Commit nhầm khóa/token | gitleaks trong CI, `.gitignore` chuẩn TsuDEV, cổng kiểm `scripts/check-standards.sh` |
 | Phụ thuộc có lỗ hổng | Gói NuGet | Quản lý phiên bản tập trung (`Directory.Packages.props`), Dependabot hằng tuần, CI chặn gói High/Critical |
 | Đầu vào dòng lệnh | Biến môi trường `TSUFILES_LANG` | Danh sách trắng `vi`/`en`, giá trị lạ quay về mặc định |
 | Chia sẻ trong mạng nội bộ (ADR-0004, `tsufiles share`) | Máy lạ trong cùng Wi-Fi dò cổng, gửi tệp độc, đọc trộm đường truyền | `Core/Share/`: tắt mặc định, chỉ nhận địa chỉ nội bộ (`LocalNetwork`), mã phiên 128 bit so sánh thời gian hằng, mỗi thiết bị mới phải được duyệt, tự tắt sau 15 phút; HTTP tối giản (8 KB đầu yêu cầu, bắt buộc Content-Length, chặn tiêu đề trùng chống smuggling, chặn `..`); tệp nhận làm sạch tên, không ghi đè, chặn đuôi chạy được, gắn Mark-of-the-Web; CSP `script-src 'self'`. **Giới hạn chấp nhận**: HTTP trong LAN chưa mã hóa - trang ghi rõ chỉ dùng mạng tin cậy |

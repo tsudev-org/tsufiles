@@ -1,6 +1,6 @@
 # Contributing to TsuFiles
 
-Thanks for helping! TsuFiles (a Vietnamese-first, offline file converter by [tsudev](https://tsudev.com)) is built to be easy to extend: most contributions touch one file plus a test.
+Thanks for helping! TsuFiles (a Vietnamese-first, offline file converter by [TsuDEV](https://tsudev.com)) is built to be easy to extend: most contributions touch one file plus a test.
 
 ## Setup
 
