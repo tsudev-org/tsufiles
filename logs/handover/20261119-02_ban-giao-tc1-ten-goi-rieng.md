@@ -9,7 +9,7 @@
 | PR | Nội dung | Trạng thái lúc đóng phiên |
 | --- | --- | --- |
 | #109 | Phiếu con TC1 của tsufiles + STATE | ĐÃ GỘP |
-| #110 | Đồng bộ bộ quy ước v3.3.0→**v3.8.0** (phase T1 phiếu `~/projects/logs/handover/20261119-01_*`) | Mở, chờ CI |
+| #110 | Đồng bộ bộ quy ước v3.7.0→**v3.8.1** (phiếu `20261119-T1`) (phase T1 phiếu `~/projects/logs/handover/20261119-01_*`) | Mở, chờ CI |
 | #111 | **TC1 việc A**: revert S3 (#106, #105 - giao thức app ngoài hệ); bỏ tên dự án gốc khỏi README, website, CONTRIBUTING, SECURITY, i18n ja/ko/de, tài liệu kỹ thuật; sửa các dòng ghi SAI sau đợt đổi tên (`filee formats`, `filee-cli`, `./Filee`, thư mục engine) | Mở, chờ CI |
 
 Ngoài repo:
@@ -30,7 +30,7 @@ Bài học:
 
 ## 2. Việc tiếp theo (theo thứ tự)
 
-1. Gộp #110 và #111 khi CI xanh (độc lập nhau). #111 đổi website (`/ban-quyen`, `/dinh-dang`) ⇒ sau khi gộp:
+1. Gộp #110 (v3.8.1) và #111 khi CI xanh (độc lập nhau). #111 đổi website (`/ban-quyen`, `/dinh-dang`) ⇒ sau khi gộp:
    deploy website (agent bị chặn deploy - đưa chủ dự án lệnh `! cd ~/projects/tsufiles/website && npm run deploy`),
    rồi quét `quet-giao-dien.cjs` + so SHA-256 tài sản (bộ nhớ production-verification).
 2. **TC1 việc B** - nối giao thức Lotus v2: kế hoạch B1-B6 ở `logs/handover/20261119-TC1_tsufiles-bo-localsend-va-ten-cu.md`

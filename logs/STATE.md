@@ -9,7 +9,7 @@
 
 ## Hàng đợi task (làm từ trên xuống)
 
-- [ ] ⚡⚡ TIẾP THEO: phiếu `logs/handover/20261119-02_ban-giao-tc1-ten-goi-rieng.md` mục 2: gộp #110 (v3.8.0) + #111
+- [ ] ⚡⚡ TIẾP THEO: phiếu `logs/handover/20261119-02_ban-giao-tc1-ten-goi-rieng.md` mục 2: gộp #110 (v3.8.1) + #111
       (TC1 việc A) → deploy website (👤 lệnh) → **TC1 việc B** nối Lotus Share (kế hoạch B1-B6 ở phiếu
       `20261119-TC1_tsufiles-*` mục 3) → T2/T3 phiếu toàn hệ `20261119-01` (TsuDEV, ngôn ngữ + giao diện theo hệ thống).
 - [ ] Phiếu toàn hệ `20261117-V1` (thống nhất phiên bản): tsufiles là bước 5, CHỜ bước 2-4 (tsucwico, tsuswico,
@@ -69,7 +69,7 @@
 ## Đã hoàn thành (mới nhất trên cùng)
 
 - 19/11/2026 - TC1 (chủ dự án: mỗi sản phẩm chỉ dùng tên/giao thức của chính nó): phiếu toàn hệ + `ra_ten_cu.py`;
-  #109 phiếu con; #111 revert S3 giao thức app ngoài hệ + bỏ tên dự án gốc khỏi nội dung hiển thị; #110 chuẩn v3.8.0.
+  #109 phiếu con; #111 revert S3 giao thức app ngoài hệ + bỏ tên dự án gốc khỏi nội dung hiển thị; #110 chuẩn v3.8.1.
   lotus-share công bố đặc tả Lotus v2 (lotus-share#75). Bàn giao `20261119-02`.
 
 - 18/11/2026 - #104 S2d gộp; #105 S3a TsuFiles nói giao thức LocalSend v2 + `tsufiles send` (gia cố JSON null, lũ gói
