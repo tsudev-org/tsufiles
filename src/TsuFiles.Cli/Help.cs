@@ -26,6 +26,7 @@ internal static class Help
                      "With --json, prints the same as JSON (for scripts and other programs).\n",
         "engines" => Engines,
         "share" => Share,
+        "send" => Send,
         _ => General,
     };
 
@@ -39,6 +40,7 @@ internal static class Help
                      "Với --json, in cùng nội dung dưới dạng JSON (cho script và chương trình khác).\n",
         "engines" => EnginesVi,
         "share" => ShareVi,
+        "send" => SendVi,
         _ => GeneralVi,
     };
 
@@ -50,7 +52,19 @@ internal static class Help
         thoại gửi lên lưu vào thư mục -o (mặc định thư mục hiện tại), không bao giờ ghi đè. Mỗi thiết bị mới phải
         được bạn đồng ý (gõ y). Phiên tự tắt sau 15 phút không dùng; Ctrl+C để tắt ngay.
 
+        App LocalSend (iPhone/iPad iOS 15+, Android, máy tính) cùng mạng cũng thấy máy này và gửi tệp tới được.
+
         Chỉ dùng trong mạng tin cậy: đường truyền trong mạng nội bộ chưa mã hóa.
+
+        """;
+
+    private const string SendVi = """
+        Cách dùng: tsufiles send [<tệp...>] [--to <tên | IP | IP:cổng>] [--settle <giây>] [--json]
+
+        Tìm máy trong mạng nội bộ theo giao thức LocalSend - app LocalSend trên điện thoại hay máy tính, TsuFiles khác
+        đang bật chia sẻ - rồi gửi tệp tới máy chọn bằng --to (khớp tên, không phân biệt hoa thường, hoặc địa chỉ IP).
+        Máy nhận phải đồng ý. Không có --to: chỉ liệt kê máy tìm thấy (--json để script đọc). --settle: số giây chờ máy
+        trả lời (mặc định 3).
 
         """;
 
@@ -62,7 +76,20 @@ internal static class Help
         downloaded; files the phone sends go to the -o folder (default: the current folder) and never overwrite.
         Every new device needs your consent (type y). The session stops after 15 idle minutes; Ctrl+C stops it now.
 
+        LocalSend apps (iPhone/iPad on iOS 15+, Android, computers) on the same network see this computer too and
+        can send files to it.
+
         Use on a trusted network only: traffic on the local network is not encrypted.
+
+        """;
+
+    private const string Send = """
+        Usage: tsufiles send [<files...>] [--to <name | IP | IP:port>] [--settle <seconds>] [--json]
+
+        Finds devices on the local network with the LocalSend protocol - LocalSend apps on phones and computers,
+        other TsuFiles with sharing on - and sends files to the one picked with --to (name match, case-insensitive,
+        or IP address). The receiver must accept. Without --to, only lists the devices found (--json for scripts).
+        --settle: seconds to wait for answers (default 3).
 
         """;
 
@@ -78,6 +105,7 @@ internal static class Help
           tsufiles engines [--json]
           tsufiles engines (install | remove) <engine> [--json]
           tsufiles share [<tệp...>] [-o <thư mục nhận>]
+          tsufiles send [<tệp...>] [--to <tên hoặc IP>]
           tsufiles help [<lệnh>]
           tsufiles version
 
@@ -179,6 +207,7 @@ internal static class Help
           tsufiles engines [--json]
           tsufiles engines (install | remove) <engine> [--json]
           tsufiles share [<files...>] [-o <receive folder>]
+          tsufiles send [<files...>] [--to <name or IP>]
           tsufiles help [<command>]
           tsufiles version
 

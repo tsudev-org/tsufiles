@@ -16,12 +16,14 @@ using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using TsuFiles.Core.Platform;
+using TsuFiles.Core.Share.LocalSend;
 using TsuFiles.Core.Web;
 
 namespace TsuFiles.Core.Share;
 
 /// <summary>Thiết bị xin kết nối, đưa cho người dùng duyệt.</summary>
-public sealed record ShareDevice(IPAddress Address, string? UserAgent);
+/// <param name="Alias">Tên thiết bị tự khai qua giao thức LocalSend (null với trình duyệt).</param>
+public sealed record ShareDevice(IPAddress Address, string? UserAgent, string? Alias = null);
 
 /// <summary>Một tệp đã nhận xong.</summary>
 public sealed record ShareReceived(string Path, long Length, ShareDevice From);
@@ -45,9 +47,27 @@ public sealed class ShareOptions
 
     /// <summary>Hỏi người dùng có cho thiết bị kết nối không; null = cho mọi thiết bị trong mạng nội bộ (chỉ dùng cho test).</summary>
     public Func<ShareDevice, CancellationToken, Task<bool>>? Approve { get; init; }
+
+    /// <summary>Bật giao thức LocalSend (tìm máy + nhận từ app LocalSend/TsuFiles khác, ADR-0004 S3); null = tắt.</summary>
+    public LocalSendOptions? LocalSend { get; init; }
 }
 
-public sealed class ShareServer : IAsyncDisposable
+public sealed class LocalSendOptions
+{
+    /// <summary>Tên máy này hiện trên thiết bị khác.</summary>
+    public required string Alias { get; init; }
+
+    /// <summary>desktop (app) hay headless (dòng lệnh).</summary>
+    public string DeviceType { get; init; } = "desktop";
+
+    /// <summary>Cổng UDP multicast; test dùng cổng khác để không đụng LocalSend thật.</summary>
+    public int DiscoveryPort { get; init; } = LocalSendProtocol.DefaultPort;
+
+    /// <summary>Mở UDP multicast để tìm máy; false = chỉ nhận qua HTTP (test).</summary>
+    public bool Discover { get; init; } = true;
+}
+
+public sealed partial class ShareServer : IAsyncDisposable
 {
     public const int MaxHeadBytes = 8 * 1024;
     private static readonly TimeSpan HeadTimeout = TimeSpan.FromSeconds(15);
@@ -55,7 +75,7 @@ public sealed class ShareServer : IAsyncDisposable
 
     private readonly ShareOptions _options;
     private readonly ILogger _log;
-    private readonly TcpListener _listener;
+    private TcpListener _listener;
     private readonly CancellationTokenSource _stop = new();
     private readonly byte[] _token = RandomNumberGenerator.GetBytes(16);
     private readonly Dictionary<IPAddress, Task<bool>> _devices = [];
@@ -74,6 +94,12 @@ public sealed class ShareServer : IAsyncDisposable
         _listener = new TcpListener(IPAddress.Any, options.Port);
         Token = Convert.ToHexStringLower(_token);
     }
+
+    /// <summary>Tìm máy LocalSend; null khi chưa bật LocalSend hoặc chưa Start.</summary>
+    public LocalSendDiscovery? Discovery { get; private set; }
+
+    /// <summary>Thông tin máy này theo giao thức LocalSend (null khi tắt).</summary>
+    public LocalSendInfo? LocalSendSelf { get; private set; }
 
     /// <summary>Mã phiên (32 ký tự hex) nằm trong mọi đường dẫn.</summary>
     public string Token { get; }
@@ -109,7 +135,25 @@ public sealed class ShareServer : IAsyncDisposable
 
     public void Start()
     {
-        _listener.Start();
+        // LocalSend dò máy cũ (không multicast) bằng HTTP ở cổng 53317: ưu tiên cổng đó, bận thì để hệ điều hành chọn.
+        if (_options.LocalSend is not null && _options.Port == 0)
+        {
+            try
+            {
+                var preferred = new TcpListener(IPAddress.Any, LocalSendProtocol.DefaultPort);
+                preferred.Start();
+                _listener = preferred;
+            }
+            catch (SocketException)
+            {
+                _listener.Start();
+            }
+        }
+        else
+        {
+            _listener.Start();
+        }
+        StartLocalSend();
         _accept = AcceptLoopAsync(_stop.Token);
         _idle = IdleLoopAsync(_stop.Token);
         _log.LogInformation("Share started on port {Port}, receiving into {Folder}", Port, _options.ReceiveFolder);
@@ -125,6 +169,8 @@ public sealed class ShareServer : IAsyncDisposable
             return;
         await _stop.CancelAsync();
         _listener.Stop();
+        if (Discovery is not null)
+            await Discovery.DisposeAsync();
         try
         {
             if (_accept is not null)
@@ -213,6 +259,11 @@ public sealed class ShareServer : IAsyncDisposable
     {
         // /s/<token>/ , /s/<token>/app.js , /s/<token>/f/<n> , /s/<token>/u?name=<tên>
         var path = request.Path;
+        if (LocalSendSelf is not null && path.StartsWith(LocalSendProtocol.ApiPrefix, StringComparison.Ordinal))
+        {
+            await HandleLocalSendAsync(stream, request, leftover, device, path[LocalSendProtocol.ApiPrefix.Length..], cancellationToken);
+            return;
+        }
         var prefix = "/s/";
         if (!path.StartsWith(prefix, StringComparison.Ordinal) || path.Length < prefix.Length + 32
             || !TokenMatches(path.AsSpan(prefix.Length, 32)))

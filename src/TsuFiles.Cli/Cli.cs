@@ -42,6 +42,8 @@ internal static class Cli
                 return Success;
             case "share":
                 return await ShareCommand.RunAsync(options, output, errors, cancellationToken);
+            case "send":
+                return await SendCommand.RunAsync(options, output, errors, cancellationToken);
         }
 
         await using var host = (createHost ?? (() => CliHost.Create()))();
