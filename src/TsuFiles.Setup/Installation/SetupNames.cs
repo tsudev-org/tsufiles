@@ -30,7 +30,7 @@ public static class SetupNames
     public const string DisplayName = TsuFiles.Core.ForkDefaults.DisplayName;
 
     // TsuFiles: nhà phát hành của bản fork.
-    public const string Publisher = "tsudev";
+    public const string Publisher = "TsuDEV";
     public const string AppExe = "TsuFiles.exe";
 
     /// <summary>TsuFiles 2.4.0-vn.* (and Filee): the app was Filee.exe. Setup still closes, cleans up and takes it over.</summary>

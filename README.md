@@ -10,7 +10,7 @@
 
 **Trình chuyển đổi tệp ngoại tuyến, miễn phí, mã nguồn mở - tiếng Việt mặc định, gia cố bảo mật.**
 
-Một sản phẩm của [tsudev](https://tsudev.com).
+Một sản phẩm của [TsuDEV](https://tsudev.com).
 
 **Hạng sản phẩm: C - Ngoại tuyến** (theo `.standards/docs/AUTH_AND_ACCOUNT.md` mục 1): mọi chức năng chuyển đổi chạy
 trọn vẹn không cần internet và không cần tài khoản; kiểm tra cập nhật là tùy chọn.
@@ -29,7 +29,7 @@ máy của bạn**, không tải tệp lên bất kỳ máy chủ nào, không c
 | macOS (Homebrew) | `brew install --cask tsudev-org/tap/tsudev-files` |
 | Debian, Ubuntu, Fedora, macOS | `curl -fsSL https://tsudev.com/install.sh \| sh -s -- tsudev-files` |
 
-Lệnh một dòng chỉ thêm kho tsudev đã ký (APT/DNF, vân tay khóa `3883 10F4 7FA8 224D 76C0 A9C7 9745 B6AF 3EA3 3C74`)
+Lệnh một dòng chỉ thêm kho TsuDEV đã ký (APT/DNF, vân tay khóa `3883 10F4 7FA8 224D 76C0 A9C7 9745 B6AF 3EA3 3C74`)
 hoặc tap Homebrew rồi để trình quản lý gói tự kiểm và cài; đọc script trước tại <https://tsudev.com/install.sh>. Tải
 tay (Windows Setup/Portable, Linux tar.gz, macOS dmg) ở [trang Tải về](https://files.tsudev.com/tai-ve/) hoặc
 [GitHub Releases](https://github.com/tsudev-org/tsufiles/releases/latest), kèm `SHA256SUMS` đã ký và chứng thực nguồn

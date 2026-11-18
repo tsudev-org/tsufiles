@@ -22,7 +22,7 @@ hệ tsudev.com, cấu hình ở `wrangler.jsonc`).
 
 * Tài sản thương hiệu (`public/favicon*`, `android-chrome-*`, `apple-touch-icon.png`, `og-image.png`,
   `brand/tsufiles-mark.*`) sinh bằng `tools/thuong-hieu/tao-tai-san.py` ở gốc repo - xem `assets/brand/README.md`;
-  không sửa tay. Riêng `brand/logo-mark.png` (cú tsudev, chân trang) lấy từ dây chuyền của repo `tsudev-org/tsudev`.
+  không sửa tay. Riêng `brand/logo-mark.png` (cú TsuDEV, chân trang) lấy từ dây chuyền của repo `tsudev-org/tsudev`.
 * Kênh ủng hộ ở trang `/ung-ho/`: sửa `src/data/ung-ho.json` (build từ chối URL không https hoặc trỏ về dự án gốc).
 * Font Be Vietnam Pro tự host (SIL OFL 1.1), token màu sao nguyên văn từ `.standards/tokens/tokens.css`.
 * Header bảo mật (HSTS, CSP chặt, `X-Frame-Options: DENY`...) ở `public/_headers`; `security.txt` ở `public/.well-known/`.

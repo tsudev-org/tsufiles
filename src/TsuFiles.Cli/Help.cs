@@ -67,7 +67,7 @@ internal static class Help
         """;
 
     private const string GeneralVi = """
-        TsuFiles (hệ sinh thái tsudev): chuyển đổi tệp ngoại tuyến từ dòng lệnh.
+        TsuFiles (hệ sinh thái TsuDEV): chuyển đổi tệp ngoại tuyến từ dòng lệnh.
 
         Cách dùng:
           tsufiles convert <tệp hoặc thư mục...> --to <định dạng> [tùy chọn]
@@ -168,7 +168,7 @@ internal static class Help
         """);
 
     private const string General = """
-        TsuFiles (tsudev ecosystem): convert files offline from the command line.
+        TsuFiles (TsuDEV ecosystem): convert files offline from the command line.
 
         Usage:
           tsufiles convert <files or folders...> --to <format> [options]

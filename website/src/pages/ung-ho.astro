@@ -5,15 +5,15 @@ import KhoiUngHo from '../components/KhoiUngHo.astro';
 import { REPO_URL } from '../lib/noi-dung';
 import { KENH, NHA_TAI_TRO, NGUOI_UNG_HO } from '../lib/ung-ho';
 ---
-<TaiLieu tieuDe="Ủng hộ" moTa="Cách ủng hộ TsuFiles, trình chuyển đổi tệp ngoại tuyến miễn phí của hệ sinh thái tsudev: kênh ủng hộ chính thức và những cách đóng góp không tốn tiền." duongDan="/ung-ho/">
+<TaiLieu tieuDe="Ủng hộ" moTa="Cách ủng hộ TsuFiles, trình chuyển đổi tệp ngoại tuyến miễn phí của hệ sinh thái TsuDEV: kênh ủng hộ chính thức và những cách đóng góp không tốn tiền." duongDan="/ung-ho/">
   <h1>Ủng hộ TsuFiles</h1>
-  <p>TsuFiles miễn phí và sẽ luôn miễn phí, không quảng cáo, không thu thập dữ liệu. Ủng hộ là hoàn toàn tự nguyện, không mở khóa tính năng hay quyền lợi nào; mọi đóng góp đều dành cho việc phát triển TsuFiles và hệ sinh thái <a href="https://tsudev.com" target="_blank" rel="noopener noreferrer">tsudev</a>.</p>
+  <p>TsuFiles miễn phí và sẽ luôn miễn phí, không quảng cáo, không thu thập dữ liệu. Ủng hộ là hoàn toàn tự nguyện, không mở khóa tính năng hay quyền lợi nào; mọi đóng góp đều dành cho việc phát triển TsuFiles và hệ sinh thái <a href="https://tsudev.com" target="_blank" rel="noopener noreferrer">TsuDEV</a>.</p>
 
   <h2 id="kenh-ung-ho">Kênh ủng hộ</h2>
   {KENH.length > 0 ? (
     <KhoiUngHo kenh={KENH} ten="TsuFiles" />
   ) : (
-    <p>Kênh ủng hộ tài chính chính thức của tsudev đang được chuẩn bị và sẽ được công bố tại trang này. Trang này là nơi duy nhất công bố kênh ủng hộ: đừng chuyển tiền theo đường dẫn ở bất kỳ nơi nào khác tự nhận là TsuFiles.</p>
+    <p>Kênh ủng hộ tài chính chính thức của TsuDEV đang được chuẩn bị và sẽ được công bố tại trang này. Trang này là nơi duy nhất công bố kênh ủng hộ: đừng chuyển tiền theo đường dẫn ở bất kỳ nơi nào khác tự nhận là TsuFiles.</p>
   )}
 
   <h2 id="khong-ton-tien">Ủng hộ không tốn tiền</h2>

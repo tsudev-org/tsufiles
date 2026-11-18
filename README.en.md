@@ -10,7 +10,7 @@
 
 **An offline, free and open-source file converter - Vietnamese-first and security-hardened.**
 
-A [tsudev](https://tsudev.com) product. Vietnamese version: [README.md](README.md). Website: <https://files.tsudev.com>.
+A [TsuDEV](https://tsudev.com) product. Vietnamese version: [README.md](README.md). Website: <https://files.tsudev.com>.
 
 Drag a file and drop it on a format in the "donut" ring that opens under the pointer - that's it. More than 260
 formats: images, PDF, Word, Excel, PowerPoint, HWP/HWPX, video, audio, e-books, archives, CAD, maps, 3D... Everything
@@ -26,7 +26,7 @@ runs **on your computer**: no file is uploaded anywhere, and Microsoft Office is
 | macOS (Homebrew) | `brew install --cask tsudev-org/tap/tsudev-files` |
 | Debian, Ubuntu, Fedora, macOS | `curl -fsSL https://tsudev.com/install.sh \| sh -s -- tsudev-files` |
 
-The one-line installer only adds the signed tsudev repository (APT/DNF, key fingerprint
+The one-line installer only adds the signed TsuDEV repository (APT/DNF, key fingerprint
 `3883 10F4 7FA8 224D 76C0 A9C7 9745 B6AF 3EA3 3C74`) or the Homebrew tap and lets the package manager verify and install
 the package; read it first at <https://tsudev.com/install.sh>. Manual downloads (Windows Setup/Portable, Linux tar.gz,
 macOS dmg) are on [GitHub Releases](https://github.com/tsudev-org/tsufiles/releases/latest) with signed `SHA256SUMS`
