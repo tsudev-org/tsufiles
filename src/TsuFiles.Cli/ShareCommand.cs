@@ -7,9 +7,6 @@ namespace TsuFiles.Cli;
 
 internal static class ShareCommand
 {
-    /// <summary>Tên máy này hiện trên app LocalSend / TsuFiles khác.</summary>
-    internal static string Alias => $"TsuFiles ({Environment.MachineName})";
-
     public static async Task<int> RunAsync(CliOptions options, TextWriter output, TextWriter errors, CancellationToken cancellationToken)
     {
         var shared = new List<string>();
@@ -30,7 +27,6 @@ internal static class ShareCommand
         {
             ReceiveFolder = Path.GetFullPath(options.Output ?? Environment.CurrentDirectory),
             SharedFiles = shared,
-            LocalSend = new LocalSendOptions { Alias = Alias, DeviceType = "headless" },
             Approve = async (device, token) =>
             {
                 if (!interactive)
@@ -42,9 +38,8 @@ internal static class ShareCommand
                 await ask.WaitAsync(token);
                 try
                 {
-                    var who = device.Alias is null ? $"{device.Address}" : $"\"{device.Alias}\" {device.Address}";
-                    output.Write(CliLanguage.T($"Thiết bị {who} ({device.UserAgent ?? "?"}) muốn kết nối. Đồng ý? [y/N] ",
-                        $"Device {who} ({device.UserAgent ?? "?"}) wants to connect. Allow? [y/N] "));
+                    output.Write(CliLanguage.T($"Thiết bị {device.Address} ({device.UserAgent ?? "?"}) muốn kết nối. Đồng ý? [y/N] ",
+                        $"Device {device.Address} ({device.UserAgent ?? "?"}) wants to connect. Allow? [y/N] "));
                     var answer = await Task.Run(Console.ReadLine, token);
                     return answer?.Trim().ToLowerInvariant() is "y" or "yes" or "c" or "co" or "có";
                 }
@@ -70,8 +65,6 @@ internal static class ShareCommand
             "Open this address in the phone's browser (same Wi-Fi):"));
         foreach (var link in links)
             output.WriteLine($"  {link}");
-        output.WriteLine(CliLanguage.T($"App LocalSend (điện thoại, máy tính) cùng mạng thấy máy này với tên \"{Alias}\".",
-            $"LocalSend apps on the same network see this computer as \"{Alias}\"."));
         output.WriteLine(CliLanguage.T("Ctrl+C để dừng.", "Ctrl+C to stop."));
 
         try

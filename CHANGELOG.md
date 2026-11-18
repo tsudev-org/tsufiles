@@ -22,11 +22,9 @@ change, a language may repeat; a language without lines shows the English ones):
 level: recommended
 vi: Chia sẻ với điện thoại: quét mã QR để gửi/nhận tệp với iPhone (kể cả iPhone 8), Android qua Wi-Fi, không cần cài app
 vi: PDF sang DOCX giữ chữ ký số, con dấu và bảng không viền của văn bản hành chính
-vi: Nói giao thức LocalSend: app LocalSend (iOS 15+, Android, máy tính) thấy máy này và gửi tệp tới; lệnh mới tsufiles send
 vi: Đóng cửa sổ thì TsuFiles chạy tiếp trong khay hệ thống; icon hiện đúng trên thanh tác vụ Windows
 en: Share with your phone: scan a QR code to send and receive files with an iPhone (even an iPhone 8) or Android over Wi-Fi, no app needed
 en: PDF to DOCX keeps digital signatures, stamps and borderless tables of official documents
-en: Speaks the LocalSend protocol: LocalSend apps (iOS 15+, Android, computers) find this computer and send files to it; new tsufiles send command
 en: Closing the window keeps TsuFiles running in the system tray; the Windows taskbar shows the right icon
 -->
 
@@ -34,7 +32,6 @@ en: Closing the window keeps TsuFiles running in the system tray; the Windows ta
 
 - **Share with your phone** ([ADR-0004](https://github.com/tsudev-org/tsufiles/blob/main/docs/adr/0004-chia-se-giua-thiet-bi-va-ios.md)): turn on **Share with phone** in the sidebar and scan the QR code. The phone's browser sends files to the computer and downloads the files you drop in - iPhone 8 (Safari 16) and newer, Android, other computers. Nothing to install on the phone. Each new device must be allowed on the computer; only local network addresses are accepted, links carry a random 128-bit session code, sharing turns itself off after 15 minutes idle. The connection is plain HTTP inside the local network: use it on trusted Wi-Fi only.
 - **Headless:** `tsufiles share [files...] -o <folder>` serves the same page from the command line and asks before each device connects.
-- **LocalSend:** while sharing is on, the free LocalSend app (iPhone/iPad on iOS 15+, Android, computers) lists this computer as `TsuFiles (<computer name>)` and can send files to it, after the same consent prompt. `tsufiles send [files...] --to <name | IP | IP:port>` finds LocalSend devices and other TsuFiles and sends files to them. Uses UDP and TCP port 53317 on the local network.
 - **PDF to DOCX** keeps signature and stamp annotations and turns side-by-side text blocks into borderless tables.
 - **Tray:** closing the window now keeps TsuFiles running in the tray (change it in Settings). The GitHub and Donate buttons left the sidebar.
 
@@ -51,10 +48,6 @@ en: Closing the window keeps TsuFiles running in the system tray; the Windows ta
   **Riêng tư**.
 - **Dòng lệnh:** `tsufiles share [tệp...] -o <thư mục>` mở cùng trang đó trên máy không màn hình, hỏi `[y/N]` trước
   khi cho mỗi thiết bị kết nối.
-- **LocalSend:** khi bật chia sẻ, app LocalSend miễn phí (iPhone/iPad iOS 15+, Android, máy tính) thấy máy này với tên
-  `TsuFiles (<tên máy>)` và gửi tệp tới được, vẫn qua bước cho phép như trình duyệt. Lệnh mới
-  `tsufiles send [tệp...] --to <tên | IP | IP:cổng>` tìm máy LocalSend và TsuFiles khác rồi gửi tệp. Dùng cổng UDP và
-  TCP 53317 trong mạng nội bộ.
 - **PDF sang DOCX** giữ lớp chú thích (chữ ký số, con dấu) và gộp các khối chữ đặt cạnh nhau thành bảng không viền.
 - **Khay hệ thống:** mặc định đóng cửa sổ thì TsuFiles chạy tiếp trong khay (đổi trong Cài đặt). Bỏ nút GitHub và
   Ủng hộ ở thanh bên; icon thanh tác vụ Windows hiện đúng.
