@@ -76,6 +76,8 @@ public sealed partial class PhoneShareService : ObservableObject, IAsyncDisposab
             ReceiveFolder = ReceiveFolder,
             SharedFiles = [.. SharedFiles],
             Approve = AskAsync,
+            // ADR-0004 S3: app LocalSend (iOS 15+, Android, máy tính) và TsuFiles khác thấy máy này và gửi tệp tới được.
+            LocalSend = new LocalSendOptions { Alias = $"TsuFiles ({Environment.MachineName})" },
         }, _log);
         server.Received += r => Dispatcher.UIThread.Post(() => Received.Insert(0, r));
         server.Stopped += () => Dispatcher.UIThread.Post(() => Forget(server));
@@ -125,7 +127,8 @@ public sealed partial class PhoneShareService : ObservableObject, IAsyncDisposab
 
     private async Task<bool> AskAsync(ShareDevice device, CancellationToken cancellationToken)
     {
-        var name = ShareApproval.NameOf(device.UserAgent) ?? _loc["share.device_unknown"];
+        // Tên LocalSend do thiết bị tự khai: luôn kèm địa chỉ IP trong câu hỏi (share.approve) nên không giả mạo được chỗ.
+        var name = device.Alias ?? ShareApproval.NameOf(device.UserAgent) ?? _loc["share.device_unknown"];
         var approval = new ShareApproval(device, this, _loc.Format("share.approve", name, device.Address));
         await Dispatcher.UIThread.InvokeAsync(() =>
         {

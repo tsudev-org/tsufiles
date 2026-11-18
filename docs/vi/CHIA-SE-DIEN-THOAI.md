@@ -20,7 +20,18 @@ Safari 16). Thiết kế: [ADR-0004](../adr/0004-chia-se-giua-thiet-bi-va-ios.md
 
 Máy chủ không màn hình: dùng lệnh `tsufiles share` (xem `tsufiles help share`).
 
-## 2. Khi điện thoại không mở được trang
+## 2. Dùng app LocalSend (tùy chọn)
+
+Khi bật chia sẻ, TsuFiles còn nói giao thức của **LocalSend** - app chia sẻ tệp miễn phí, mã nguồn mở, có trên App
+Store (iOS 15 trở lên, gồm iPhone 8), Google Play và máy tính:
+
+- Điện thoại có LocalSend: mở app, máy tính hiện trong danh sách với tên `TsuFiles (<tên máy>)`; chọn tệp rồi chạm vào
+  máy đó. Máy tính vẫn hỏi cho phép như với trình duyệt.
+- Gửi từ máy tính tới điện thoại/máy khác đang mở LocalSend (hoặc TsuFiles khác đang bật chia sẻ):
+  `tsufiles send` để xem máy tìm thấy, `tsufiles send <tệp...> --to "<tên hoặc IP>"` để gửi.
+- LocalSend dùng cổng UDP và TCP 53317 trong mạng nội bộ: tường lửa Windows hỏi thì cho phép ở mạng Riêng tư.
+
+## 3. Khi điện thoại không mở được trang
 
 - Điện thoại và máy tính phải cùng một mạng Wi-Fi (Wi-Fi khách của quán cà phê/khách sạn thường chặn các máy nói
   chuyện với nhau).
@@ -31,7 +42,7 @@ Máy chủ không màn hình: dùng lệnh `tsufiles share` (xem `tsufiles help 
   chỉ. Vừa đổi Wi-Fi thì bấm nút làm mới cạnh **Tắt chia sẻ**.
 - Trang báo "Máy tính đã từ chối thiết bị này": tắt rồi bật lại chia sẻ (phiên mới hỏi lại từ đầu).
 
-## 3. An toàn
+## 4. An toàn
 
 - Chỉ dùng trên mạng tin cậy (nhà, cơ quan): đường truyền trong mạng nội bộ là HTTP, chưa mã hóa.
 - Chia sẻ tắt sẵn; chỉ nhận kết nối từ địa chỉ mạng nội bộ; đường dẫn chứa mã phiên ngẫu nhiên 128 bit; mỗi thiết

@@ -27,7 +27,7 @@ internal sealed record CliOptions
     public double? SettleSeconds { get; set; }
     public string? Error { get; set; }
 
-    public static readonly string[] Commands = ["convert", "watch", "formats", "presets", "engines", "share", "help", "version"];
+    public static readonly string[] Commands = ["convert", "watch", "formats", "presets", "engines", "share", "send", "help", "version"];
 
     public static CliOptions Parse(IReadOnlyList<string> args)
     {
