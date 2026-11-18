@@ -1647,5 +1647,16 @@
   "share.approve": "{0} ({1}) wants to connect. Allow?",
   "share.device_unknown": "A device",
   "share.allow": "Allow",
-  "share.deny": "Deny"
+  "share.deny": "Deny",
+  "share.nearby": "Nearby devices (LocalSend)",
+  "share.nearby_hint": "Phones and computers running the free LocalSend app, and other TsuFiles with sharing on. They can send files here; Send gives them the files in the list below.",
+  "share.nearby_empty": "No devices found yet. Open LocalSend on the other device (same Wi-Fi), then refresh.",
+  "share.nearby_refresh": "Look for devices again",
+  "share.send": "Send files",
+  "share.sending": "Waiting for {0} to accept…",
+  "share.sent": "Sent {0} of {1} files to {2}.",
+  "share.send_declined": "{0} declined.",
+  "share.send_busy": "{0} is receiving from another device. Try again shortly.",
+  "share.send_pin": "{0} asks for a PIN. Turn the PIN off in LocalSend on that device to receive from TsuFiles.",
+  "share.send_failed": "Could not send to {0}: {1}"
 }

@@ -1626,5 +1626,16 @@
   "share.approve": "{0} ({1}) يريد الاتصال. هل تسمح؟",
   "share.device_unknown": "جهاز",
   "share.allow": "سماح",
-  "share.deny": "رفض"
+  "share.deny": "رفض",
+  "share.nearby": "الأجهزة القريبة (LocalSend)",
+  "share.nearby_hint": "الهواتف وأجهزة الكمبيوتر التي تشغّل تطبيق LocalSend المجاني، ونسخ TsuFiles الأخرى التي فعّلت المشاركة. يمكنها إرسال الملفات إلى هنا؛ زر إرسال يمنحها الملفات في القائمة أدناه.",
+  "share.nearby_empty": "لم يُعثر على أجهزة بعد. افتح LocalSend على الجهاز الآخر (نفس شبكة Wi-Fi) ثم حدّث.",
+  "share.nearby_refresh": "البحث عن الأجهزة مجددًا",
+  "share.send": "إرسال الملفات",
+  "share.sending": "بانتظار موافقة {0}…",
+  "share.sent": "تم إرسال {0} من {1} ملفات إلى {2}.",
+  "share.send_declined": "رفض {0}.",
+  "share.send_busy": "{0} يستقبل من جهاز آخر. حاول مرة أخرى بعد قليل.",
+  "share.send_pin": "{0} يطلب رمز PIN. أوقف PIN في LocalSend على ذلك الجهاز للاستقبال من TsuFiles.",
+  "share.send_failed": "تعذّر الإرسال إلى {0}: {1}"
 }

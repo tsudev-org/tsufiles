@@ -1647,5 +1647,16 @@
   "share.approve": "{0} ({1}) 要求連線。允許嗎？",
   "share.device_unknown": "一台裝置",
   "share.allow": "允許",
-  "share.deny": "拒絕"
+  "share.deny": "拒絕",
+  "share.nearby": "附近的裝置 (LocalSend)",
+  "share.nearby_hint": "執行免費 LocalSend 應用程式的手機和電腦，以及開啟分享的其他 TsuFiles。它們可以把檔案傳送到這裡；按「傳送」會把下方清單中的檔案傳給對方。",
+  "share.nearby_empty": "尚未找到裝置。請在另一台裝置上開啟 LocalSend（同一 Wi-Fi），然後重新整理。",
+  "share.nearby_refresh": "重新尋找裝置",
+  "share.send": "傳送檔案",
+  "share.sending": "正在等待 {0} 接受…",
+  "share.sent": "已傳送 {0}/{1} 個檔案到 {2}。",
+  "share.send_declined": "{0} 已拒絕。",
+  "share.send_busy": "{0} 正在接收另一台裝置的檔案，請稍後再試。",
+  "share.send_pin": "{0} 要求輸入 PIN。請在該裝置的 LocalSend 中關閉 PIN，才能接收來自 TsuFiles 的檔案。",
+  "share.send_failed": "無法傳送到 {0}：{1}"
 }

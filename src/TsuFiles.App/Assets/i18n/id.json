@@ -1625,5 +1625,16 @@
   "share.approve": "{0} ({1}) ingin terhubung. Izinkan?",
   "share.device_unknown": "Sebuah perangkat",
   "share.allow": "Izinkan",
-  "share.deny": "Tolak"
+  "share.deny": "Tolak",
+  "share.nearby": "Perangkat terdekat (LocalSend)",
+  "share.nearby_hint": "Ponsel dan komputer yang menjalankan aplikasi gratis LocalSend, serta TsuFiles lain yang berbagi aktif. Mereka dapat mengirim file ke sini; Kirim memberi mereka file di daftar di bawah.",
+  "share.nearby_empty": "Belum ada perangkat ditemukan. Buka LocalSend di perangkat lain (Wi-Fi yang sama), lalu muat ulang.",
+  "share.nearby_refresh": "Cari perangkat lagi",
+  "share.send": "Kirim file",
+  "share.sending": "Menunggu {0} menerima…",
+  "share.sent": "{0} dari {1} file terkirim ke {2}.",
+  "share.send_declined": "{0} menolak.",
+  "share.send_busy": "{0} sedang menerima dari perangkat lain. Coba lagi sebentar lagi.",
+  "share.send_pin": "{0} meminta PIN. Matikan PIN di LocalSend pada perangkat itu untuk menerima dari TsuFiles.",
+  "share.send_failed": "Tidak dapat mengirim ke {0}: {1}"
 }
