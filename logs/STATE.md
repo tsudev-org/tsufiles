@@ -9,6 +9,9 @@
 
 ## Hàng đợi task (làm từ trên xuống)
 
+- [ ] ⚡⚡ ƯU TIÊN: phiếu `logs/handover/20261119-TC1_tsufiles-bo-localsend-va-ten-cu.md` (chủ dự án 19/11): việc A
+      (rút LocalSend + `de.json`/`/dinh-dang`) TRƯỚC bản phát hành kế tiếp; việc B (nối Lotus Share) chờ lotus-share trả
+      lời phiếu con; mục 4 có 2 câu hỏi 👤. Phiếu tổng: `~/projects/logs/handover/20261119-TC1_ten-goi-rieng-toan-he.md`.
 - [ ] ⚡ TIẾP THEO: phiếu `logs/handover/20261118-03_ban-giao-s3-localsend.md` (đọc mục 2): S3c thử với app LocalSend
       thật trên iPhone (cần chủ dự án cầm máy); S4 iOS gốc CHỜ chủ dự án; V1 bước 5 CHỜ bước 2-4 của các repo khác.
 - [ ] Phiếu toàn hệ `20261117-V1` (thống nhất phiên bản): tsufiles là bước 5, CHỜ bước 2-4 (tsucwico, tsuswico,
