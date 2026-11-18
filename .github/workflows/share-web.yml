@@ -1,0 +1,63 @@
+# TsuFiles (ADR-0004 S2d): trang "Gửi và nhận tệp" mà điện thoại mở khi quét mã QR, kiểm đầu-cuối bằng WebKit giả
+# lập iPhone 8 (Safari 16). Chạy `tsufiles-cli share` thật, duyệt thiết bị qua dòng lệnh, tải xuống + gửi lên.
+# Kịch bản: tests/share-web/kiem-trang-chia-se.mjs. Playwright dùng chung website/package-lock.json.
+name: Trang chia sẻ (WebKit)
+
+on:
+  push:
+    branches: [main]
+    paths: &duong-dan
+      - src/TsuFiles.Core/Share/**
+      - src/TsuFiles.Core/Web/**
+      - src/TsuFiles.Cli/**
+      - tests/share-web/**
+      - website/package-lock.json
+      - .github/workflows/share-web.yml
+  pull_request:
+    paths: *duong-dan
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: share-web-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  webkit:
+    name: Trang chia sẻ trên WebKit (iPhone 8)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6
+        with:
+          global-json-file: global.json
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - name: Build tsufiles-cli
+        run: |
+          dotnet restore src/TsuFiles.Cli --locked-mode
+          dotnet build src/TsuFiles.Cli --no-restore -c Release
+      - name: Cài Playwright WebKit
+        working-directory: website
+        run: |
+          npm ci --no-audit --no-fund
+          npx playwright install --with-deps webkit
+      - name: Kiểm trang chia sẻ
+        env:
+          ANH_CHUP: ${{ runner.temp }}/anh-chup
+        run: node tests/share-web/kiem-trang-chia-se.mjs
+      - name: Tải ảnh chụp trang
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: trang-chia-se-webkit
+          path: ${{ runner.temp }}/anh-chup
+          if-no-files-found: ignore

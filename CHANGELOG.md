@@ -14,6 +14,46 @@ change, a language may repeat; a language without lines shows the English ones):
 - `recommended`: bug fixes. The card shows once per version.
 - `optional`: new features only. No card, the sidebar button only.
 
+## Chưa phát hành
+
+<!-- Đổi tiêu đề thành "## <phiên bản>" đúng tên thẻ khi phát hành (docs/vi/PHAT-HANH.md mục 3, bước 1). -->
+
+<!-- update
+level: recommended
+vi: Chia sẻ với điện thoại: quét mã QR để gửi/nhận tệp với iPhone (kể cả iPhone 8), Android qua Wi-Fi, không cần cài app
+vi: PDF sang DOCX giữ chữ ký số, con dấu và bảng không viền của văn bản hành chính
+vi: Đóng cửa sổ thì TsuFiles chạy tiếp trong khay hệ thống; icon hiện đúng trên thanh tác vụ Windows
+en: Share with your phone: scan a QR code to send and receive files with an iPhone (even an iPhone 8) or Android over Wi-Fi, no app needed
+en: PDF to DOCX keeps digital signatures, stamps and borderless tables of official documents
+en: Closing the window keeps TsuFiles running in the system tray; the Windows taskbar shows the right icon
+-->
+
+### English summary
+
+- **Share with your phone** ([ADR-0004](https://github.com/tsudev-org/tsufiles/blob/main/docs/adr/0004-chia-se-giua-thiet-bi-va-ios.md)): turn on **Share with phone** in the sidebar and scan the QR code. The phone's browser sends files to the computer and downloads the files you drop in - iPhone 8 (Safari 16) and newer, Android, other computers. Nothing to install on the phone. Each new device must be allowed on the computer; only local network addresses are accepted, links carry a random 128-bit session code, sharing turns itself off after 15 minutes idle. The connection is plain HTTP inside the local network: use it on trusted Wi-Fi only.
+- **Headless:** `tsufiles share [files...] -o <folder>` serves the same page from the command line and asks before each device connects.
+- **PDF to DOCX** keeps signature and stamp annotations and turns side-by-side text blocks into borderless tables.
+- **Tray:** closing the window now keeps TsuFiles running in the tray (change it in Settings). The GitHub and Donate buttons left the sidebar.
+
+### Chi tiết (tiếng Việt)
+
+- **Chia sẻ với điện thoại** ([ADR-0004](docs/adr/0004-chia-se-giua-thiet-bi-va-ios.md), hướng dẫn
+  [CHIA-SE-DIEN-THOAI.md](docs/vi/CHIA-SE-DIEN-THOAI.md)): thanh bên trái > **Chia sẻ với điện thoại** > **Bật chia
+  sẻ**, điện thoại quét mã QR. Trên trang web, điện thoại gửi ảnh/tệp lên máy tính (lưu vào `Tải xuống/TsuFiles`, đổi
+  được) và tải về tệp bạn kéo thả vào ô **Tệp điện thoại tải về được**. Chạy trên iPhone 8 (Safari 16) trở lên,
+  Android và máy tính khác; không phải cài app. Mỗi thiết bị mới phải được cho phép trên máy tính (cửa sổ đang ẩn ở
+  khay thì tự mở ra để duyệt). Chỉ nhận địa chỉ mạng nội bộ, đường dẫn chứa mã phiên ngẫu nhiên 128 bit, tự tắt sau 15
+  phút không dùng, tệp nhận không ghi đè và bị từ chối nếu là loại chạy được mã (`.exe`, `.bat`...). Đường truyền là
+  HTTP trong mạng nội bộ, chưa mã hóa: chỉ dùng ở Wi-Fi tin cậy. Windows hỏi tường lửa lần đầu: cho phép ở mạng
+  **Riêng tư**.
+- **Dòng lệnh:** `tsufiles share [tệp...] -o <thư mục>` mở cùng trang đó trên máy không màn hình, hỏi `[y/N]` trước
+  khi cho mỗi thiết bị kết nối.
+- **PDF sang DOCX** giữ lớp chú thích (chữ ký số, con dấu) và gộp các khối chữ đặt cạnh nhau thành bảng không viền.
+- **Khay hệ thống:** mặc định đóng cửa sổ thì TsuFiles chạy tiếp trong khay (đổi trong Cài đặt). Bỏ nút GitHub và
+  Ủng hộ ở thanh bên; icon thanh tác vụ Windows hiện đúng.
+- Kiểm thử: trang điện thoại chạy đầu-cuối trên WebKit giả lập iPhone 8 ở mỗi PR chạm phần chia sẻ
+  (`tests/share-web/`).
+
 ## 2.4.1-vn.1
 
 <!-- update
