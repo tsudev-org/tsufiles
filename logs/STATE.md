@@ -9,10 +9,10 @@
 
 ## Hàng đợi task (làm từ trên xuống)
 
-- [ ] ⚡ TIẾP THEO: phiếu `logs/handover/20261117-02_ban-giao-s2-ma-qr-va-trang-chia-se.md` (đọc mục 2): gộp
-      #99 -> #101 -> #102 nếu còn mở; rồi **S2d** (Playwright WebKit, CHANGELOG); S3 (UDP multicast, LocalSend); S4 iOS
-      gốc CHỜ chủ dự án.
-- [ ] Phiếu toàn hệ `20261117-V1` (thống nhất phiên bản): tsufiles là bước 5, CHỜ tsudev-standards v3.7.0. Khảo sát
+- [ ] ⚡ TIẾP THEO: phiếu `logs/handover/20261118-03_ban-giao-s3-localsend.md` (đọc mục 2): S3c thử với app LocalSend
+      thật trên iPhone (cần chủ dự án cầm máy); S4 iOS gốc CHỜ chủ dự án; V1 bước 5 CHỜ bước 2-4 của các repo khác.
+- [ ] Phiếu toàn hệ `20261117-V1` (thống nhất phiên bản): tsufiles là bước 5, CHỜ bước 2-4 (tsucwico, tsuswico,
+      trafficmonitor - đo 18/11 chưa repo nào theo khuôn mới); test khóa hợp đồng updater ở #107. Khảo sát
       updater đã ghi ở mục 6 của bản sao (phải giữ thêm bộ tệp tên cũ `tsudev-files-*` cho updater 2.4.0-vn.1).
   - Tệp mẫu của chủ dự án `So_Do.pdf`, `pdf-1.pdf`, `pptx-1.pptx` ở thư mục gốc: KHÔNG commit.
 
@@ -66,6 +66,10 @@
 | --- | --- | --- |
 
 ## Đã hoàn thành (mới nhất trên cùng)
+
+- 18/11/2026 - #104 S2d gộp; #105 S3a TsuFiles nói giao thức LocalSend v2 + `tsufiles send` (gia cố JSON null, lũ gói
+  announce, `--to ""`, `--to IP:cổng`; thử thật hai tiến trình qua multicast); #106 S3b danh sách máy LocalSend + nút Gửi
+  tệp (11 khóa x 22 ngôn ngữ); #107 test hợp đồng phiên bản V1. Phiếu AN1 ĐÓNG (#103). Bàn giao `20261118-03`.
 
 - 17-18/11/2026 - #97 sửa 2 test chập chờn làm đỏ CI `main` (ShareServer, Setup); #98 S2a bộ sinh mã QR tự viết; #99
   S2b trang "Chia sẻ với điện thoại"; #101 đồng bộ chuẩn v3.7.0 (P0); #102 S2c. CodeQL #24-#26 đóng false positive.
