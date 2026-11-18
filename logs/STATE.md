@@ -10,7 +10,7 @@
 ## Hàng đợi task (làm từ trên xuống)
 
 - [ ] ⚡⚡ TIẾP THEO: phiếu `logs/handover/20261119-02_ban-giao-tc1-ten-goi-rieng.md` mục 2: (#110 v3.8.1 + #111 TC1 việc A
-      ĐÃ GỘP 19/11) → deploy website (👤 lệnh) → **TC1 việc B** nối Lotus Share (kế hoạch B1-B6 ở phiếu
+      ĐÃ GỘP + website ĐÃ DEPLOY 19/11) → **TC1 việc B** nối Lotus Share (kế hoạch B1-B6 ở phiếu
       `20261119-TC1_tsufiles-*` mục 3) → T2/T3 phiếu toàn hệ `20261119-01` (TsuDEV, ngôn ngữ + giao diện theo hệ thống).
 - [ ] Phiếu toàn hệ `20261117-V1` (thống nhất phiên bản): tsufiles là bước 5, CHỜ bước 2-4 (tsucwico, tsuswico,
       trafficmonitor - đo 18/11 chưa repo nào theo khuôn mới); test khóa hợp đồng updater ở #107. Khảo sát
