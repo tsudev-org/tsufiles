@@ -25,6 +25,13 @@ public class UpdateServiceTests
     [InlineData("v1.0.0", "1.0.1", false)]
     [InlineData("nightly", "1.0.1", false)]
     [InlineData(null, "1.0.1", false)]
+    // Phiếu toàn hệ 20261117-V1: thẻ mới v26.M.DDNN phải được bản 2.4.x đã cài nhận là bản mới, và so đúng với nhau.
+    [InlineData("v26.11.1801", "2.4.0", true)]
+    [InlineData("v26.11.1801", "2.4.1", true)]
+    [InlineData("v26.12.0101", "26.11.3102", true)]
+    [InlineData("v27.1.0101", "26.12.3199", true)]
+    [InlineData("v26.11.1801", "26.11.1802", false)]
+    [InlineData("v26.11.1801-beta.2", "26.11.1801", false)]
     public void Release_tags_compare_by_version(string? tag, string current, bool newer) =>
         Assert.Equal(newer, UpdateService.IsNewer(tag, current));
 
