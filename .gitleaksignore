@@ -11,3 +11,10 @@
 8fd4bc55f4173d73323ea57932031b79ebe0b18a:tests/Filee.App.Tests/UpdateServiceTests.cs:generic-api-key:799
 # GestureDetector.cs: biến cục bộ lấy từ bộ đếm thời gian hệ thống (số đếm cử chỉ)
 49961742c2aa7c0bc4d9fbf40071eca25c42aa8b:src/Filee.App/Services/Triggers/GestureDetector.cs:generic-api-key:74
+# Cùng ba chỗ trên, bắt lại ở commit gộp upstream KnifeLemon/Filee#1299 (gốc tách fork, phiếu AN1 18/11/2026).
+64890f1e3fdc3c581f6995c1ca849d47bbed339c:src/Filee.App/Services/Triggers/GestureDetector.cs:generic-api-key:79
+64890f1e3fdc3c581f6995c1ca849d47bbed339c:src/Filee.Engines/Metadata/ExifTool.cs:generic-api-key:107
+64890f1e3fdc3c581f6995c1ca849d47bbed339c:tests/Filee.App.Tests/UpdateServiceTests.cs:generic-api-key:920
+64890f1e3fdc3c581f6995c1ca849d47bbed339c:tests/Filee.App.Tests/UpdateServiceTests.cs:generic-api-key:921
+64890f1e3fdc3c581f6995c1ca849d47bbed339c:tests/Filee.App.Tests/UpdateServiceTests.cs:generic-api-key:922
+64890f1e3fdc3c581f6995c1ca849d47bbed339c:tests/Filee.App.Tests/UpdateServiceTests.cs:generic-api-key:948

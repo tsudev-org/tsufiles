@@ -36,6 +36,10 @@ jobs:
           cache: npm
           cache-dependency-path: website/package-lock.json
       - run: npm ci --no-audit --no-fund
+      # Site tĩnh: mọi gói npm chỉ dùng lúc dựng (devDependencies) - không gói nào tới trình duyệt hay Worker.
+      # Cổng chặn lỗ hổng mức high ở phụ thuộc chạy thật (quyết định toàn hệ 18/11/2026, phiếu AN1).
+      - name: Soát lỗ hổng phụ thuộc chạy thật (npm audit)
+        run: npm audit --omit=dev --audit-level=high
       - name: Build và kiểm tra nhận diện, CSP
         env:
           GITHUB_TOKEN: ${{ github.token }}   # đọc releases/latest không bị giới hạn 60 lượt/giờ của IP dùng chung
