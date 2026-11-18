@@ -57,6 +57,14 @@ Phụ thuộc: `lotus-share/logs/handover/20261119-TC1_yeu-cau-ten-goi-va-hop-do
   19/11 thì bỏ; trang `/ban-quyen` vẫn hiển thị NGUYÊN VĂN `LICENSE` (bắt buộc) nhưng bỏ đoạn giới thiệu tác giả gốc.
   `App.axaml` `Name="Filee"` (tên app ở menu macOS) là định danh lúc chạy? - kiểm ADR-0003 mục 5 trước khi đổi.
 
+## 4b. Tin từ phiên điều phối (projects-19, 19/11/2026)
+
+- Phiếu con tsudev bước 1 (bỏ `basedOn`, dòng "Dựa trên", ô tìm `/apps`): tsudev-org/tsudev#315, chờ `nguyentrangtinhsu`
+  duyệt (chạm cổng bản quyền). Bước 2-5 tsudev + phiếu con trafficmonitor: phase T0/TC1 của
+  `~/projects/logs/handover/20261119-01_ke-hoach-toan-he-v3.8.0.md`.
+- tsudev-standards **v3.8.0** đã phát hành (tên hiển thị TsuDEV, `PRODUCT_POLICY.md`, `STORE_SUBMISSION.md`): làm việc A
+  cùng đợt với `./scripts/sync-standards.sh --ref v3.8.0` để đổi chữ một lần - đọc phiếu `20261119-01` hàng tsufiles trước.
+
 ## 5. Nghiệm thu
 
 - `python3 -I ~/projects/logs/tools/ra_ten_cu.py --dong tsufiles`: 0 dòng "LocalSend"; "Filee" chỉ còn ở chỗ thuộc mục 2
