@@ -60,6 +60,12 @@ Mục tiêu: bản phát hành tới không mang chữ hay cổng LocalSend.
 | B5 | Giao diện: "Thiết bị Lotus Share gần đây" + nút Gửi tệp; khóa i18n 22 ngôn ngữ (chèn văn bản, KHÔNG dump lại JSON); tài liệu, CHANGELOG | `0aec5313` (S3b) | Ảnh chụp trang; `ra_ten_cu.py --dong tsufiles` 0 dòng LocalSend |
 | B6 | Thử thật với Lotus Share trên Windows + Android (👤 cầm máy) | - | Hai chiều, cài cùng máy không tranh cổng |
 
+
+Công cụ chẩn đoán của Lotus (`support/scripts/chan-doan-mang.ps1/.sh`, lotus-share#76) coi tiến trình `TsuFiles`,
+`tsufiles-cli` dùng chung UDP 53420 là hợp lệ (so khớp không phân biệt hoa thường; Linux `ss` cắt tên ở 15 ký tự). Thử
+B2 bằng `dotnet run`/`dotnet TsuFiles.dll` thì tiến trình hiện là `dotnet` ⇒ công cụ báo LỖI - dùng bản `dotnet publish`
+(tệp chạy `TsuFiles`/`tsufiles-cli`) khi đo cùng máy. Đổi tên tệp chạy sau này ⇒ báo lotus-share.
+
 ## 4. Câu hỏi cho chủ dự án - ĐÃ CHỐT 19/11/2026
 
 Chủ dự án giao agent tự chọn phương án tối ưu (19/11). Agent chốt: (1) GIỮ S1/S2 trong TsuFiles (gắn với chuyển đổi,
