@@ -37,8 +37,9 @@ Bài học:
 2. **TC1 việc B** - nối giao thức Lotus v2: kế hoạch B1-B6 ở `logs/handover/20261119-TC1_tsufiles-bo-localsend-va-ten-cu.md`
    mục 3 (lotus-share#75 ĐÃ GỘP, `main` `2d392aeb`). Bắt buộc mTLS, vân tay hex HOA, không chiếm TCP 53420.
 3. Phase của phiếu toàn hệ `20261119-01` áp cho tsufiles (đọc hàng tsufiles trước):
-   - **T2**: chữ hiển thị `tsudev` → `TsuDEV` (README "Một sản phẩm của tsudev", website, giao diện); icon tím → xanh
-     logo. KHÔNG đổi định danh (repo, gói `tsudev-files`, tên miền, khóa cấu hình). Dòng `©` chạm cổng bản quyền ⇒ 👤.
+   - ~~**T2**~~ XONG 19/11: #115 đã gộp (TsuDEV hiển thị + website bảng xanh 4.2; phiếu
+     `~/projects/logs/handover/20261119-T2_*` mục 4). CÒN: 👤 deploy website; 👤 quyết theme app "Cú đêm" tím (màu logo
+     con cú) đổi xanh hay giữ ngoại lệ - trong lúc chờ GIỮ NGUYÊN (phiên điều phối projects-d7 19/11).
    - **T3**: PRODUCT_POLICY mục 1 - lần chạy đầu ngôn ngữ + giao diện **theo hệ thống** (hiện TsuFiles ÉP tiếng Việt:
      ngược quy ước). Sửa cùng lúc mã, README ("Tiếng Việt mặc định" ở bảng Điểm nổi bật), website, 3 test bắt buộc
      (hệ thống `vi`, `en`, ngôn ngữ chưa hỗ trợ ⇒ tiếng Anh; hệ thống sáng/tối).
