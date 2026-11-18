@@ -9,11 +9,9 @@
 
 ## Hàng đợi task (làm từ trên xuống)
 
-- [ ] ⚡⚡ ƯU TIÊN: phiếu `logs/handover/20261119-TC1_tsufiles-bo-localsend-va-ten-cu.md` (chủ dự án 19/11): việc A
-      (rút LocalSend + `de.json`/`/dinh-dang`) TRƯỚC bản phát hành kế tiếp; việc B (nối Lotus Share) chờ lotus-share trả
-      lời phiếu con; mục 4 có 2 câu hỏi 👤. Phiếu tổng: `~/projects/logs/handover/20261119-TC1_ten-goi-rieng-toan-he.md`.
-- [ ] ⚡ TIẾP THEO: phiếu `logs/handover/20261118-03_ban-giao-s3-localsend.md` (đọc mục 2): S3c thử với app LocalSend
-      thật trên iPhone (cần chủ dự án cầm máy); S4 iOS gốc CHỜ chủ dự án; V1 bước 5 CHỜ bước 2-4 của các repo khác.
+- [ ] ⚡⚡ TIẾP THEO: phiếu `logs/handover/20261119-02_ban-giao-tc1-ten-goi-rieng.md` mục 2: (#110 v3.8.1 + #111 TC1 việc A
+      ĐÃ GỘP 19/11) → deploy website (👤 lệnh) → **TC1 việc B** nối Lotus Share (kế hoạch B1-B6 ở phiếu
+      `20261119-TC1_tsufiles-*` mục 3) → T2/T3 phiếu toàn hệ `20261119-01` (TsuDEV, ngôn ngữ + giao diện theo hệ thống).
 - [ ] Phiếu toàn hệ `20261117-V1` (thống nhất phiên bản): tsufiles là bước 5, CHỜ bước 2-4 (tsucwico, tsuswico,
       trafficmonitor - đo 18/11 chưa repo nào theo khuôn mới); test khóa hợp đồng updater ở #107. Khảo sát
       updater đã ghi ở mục 6 của bản sao (phải giữ thêm bộ tệp tên cũ `tsudev-files-*` cho updater 2.4.0-vn.1).
@@ -69,6 +67,10 @@
 | --- | --- | --- |
 
 ## Đã hoàn thành (mới nhất trên cùng)
+
+- 19/11/2026 - TC1 (chủ dự án: mỗi sản phẩm chỉ dùng tên/giao thức của chính nó): phiếu toàn hệ + `ra_ten_cu.py`;
+  #109 phiếu con; #111 revert S3 giao thức app ngoài hệ + bỏ tên dự án gốc khỏi nội dung hiển thị; #110 chuẩn v3.8.1.
+  lotus-share công bố đặc tả Lotus v2 (lotus-share#75). Bàn giao `20261119-02`.
 
 - 18/11/2026 - #104 S2d gộp; #105 S3a TsuFiles nói giao thức LocalSend v2 + `tsufiles send` (gia cố JSON null, lũ gói
   announce, `--to ""`, `--to IP:cổng`; thử thật hai tiến trình qua multicast); #106 S3b danh sách máy LocalSend + nút Gửi
