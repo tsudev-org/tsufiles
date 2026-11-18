@@ -3,7 +3,7 @@
 - **Mã phiếu**: 20261119-TC1 (phiếu con; phiếu tổng `~/projects/logs/handover/20261119-TC1_ten-goi-rieng-toan-he.md`)
 - **Từ**: phiên tsufiles-3c, 19/11/2026, theo yêu cầu trực tiếp của chủ dự án
 - **Đến**: phiên tsufiles (phiên này hoặc kế tiếp)
-- **Trạng thái**: MỞ
+- **Trạng thái**: MỞ - việc A XONG (#111, chờ CI/gộp); việc B SẴN SÀNG làm (lotus-share đã trả lời 19/11)
 
 ## 1. Nguồn gốc (đọc lại lịch sử 19/11)
 
@@ -18,7 +18,11 @@ Hiện trạng `main` (CHƯA phát hành - chưa người dùng nào cài): TsuF
 LocalSend cài cùng máy, đúng lỗi lotus-share từng gặp), giao diện 22 ngôn ngữ + `tsufiles help send` + CHANGELOG + docs
 ghi "LocalSend".
 
-## 2. Việc A - Trước bản phát hành kế tiếp (không chờ ai, làm ngay)
+## 2. Việc A - XONG 19/11/2026 (PR #111)
+
+Đã làm: revert #106 + #105 (thay cho tắt/đổi tên - mã đó nói giao thức của app ngoài hệ); README/website/
+CONTRIBUTING/SECURITY/i18n ja-ko-de/tài liệu kỹ thuật; `tools/xoa-ten-cu.py` bắt được chữ Hán/Kana/Hangul. Kế hoạch ban
+đầu giữ để đối chiếu:
 
 Mục tiêu: bản phát hành tới không mang chữ hay cổng LocalSend.
 
@@ -34,18 +38,33 @@ Mục tiêu: bản phát hành tới không mang chữ hay cổng LocalSend.
    `installer.*`, `theme.*`, `triggers.gnome_*`…) - `tools/xoa-ten-cu.py` bỏ sót vì khuôn `Filee-` (gạch nối + chữ);
    sửa tay + thêm ca vào `--kiem`. Website `/dinh-dang`: ví dụ lệnh `filee formats` là SAI (lệnh thật `tsufiles formats`).
 
-## 3. Việc B - Nối Lotus Share (CHỜ lotus-share trả lời phiếu con của họ)
+## 3. Việc B - Nối giao thức Lotus v2 (SẴN SÀNG - mỗi bước một PR, theo thứ tự)
 
-Phụ thuộc: `lotus-share/logs/handover/20261119-TC1_yeu-cau-ten-goi-va-hop-dong-giao-thuc.md` mục 2-3 (đặc tả
-`docs/GIAO-THUC-LOTUS-V2.md`, mẫu kiểm, xác nhận `SO_REUSEADDR` UDP 53420).
+Đầu vào: đặc tả `~/projects/lotus-share/docs/GIAO-THUC-LOTUS-V2.md` + mẫu `docs/giao-thuc-mau/` (lotus-share PR #75 - **ĐÃ GỘP**
+19/11/2026, `main` `2d392aeb`; chép mẫu từ commit đó; đọc trả lời mục 6.1 của phiếu con lotus-share). Điểm bắt buộc từ đặc tả:
+- Phiên bản `2.2`, tiền tố `/api/lotus/v2/`, UDP **53420**, nhóm `224.0.0.168` (+ `ff12::1075:5ea0`), chuỗi gói chào
+  100 ms / 500 ms / 2 s; trả lời gói chào bằng `POST register` tới `IP nguồn:port trong gói` (không trả bằng UDP).
+- **mTLS**: mỗi máy một chứng thư X.509 tự ký giữ cố định; vân tay = SHA-256 của DER, **hex HOA** 64 ký tự; máy chủ
+  Lotus đòi chứng thư client và trường `fingerprint` khai phải khớp; client ghim vân tay máy chủ (bỏ qua tên máy).
+- TCP 53420 là của Lotus Share: máy chủ TsuFiles dùng cổng riêng, khai trong trường `port`. Quét mạng con của Lotus chỉ
+  thử 53420 ⇒ TsuFiles phải GỬI gói chào để được thấy.
+- UDP: đặt `SO_REUSEADDR` (Linux/macOS thêm `SO_REUSEPORT` = option 15 / 0x200 qua `SetRawSocketOption`) TRƯỚC bind;
+  KHÔNG `ExclusiveAddressUse` trên Windows.
 
-1. Lõi `Core/Share/Nearby/`: cổng UDP 53420, nhóm `224.0.0.168` (+ `ff12::1075:5ea0` nếu đặc tả bắt buộc), tiền tố
-   `/api/lotus/v2/`, HTTPS + ghim vân tay theo đặc tả. Máy chủ TsuFiles KHÔNG chiếm TCP 53420 (khai cổng riêng trong gói).
-2. CI: test đối chiếu với `docs/giao-thuc-mau/` của lotus-share (chép kèm SHA-256 nguồn).
-3. Thử thật: TsuFiles ↔ Lotus Share (Windows + Android) hai chiều; cài cả hai trên một máy.
-4. Giao diện: "Thiết bị Lotus Share gần đây", hướng dẫn cài Lotus Share (lotus.tsudev.com), không nhắc app khác.
+| Bước | Nội dung | Lấy lại từ lịch sử git | Nghiệm thu |
+| --- | --- | --- | --- |
+| B1 | `Core/Share/Lotus/`: DTO theo đặc tả (source-gen JSON, `RespectNullableAnnotations`), hằng số, danh tính thiết bị (chứng thư tự ký sinh 1 lần, lưu ở thư mục dữ liệu, quyền chỉ người dùng; Windows cân nhắc kho chứng thư CurrentUser không xuất được khóa) | DTO/gia cố: `095fd1e5` (`LocalSendModels.cs`) | Test đọc + ghi lại y hệt từng tệp `giao-thuc-mau/` (chép kèm SHA-256 nguồn) |
+| B2 | Khám phá UDP 53420 (gửi gói chào khi mở VÀ khi bấm làm mới, kèm broadcast có hướng): cờ reuse, tham gia nhóm trên từng card, gói chào, trả lời bằng `register` HTTPS, trần 4 lần trả lời cùng lúc, bỏ địa chỉ ngoài LAN | `LocalSendDiscovery.cs` ở `095fd1e5` | Hai tiến trình TsuFiles cùng máy thấy nhau; chạy cùng `lotus-share-cli` (build từ `~/projects/lotus-share/cli`) cả hai bind được |
+| B3 | Máy chủ HTTPS: `SslStream` trên `TcpListener` hiện có, `ClientCertificateRequired`, nhận chứng thư tự ký còn hạn, ghi vân tay client; route register/info/prepare-upload/upload/cancel qua bước duyệt thiết bị sẵn có; token mỗi tệp dùng một lần, 409, sha256 | `ShareServer.LocalSend.cs` ở `095fd1e5` + `45bc5792` | Test: client không chứng thư bị từ chối; vân tay khai lệch bị bỏ qua |
+| B4 | Client: `SocketsHttpHandler` + `ClientCertificates` + ghim vân tay máy chủ; `tsufiles send [--to tên|IP|IP:cổng]` | `LocalSendClient.cs`, `SendCommand.cs` ở `095fd1e5` | Gửi thật TsuFiles → `lotus-share-cli` và ngược lại (Linux) |
+| B5 | Giao diện: "Thiết bị Lotus Share gần đây" + nút Gửi tệp; khóa i18n 22 ngôn ngữ (chèn văn bản, KHÔNG dump lại JSON); tài liệu, CHANGELOG | `0aec5313` (S3b) | Ảnh chụp trang; `ra_ten_cu.py --dong tsufiles` 0 dòng LocalSend |
+| B6 | Thử thật với Lotus Share trên Windows + Android (👤 cầm máy) | - | Hai chiều, cài cùng máy không tranh cổng |
 
-## 4. 👤 Câu hỏi cho chủ dự án (ghi câu trả lời vào đây)
+## 4. Câu hỏi cho chủ dự án - ĐÃ CHỐT 19/11/2026
+
+Chủ dự án giao agent tự chọn phương án tối ưu (19/11). Agent chốt: (1) GIỮ S1/S2 trong TsuFiles (gắn với chuyển đổi,
+cổng ngẫu nhiên, không đụng Lotus Share); (2) BỎ mọi lời ghi công tác giả gốc ngoài LICENSE/THIRD-PARTY-NOTICES (đã làm
+ở #111). `App.axaml` `Name` đã đổi (chỉ menu macOS; WM_CLASS tường minh). Nội dung câu hỏi ban đầu:
 
 - **S1/S2 "Chia sẻ với điện thoại" (trình duyệt + QR) cũng sinh ra từ yêu cầu 16/11.** Lotus Share đã có trang "chia sẻ
   qua web" + mã QR (`app/lib/pages/web_share_page.dart`). Giữ S1/S2 trong TsuFiles (điểm riêng: điện thoại gửi HEIC lên
