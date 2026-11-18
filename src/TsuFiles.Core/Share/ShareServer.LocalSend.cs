@@ -59,17 +59,8 @@ public sealed partial class ShareServer
         switch (request.Method, route)
         {
             case ("POST", "register"):
-            {
-                var info = await ReadJsonAsync(stream, request, leftover, LocalSendJsonContext.Default.LocalSendInfo, cancellationToken);
-                if (info is null)
-                {
-                    await ShareHttp.WriteTextAsync(stream, 400, "Invalid body", cancellationToken);
-                    return;
-                }
-                Discovery?.Observe(device.Address, info);
-                await WriteJsonAsync(stream, LocalSendSelf! with { Announce = null }, cancellationToken);
+                await RegisterAsync(stream, request, leftover, device, cancellationToken);
                 return;
-            }
             case ("GET", "info"):
                 await WriteJsonAsync(stream, LocalSendSelf! with { Port = null, Protocol = null, Announce = null }, cancellationToken);
                 return;
@@ -91,6 +82,20 @@ public sealed partial class ShareServer
                 await ShareHttp.WriteTextAsync(stream, 404, "Not Found", cancellationToken);
                 return;
         }
+    }
+
+    /// <summary>Máy khác báo "tôi ở đây" (trả lời gói thông báo của máy này): ghi vào danh bạ, trả lại thông tin máy này.</summary>
+    private async Task RegisterAsync(Stream stream, ShareRequest request, ReadOnlyMemory<byte> leftover, ShareDevice device,
+        CancellationToken cancellationToken)
+    {
+        var info = await ReadJsonAsync(stream, request, leftover, LocalSendJsonContext.Default.LocalSendInfo, cancellationToken);
+        if (info is null)
+        {
+            await ShareHttp.WriteTextAsync(stream, 400, "Invalid body", cancellationToken);
+            return;
+        }
+        Discovery?.Observe(device.Address, info);
+        await WriteJsonAsync(stream, LocalSendSelf! with { Announce = null }, cancellationToken);
     }
 
     private async Task PrepareUploadAsync(Stream stream, ShareRequest request, ReadOnlyMemory<byte> leftover, ShareDevice device,
