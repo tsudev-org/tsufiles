@@ -27,7 +27,8 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 SKIP_PREFIXES = (".standards/", "logs/", "docs/adr/", "CHANGELOG.md", "LICENSE", "THIRD-PARTY-NOTICES.md",
                  "tools/doi-ten-tsudev.py", "tools/xoa-ten-cu.py", ".standards-upstream", ".gitleaksignore",
-                 "docs/SECURITY.upstream.md", "src/Filee.ExplorerMenu/",
+                 "src/Filee.ExplorerMenu/",
+                 "src/TsuFiles.Core/ForkDefaults.cs",  # của chủ dự án; cố ý ghi tên cũ để mô tả Brand() và di trú
                  "tests/")  # test giữ dữ liệu mẫu/tên cũ cố ý (di trú, Brand(), tên tệp phát hành); sửa tay khi cần
 TEXT_SUFFIXES = {".cs", ".csproj", ".props", ".targets", ".axaml", ".xaml", ".json", ".xml", ".yml", ".yaml", ".ps1",
                  ".sh", ".py", ".md", ".txt", ".plist", ".js", ".mjs", ".ts", ".astro", ".toml", ".css", ".html", ".svg",
@@ -46,7 +47,10 @@ PROTECTED = re.compile(
     r"|copied - 1;")
 
 # "Filee" là một từ (không phải một phần của đường dẫn, tên tệp hay định danh); "\nFilee" trong chuỗi JSON cũng tính.
-WORD = re.compile(r"(?:(?<=\\n)|(?<![\w./\\@-]))Filee(?![\w-]|\.[A-Za-z])")
+# Ranh giới chữ LATINH, không dùng \w: chữ Hán/Kana/Hangul là ký tự "chữ" nên "Fileeを開く", "Filee를" từng lọt (19/11/2026,
+# 103 chuỗi ja + 78 chuỗi ko). "Filee-<Danh từ viết hoa>" của tiếng Đức ("Filee-Installation") là chữ hiển thị; "Filee-<chữ
+# thường>" ("Filee-update", "Filee-build") là định danh tệp/mutex - giữ.
+WORD = re.compile(r"(?:(?<=\\n)|(?<![A-Za-z0-9_./\\@-]))Filee(?![A-Za-z0-9_]|\.[A-Za-z]|-(?![A-Z])|-(?:Setup|Uninstall)\b)")
 ICON = re.compile(r"\bfilee\.(ico|png)\b")
 ICON_FILES = {"src/TsuFiles.App/Assets/Icons/filee.ico": "src/TsuFiles.App/Assets/Icons/tsufiles.ico",
               "src/TsuFiles.App/Assets/Icons/filee.png": "src/TsuFiles.App/Assets/Icons/tsufiles.png"}

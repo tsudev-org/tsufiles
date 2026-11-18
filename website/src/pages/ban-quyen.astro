@@ -1,12 +1,12 @@
 ---
 import TaiLieu from '../components/TaiLieu.astro';
-import { docTep, renderMd, UPSTREAM_URL } from '../lib/noi-dung';
+import { docTep, renderMd } from '../lib/noi-dung';
 const giayPhep = docTep('LICENSE');
 const benThuBa = renderMd('THIRD-PARTY-NOTICES.md', { boTieuDeDau: true, haCap: 1 });
 ---
-<TaiLieu tieuDe="Bản quyền" moTa="Bản quyền và giấy phép của TsuFiles: giấy phép MIT của Filee gốc nguyên văn, ghi công tác giả KnifeLemon và danh sách thành phần bên thứ ba." duongDan="/ban-quyen/">
+<TaiLieu tieuDe="Bản quyền" moTa="Bản quyền và giấy phép của TsuFiles: toàn văn giấy phép MIT, tóm tắt quyền và nghĩa vụ khi dùng lại mã nguồn, cùng danh sách thành phần bên thứ ba." duongDan="/ban-quyen/">
   <h1>Bản quyền</h1>
-  <p>TsuFiles là bản phái sinh của <a href={UPSTREAM_URL} target="_blank" rel="noopener noreferrer">Filee</a>, tác phẩm của Myeonggu Kim (KnifeLemon) và những người đóng góp cho Filee. Toàn bộ mã nguồn, kể cả phần tsudev thêm vào, phát hành theo giấy phép MIT dưới đây. Giấy phép MIT yêu cầu giữ nguyên thông báo bản quyền gốc trong mọi bản sao; từ 2.4.1 mọi tên gọi, tệp chạy (<code>TsuFiles</code>), lệnh (<code>tsufiles</code>) và thư mục dữ liệu đều là của TsuFiles.</p>
+  <p>Toàn bộ mã nguồn TsuFiles phát hành theo giấy phép MIT dưới đây (nguyên văn, kèm các thông báo bản quyền mà giấy phép yêu cầu giữ trong mọi bản sao).</p>
   <p>Muốn ủng hộ TsuFiles, xem trang <a href="/ung-ho/">Ủng hộ</a>.</p>
 
   <h2 id="giay-phep-mit">Giấy phép MIT (nguyên văn)</h2>

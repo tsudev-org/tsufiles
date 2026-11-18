@@ -7,7 +7,6 @@ export const SAN_PHAM = 'TsuFiles';
 export const REPO = 'tsudev-org/tsufiles';
 export const REPO_URL = `https://github.com/${REPO}`;
 export const RELEASES_URL = `${REPO_URL}/releases/latest`;
-export const UPSTREAM_URL = 'https://github.com/KnifeLemon/Filee';
 export const SITE = 'https://files.tsudev.com';
 
 // Gốc repo: build chạy trong thư mục website/ (npm run build), nên gốc là thư mục cha.

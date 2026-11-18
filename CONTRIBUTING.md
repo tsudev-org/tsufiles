@@ -1,6 +1,6 @@
 # Contributing to TsuFiles
 
-Thanks for helping! TsuFiles (a Vietnamese-first fork of [Filee](https://github.com/KnifeLemon/Filee)) is built to be easy to extend: most contributions touch one file plus a test.
+Thanks for helping! TsuFiles (a Vietnamese-first, offline file converter by [tsudev](https://tsudev.com)) is built to be easy to extend: most contributions touch one file plus a test.
 
 ## Setup
 
@@ -78,8 +78,8 @@ Before releasing a port's packages, verify the installed package, CLI conversion
 and spaced paths, drag and keyboard gestures, permissions denied/granted, Retina/scaling, tray, login startup,
 engine downloads, watch folders, and uninstall. CI GUI startup alone does not validate these interactions.
 
-The website lives in the adjacent `../filee-web` repository. Its downloads must match real release assets and
-keep macOS marked as a preview until it is notarized.
+The website lives in `website/` (files.tsudev.com). Its downloads must match real release assets and keep macOS
+marked as a preview until it is notarized.
 
 ## Where things live
 
@@ -120,40 +120,15 @@ Read [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) first. In short:
 
 ## Releasing (maintainers)
 
-> **TsuFiles releases follow [docs/vi/PHAT-HANH.md](docs/vi/PHAT-HANH.md)** (tag `vX.Y.Z-vn.N`, checksums signed
-> with the fork's own key, no Authenticode certificate yet). The rest of this section describes the upstream Filee
-> process and is kept as a reference for the steps that still apply.
-
-Bump `<Version>` in `Directory.Build.props`, merge, then push a tag `vX.Y.Z`. `.github/workflows/release.yml` runs the
-tests and `build/build-installer.ps1 -Portable`: it publishes the app (`-p:TsuFilesRelease=true`, which lets it register
-Explorer and startup entries), adds the Explorer menu extension and the bundled rhwp and 7-Zip, compiles
-`src/TsuFiles.Setup` (the TsuFiles installer) and appends the app to it. It drafts the release with the Linux and macOS
-packages and release notes generated from the merged pull requests, and keeps the tested Windows build unsigned (the
-artifact `windows-unsigned`).
-
-Then, on a PC signed in to SimplySign Desktop (Certum's cloud certificate; its key needs the phone app's token), sign
-the Windows files and add them to the draft:
-
-```
-pwsh build/sign-release.ps1 -Version X.Y.Z -CertificateThumbprint <sha1> -UpdateKey <private key file>
-```
-
-It signs every unsigned program in the build and the Setup program, packs and signs `Filee-X.Y.Z-win-Setup.exe`, zips
-the portable copy, checks the signed Setup in a sandbox install and uploads the files with their SHA-256 sums. It signs
-every `SHA256SUMS` file of the release (Windows, Linux and macOS) with TsuFiles's update key and uploads the `.sig` files
-next to them (`build/sign-checksums.ps1`; it asks for the key's passphrase). It also copies the Windows files to the
-download mirror `https://dl.filee.sh/X.Y.Z/` (Cloudflare R2; needs `npx wrangler login` once), which the Microsoft
-Store listing points at because GitHub's download links redirect. Look over the draft and publish it (or pass
-`-Publish`). `build/sign-windows.ps1` signs any folder or file on its own.
+Releases follow **[docs/vi/PHAT-HANH.md](docs/vi/PHAT-HANH.md)**: tag, `.github/workflows/release.yml` (tests,
+`build/build-installer.ps1 -Portable`, Linux and macOS packages, SBOM and build provenance), checksums signed with
+TsuFiles's own update key (`build/sign-checksums.ps1`). Windows files are not Authenticode-signed yet.
 
 The update key is made once with `pwsh build/new-update-key.ps1 -PrivateKeyPath <file outside the repository>`. Its
 public half goes into `TsuFilesUpdatePublicKey` in `Directory.Build.props`; official builds (`-p:TsuFilesRelease=true`)
-then refuse an update whose checksum file isn't signed with it, so `sign-release.ps1` stops without `-UpdateKey` (or
-`TSUFILES_UPDATE_KEY`) and won't publish a draft with an unsigned checksum file. Keep the private key and a backup off
-the repository: copies that carry the public key can only be updated with releases signed by it.
-`TsuFilesExpectedPublisher` and `TsuFilesExpectedIssuer` name the code signing certificate the Windows installer must be
-signed with; before a renewed certificate comes from another certificate authority, release a build that lists both
-issuers.
+then refuse an update whose checksum file isn't signed with it. Keep the private key and a backup off the repository:
+copies that carry the public key can only be updated with releases signed by it. `TsuFilesExpectedPublisher` and
+`TsuFilesExpectedIssuer` name the code signing certificate the Windows installer must be signed with once there is one.
 
 ### "What's new" slides for a release
 
@@ -188,7 +163,7 @@ To try the installer locally run `pwsh build/build-installer.ps1` (output in `Re
 engines, the C++ runtime and the Zig toolchain for the Explorer menu into `build/.cache`; run `build/fetch-fonts.ps1`
 first). `pwsh build/build-installer.ps1 -CheckOnly` builds Setup around a stub app and installs, updates and
 uninstalls it in a sandbox. To run the real Setup without touching your PC, give it a scratch folder:
-`Filee-X.Y.Z-win-Setup.exe /SANDBOX=D:\scratch` (registry, Program Files, Start menu, desktop, PATH and `%APPDATA%`
+`tsudev-files-X.Y.Z-win-Setup.exe /SANDBOX=D:\scratch` (registry, Program Files, Start menu, desktop, PATH and `%APPDATA%`
 all go into that folder; no administrator rights are asked for and TsuFiles is not started). Setup's texts are the
 `installer.*` keys of the app's translation files; its engine page uses the app's engine names. See
 [Architecture](docs/ARCHITECTURE.md#windows-installer).

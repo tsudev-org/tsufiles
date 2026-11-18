@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  Builds the Windows installer Filee-<version>-win-Setup.exe (Filee's own, src/TsuFiles.Setup) and, with -Portable, the
+  Builds the Windows installer tsudev-files-<version>-win-Setup.exe (TsuFiles's own, src/TsuFiles.Setup) and, with -Portable, the
   portable zip, into -OutputDir.
 
 .DESCRIPTION

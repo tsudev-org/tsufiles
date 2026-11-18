@@ -454,7 +454,7 @@ installed yet; the slides introduce the installed one. The demo animations are r
 - `TsuFiles.Cli` (`tsufiles-cli.exe`, run as `tsufiles` through `cli\tsufiles.cmd`, which Setup can put on PATH) composes the same
   pipeline as the app without any UI (`CliHost`: `UserDataStore`, `EngineRegistry`, `ConverterCatalog`, `JobQueue`)
   and reads the app's presets and engine order. It is published into the app folder, so both share one runtime and
-  the bundled engines; its name can't be `filee.exe` next to `TsuFiles.exe` on a case-insensitive file system.
+  the bundled engines; its name is `tsufiles-cli` because `tsufiles.exe` can't sit next to `TsuFiles.exe` on a case-insensitive file system.
 - `TsuFiles.Core/Watching/FolderWatcher` watches one `WatchRule` with a `FileSystemWatcher` and converts a file once it
   has kept its size and time for a moment, opens without sharing and has data at its start (downloads and copies in
   progress are skipped). A file that didn't convert gets one more turn after 10 seconds. Temporary files, unknown
@@ -552,7 +552,7 @@ applied by `WindowsPlatformServices.SetContextMenu` at start-up and whenever set
     package is registered the classic verb is removed (Windows lists packaged commands under "Show more options" too).
   - Invoke starts `TsuFiles.exe --convert "<path>"…` next to the DLL and returns at once. Selections longer than a
     command line go through `%TEMP%\TsuFiles-convert-*.txt` (`--convert-list`, one path per line), which the app deletes.
-  - Updates: Setup asks the running Filee to exit (`TsuFiles.exe --quit`), then renames a `FileeExplorerMenu.dll` that
+  - Updates: Setup asks the running TsuFiles to exit (`TsuFiles.exe --quit`), then renames a `FileeExplorerMenu.dll` that
     Explorer still has loaded into its backup folder (Windows allows renaming a loaded DLL, not replacing or deleting
     it) and has Windows delete the old copy at the next restart, so updating needs no restart. An update keeps the
     registration as it was and refreshes it. Uninstall runs `TsuFiles.exe --uninstall-cleanup` (`UninstallCleanup`): it
@@ -572,7 +572,7 @@ the entry up for new menus; if not, restart Explorer. To remove it by hand:
 
 ## Windows installer
 
-`Filee-<version>-win-Setup.exe` is Filee's own installer, `src/TsuFiles.Setup` (it replaced the Inno Setup script of
+`tsudev-files-<version>-win-Setup.exe` is TsuFiles's own installer, `src/TsuFiles.Setup` (it replaced the Inno Setup script of
 1.x). It is an Avalonia program with the app's look and translations: it links `Styles/Soft.axaml` (which therefore
 styles only Avalonia's own controls; TsuFiles's controls are in `Controls.axaml`), `SoftPalette` (accent, radii, font
 order), `AppLanguages` and `Assets/i18n/*.json` (Setup's texts are the `installer.*` keys). To stay small it uses
@@ -613,7 +613,7 @@ have no semibold) instead of the app's embedded Noto fonts.
   uninstall entry, the shortcuts and PATH. Any failure until then puts everything back. TsuFiles's own settings (Explorer
   menu, start at sign-in, engines, a picked language) are handed to TsuFiles on its command line, as before.
 - **Updates from 1.x**: the uninstall key stays `{C8686E06-8327-40A2-B0F7-3DEDD61D9248}_is1` (Inno Setup's AppId), so
-  Apps & Features keeps one Filee. `PreviousInstall` reads the folder and choices of an Inno Setup installation; an
+  Apps & Features keeps one entry. `PreviousInstall` reads the folder and choices of an Inno Setup installation; an
   update keeps the folder and what is registered now (desktop shortcut, PATH, the top-level menu package), removes
   `unins000.*` and every file 2.0 doesn't have, and rewrites the key without the `Inno Setup: …` values. The app
   counts as installed when `uninstall.exe` (or 1.x's `unins000.exe`) is next to it (`UpdateService.IsInstalled`).
@@ -627,7 +627,7 @@ have no semibold) instead of the app's embedded Noto fonts.
   moved or renamed, fails the uninstall and keeps the key, `uninstall.json` and `uninstall.exe`, so it can be run again;
   `uninstall.json` itself is never scheduled or renamed. A program without a payload is the uninstaller only as `uninstall.exe`, as `TsuFiles.Setup.exe` (a development build) or with `/UNINSTALL`
   (`SetupStart`); any other name is a Setup.exe whose download didn't finish, and it says so instead (exit code 1).
-- **Command line**: Inno Setup's switches (`SetupOptions`, documented at the top of the file), because Filee 1.x
+- **Command line**: Inno Setup's switches (`SetupOptions`, documented at the top of the file), because 1.x releases
   updates itself with `/SILENT /NORESTART` and winget passes `/VERYSILENT /SUPPRESSMSGBOXES /NORESTART`. Exit codes as
   Inno Setup's: 0 done, 1 could not start, 2 cancelled before installing (also a declined UAC prompt), 4 failed.
 - **Testing**: `TsuFiles.Setup.Tests` runs installs, updates (also over a simulated 1.x installation) and uninstalls
@@ -637,8 +637,8 @@ have no semibold) instead of the app's embedded Noto fonts.
 
 ## Linux installer and updates
 
-On Linux, Filee is distributed as a self-contained archive (`Filee-<version>-<rid>.tar.gz` for `linux-x64` and
-`linux-arm64`) containing the application, `filee-cli`, bundled conversion engines, application icon, `.desktop` launcher,
+On Linux, TsuFiles is distributed as a self-contained archive (`tsudev-files-<version>-<rid>.tar.gz` for `linux-x64` and
+`linux-arm64`) containing the application, `tsufiles-cli`, bundled conversion engines, application icon, `.desktop` launcher,
 and standalone shell scripts (`install.sh`, `uninstall.sh`).
 
 - **Installation**: `install.sh` installs for the current user into `~/.local/share/filee/application` without root,
@@ -656,6 +656,6 @@ and standalone shell scripts (`install.sh`, `uninstall.sh`).
   helper executes `install.sh --upgrade` (which safely moves the existing installation to a backup directory, validates the
   new files, and rolls back on failure or signal interruption), and restarts TsuFiles with `--background --whats-new`.
   Output and rollback diagnostics are appended to TsuFiles's daily log (`~/.config/TsuFiles/logs/`). Downloaded conversion engines
-  (`~/.local/share/Filee/engines`) and user settings (`~/.config/TsuFiles`) remain untouched.
+  (`~/.local/share/TsuFiles/engines`) and user settings (`~/.config/TsuFiles`) remain untouched.
 - **Uninstallation**: `uninstall.sh` removes the application directory, desktop launcher, and `~/.local/bin/tsufiles` symlink
   after verifying the `.filee-package` marker. User settings and converted files are kept.

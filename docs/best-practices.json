@@ -14,7 +14,7 @@
   ],
   "version_semver": [
    "Met",
-   "Versions use the SemVer format MAJOR.MINOR.PATCH from the upstream Filee version plus a -vn.N suffix for the fork revision (e.g. 2.4.1-vn.1)."
+   "Versions use MAJOR.MINOR.PATCH plus a -vn.N revision suffix (e.g. 2.4.1-vn.1); from the next release the tsudev scheme vYY.M.DDNN (VERSIONING v3)."
   ],
   "version_tags": [
    "Met",

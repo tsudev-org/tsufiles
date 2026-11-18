@@ -1,9 +1,7 @@
 # What TsuFiles shows by default
 
 TsuFiles recognizes about 270 formats and ships many tools. These rules decide which of them a user sees by default,
-so the everyday conversions stay easy to find as more arrive. They come from [#806](https://github.com/KnifeLemon/Filee/issues/806),
-[#832](https://github.com/KnifeLemon/Filee/issues/832), [#844](https://github.com/KnifeLemon/Filee/issues/844) and
-[discussion #862](https://github.com/KnifeLemon/Filee/discussions/862).
+so the everyday conversions stay easy to find as more arrive.
 
 > **Status:** the fields and grades are in the code (`src/TsuFiles.Core/Formats/FormatFields.cs`, tested by
 > `FormatFieldsTests`). The field switches (Settings → Fields) and the new default donuts are on screen.
@@ -16,7 +14,7 @@ so the everyday conversions stay easy to find as more arrive. They come from [#8
   belongs to the field named after its category (`image`, `video`, `cad`, …); an `Overlaps` row replaces that, for
   example `dxf` → cad + vector, `srt` → subtitle + video + audio.
 - **The grade** says how widely files in the format are made today: everyday, general, specialist or legacy. The
-  criteria and tie-breaks are in [#844](https://github.com/KnifeLemon/Filee/issues/844). A grade hides nothing by
+  grade lists live in `src/TsuFiles.Core/Formats/FormatFields.cs`. A grade hides nothing by
   itself; rule 5 uses it.
 - `FormatFieldsTests` fails while a format has no grade, so no format comes in unclassified.
 

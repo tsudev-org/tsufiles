@@ -22,7 +22,7 @@ Làm theo bốn phase, mỗi phase một PR. Mỗi phase dùng được ngay mà
 | --- | --- | --- | --- |
 | S1 | Máy chủ chia sẻ trong mạng LAN chạy trong app desktop (`TsuFiles.Core/Share/`) | - | 0 |
 | S2 | Trang web gửi/nhận do chính app desktop phục vụ, mở bằng cách quét mã QR | Safari 16 + Camera | 0 |
-| S3 | Tìm máy TsuFiles khác trong mạng (UDP multicast), gửi thẳng giữa desktop | - | 0 |
+| S3 | Tìm máy và gửi thẳng bằng giao thức Lotus Share của hệ (mục 2.3) | app Lotus Share (khi có bản iOS) | 0 |
 | S4 | App iOS gốc (Avalonia iOS, .NET 10 hỗ trợ iOS 12.2+) | App Store | Mac + 99 USD/năm |
 
 **S2 là lời giải chính cho iPhone 8**: không cần cài gì, không cần App Store, chạy trên mọi điện thoại có trình duyệt
@@ -50,15 +50,27 @@ tăng kích thước gói tự chứa, cần kiểm cắt tỉa), (b) máy chủ
 đường dẫn của S2 (GET trang/tệp, POST multipart có giới hạn). Đề xuất (b) để giữ gói nhỏ, kèm fuzz bộ phân tích; S1
 đo cả hai trước khi chốt. Tường lửa Windows sẽ hỏi lần đầu bật chia sẻ - ghi vào hướng dẫn.
 
-### 2.3. Tương thích LocalSend (cân nhắc ở S3)
+### 2.3. Tìm máy và gửi thẳng (S3): giao thức Lotus Share
 
-LocalSend (MIT) có giao thức mở (UDP multicast + REST) và đã có app iOS miễn phí. Nếu TsuFiles nói được giao thức này
-thì iPhone có app LocalSend gửi/nhận được với TsuFiles mà tsudev không cần phát hành app iOS. Trước khi làm phải kiểm:
-phiên bản iOS tối thiểu của app LocalSend hiện hành và giấy phép của đặc tả giao thức.
+Hệ tsudev đã có sản phẩm chia sẻ tệp riêng là **Lotus Share** (repo `tsudev-org/lotus-share`, giao thức Lotus v2: cổng
+53420, nhóm multicast `224.0.0.168`, API `/api/lotus/v2/`). TsuFiles nói đúng giao thức này để thấy và gửi tệp với Lotus
+Share và với TsuFiles khác; KHÔNG nói giao thức của ứng dụng ngoài hệ. Hợp đồng giao thức do lotus-share công bố
+(`docs/GIAO-THUC-LOTUS-V2.md`, phiếu `20261119-TC1`); TsuFiles không chiếm cổng TCP 53420 của Lotus Share (máy chủ dùng
+cổng riêng khai trong gói), chỉ cùng nghe UDP 53420.
 
 ## 3. Hệ quả
 
 - S1-S3 không đổi khóa JSON của dòng lệnh, không đổi trình cập nhật. Thêm lệnh `tsufiles share` (S1) cho máy chủ không
   màn hình.
 - Tăng bề mặt tấn công (cổng mạng mở): thêm fuzz cho bộ đọc multipart (cùng khuôn P4) và test chặn địa chỉ công khai.
-- S4 chỉ làm khi chủ dự án chấp thuận Mac + tài khoản Apple; nếu không, S2 (và S3 với LocalSend) là bản iOS chính thức.
+- S4 chỉ làm khi chủ dự án chấp thuận Mac + tài khoản Apple; nếu không, S2 (trình duyệt) và app Lotus Share là đường
+  dùng trên iPhone.
+
+## 4. Sửa hướng S3 (19/11/2026)
+
+Bản S3 đầu tiên (#105, #106, gộp 18/11, chưa phát hành) nói giao thức của một ứng dụng chia sẻ ngoài hệ và hướng người
+dùng cài ứng dụng đó: TsuFiles không thấy Lotus Share, lại chiếm cổng của ứng dụng kia (đụng nhau khi cài cùng máy). Chủ
+dự án 19/11 chốt: mọi sản phẩm hệ chỉ dùng tên gọi và giao thức của hệ. #105, #106 được revert toàn bộ (phiếu
+`20261119-TC1`); S3 làm lại theo mục 2.3 khi lotus-share công bố đặc tả. Phần dùng lại được (gia cố JSON từ máy lạ, trần
+số lần trả lời gói thông báo, giao diện danh sách máy + nút Gửi) lấy từ lịch sử git: commit `095fd1e5`, `45bc5792`,
+`0aec5313`.

@@ -2,7 +2,7 @@ HƯỚNG DẪN CÀI ĐẶT TSUDEV-FILES TRÊN LINUX (bản Việt hóa của Tsu
 Bản tiếng Anh đầy đủ: INSTALL.txt. Thông báo của install.sh/uninstall.sh mặc định
 là tiếng Việt; đặt TSUFILES_LANG=en để xem tiếng Anh.
 
-Chạy thử ngay không cần cài: ./Filee (giao diện) hoặc ./tsufiles-cli help (dòng lệnh).
+Chạy thử ngay không cần cài: ./TsuFiles (giao diện) hoặc ./tsufiles-cli help (dòng lệnh).
 
 Cài cho người dùng hiện tại: ./install.sh
 - Cần Python 3. Tạo biểu tượng trong trình đơn ứng dụng và lệnh ~/.local/bin/tsufiles.
@@ -66,7 +66,7 @@ cửa sổ Hyprland đặt vòng donut tại con trỏ (ứng dụng Wayland kh�
 trí cửa sổ). Cần libinput, libudev và libwayland-client (trên Ubuntu: libinput10,
 libudev1, libwayland-client0). Cách bật:
 1. Chạy TsuFiles với biến môi trường TSUFILES_WAYLAND_GESTURES=1, ví dụ thêm dòng
-   TSUFILES_WAYLAND_GESTURES=1 vào ~/.config/environment.d/filee.conf (có hiệu lực
+   TSUFILES_WAYLAND_GESTURES=1 vào ~/.config/environment.d/tsufiles.conf (có hiệu lực
    sau khi đăng nhập lại).
 2. Thêm bạn vào nhóm input rồi đăng xuất, đăng nhập lại. CẢNH BÁO: thành viên nhóm
    này đọc được mọi phím và chuột từ bất kỳ chương trình nào họ chạy; chỉ bật nếu
@@ -91,7 +91,7 @@ libudev1, libwayland-client0). Cách bật:
 Chạy Wayland gốc (thử nghiệm, mặc định tắt):
 Mặc định TsuFiles chạy qua XWayland để tương thích tốt nhất. Muốn dùng Wayland gốc,
 chạy TsuFiles với TSUFILES_USE_WAYLAND=1 (export, hoặc ghi vào
-~/.config/environment.d/filee.conf). Hạn chế: Wayland không cho biết cửa sổ nào
+~/.config/environment.d/tsufiles.conf). Hạn chế: Wayland không cho biết cửa sổ nào
 đang nằm dưới con trỏ, nên Ctrl+kéo trong bất kỳ ứng dụng nào cũng mở một cửa sổ
 donut ẩn; nó chỉ nhận tệp, nên thao tác Ctrl+kéo để chép chữ có thể bị nuốt gần
 điểm bắt đầu. Nếu vướng, đổi phím bổ trợ ở trang Trình kích hoạt (ví dụ
