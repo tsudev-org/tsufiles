@@ -14,8 +14,8 @@ Vui lòng gửi kèm: phiên bản, hệ điều hành, tệp mẫu (nếu có t
 Cam kết phản hồi: xác nhận đã nhận trong **3 ngày làm việc**, đánh giá ban đầu trong **7 ngày**, bản vá cho lỗi
 nghiêm trọng (thực thi mã, ghi tệp ngoài thư mục đích, vượt qua kiểm tra chữ ký cập nhật) sớm nhất có thể.
 
-Lỗ hổng nằm trong mã kế thừa từ Filee gốc sẽ được báo tiếp lên upstream theo
-[chính sách của họ](docs/SECURITY.upstream.md) sau khi bạn đồng ý.
+Lỗ hổng cũng ảnh hưởng tới một dự án mã nguồn mở khác sẽ được báo cho dự án đó theo cách công bố có phối hợp,
+sau khi bạn đồng ý.
 
 ## Phạm vi đặc biệt quan tâm
 

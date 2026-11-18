@@ -26,7 +26,7 @@
 | Lộ bí mật trong repo | Commit nhầm khóa/token | gitleaks trong CI, `.gitignore` chuẩn tsudev, cổng kiểm `scripts/check-standards.sh` |
 | Phụ thuộc có lỗ hổng | Gói NuGet | Quản lý phiên bản tập trung (`Directory.Packages.props`), Dependabot hằng tuần, CI chặn gói High/Critical |
 | Đầu vào dòng lệnh | Biến môi trường `TSUFILES_LANG` | Danh sách trắng `vi`/`en`, giá trị lạ quay về mặc định |
-| Chia sẻ trong mạng nội bộ (ADR-0004, `tsufiles share`) | Máy lạ trong cùng Wi-Fi dò cổng, gửi tệp độc, đọc trộm đường truyền | `Core/Share/`: tắt mặc định, chỉ nhận địa chỉ nội bộ (`LocalNetwork`), mã phiên 128 bit so sánh thời gian hằng, mỗi thiết bị mới phải được duyệt, tự tắt sau 15 phút; HTTP tối giản (8 KB đầu yêu cầu, bắt buộc Content-Length, chặn tiêu đề trùng chống smuggling, chặn `..`); tệp nhận làm sạch tên, không ghi đè, chặn đuôi chạy được, gắn Mark-of-the-Web; CSP `script-src 'self'`. LocalSend (ADR-0004 mục 4): `/prepare-upload` qua cùng bước duyệt, token 128 bit mỗi tệp dùng một lần gắn địa chỉ, một phiên một lúc, JSON tối đa 1 MB, kiểm kích thước + sha256; gửi tới máy HTTPS chỉ tin chứng thư có SHA-256 trùng vân tay đã công bố; gói multicast ngoài mạng nội bộ bị bỏ. **Giới hạn chấp nhận**: HTTP trong LAN chưa mã hóa - trang ghi rõ chỉ dùng mạng tin cậy |
+| Chia sẻ trong mạng nội bộ (ADR-0004, `tsufiles share`) | Máy lạ trong cùng Wi-Fi dò cổng, gửi tệp độc, đọc trộm đường truyền | `Core/Share/`: tắt mặc định, chỉ nhận địa chỉ nội bộ (`LocalNetwork`), mã phiên 128 bit so sánh thời gian hằng, mỗi thiết bị mới phải được duyệt, tự tắt sau 15 phút; HTTP tối giản (8 KB đầu yêu cầu, bắt buộc Content-Length, chặn tiêu đề trùng chống smuggling, chặn `..`); tệp nhận làm sạch tên, không ghi đè, chặn đuôi chạy được, gắn Mark-of-the-Web; CSP `script-src 'self'`. **Giới hạn chấp nhận**: HTTP trong LAN chưa mã hóa - trang ghi rõ chỉ dùng mạng tin cậy |
 
 ## 3. Cổng kiểm tự động
 
@@ -62,4 +62,4 @@
 - [ ] Bật branch protection cho `main`: yêu cầu PR + các check `ci` và `Bảo mật`.
 - [x] Fuzz đột biến cho bộ đọc tự viết (MOBI/PalmDOC/HUFF-CDIC, ICNS, OFD) + kiểm thuộc tính ArchiveSafety: 200 vòng mỗi CI, 20.000 vòng hằng tuần (`fuzz.yml`). Lượt đầu 5.000 vòng/mục tiêu: không lỗi (11/11/2026). Còn HWP/HWPX.
 - [x] Đổi tên hiển thị "Filee" -> "tsudev-files" (09/11/2026, [ADR-0001](../adr/0001-doi-ten-hien-thi-tsudev-files.md)), rồi -> "TsuFiles" (12/11/2026, [ADR-0003](../adr/0003-ten-san-pham-tsufiles.md)).
-- [ ] Cài song song với Filee gốc: hiện dùng chung `AppGuid`, khóa registry và thư mục dữ liệu (ADR-0001 mục 4).
+- [ ] Cài song song với bản gốc: hiện dùng chung `AppGuid`, khóa registry và thư mục dữ liệu (ADR-0001 mục 4).

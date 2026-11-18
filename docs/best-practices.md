@@ -21,7 +21,7 @@ The exact answers submitted (status + justification per criterion) are in
 | `interact` | Met | Issues, Discussions and security advisories linked from README.en.md |
 | `contribution` | Met | [CONTRIBUTING.md](../CONTRIBUTING.md) |
 | `contribution_requirements` | Met | CONTRIBUTING.md "Code style", "Tests", "Pull requests"; PR template |
-| `floss_license` | Met | MIT, [LICENSE](../LICENSE) (keeps the upstream Filee copyright) |
+| `floss_license` | Met | MIT, [LICENSE](../LICENSE) (keeps the original copyright notice, as MIT requires) |
 | `floss_license_osi` | Met | MIT is OSI-approved |
 | `license_location` | Met | `LICENSE` at the repository root |
 | `documentation_basics` | Met | README.en.md, <https://files.tsudev.com/huong-dan/>, `docs/` |

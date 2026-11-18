@@ -9,7 +9,6 @@ using CommunityToolkit.Mvvm.Input;
 using TsuFiles.App.Services;
 using TsuFiles.Core.Platform;
 using TsuFiles.Core.Share;
-using TsuFiles.Core.Share.LocalSend;
 
 namespace TsuFiles.App.ViewModels.Pages;
 
@@ -25,7 +24,6 @@ public sealed partial class SharePageViewModel : ObservableObject, IDisposable
         share.PropertyChanged += OnShareChanged;
         share.SharedFiles.CollectionChanged += OnFilesChanged;
         share.Received.CollectionChanged += OnReceivedChanged;
-        share.Peers.CollectionChanged += OnPeersChanged;
         Update();
     }
 
@@ -61,22 +59,6 @@ public sealed partial class SharePageViewModel : ObservableObject, IDisposable
     public IReadOnlyList<string> Received => _share.Received.Select(r => Path.GetFileName(r.Path)).ToList();
 
     public bool HasReceived => _share.Received.Count > 0;
-
-    /// <summary>Máy LocalSend tìm thấy (ADR-0004 S3b).</summary>
-    public ObservableCollection<LocalSendPeer> Peers => _share.Peers;
-
-    public bool NoPeers => _share.IsRunning && _share.Peers.Count == 0;
-
-    public string? SendStatus => _share.SendStatus;
-
-    /// <summary>Nút Gửi chỉ bật khi có tệp trong danh sách và chưa có lần gửi nào đang chạy.</summary>
-    public bool CanSend => _share.SharedFiles.Count > 0 && !_share.IsSending;
-
-    [RelayCommand]
-    private Task FindPeersAsync() => _share.FindPeersAsync();
-
-    [RelayCommand(CanExecute = nameof(CanSend))]
-    private Task SendToAsync(LocalSendPeer peer) => _share.SendAsync(peer);
 
     [RelayCommand]
     private void Start()
@@ -120,24 +102,14 @@ public sealed partial class SharePageViewModel : ObservableObject, IDisposable
         _share.PropertyChanged -= OnShareChanged;
         _share.SharedFiles.CollectionChanged -= OnFilesChanged;
         _share.Received.CollectionChanged -= OnReceivedChanged;
-        _share.Peers.CollectionChanged -= OnPeersChanged;
     }
 
-    private void OnShareChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        Update();
-        OnPropertyChanged(nameof(SendStatus));
-        SendToCommand.NotifyCanExecuteChanged();
-    }
-
-    private void OnPeersChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) =>
-        OnPropertyChanged(nameof(NoPeers));
+    private void OnShareChanged(object? sender, PropertyChangedEventArgs e) => Update();
 
     private void OnFilesChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
         OnPropertyChanged(nameof(SharedFiles));
         OnPropertyChanged(nameof(HasSharedFiles));
-        SendToCommand.NotifyCanExecuteChanged();
     }
 
     private void OnReceivedChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -166,6 +138,5 @@ public sealed partial class SharePageViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(OtherLinks));
         OnPropertyChanged(nameof(HasOtherLinks));
         OnPropertyChanged(nameof(NoNetwork));
-        OnPropertyChanged(nameof(NoPeers));
     }
 }

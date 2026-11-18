@@ -13,8 +13,8 @@ new("epub", "EPUB", FormatCategory.Document, ["epub"]),
 ```
 
 Then add its id to one grade list in `FormatFields` (`src/TsuFiles.Core/Formats/FormatFields.cs`): everyday, general,
-specialist or legacy, by how widely files in it are made today. The full criteria, tie-breaks and close calls are in
-[#844](https://github.com/KnifeLemon/Filee/issues/844); what fields and grades decide is in
+specialist or legacy, by how widely files in it are made today. Compare with similar formats already graded there and
+explain close calls in the pull request; what fields and grades decide is in
 [docs/FORMAT-RULES.md](FORMAT-RULES.md). It belongs to its category's field; if it belongs to
 other fields too, or only to a field that can be turned off, give it an `Overlaps` row. A new output format graded
 specialist or legacy must belong only to fields that can be turned off and are off by default. `FormatFieldsTests` fails

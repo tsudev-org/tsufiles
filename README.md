@@ -8,7 +8,7 @@
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/tsudev-org/tsufiles/badge)](https://scorecard.dev/viewer/?uri=github.com/tsudev-org/tsufiles)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/16719/badge)](https://www.bestpractices.dev/projects/16719)
 
-**Trình chuyển đổi tệp ngoại tuyến, miễn phí, mã nguồn mở - bản Việt hóa và gia cố bảo mật của [Filee](https://github.com/KnifeLemon/Filee).**
+**Trình chuyển đổi tệp ngoại tuyến, miễn phí, mã nguồn mở - tiếng Việt mặc định, gia cố bảo mật.**
 
 Một sản phẩm của [tsudev](https://tsudev.com).
 
@@ -43,17 +43,16 @@ gốc build: `gh attestation verify <tệp> -R tsudev-org/tsufiles`.
 - Ủng hộ dự án: <https://files.tsudev.com/ung-ho/>
 - English: [README.en.md](README.en.md)
 
-## Khác biệt so với bản gốc
+## Điểm nổi bật
 
-| Hạng mục | Dự án gốc | TsuFiles |
-| --- | --- | --- |
-| Ngôn ngữ mặc định | Theo ngôn ngữ hệ điều hành, dự phòng tiếng Anh | **Tiếng Việt** cho giao diện, trình cài đặt và dòng lệnh; đổi được trong Cài đặt (`auto`, `en`, ...) |
-| Dòng lệnh `tsufiles` | Chỉ tiếng Anh | Tiếng Việt mặc định, `TSUFILES_LANG=en` để dùng tiếng Anh; khóa JSON giữ nguyên cho script |
-| Kiểm tra cập nhật | `KnifeLemon/Filee` + khóa ký của tác giả gốc | `tsudev-org/tsufiles` + **khóa ký ECDSA P-256 riêng**; bản phát hành của repo khác bị từ chối |
-| Tên sản phẩm | TsuFiles | **TsuFiles** - logo con cú, kiểu giao diện Cú đêm ([ADR-0003](docs/adr/0003-ten-san-pham-tsufiles.md)); tệp chạy, lệnh `tsufiles`, thư mục dữ liệu, lối tắt và tệp phát hành đổi sang `tsufiles` ở bản 2.4.1 kèm di trú |
-| Trang tải khi cập nhật lỗi | filee.sh | Trang phát hành của repo này |
-| GitHub Actions | Ghim theo tag | **Ghim theo SHA commit** (chống tag bị sửa) |
-| Cổng kiểm bảo mật | CI + test | Thêm CodeQL (security-extended), gitleaks, soát lỗ hổng NuGet, kiểm tra bản dịch, Dependabot |
+| Hạng mục | TsuFiles |
+| --- | --- |
+| Ngôn ngữ | **Tiếng Việt** mặc định cho giao diện, trình cài đặt và dòng lệnh; đổi được trong Cài đặt (`auto`, `en`, ...) |
+| Dòng lệnh `tsufiles` | Tiếng Việt mặc định, `TSUFILES_LANG=en` để dùng tiếng Anh; khóa JSON ổn định cho script |
+| Cập nhật | Chỉ nhận bản phát hành của `tsudev-org/tsufiles` ký bằng **khóa ECDSA P-256 riêng**; tệp khác bị từ chối |
+| Nhận diện | Logo con cú, kiểu giao diện Cú đêm ([ADR-0003](docs/adr/0003-ten-san-pham-tsufiles.md)) |
+| GitHub Actions | **Ghim theo SHA commit** (chống tag bị sửa) |
+| Cổng kiểm bảo mật | CodeQL (security-extended), gitleaks, soát lỗ hổng NuGet, SBOM + chứng thực build, kiểm tra bản dịch, Dependabot |
 
 Chi tiết kiến trúc bảo mật: [docs/vi/KIEN-TRUC-BAO-MAT.md](docs/vi/KIEN-TRUC-BAO-MAT.md).
 
@@ -112,6 +111,4 @@ TsuFiles miễn phí và sẽ luôn miễn phí. Mọi kênh ủng hộ chính t
 
 ## Giấy phép và ghi công
 
-Phát hành theo giấy phép MIT, giữ nguyên [LICENSE](LICENSE) của các tác giả TsuFiles ("TsuFiles contributors").
-Mọi công lao của phần mềm gốc thuộc về [KnifeLemon/Filee](https://github.com/KnifeLemon/Filee) và cộng đồng đóng góp.
-Thành phần bên thứ ba: [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+Phát hành theo giấy phép MIT - xem [LICENSE](LICENSE). Thành phần bên thứ ba: [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).

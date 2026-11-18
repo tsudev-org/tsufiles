@@ -126,7 +126,7 @@ the runtime next to every program that needs it and does not ship it (`Infrastru
 | Binary | Runtime |
 |---|---|
 | `engines/rhwp/rhwp.exe` (bundled) | `vcruntime` component copied next to it by `fetch-engines.ps1` (#248) |
-| `unhwp.dll` (NuGet, loaded into Filee.exe and tsufiles-cli.exe) | `vcruntime` component copied next to `Filee.exe` (`build-installer.ps1` → `fetch-engines.ps1 -RuntimeTo`) |
+| `unhwp.dll` (NuGet, loaded into TsuFiles.exe and tsufiles-cli.exe) | `vcruntime` component copied next to `TsuFiles.exe` (`build-installer.ps1` → `fetch-engines.ps1 -RuntimeTo`) |
 | Ghostscript (download) | `vcruntime` component copied next to `gswin64c.exe` (`EngineInstaller`, `fetch-engines.ps1`) |
 | LibreOffice (download) | its own copy, which the administrative install leaves in `System64`, copied into `program/` (`EngineInstaller`, `fetch-engines.ps1`; `LibreOfficeConverter` also repairs a copy installed by an earlier TsuFiles) |
 | calibre, Java (downloads) | ship their own next to their programs (`app/bin`, `bin`) |
@@ -174,7 +174,7 @@ pinned source in `build/build-native.py` like rhwp (PR #113 did this for SharpHo
 
 ## Windows on ARM64
 
-`build/build-installer.ps1 -Runtime win-arm64` builds `Filee-<version>-win-arm64-Setup.exe` (and `-Portable.zip`): the
+`build/build-installer.ps1 -Runtime win-arm64` builds `tsudev-files-<version>-win-arm64-Setup.exe` (and `-Portable.zip`): the
 app, the command line and Setup for win-arm64, the Explorer menu DLL for ARM64 (`build-explorer-menu.ps1
 -Architecture arm64`, packaged as `arm64`), and ARM64 builds of the bundled engines (`fetch-engines.ps1 -Runtime
 win-arm64`). The engines the app downloads stay x64: on Windows 11 on ARM, which runs them under emulation, the app
@@ -188,7 +188,7 @@ Setup's engine list is made when it is packed (`build/tools/make-setup.cs`), so 
   pinned commits as above, with the C runtime linked statically (`+crt-static`): they import no Visual C++ runtime DLL,
   so the ARM64 build ships none. Its artifact is hosted on dl.filee.sh and pinned by SHA-256 in `$arm64Pins` of
   `build/fetch-engines.ps1`; until a pin is filled in, a win-arm64 build stops and says so. `unhwp.dll` goes next to
-  `Filee.exe` through the build (`-p:UnhwpNativeLibrary`).
+  `TsuFiles.exe` through the build (`-p:UnhwpNativeLibrary`).
 
 `UnhwpConverter` reports Unhwp as available where its library loads, so a build without it shows the engine as not
 available on this platform. CI's `build (win-arm64)` job builds and tests on Windows 11 ARM64; once both pins are filled

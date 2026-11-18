@@ -1,4 +1,4 @@
-Run ./Filee to test the extracted app, or ./tsufiles-cli help for the command line.
+Run ./TsuFiles to test the extracted app, or ./tsufiles-cli help for the command line.
 
 Run ./install.sh to install for the current user. It requires Python 3, creates
 an application launcher and ~/.local/bin/tsufiles, and does not require root.
@@ -67,7 +67,7 @@ window rule places the donut at the cursor because Wayland apps cannot place win
 It needs libinput, libudev and libwayland-client (libinput10, libudev1 and
 libwayland-client0 on Ubuntu). To turn it on:
 1. Start TsuFiles with TSUFILES_WAYLAND_GESTURES=1 in its environment, for example
-   with the line TSUFILES_WAYLAND_GESTURES=1 in ~/.config/environment.d/filee.conf
+   with the line TSUFILES_WAYLAND_GESTURES=1 in ~/.config/environment.d/tsufiles.conf
    (takes effect after you sign in again).
 2. Add yourself to the input group, then sign out and in. Members of that group
    can read all keyboard and mouse input from any program they run, so enable
@@ -124,7 +124,7 @@ Native Wayland Backend (experimental, off by default):
 By default, TsuFiles runs through XWayland on Wayland desktops for maximum compatibility.
 To opt into the native Wayland backend (Avalonia.Wayland):
   Start TsuFiles with TSUFILES_USE_WAYLAND=1 in its environment.
-  (e.g., export TSUFILES_USE_WAYLAND=1 or set in ~/.config/environment.d/filee.conf).
+  (e.g., export TSUFILES_USE_WAYLAND=1 or set in ~/.config/environment.d/tsufiles.conf).
 Limits: Wayland cannot say which window is under the cursor, so a Ctrl+drag in
 any app opens an invisible donut window. It only shows when files are dragged
 onto it, but it rejects drops that are not files, so Ctrl+drag to copy text in an

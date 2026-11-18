@@ -1647,16 +1647,5 @@
   "share.approve": "{0} ({1}) muốn kết nối. Cho phép?",
   "share.device_unknown": "Một thiết bị",
   "share.allow": "Cho phép",
-  "share.deny": "Từ chối",
-  "share.nearby": "Thiết bị gần đây (LocalSend)",
-  "share.nearby_hint": "Điện thoại, máy tính đang mở app LocalSend miễn phí và TsuFiles khác đang bật chia sẻ. Các máy này gửi tệp tới đây được; nút Gửi chuyển cho máy đó các tệp trong danh sách bên dưới.",
-  "share.nearby_empty": "Chưa thấy thiết bị nào. Mở LocalSend trên máy kia (cùng Wi-Fi) rồi bấm làm mới.",
-  "share.nearby_refresh": "Tìm lại thiết bị",
-  "share.send": "Gửi tệp",
-  "share.sending": "Đang chờ {0} đồng ý…",
-  "share.sent": "Đã gửi {0}/{1} tệp tới {2}.",
-  "share.send_declined": "{0} đã từ chối.",
-  "share.send_busy": "{0} đang nhận từ máy khác. Thử lại sau ít phút.",
-  "share.send_pin": "{0} yêu cầu mã PIN. Tắt PIN trong LocalSend trên máy đó để nhận từ TsuFiles.",
-  "share.send_failed": "Không gửi được tới {0}: {1}"
+  "share.deny": "Từ chối"
 }

@@ -1625,16 +1625,5 @@
   "share.approve": "{0} ({1}) bağlanmak istiyor. İzin verilsin mi?",
   "share.device_unknown": "Bir cihaz",
   "share.allow": "İzin ver",
-  "share.deny": "Reddet",
-  "share.nearby": "Yakındaki cihazlar (LocalSend)",
-  "share.nearby_hint": "Ücretsiz LocalSend uygulamasını çalıştıran telefonlar ve bilgisayarlar ile paylaşımı açık diğer TsuFiles. Buraya dosya gönderebilirler; Gönder, aşağıdaki listedeki dosyaları onlara verir.",
-  "share.nearby_empty": "Henüz cihaz bulunamadı. Diğer cihazda LocalSend'i açın (aynı Wi-Fi), sonra yenileyin.",
-  "share.nearby_refresh": "Cihazları yeniden ara",
-  "share.send": "Dosyaları gönder",
-  "share.sending": "{0} cihazının kabul etmesi bekleniyor…",
-  "share.sent": "{1} dosyadan {0} tanesi {2} cihazına gönderildi.",
-  "share.send_declined": "{0} reddetti.",
-  "share.send_busy": "{0} başka bir cihazdan alım yapıyor. Biraz sonra yeniden deneyin.",
-  "share.send_pin": "{0} PIN istiyor. TsuFiles'tan almak için o cihazdaki LocalSend'de PIN'i kapatın.",
-  "share.send_failed": "{0} cihazına gönderilemedi: {1}"
+  "share.deny": "Reddet"
 }

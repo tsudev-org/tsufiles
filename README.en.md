@@ -8,8 +8,7 @@
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/tsudev-org/tsufiles/badge)](https://scorecard.dev/viewer/?uri=github.com/tsudev-org/tsufiles)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/16719/badge)](https://www.bestpractices.dev/projects/16719)
 
-**An offline, free and open-source file converter - a Vietnamese-first, security-hardened fork of
-[Filee](https://github.com/KnifeLemon/Filee).**
+**An offline, free and open-source file converter - Vietnamese-first and security-hardened.**
 
 A [tsudev](https://tsudev.com) product. Vietnamese version: [README.md](README.md). Website: <https://files.tsudev.com>.
 
@@ -40,16 +39,16 @@ and build provenance: `gh attestation verify <file> -R tsudev-org/tsufiles`.
 - Security vulnerabilities: see [SECURITY.md](SECURITY.md) (do NOT open a public issue)
 - Support the project: <https://files.tsudev.com/ung-ho/>
 
-## How it differs from the original project
+## Highlights
 
-| Area | TsuFiles | TsuFiles |
-| --- | --- | --- |
-| Default language | The operating system's, English as fallback | **Vietnamese** for the app, the installer and the CLI; changeable in Settings |
-| `tsufiles` command line | English only | Vietnamese by default, `TSUFILES_LANG=en` for English; JSON keys unchanged for scripts |
-| Product name | TsuFiles | **TsuFiles**, owl logo, Night Owl theme ([ADR-0003](docs/adr/0003-ten-san-pham-tsufiles.md)); executable, `tsufiles` command, data folder, shortcuts and release files move to `tsufiles` in 2.4.1 with migration |
-| Updates | `KnifeLemon/Filee` and its author's signing key | `tsudev-org/tsufiles` and **its own ECDSA P-256 signing key**; releases of other repositories are refused |
-| GitHub Actions | Pinned by tag | **Pinned by commit SHA** |
-| Security gates | CI + tests | Also CodeQL (security-extended), gitleaks, NuGet vulnerability audit, SBOM and build provenance, Dependabot |
+| Area | TsuFiles |
+| --- | --- |
+| Language | **Vietnamese** by default for the app, the installer and the CLI; changeable in Settings |
+| `tsufiles` command line | Vietnamese by default, `TSUFILES_LANG=en` for English; stable JSON keys for scripts |
+| Updates | Only releases of `tsudev-org/tsufiles` signed with **its own ECDSA P-256 key**; anything else is refused |
+| Identity | Owl logo, Night Owl theme ([ADR-0003](docs/adr/0003-ten-san-pham-tsufiles.md)) |
+| GitHub Actions | **Pinned by commit SHA** |
+| Security gates | CodeQL (security-extended), gitleaks, NuGet vulnerability audit, SBOM and build provenance, Dependabot |
 
 Security architecture (Vietnamese): [docs/vi/KIEN-TRUC-BAO-MAT.md](docs/vi/KIEN-TRUC-BAO-MAT.md).
 
@@ -77,6 +76,4 @@ Sponsors are listed here, on that page and on the app's About page.
 
 ## License and credits
 
-MIT. The [LICENSE](LICENSE) of Filee's authors ("Myeonggu Kim (KnifeLemon) and Filee contributors") is kept as the
-license requires; all credit for the original software goes to [KnifeLemon/Filee](https://github.com/KnifeLemon/Filee)
-and its contributors. Third-party components: [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+MIT - see [LICENSE](LICENSE). Third-party components: [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
