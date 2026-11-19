@@ -38,7 +38,7 @@ Bài học:
    mục 3 (lotus-share#75 ĐÃ GỘP, `main` `2d392aeb`). Bắt buộc mTLS, vân tay hex HOA, không chiếm TCP 53420.
 3. Phase của phiếu toàn hệ `20261119-01` áp cho tsufiles (đọc hàng tsufiles trước):
    - ~~**T2**~~ XONG 19/11: #115 đã gộp (TsuDEV hiển thị + website bảng xanh 4.2; phiếu
-     `~/projects/logs/handover/20261119-T2_*` mục 4). CÒN: 👤 deploy website; 👤 quyết theme app "Cú đêm" tím (màu logo
+     `~/projects/logs/handover/20261119-T2_*` mục 4; website deploy version `d58d4276`). CÒN: 👤 quyết theme app "Cú đêm" tím (màu logo
      con cú) đổi xanh hay giữ ngoại lệ - trong lúc chờ GIỮ NGUYÊN (phiên điều phối projects-d7 19/11).
    - **T3**: PRODUCT_POLICY mục 1 - lần chạy đầu ngôn ngữ + giao diện **theo hệ thống** (hiện TsuFiles ÉP tiếng Việt:
      ngược quy ước). Sửa cùng lúc mã, README ("Tiếng Việt mặc định" ở bảng Điểm nổi bật), website, 3 test bắt buộc
