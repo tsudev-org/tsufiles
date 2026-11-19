@@ -380,7 +380,7 @@ def og_image(tight, resize, Image, ImageDraw):
     bw = semi.width(label) + 56
     d.rounded_rectangle((x, 400, x + bw, 456), radius=28, fill=PRIMARY)
     semi.draw(d, (x + 28, 436), label, ON_PRIMARY)
-    Font(600, 30).draw(d, (W - 110 - Font(600, 30).width("tsudev"), H - 100), "tsudev", TEXT)
+    Font(600, 30).draw(d, (W - 110 - Font(600, 30).width("TsuDEV"), H - 100), "TsuDEV", TEXT)
     return og
 
 

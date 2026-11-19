@@ -1,5 +1,6 @@
-/* Bảng màu đen tuyền + xanh logo của hệ TsuDEV (ECOSYSTEM_IDENTITY 4.2 từ v3.8.0, quyết định chủ dự án 16/11 và
-   19/11/2026; khớp tsudev.com). Ghi đè token màu của tokens.css (bản sao nguyên văn từ tsudev-standards, không sửa ở đó).
+/* Bảng màu đen tuyền + tím logo cú của TsuFiles (ECOSYSTEM_IDENTITY 4.2.1 từ v3.8.3, quyết định chủ dự án 19/11/2026):
+   nền/viền/chữ như bảng xanh của hệ, các vai trò màu nhấn lấy sắc tím của logo con cú. Ghi đè token màu của
+   tokens.css (bản sao nguyên văn từ tsudev-standards, không sửa ở đó).
    Chỉ hai chế độ: data-theme="dark" (mặc định) và "light". KHÔNG treo bảng màu vào @media (prefers-color-scheme):
    chỉ public/theme.js được hỏi hệ điều hành (lựa chọn "Hệ thống"). Mọi cặp chữ/nền đạt WCAG AA. */
 [data-theme="dark"] {
@@ -13,16 +14,16 @@
   --text-primary: #EDEDED;
   --text-secondary: #B4B4B4;
   --text-muted: #8F8F8F;
-  --text-link: #7DD3FC;
-  --primary: #38BDF8;
-  --primary-hover: #7DD3FC;
-  --primary-active: #0EA5E9;
-  --on-primary: #0A0A0A;   /* mực đen: xanh lơ không đạt 4.5:1 dưới chữ trắng */
-  --focus-ring: #38BDF8;
-  --accent: #3B9EFF;
-  --glow: rgba(56, 189, 248, 0.14);
-  --icon-info: #60A5FA;
-  --icon-nav: #7DD3FC;
+  --text-link: #C4A1FF;
+  --primary: #A970FF;
+  --primary-hover: #BB8CFF;
+  --primary-active: #9A5CF5;
+  --on-primary: #0A0A0A;   /* mực đen: tím sáng không đạt 4.5:1 dưới chữ trắng */
+  --focus-ring: #A970FF;
+  --accent: #D8B4FC;
+  --glow: rgba(169, 112, 255, 0.16);
+  --icon-info: #C4A1FF;
+  --icon-nav: #D8B4FC;
   --overlay: rgba(0, 0, 0, 0.6);
   color-scheme: dark;
 }
@@ -38,16 +39,16 @@
   --text-primary: #0A0A0A;
   --text-secondary: #3F3F46;
   --text-muted: #52525B;
-  --text-link: #0757A3;
-  --primary: #0868C4;
-  --primary-hover: #0757A3;
-  --primary-active: #064785;
+  --text-link: #6D28D9;
+  --primary: #7C3AED;
+  --primary-hover: #6D28D9;
+  --primary-active: #5B21B6;
   --on-primary: #FFFFFF;
-  --focus-ring: #0868C4;
-  --accent: #0E7490;
-  --glow: rgba(8, 104, 196, 0.10);
-  --icon-info: #0369A1;
-  --icon-nav: #0757A3;
+  --focus-ring: #7C3AED;
+  --accent: #5E28B5;
+  --glow: rgba(124, 58, 237, 0.10);
+  --icon-info: #6D28D9;
+  --icon-nav: #5B21B6;
   --overlay: rgba(10, 10, 10, 0.35);
   color-scheme: light;
 }
