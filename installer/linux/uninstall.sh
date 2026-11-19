@@ -1,11 +1,20 @@
 #!/bin/sh
 set -eu
 
-# TsuFiles: thông báo tiếng Việt mặc định; TSUFILES_LANG=en để dùng tiếng Anh (giống dòng lệnh). say "<vi>" "<en>".
-say() {
+# TsuFiles: thông báo theo ngôn ngữ hệ thống (PRODUCT_POLICY mục 1, giống dòng lệnh): TSUFILES_LANG=vi|en thắng; không
+# thì LC_ALL/LC_MESSAGES/LANG là tiếng Việt => tiếng Việt, ngoài ra tiếng Anh. say "<vi>" "<en>".
+tsufiles_lang() {
     case "$(printf '%s' "${TSUFILES_LANG:-}" | tr '[:upper:]' '[:lower:]')" in
-        en|en-us|english) shift ;;
+        vi|vi-vn|vietnamese) printf 'vi'; return ;;
+        en|en-us|english) printf 'en'; return ;;
     esac
+    case "${LC_ALL:-${LC_MESSAGES:-${LANG:-}}}" in
+        vi|vi[-_.@]*) printf 'vi' ;;
+        *) printf 'en' ;;
+    esac
+}
+say() {
+    [ "$(tsufiles_lang)" = vi ] || shift
     printf '%s\n' "$1"
 }
 
@@ -13,12 +22,12 @@ data_dir=${XDG_DATA_HOME:-"$HOME/.local/share"}
 install_dir="$data_dir/filee/application"
 desktop_file="$data_dir/applications/com.tsudev.tsufiles.desktop"
 gnome_extension_id="tsufiles-donut@tsudev.com"
-python3 - "$data_dir" "$install_dir" "${TSUFILES_LANG:-}" <<'PY'
+python3 - "$data_dir" "$install_dir" "$(tsufiles_lang)" <<'PY'
 import pathlib
 import sys
 
-# TsuFiles: tiếng Việt mặc định, TSUFILES_LANG=en để dùng tiếng Anh.
-EN = sys.argv[3].strip().lower() in ('en', 'en-us', 'english')
+# TsuFiles: ngôn ngữ do tsufiles_lang chọn (vi | en).
+EN = sys.argv[3] != 'vi'
 
 root, target = map(pathlib.Path, sys.argv[1:3])
 expected = root.resolve() / 'filee' / 'application'

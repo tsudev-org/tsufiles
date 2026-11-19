@@ -5,11 +5,20 @@ set -eu
 # Supports first-time installation and in-place upgrade (--upgrade).
 # Preserves downloaded conversion engines (~/.local/share/TsuFiles/engines) and user settings (~/.config/TsuFiles; 2.4.0-vn.*: Filee, moved by the app).
 
-# TsuFiles: thông báo tiếng Việt mặc định; TSUFILES_LANG=en để dùng tiếng Anh (giống dòng lệnh). say "<vi>" "<en>".
-say() {
+# TsuFiles: thông báo theo ngôn ngữ hệ thống (PRODUCT_POLICY mục 1, giống dòng lệnh): TSUFILES_LANG=vi|en thắng; không
+# thì LC_ALL/LC_MESSAGES/LANG là tiếng Việt => tiếng Việt, ngoài ra tiếng Anh. say "<vi>" "<en>".
+tsufiles_lang() {
     case "$(printf '%s' "${TSUFILES_LANG:-}" | tr '[:upper:]' '[:lower:]')" in
-        en|en-us|english) shift ;;
+        vi|vi-vn|vietnamese) printf 'vi'; return ;;
+        en|en-us|english) printf 'en'; return ;;
     esac
+    case "${LC_ALL:-${LC_MESSAGES:-${LANG:-}}}" in
+        vi|vi[-_.@]*) printf 'vi' ;;
+        *) printf 'en' ;;
+    esac
+}
+say() {
+    [ "$(tsufiles_lang)" = vi ] || shift
     printf '%s\n' "$1"
 }
 

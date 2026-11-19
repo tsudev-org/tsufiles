@@ -24,10 +24,12 @@ vi: Chia sẻ với điện thoại: quét mã QR để gửi/nhận tệp với
 vi: PDF sang DOCX giữ chữ ký số, con dấu và bảng không viền của văn bản hành chính
 vi: Gửi kết quả sang điện thoại, máy tính khác bằng Lotus Share ngay từ thẻ kết quả (khi đã cài Lotus Share)
 vi: Đóng cửa sổ thì TsuFiles chạy tiếp trong khay hệ thống; icon hiện đúng trên thanh tác vụ Windows
+vi: Bản cài mới dùng ngôn ngữ và chế độ sáng/tối của máy; máy đã cài giữ nguyên lựa chọn đang dùng
 en: Share with your phone: scan a QR code to send and receive files with an iPhone (even an iPhone 8) or Android over Wi-Fi, no app needed
 en: PDF to DOCX keeps digital signatures, stamps and borderless tables of official documents
 en: Send results to a phone or another computer with Lotus Share right from the result card (when Lotus Share is installed)
 en: Closing the window keeps TsuFiles running in the system tray; the Windows taskbar shows the right icon
+en: New installs follow the computer's language and light/dark mode; existing installs keep their choices
 -->
 
 ### English summary
@@ -37,6 +39,7 @@ en: Closing the window keeps TsuFiles running in the system tray; the Windows ta
 - **PDF to DOCX** keeps signature and stamp annotations and turns side-by-side text blocks into borderless tables.
 - **Send with Lotus Share:** when Lotus Share is installed, each result card on Home has a share button that opens Lotus Share with the results ready to send. TsuFiles opens no extra network port for this.
 - **Tray:** closing the window now keeps TsuFiles running in the tray (change it in Settings). The GitHub and Donate buttons left the sidebar.
+- **Language and theme follow the system:** a new install starts in the operating system's language (English when TsuFiles has no translation for it) and in the Night Owl style following the system's light or dark mode. Existing installs keep their language and theme. The CLI and the Linux/macOS install scripts speak Vietnamese on a Vietnamese system and English otherwise; `TSUFILES_LANG=vi` or `en` still chooses.
 
 ### Chi tiết (tiếng Việt)
 
@@ -57,6 +60,10 @@ en: Closing the window keeps TsuFiles running in the system tray; the Windows ta
   mạng nào cho việc này.
 - **Khay hệ thống:** mặc định đóng cửa sổ thì TsuFiles chạy tiếp trong khay (đổi trong Cài đặt). Bỏ nút GitHub và
   Ủng hộ ở thanh bên; icon thanh tác vụ Windows hiện đúng.
+- **Ngôn ngữ và giao diện theo hệ thống:** bản cài mới mở bằng ngôn ngữ của hệ điều hành (chưa có bản dịch thì tiếng
+  Anh) và kiểu Cú đêm theo chế độ sáng/tối của máy. Máy đã cài giữ nguyên ngôn ngữ và giao diện đang dùng. Dòng lệnh và
+  script cài/gỡ Linux/macOS nói tiếng Việt khi hệ thống dùng tiếng Việt, ngoài ra tiếng Anh; `TSUFILES_LANG=vi` hoặc `en`
+  vẫn chọn được.
 - Kiểm thử: trang điện thoại chạy đầu-cuối trên WebKit giả lập iPhone 8 ở mỗi PR chạm phần chia sẻ
   (`tests/share-web/`).
 

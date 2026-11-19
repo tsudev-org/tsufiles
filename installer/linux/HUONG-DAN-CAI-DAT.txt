@@ -1,6 +1,6 @@
-HƯỚNG DẪN CÀI ĐẶT TSUDEV-FILES TRÊN LINUX (bản Việt hóa của TsuFiles)
-Bản tiếng Anh đầy đủ: INSTALL.txt. Thông báo của install.sh/uninstall.sh mặc định
-là tiếng Việt; đặt TSUFILES_LANG=en để xem tiếng Anh.
+HƯỚNG DẪN CÀI ĐẶT TSUFILES TRÊN LINUX
+Bản tiếng Anh đầy đủ: INSTALL.txt. Thông báo của install.sh/uninstall.sh theo ngôn
+ngữ hệ thống (LANG); đặt TSUFILES_LANG=vi hoặc TSUFILES_LANG=en để chọn.
 
 Chạy thử ngay không cần cài: ./TsuFiles (giao diện) hoặc ./tsufiles-cli help (dòng lệnh).
 

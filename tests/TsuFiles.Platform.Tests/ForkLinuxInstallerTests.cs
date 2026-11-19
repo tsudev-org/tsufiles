@@ -1,4 +1,4 @@
-// TsuFiles: script cài/gỡ Linux và macOS nói tiếng Việt mặc định và tiếng Anh khi TSUFILES_LANG=en (giống dòng lệnh).
+// TsuFiles: script cài/gỡ Linux và macOS nói theo ngôn ngữ hệ thống (LANG), TSUFILES_LANG=vi|en thắng (giống dòng lệnh).
 
 using System.Diagnostics;
 
@@ -6,15 +6,19 @@ namespace TsuFiles.Platform.Tests;
 
 public sealed class ForkLinuxInstallerTests
 {
+    // PRODUCT_POLICY mục 1.4: hệ thống vi → vi, en → en, ngôn ngữ chưa hỗ trợ (ja) → en; TSUFILES_LANG thắng.
     [Theory]
-    [InlineData(null, "Tùy chọn không hợp lệ: --la", "Cách dùng:")]
-    [InlineData("vi", "Tùy chọn không hợp lệ: --la", "Cách dùng:")]
-    [InlineData("EN", "Unknown option: --la", "Usage:")]
-    [InlineData("khong-ro", "Tùy chọn không hợp lệ: --la", "Cách dùng:")]
-    public void Install_script_speaks_the_fork_language(string? language, string error, string usage)
+    [InlineData(null, "vi_VN.UTF-8", "Tùy chọn không hợp lệ: --la", "Cách dùng:")]
+    [InlineData(null, "en_US.UTF-8", "Unknown option: --la", "Usage:")]
+    [InlineData(null, "ja_JP.UTF-8", "Unknown option: --la", "Usage:")]
+    [InlineData(null, null, "Unknown option: --la", "Usage:")]
+    [InlineData("vi", "en_US.UTF-8", "Tùy chọn không hợp lệ: --la", "Cách dùng:")]
+    [InlineData("EN", "vi_VN.UTF-8", "Unknown option: --la", "Usage:")]
+    [InlineData("khong-ro", "vi_VN.UTF-8", "Tùy chọn không hợp lệ: --la", "Cách dùng:")]
+    public void Install_script_speaks_the_system_language(string? language, string? lang, string error, string usage)
     {
         Assert.SkipUnless(OperatingSystem.IsLinux() || OperatingSystem.IsMacOS(), "Cần /bin/sh.");
-        var (code, output) = Run("install.sh", language, "--la");
+        var (code, output) = Run("install.sh", language, lang, "--la");
         Assert.Equal(1, code);
         Assert.Contains(error, output);
         Assert.Contains(usage, output);
@@ -59,7 +63,7 @@ public sealed class ForkLinuxInstallerTests
         }
     }
 
-    private static (int Code, string Output) Run(string script, string? language, params string[] args)
+    private static (int Code, string Output) Run(string script, string? language, string? lang, params string[] args)
     {
         var psi = new ProcessStartInfo("/bin/sh")
         {
@@ -70,9 +74,12 @@ public sealed class ForkLinuxInstallerTests
         psi.ArgumentList.Add(Path.Combine(InstallerFolder, script));
         foreach (var arg in args)
             psi.ArgumentList.Add(arg);
-        psi.Environment.Remove("TSUFILES_LANG");
+        foreach (var name in new[] { "TSUFILES_LANG", "LC_ALL", "LC_MESSAGES", "LANG" })
+            psi.Environment.Remove(name);
         if (language is not null)
             psi.Environment["TSUFILES_LANG"] = language;
+        if (lang is not null)
+            psi.Environment["LANG"] = lang;
         using var process = Process.Start(psi)!;
         var output = process.StandardOutput.ReadToEnd() + process.StandardError.ReadToEnd();
         process.WaitForExit(10000);

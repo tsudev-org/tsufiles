@@ -57,7 +57,7 @@ internal static class Program
         foreach (var task in SetupTasks.UnknownNames(options.Tasks).Concat(SetupTasks.UnknownNames(options.MergeTasks)))
             log.Warn($"Unknown task ignored: {task}");
 
-        // TsuFiles: trình cài đặt nói tiếng Việt khi không có /LANG; "auto" vẫn theo ngôn ngữ Windows.
+        // TsuFiles (PRODUCT_POLICY mục 1): không có /LANG thì theo ngôn ngữ hiển thị của Windows, chưa có bản dịch thì tiếng Anh.
         var texts = new SetupTexts(options.Language ?? TsuFiles.Core.ForkDefaults.DefaultLanguage);
         try
         {

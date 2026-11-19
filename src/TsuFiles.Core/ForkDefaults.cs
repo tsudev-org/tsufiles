@@ -11,10 +11,29 @@ namespace TsuFiles.Core;
 public static class ForkDefaults
 {
     /// <summary>
-    /// Ngôn ngữ giao diện của bản cài mới: tiếng Việt. Người dùng vẫn đổi được trong Cài đặt
-    /// (kể cả "auto" = theo ngôn ngữ hệ điều hành, hoặc "en").
+    /// Ngôn ngữ giao diện của bản cài mới: "auto" = theo ngôn ngữ hệ điều hành, ngôn ngữ chưa có bản dịch thì tiếng Anh
+    /// (PRODUCT_POLICY mục 1, chuẩn v3.8.0). Người dùng chọn ngôn ngữ trong Cài đặt thì lựa chọn đó thắng.
     /// </summary>
-    public const string DefaultLanguage = "vi";
+    public const string DefaultLanguage = "auto";
+
+    /// <summary>
+    /// Ngôn ngữ mặc định của bản 2.4.x (trước PRODUCT_POLICY mục 1). Máy đã cài luôn có <c>language</c> trong settings.json;
+    /// giá trị này chỉ dùng khi tệp đó thiếu trường, để giao diện của người đang dùng không đổi đột ngột (mục 1.2 phiếu T3).
+    /// </summary>
+    public const string LegacyLanguage = "vi";
+
+    /// <summary>
+    /// Ngôn ngữ của dòng lệnh và script cài đặt khi không đặt <c>TSUFILES_LANG</c>: tiếng Việt nếu hệ thống dùng tiếng
+    /// Việt (<c>vi</c>, <c>vi-VN</c>, <c>vi_VN.UTF-8</c>), ngoài ra tiếng Anh.
+    /// </summary>
+    public static string CommandLineLanguage(string? systemLanguage)
+    {
+        var name = systemLanguage?.Trim() ?? "";
+        return name.Equals("vi", StringComparison.OrdinalIgnoreCase) ||
+               (name.Length > 2 && name.StartsWith("vi", StringComparison.OrdinalIgnoreCase) && name[2] is '-' or '_' or '.' or '@')
+            ? "vi"
+            : "en";
+    }
 
     /// <summary>Ngôn ngữ dự phòng khi thiếu bản dịch một chuỗi: tiếng Anh (bản gốc, luôn đầy đủ).</summary>
     public const string FallbackLanguage = "en";

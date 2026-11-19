@@ -9,9 +9,10 @@
 
 ## Hàng đợi task (làm từ trên xuống)
 
-- [ ] ⚡⚡ TIẾP THEO: phiếu `logs/handover/20261119-02_ban-giao-tc1-ten-goi-rieng.md` mục 2: (#110 v3.8.1 + #111 TC1 việc A
-      ĐÃ GỘP + website ĐÃ DEPLOY 19/11) → **TC1 việc B** ĐỔI HƯỚNG 19/11: nút "Gửi bằng Lotus Share"
-      giao tệp cho app Lotus Share, KHÔNG tự nói giao thức (phiếu `20261119-TC1_tsufiles-*` mục 3, ADR-0004 mục 5) → 👤 thử thật → T3 phiếu toàn hệ `20261119-01` (ngôn ngữ + giao diện theo hệ thống). T2 XONG #115 + website đã deploy 19/11.
+- [ ] ⚡⚡ TIẾP THEO: phiếu `logs/handover/20261119-02_ban-giao-tc1-ten-goi-rieng.md` mục 2. TC1 việc B (nút "Gửi bằng
+      Lotus Share", #119) ĐÃ GỘP 19/11 → 👤 thử thật trên Windows (cài cả hai). T3 (ngôn ngữ + giao diện theo hệ thống):
+      PR `feat/t3-mac-dinh-theo-he-thong` → gộp khi CI xanh → 👤 deploy website (`cd website && npm run deploy`).
+      Phase kế của phiếu toàn hệ `20261119-01`: T7 (Pro/Ủng hộ, tsufiles xếp sau sound-db), T8 (ảnh/video website), M4.
 - [ ] Phiếu toàn hệ `20261117-V1` (thống nhất phiên bản): tsufiles là bước 5, CHỜ bước 2-4 (tsucwico, tsuswico,
       trafficmonitor - đo 18/11 chưa repo nào theo khuôn mới); test khóa hợp đồng updater ở #107. Khảo sát
       updater đã ghi ở mục 6 của bản sao (phải giữ thêm bộ tệp tên cũ `tsudev-files-*` cho updater 2.4.0-vn.1).
@@ -67,6 +68,10 @@
 | --- | --- | --- |
 
 ## Đã hoàn thành (mới nhất trên cùng)
+
+- 19/11/2026 - #119 TC1 việc B đổi hướng (nút "Gửi bằng Lotus Share", không tự nói giao thức) gộp sau khi chạy lại job
+  macOS Intel (`hdiutil create failed - Resource busy`, chập chờn của runner). T3: bản cài mới ngôn ngữ `auto` + Cú đêm
+  chế độ Hệ thống; máy đã cài giữ nguyên; CLI/script cài theo `LANG`; test PRODUCT_POLICY 1.4.
 
 - 19/11/2026 - TC1 (chủ dự án: mỗi sản phẩm chỉ dùng tên/giao thức của chính nó): phiếu toàn hệ + `ra_ten_cu.py`;
   #109 phiếu con; #111 revert S3 giao thức app ngoài hệ + bỏ tên dự án gốc khỏi nội dung hiển thị; #110 chuẩn v3.8.1.
