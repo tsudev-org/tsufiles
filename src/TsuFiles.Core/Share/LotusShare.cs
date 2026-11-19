@@ -41,9 +41,10 @@ public static class LotusShare
                     list.Add(Path.Combine(local, "Programs", "Lotus Share", WindowsExe));
                 break;
             case "macos":
-                list.Add(Path.Combine("/Applications", MacBundle));
+                // Đường dẫn POSIX ghép bằng "/" cố định (Path.Combine dùng "\\" khi chạy test trên Windows).
+                list.Add("/Applications/" + MacBundle);
                 if (env("HOME") is { Length: > 0 } home)
-                    list.Add(Path.Combine(home, "Applications", MacBundle));
+                    list.Add(home.TrimEnd('/') + "/Applications/" + MacBundle);
                 break;
             case "linux":
                 // Gói APT/RPM: /opt/lotus-share/lotus_share (+ liên kết /usr/bin/lotus-share).
