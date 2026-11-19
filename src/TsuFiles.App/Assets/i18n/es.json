@@ -62,6 +62,7 @@
   "home.open_folder": "Abrir carpeta",
   "home.open_file": "Abrir archivo",
   "home.open_with": "Abrir con",
+  "home.send_lotus": "Enviar con Lotus Share",
   "home.clear_history": "Borrar",
   "home.files": "{0} archivos",
   "home.failed_files": "{0} con error",

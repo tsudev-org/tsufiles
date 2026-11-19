@@ -65,6 +65,7 @@
   "home.open_folder": "Otwórz folder",
   "home.open_file": "Otwórz plik",
   "home.open_with": "Otwórz za pomocą",
+  "home.send_lotus": "Wyślij przez Lotus Share",
   "home.clear_history": "Wyczyść",
   "home.files": "Pliki: {0}",
   "home.failed_files": "Błędy: {0}",

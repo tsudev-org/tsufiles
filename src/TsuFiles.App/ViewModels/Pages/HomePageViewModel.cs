@@ -14,6 +14,7 @@ using TsuFiles.Core.History;
 using TsuFiles.Core.Localization;
 using TsuFiles.Core.Platform;
 using TsuFiles.Core.Settings;
+using TsuFiles.Core.Share;
 
 namespace TsuFiles.App.ViewModels.Pages;
 
@@ -50,6 +51,7 @@ public sealed partial class HistoryItemViewModel : ObservableObject
         // output folder ("Extract") opens in the file manager.
         CanOpen = _output is not null && (FormatRegistry.Detect(_output) is not null || Directory.Exists(_output));
         CanOpenWith = CanOpen && platform.SupportsOpenWith && !Directory.Exists(_output!);
+        CanSendWithLotus = _output is not null && LotusShareApp() is not null;
 
         // The card shows the result: its picture when it is one, else its format. A job without results shows a source.
         var shown = _output ?? entry.Outputs.FirstOrDefault() ?? entry.Sources.FirstOrDefault();
@@ -85,6 +87,20 @@ public sealed partial class HistoryItemViewModel : ObservableObject
 
     /// <summary>"Open with": an output file, on a system with an "Open with" dialog.</summary>
     public bool CanOpenWith { get; }
+
+    /// <summary>"Send with Lotus Share": there is a result on disk and Lotus Share is installed (it does the sending).</summary>
+    public bool CanSendWithLotus { get; }
+
+    private static (string? App, DateTime At) _lotus;
+
+    /// <summary>Where Lotus Share is installed, looked up again at most once a minute (one look per history card is wasteful).</summary>
+    private static string? LotusShareApp()
+    {
+        var now = DateTime.UtcNow;
+        if (now - _lotus.At > TimeSpan.FromMinutes(1))
+            _lotus = (LotusShare.Find(), now);
+        return _lotus.App;
+    }
 
     /// <summary>The picture the card shows, loaded in the background (<see cref="HomePageViewModel"/>); null until then.</summary>
     internal string? ThumbnailSource { get; }
@@ -190,6 +206,14 @@ public sealed partial class HistoryItemViewModel : ObservableObject
     {
         if (CanOpen && ConversionService.Exists(_output!))
             _platform.OpenFile(_output!);
+    }
+
+    [RelayCommand]
+    private void SendWithLotus()
+    {
+        // Every result still on disk; Lotus Share asks where to send them (TsuFiles never speaks its network protocol).
+        if (CanSendWithLotus && LotusShareApp() is { } app)
+            LotusShare.Send(app, _entry.Outputs.Where(ConversionService.Exists));
     }
 
     [RelayCommand]

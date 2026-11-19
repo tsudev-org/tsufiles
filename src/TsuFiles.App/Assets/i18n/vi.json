@@ -65,6 +65,7 @@
   "home.open_folder": "Mở thư mục",
   "home.open_file": "Mở tệp",
   "home.open_with": "Mở bằng",
+  "home.send_lotus": "Gửi bằng Lotus Share",
   "home.clear_history": "Xóa",
   "home.files": "{0} tệp",
   "home.failed_files": "{0} lỗi",

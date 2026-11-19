@@ -38,33 +38,27 @@ Mục tiêu: bản phát hành tới không mang chữ hay cổng LocalSend.
    `installer.*`, `theme.*`, `triggers.gnome_*`…) - `tools/xoa-ten-cu.py` bỏ sót vì khuôn `Filee-` (gạch nối + chữ);
    sửa tay + thêm ca vào `--kiem`. Website `/dinh-dang`: ví dụ lệnh `filee formats` là SAI (lệnh thật `tsufiles formats`).
 
-## 3. Việc B - Nối giao thức Lotus v2 (SẴN SÀNG - mỗi bước một PR, theo thứ tự)
+## 3. Việc B - "Gửi bằng Lotus Share" (giao tệp, KHÔNG nói giao thức) - LÀM 19/11/2026
 
-Đầu vào: đặc tả `~/projects/lotus-share/docs/GIAO-THUC-LOTUS-V2.md` + mẫu `docs/giao-thuc-mau/` (lotus-share PR #75 - **ĐÃ GỘP**
-19/11/2026, `main` `2d392aeb`; chép mẫu từ commit đó; đọc trả lời mục 6.1 của phiếu con lotus-share). Điểm bắt buộc từ đặc tả:
-- Phiên bản `2.2`, tiền tố `/api/lotus/v2/`, UDP **53420**, nhóm `224.0.0.168` (+ `ff12::1075:5ea0`), chuỗi gói chào
-  100 ms / 500 ms / 2 s; trả lời gói chào bằng `POST register` tới `IP nguồn:port trong gói` (không trả bằng UDP).
-- **mTLS**: mỗi máy một chứng thư X.509 tự ký giữ cố định; vân tay = SHA-256 của DER, **hex HOA** 64 ký tự; máy chủ
-  Lotus đòi chứng thư client và trường `fingerprint` khai phải khớp; client ghim vân tay máy chủ (bỏ qua tên máy).
-- TCP 53420 là của Lotus Share: máy chủ TsuFiles dùng cổng riêng, khai trong trường `port`. Quét mạng con của Lotus chỉ
-  thử 53420 ⇒ TsuFiles phải GỬI gói chào để được thấy.
-- UDP: đặt `SO_REUSEADDR` (Linux/macOS thêm `SO_REUSEPORT` = option 15 / 0x200 qua `SetRawSocketOption`) TRƯỚC bind;
-  KHÔNG `ExclusiveAddressUse` trên Windows.
+**Đổi hướng 19/11/2026** (chủ dự án giao agent chọn phương án tối ưu, không xung đột giữa các dự án): BỎ kế hoạch tự cài
+giao thức Lotus v2 trong TsuFiles (B1-B6 cũ: chứng thư + mTLS, UDP 53420, máy chủ HTTPS, client). Lý do và so sánh:
+ADR-0004 mục 5 (dư thừa với Lotus Share; hai mục cho cùng một máy; tranh UDP 53420; thêm máy chủ luôn nghe cho app
+ngoại tuyến D3; buộc lịch phát hành hai bên). Mã #105/#106 KHÔNG dùng lại.
 
-| Bước | Nội dung | Lấy lại từ lịch sử git | Nghiệm thu |
-| --- | --- | --- | --- |
-| B1 | `Core/Share/Lotus/`: DTO theo đặc tả (source-gen JSON, `RespectNullableAnnotations`), hằng số, danh tính thiết bị (chứng thư tự ký sinh 1 lần, lưu ở thư mục dữ liệu, quyền chỉ người dùng; Windows cân nhắc kho chứng thư CurrentUser không xuất được khóa) | DTO/gia cố: `095fd1e5` (`LocalSendModels.cs`) | Test đọc + ghi lại y hệt từng tệp `giao-thuc-mau/` (chép kèm SHA-256 nguồn) |
-| B2 | Khám phá UDP 53420 (gửi gói chào khi mở VÀ khi bấm làm mới, kèm broadcast có hướng): cờ reuse, tham gia nhóm trên từng card, gói chào, trả lời bằng `register` HTTPS, trần 4 lần trả lời cùng lúc, bỏ địa chỉ ngoài LAN | `LocalSendDiscovery.cs` ở `095fd1e5` | Hai tiến trình TsuFiles cùng máy thấy nhau; chạy cùng `lotus-share-cli` (build từ `~/projects/lotus-share/cli`) cả hai bind được |
-| B3 | Máy chủ HTTPS: `SslStream` trên `TcpListener` hiện có, `ClientCertificateRequired`, nhận chứng thư tự ký còn hạn, ghi vân tay client; route register/info/prepare-upload/upload/cancel qua bước duyệt thiết bị sẵn có; token mỗi tệp dùng một lần, 409, sha256 | `ShareServer.LocalSend.cs` ở `095fd1e5` + `45bc5792` | Test: client không chứng thư bị từ chối; vân tay khai lệch bị bỏ qua |
-| B4 | Client: `SocketsHttpHandler` + `ClientCertificates` + ghim vân tay máy chủ; `tsufiles send [--to tên|IP|IP:cổng]` | `LocalSendClient.cs`, `SendCommand.cs` ở `095fd1e5` | Gửi thật TsuFiles → `lotus-share-cli` và ngược lại (Linux) |
-| B5 | Giao diện: "Thiết bị Lotus Share gần đây" + nút Gửi tệp; khóa i18n 22 ngôn ngữ (chèn văn bản, KHÔNG dump lại JSON); tài liệu, CHANGELOG | `0aec5313` (S3b) | Ảnh chụp trang; `ra_ten_cu.py --dong tsufiles` 0 dòng LocalSend |
-| B6 | Thử thật với Lotus Share trên Windows + Android (👤 cầm máy) | - | Hai chiều, cài cùng máy không tranh cổng |
-
-
-Công cụ chẩn đoán của Lotus (`support/scripts/chan-doan-mang.ps1/.sh`, lotus-share#76) coi tiến trình `TsuFiles`,
-`tsufiles-cli` dùng chung UDP 53420 là hợp lệ (so khớp không phân biệt hoa thường; Linux `ss` cắt tên ở 15 ký tự). Thử
-B2 bằng `dotnet run`/`dotnet TsuFiles.dll` thì tiến trình hiện là `dotnet` ⇒ công cụ báo LỖI - dùng bản `dotnet publish`
-(tệp chạy `TsuFiles`/`tsufiles-cli`) khi đo cùng máy. Đổi tên tệp chạy sau này ⇒ báo lotus-share.
+Làm thay (một PR):
+1. `Core/Share/LotusShare.cs`: tìm Lotus Share ở chỗ bộ cài chính thức đặt (Windows `InstallLocation` của AppId
+   `{21D09887-EE8E-478B-B43F-BD492DE6EFE3}_is1` → `lotus_share.exe`; Linux `/opt/lotus-share/lotus_share`,
+   `/usr/bin/lotus-share` (đo từ gói deb 26.11.1801); macOS `Lotus Share.app`), không dò PATH; mở kèm đường dẫn tuyệt
+   đối qua `ArgumentList` (macOS `open -b com.tsudev.lotusshare`). Test `LotusShareTests`.
+2. Thẻ kết quả trang chủ: nút chia sẻ `home.send_lotus` (22 ngôn ngữ), chỉ hiện khi đã cài Lotus Share.
+3. ADR-0004 mục 2.3 + 5, `docs/vi/CHIA-SE-DIEN-THOAI.md`, CHANGELOG.
+4. ĐÃ TRẢ LỜI: lotus-share#85 - hợp đồng `docs/MO-KEM-TEP.md` + test khóa `load_selection_from_args_test.dart`;
+   đặc tả giao thức đã bỏ tên TsuFiles. Thử thật dùng Lotus Share **26.11.1901** trở lên (26.11.1801 không mở được).
+   Phiếu gốc: TsuFiles KHÔNG còn là client giao thức (bỏ các dòng nhắc TsuFiles trong đặc tả); hợp đồng
+   duy nhất là "tệp chạy nhận đường dẫn tệp/thư mục ở dòng lệnh" (`LoadSelectionFromArgsAction`, chuyển cho bản đang
+   chạy qua `notifyRunningInstance`) + vị trí cài ở trên - đổi thì báo tsufiles.
+5. 👤 Thử thật: Windows cài cả hai, bấm nút ở thẻ kết quả → Lotus Share mở với tệp; Lotus Share đang chạy sẵn → tệp vào
+   cửa sổ đang mở.
 
 ## 4. Câu hỏi cho chủ dự án - ĐÃ CHỐT 19/11/2026
 

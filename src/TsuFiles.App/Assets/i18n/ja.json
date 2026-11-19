@@ -62,6 +62,7 @@
   "home.open_folder": "フォルダーを開く",
   "home.open_file": "ファイルを開く",
   "home.open_with": "プログラムから開く",
+  "home.send_lotus": "Lotus Share で送信",
   "home.clear_history": "消去",
   "home.files": "{0}個のファイル",
   "home.failed_files": "{0}件失敗",
