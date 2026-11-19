@@ -174,6 +174,11 @@
                             ToolTip.Tip="{DynamicResource home.open_with}" AutomationProperties.Name="{DynamicResource home.open_with}">
                       <PathIcon Width="13" Height="13" Data="{StaticResource Icon.OpenWith}" />
                     </Button>
+                    <!-- Only when Lotus Share is installed: it sends the results to a phone or another computer. -->
+                    <Button Command="{Binding SendWithLotusCommand}" IsVisible="{Binding CanSendWithLotus}" Padding="8,5"
+                            ToolTip.Tip="{DynamicResource home.send_lotus}" AutomationProperties.Name="{DynamicResource home.send_lotus}">
+                      <PathIcon Width="13" Height="13" Data="{StaticResource Icon.Share}" />
+                    </Button>
                     <Button Command="{Binding OpenFolderCommand}" Padding="10,5">
                       <StackPanel Orientation="Horizontal" Spacing="6">
                         <PathIcon Width="13" Height="13" Data="{StaticResource Icon.Folder}" />

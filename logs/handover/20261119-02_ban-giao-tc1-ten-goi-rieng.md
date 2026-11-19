@@ -34,8 +34,9 @@ Bài học:
 1. ~~Gộp #110, #111, #113, #112; deploy website~~ XONG 19/11: chủ dự án deploy (Worker version
    `fe26cf1a-6ff0-4a72-938e-604ca4afeca8`); quét production 5 trang × 3 khung 200 OK; SHA-256 4 trang đổi khớp `dist/`;
    0 chữ LocalSend/upstream/`filee formats`; "KnifeLemon" chỉ còn trong ô LICENSE nguyên văn `/ban-quyen` (bắt buộc MIT).
-2. **TC1 việc B** - nối giao thức Lotus v2: kế hoạch B1-B6 ở `logs/handover/20261119-TC1_tsufiles-bo-localsend-va-ten-cu.md`
-   mục 3 (lotus-share#75 ĐÃ GỘP, `main` `2d392aeb`). Bắt buộc mTLS, vân tay hex HOA, không chiếm TCP 53420.
+2. **TC1 việc B** - ĐỔI HƯỚNG 19/11: KHÔNG nối giao thức Lotus v2 (B1-B6 cũ bỏ); làm nút "Gửi bằng Lotus Share" giao
+   tệp cho app Lotus Share đã cài. Chi tiết `logs/handover/20261119-TC1_tsufiles-bo-localsend-va-ten-cu.md` mục 3, lý do
+   ADR-0004 mục 5. Còn: 👤 thử thật trên Windows.
 3. Phase của phiếu toàn hệ `20261119-01` áp cho tsufiles (đọc hàng tsufiles trước):
    - ~~**T2**~~ XONG 19/11: #115 đã gộp (TsuDEV hiển thị + website bảng xanh 4.2; phiếu
      `~/projects/logs/handover/20261119-T2_*` mục 4; website deploy version `d58d4276`). Theme app "Cú đêm" GIỮ TÍM (màu logo con cú) - chủ dự án chốt

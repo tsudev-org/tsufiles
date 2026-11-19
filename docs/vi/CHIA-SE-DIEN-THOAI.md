@@ -20,6 +20,12 @@ Safari 16). Thiết kế: [ADR-0004](../adr/0004-chia-se-giua-thiet-bi-va-ios.md
 
 Máy chủ không màn hình: dùng lệnh `tsufiles share` (xem `tsufiles help share`).
 
+### Gửi bằng Lotus Share
+
+Muốn gửi thẳng tới điện thoại hay máy tính khác mà không mở trang web: cài [Lotus Share](https://lotus.tsudev.com) trên
+cả hai máy. Khi đó mỗi thẻ kết quả ở trang chủ TsuFiles có nút chia sẻ: bấm vào, Lotus Share mở ra với sẵn các tệp kết
+quả, chọn máy nhận rồi gửi. Việc tìm máy và truyền tệp do Lotus Share làm; TsuFiles không mở thêm cổng mạng nào.
+
 ## 2. Khi điện thoại không mở được trang
 
 - Điện thoại và máy tính phải cùng một mạng Wi-Fi (Wi-Fi khách của quán cà phê/khách sạn thường chặn các máy nói

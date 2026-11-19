@@ -62,6 +62,7 @@
   "home.open_folder": "Klasörü aç",
   "home.open_file": "Dosyayı aç",
   "home.open_with": "Birlikte aç",
+  "home.send_lotus": "Lotus Share ile gönder",
   "home.clear_history": "Temizle",
   "home.files": "{0} dosya",
   "home.failed_files": "{0} başarısız",

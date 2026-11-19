@@ -1,16 +1,16 @@
 # Changelog
 
-What changed in each version of Filee, for the people using it. The release workflow puts the section of the
+What changed in each version of TsuFiles, for the people using it. The release workflow puts the section of the
 version it publishes under "What's Changed" in the GitHub release notes, above the list of pull requests.
 
-Add a `## <version>` section before tagging a release. Write what someone using Filee notices: what's new, where to
+Add a `## <version>` section before tagging a release. Write what someone using TsuFiles notices: what's new, where to
 find it, what it does and doesn't do.
 
 Start the section with an `<!-- update -->` block (hidden on GitHub). The app's update notice shows its level and its
-one-line summaries in the user's language (any language Filee ships: `ko`, `en`, `zh`, `pl`, `pt-BR`, …; a line per
+one-line summaries in the user's language (any language TsuFiles ships: `ko`, `en`, `zh`, `pl`, `pt-BR`, …; a line per
 change, a language may repeat; a language without lines shows the English ones):
 
-- `required`: wrong or lost results, security, Filee not starting. The card shows every time Filee starts.
+- `required`: wrong or lost results, security, TsuFiles not starting. The card shows every time TsuFiles starts.
 - `recommended`: bug fixes. The card shows once per version.
 - `optional`: new features only. No card, the sidebar button only.
 
@@ -22,9 +22,11 @@ change, a language may repeat; a language without lines shows the English ones):
 level: recommended
 vi: Chia sẻ với điện thoại: quét mã QR để gửi/nhận tệp với iPhone (kể cả iPhone 8), Android qua Wi-Fi, không cần cài app
 vi: PDF sang DOCX giữ chữ ký số, con dấu và bảng không viền của văn bản hành chính
+vi: Gửi kết quả sang điện thoại, máy tính khác bằng Lotus Share ngay từ thẻ kết quả (khi đã cài Lotus Share)
 vi: Đóng cửa sổ thì TsuFiles chạy tiếp trong khay hệ thống; icon hiện đúng trên thanh tác vụ Windows
 en: Share with your phone: scan a QR code to send and receive files with an iPhone (even an iPhone 8) or Android over Wi-Fi, no app needed
 en: PDF to DOCX keeps digital signatures, stamps and borderless tables of official documents
+en: Send results to a phone or another computer with Lotus Share right from the result card (when Lotus Share is installed)
 en: Closing the window keeps TsuFiles running in the system tray; the Windows taskbar shows the right icon
 -->
 
@@ -33,6 +35,7 @@ en: Closing the window keeps TsuFiles running in the system tray; the Windows ta
 - **Share with your phone** ([ADR-0004](https://github.com/tsudev-org/tsufiles/blob/main/docs/adr/0004-chia-se-giua-thiet-bi-va-ios.md)): turn on **Share with phone** in the sidebar and scan the QR code. The phone's browser sends files to the computer and downloads the files you drop in - iPhone 8 (Safari 16) and newer, Android, other computers. Nothing to install on the phone. Each new device must be allowed on the computer; only local network addresses are accepted, links carry a random 128-bit session code, sharing turns itself off after 15 minutes idle. The connection is plain HTTP inside the local network: use it on trusted Wi-Fi only.
 - **Headless:** `tsufiles share [files...] -o <folder>` serves the same page from the command line and asks before each device connects.
 - **PDF to DOCX** keeps signature and stamp annotations and turns side-by-side text blocks into borderless tables.
+- **Send with Lotus Share:** when Lotus Share is installed, each result card on Home has a share button that opens Lotus Share with the results ready to send. TsuFiles opens no extra network port for this.
 - **Tray:** closing the window now keeps TsuFiles running in the tray (change it in Settings). The GitHub and Donate buttons left the sidebar.
 
 ### Chi tiết (tiếng Việt)
@@ -49,6 +52,9 @@ en: Closing the window keeps TsuFiles running in the system tray; the Windows ta
 - **Dòng lệnh:** `tsufiles share [tệp...] -o <thư mục>` mở cùng trang đó trên máy không màn hình, hỏi `[y/N]` trước
   khi cho mỗi thiết bị kết nối.
 - **PDF sang DOCX** giữ lớp chú thích (chữ ký số, con dấu) và gộp các khối chữ đặt cạnh nhau thành bảng không viền.
+- **Gửi bằng Lotus Share:** máy đã cài [Lotus Share](https://lotus.tsudev.com) thì mỗi thẻ kết quả ở trang chủ có nút
+  chia sẻ, mở Lotus Share với sẵn các tệp kết quả để gửi sang điện thoại hay máy tính khác. TsuFiles không mở thêm cổng
+  mạng nào cho việc này.
 - **Khay hệ thống:** mặc định đóng cửa sổ thì TsuFiles chạy tiếp trong khay (đổi trong Cài đặt). Bỏ nút GitHub và
   Ủng hộ ở thanh bên; icon thanh tác vụ Windows hiện đúng.
 - Kiểm thử: trang điện thoại chạy đầu-cuối trên WebKit giả lập iPhone 8 ở mỗi PR chạm phần chia sẻ

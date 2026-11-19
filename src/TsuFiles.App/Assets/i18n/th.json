@@ -62,6 +62,7 @@
   "home.open_folder": "เปิดโฟลเดอร์",
   "home.open_file": "เปิดไฟล์",
   "home.open_with": "เปิดด้วย",
+  "home.send_lotus": "ส่งด้วย Lotus Share",
   "home.clear_history": "ล้างประวัติ",
   "home.files": "{0} ไฟล์",
   "home.failed_files": "ล้มเหลว {0} ไฟล์",
