@@ -17,7 +17,7 @@ public static class SponsorLinks
     /// <summary>The support page: every way to support TsuFiles, kept up to date without a new release.</summary>
     public const string SupportPageUrl = ForkDefaults.SupportPageUrl;
 
-    private static readonly SponsorLink Page = new("page", "files.tsudev.com/ung-ho", SupportPageUrl, "Icon.Heart", "#0868C4");
+    private static readonly SponsorLink Page = new("page", "files.tsudev.com/ung-ho", SupportPageUrl, "Icon.Heart", "#7C3AED");
     private static readonly SponsorLink Star = new("star", "GitHub", ForkDefaults.RepositoryUrl, "Icon.GitHub", "#24292F");
 
     /// <summary>Every way, the same in every language (the support page itself is where the choice is made).</summary>

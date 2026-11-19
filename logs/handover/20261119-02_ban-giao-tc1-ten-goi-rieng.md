@@ -41,6 +41,8 @@ Bài học:
      `~/projects/logs/handover/20261119-T2_*` mục 4; website deploy version `d58d4276`). Theme app "Cú đêm" GIỮ TÍM (màu logo con cú) - chủ dự án chốt
      19/11/2026, ngoại lệ như tím hoa sen Lotus Share (báo qua phiên điều phối projects-d7; ghi vào ECOSYSTEM_IDENTITY 4.2).
      KHÔNG đổi `NightOwlPalette` sang xanh.
+     **Sau đó chủ dự án chốt thêm (19/11, phiếu `~/projects/logs/handover/20261119-TF1_*`): website files.tsudev.com cũng
+     tím logo cú** (ECOSYSTEM_IDENTITY 4.2.1, chuẩn v3.8.3) - đảo phần website của #115; chữ TsuDEV giữ nguyên.
    - **T3**: PRODUCT_POLICY mục 1 - lần chạy đầu ngôn ngữ + giao diện **theo hệ thống** (hiện TsuFiles ÉP tiếng Việt:
      ngược quy ước). Sửa cùng lúc mã, README ("Tiếng Việt mặc định" ở bảng Điểm nổi bật), website, 3 test bắt buộc
      (hệ thống `vi`, `en`, ngôn ngữ chưa hỗ trợ ⇒ tiếng Anh; hệ thống sáng/tối).
