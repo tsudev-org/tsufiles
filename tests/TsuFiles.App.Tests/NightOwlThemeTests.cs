@@ -97,27 +97,75 @@ public class NightOwlThemeTests
     }
 
     [Fact]
-    public void A_new_install_starts_in_night_owl_dark_and_an_existing_one_keeps_its_style()
+    public void A_new_install_follows_the_system_and_an_existing_one_keeps_its_choices()
     {
         var fresh = Directory.CreateTempSubdirectory("tsufiles-owl-").FullName;
         var existing = Directory.CreateTempSubdirectory("tsufiles-owl-").FullName;
+        var legacy = Directory.CreateTempSubdirectory("tsufiles-owl-").FullName;
         try
         {
+            // PRODUCT_POLICY mục 1: bản cài mới = Cú đêm, sáng/tối và ngôn ngữ theo hệ điều hành.
             var store = new UserDataStore(fresh);
             store.Load();
             Assert.Equal(ThemeStyle.NightOwl, store.Settings.Theme.Style);
-            Assert.Equal(ThemeMode.Dark, store.Settings.Theme.Mode);
+            Assert.Equal(ThemeMode.System, store.Settings.Theme.Mode);
+            Assert.Equal("auto", store.Settings.Language);
 
-            File.WriteAllText(Path.Combine(existing, "settings.json"), """{ "theme": { "style": "Soft", "mode": "System" } }""");
+            // Máy đã cài 2.4.x: settings.json ghi rõ lựa chọn (kể cả mặc định cũ vi + Tối) ⇒ giữ nguyên.
+            File.WriteAllText(Path.Combine(existing, "settings.json"),
+                """{ "language": "vi", "theme": { "style": "NightOwl", "mode": "Dark" } }""");
             var old = new UserDataStore(existing);
             old.Load();
-            Assert.Equal(ThemeStyle.Soft, old.Settings.Theme.Style);
-            Assert.Equal(ThemeMode.System, old.Settings.Theme.Mode);
+            Assert.Equal(ThemeStyle.NightOwl, old.Settings.Theme.Style);
+            Assert.Equal(ThemeMode.Dark, old.Settings.Theme.Mode);
+            Assert.Equal("vi", old.Settings.Language);
+
+            // settings.json thiếu trường: giữ giao diện và ngôn ngữ người dùng vẫn thấy (Soft, tiếng Việt), không đổi đột ngột.
+            File.WriteAllText(Path.Combine(legacy, "settings.json"), """{ "theme": { "style": "Soft", "mode": "System" } }""");
+            var older = new UserDataStore(legacy);
+            older.Load();
+            Assert.Equal(ThemeStyle.Soft, older.Settings.Theme.Style);
+            Assert.Equal(ThemeMode.System, older.Settings.Theme.Mode);
+            Assert.Equal("vi", older.Settings.Language);
         }
         finally
         {
             Directory.Delete(fresh, true);
             Directory.Delete(existing, true);
+            Directory.Delete(legacy, true);
+        }
+    }
+
+    // PRODUCT_POLICY mục 1.4: chế độ Hệ thống ⇒ ứng dụng không ghim biến thể (đi theo hệ điều hành, đổi ngay khi hệ điều
+    // hành đổi) và mỗi biến thể hệ thống sáng/tối nhận đúng bảng màu Cú đêm.
+    [AvaloniaFact]
+    public void System_mode_follows_the_os_light_or_dark_with_the_night_owl_palette()
+    {
+        TestServices.EnsureInitialized("en");
+        var theme = AppHost.Get<ThemeService>();
+        var app = Avalonia.Application.Current!;
+        try
+        {
+            theme.Apply(new ThemeSettings { Style = ThemeStyle.NightOwl, Mode = ThemeMode.System }, "en");
+            Assert.Equal(ThemeVariant.Default, app.RequestedThemeVariant);
+            foreach (var (os, page, accent) in new[]
+                     {
+                         (ThemeVariant.Light, NightOwlPalette.LightPage, NightOwlPalette.LightAccent),
+                         (ThemeVariant.Dark, NightOwlPalette.DarkPage, NightOwlPalette.DarkAccent),
+                     })
+            {
+                // Hệ điều hành báo sáng/tối: một cửa sổ đặt đúng biến thể đó thay cho cài đặt của nền tảng.
+                var window = new Window { RequestedThemeVariant = os };
+                Assert.Equal(os, window.ActualThemeVariant);
+                Assert.True(window.TryFindResource("PageBrush", window.ActualThemeVariant, out var pageBrush));
+                Assert.Equal(Color.Parse(page), Assert.IsType<SolidColorBrush>(pageBrush).Color);
+                Assert.True(window.TryFindResource("AccentBrush", window.ActualThemeVariant, out var accentBrush));
+                Assert.Equal(Color.Parse(accent), Assert.IsType<SolidColorBrush>(accentBrush).Color);
+            }
+        }
+        finally
+        {
+            theme.Apply(new ThemeSettings(), "en");
         }
     }
 
@@ -192,6 +240,8 @@ public class NightOwlThemeTests
         var directory = Directory.CreateTempSubdirectory("tsufiles-owl-shot-").FullName;
         var store = new UserDataStore(directory);
         store.Load();
+        // Bản cài mới theo hệ thống (PRODUCT_POLICY mục 1); ảnh này ghim chế độ Tối.
+        store.Settings.Theme.Mode = ThemeMode.Dark;
         var theme = AppHost.Get<ThemeService>();
         theme.Apply(store.Settings.Theme, "vi");
         var vm = new ThemePageViewModel(store, AppHost.Get<ILocalizer>(), AppHost.Get<IPlatformServices>());

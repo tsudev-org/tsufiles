@@ -19,9 +19,12 @@ internal static class NightOwlPalette
     /// <summary>Nền trang tối: đen tuyền theo quyết định giao diện chung của hệ sinh thái (phiếu 20261110-05).</summary>
     public const string DarkPage = "#0A0A0A";
 
+    /// <summary>Nền trang sáng (chế độ Sáng hoặc Hệ thống khi hệ điều hành sáng).</summary>
+    public const string LightPage = "#F7F6FB";
+
     private static readonly (string Key, string Light, string Dark)[] Surfaces =
     [
-        ("PageBrush", "#F7F6FB", DarkPage),
+        ("PageBrush", LightPage, DarkPage),
         ("SurfaceBrush", "#FFFFFF", "#141414"),
         ("SurfaceAltBrush", "#EFECF7", "#1E1C24"),
         ("SubtleBorderBrush", "#1A2A1650", "#24FFFFFF"),

@@ -79,9 +79,11 @@ public sealed class UserDataStore
         if (fresh)
         {
             Settings.TurnedOffFields = FormatFields.All.Where(f => f.CanTurnOff && !f.OnByDefault).Select(f => f.Id).ToList();
-            // TsuFiles (ADR-0003): bản cài mới mở bằng kiểu Cú đêm, nền tối theo giao diện chung của hệ sinh thái tsudev.
+            // TsuFiles (ADR-0003, PRODUCT_POLICY mục 1): bản cài mới mở bằng kiểu Cú đêm, sáng/tối và ngôn ngữ theo hệ điều
+            // hành. Máy đã cài có settings.json ghi rõ ngôn ngữ + giao diện đang dùng nên không đổi.
             Settings.Theme.Style = ThemeStyle.NightOwl;
-            Settings.Theme.Mode = ThemeMode.Dark;
+            Settings.Theme.Mode = ThemeMode.System;
+            Settings.Language = ForkDefaults.DefaultLanguage;
         }
         Presets = Read(PresetsPath, TsuFilesJsonContext.Default.ListPreset) ?? BuiltInData.CreatePresets();
         Profiles = Read(ProfilesPath, TsuFilesJsonContext.Default.ListToolbarProfile) ?? BuiltInData.CreateProfiles();

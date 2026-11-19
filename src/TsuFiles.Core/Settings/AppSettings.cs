@@ -38,8 +38,8 @@ public enum CloseAction
 /// <summary>Look and feel.</summary>
 public sealed class ThemeSettings
 {
-    // TsuFiles: bản cài mới nhận Cú đêm ở UserDataStore.Load (chỉ khi chưa có settings.json); giá trị mặc định của lớp giữ
-    // Soft để settings.json thiếu trường này (hoặc đọc lỗi) vẫn là giao diện người dùng đang có.
+    // TsuFiles: bản cài mới nhận Cú đêm + Hệ thống ở UserDataStore.Load (chỉ khi chưa có settings.json); giá trị mặc định
+    // của lớp giữ Soft để settings.json thiếu trường này (hoặc đọc lỗi) vẫn là giao diện người dùng đang có.
     public ThemeStyle Style { get; set; } = ThemeStyle.Soft;
 
     public ThemeMode Mode { get; set; } = ThemeMode.System;
@@ -141,8 +141,11 @@ public sealed class AppSettings
 
     public int SchemaVersion { get; set; } = CurrentSchemaVersion;
 
-    /// <summary><c>"auto"</c>, <c>"en"</c>, <c>"ko"</c> or <c>"zh-CN"</c>. TsuFiles: mặc định tiếng Việt (<see cref="ForkDefaults.DefaultLanguage"/>).</summary>
-    public string Language { get; set; } = ForkDefaults.DefaultLanguage;
+    /// <summary>
+    /// <c>"auto"</c>, <c>"en"</c>, <c>"ko"</c> or <c>"zh-CN"</c>. TsuFiles: bản cài mới nhận <see cref="ForkDefaults.DefaultLanguage"/>
+    /// ("auto") ở UserDataStore.Load; giá trị của lớp giữ tiếng Việt cho settings.json thiếu trường này (máy đã cài).
+    /// </summary>
+    public string Language { get; set; } = ForkDefaults.LegacyLanguage;
 
     public bool StartWithSystem { get; set; } = true;
 

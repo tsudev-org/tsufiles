@@ -14,16 +14,26 @@ internal static class CliTestLanguage
 public sealed class ForkLanguageTests
 {
     [Theory]
-    [InlineData(null, "vi")]
-    [InlineData("", "vi")]
-    [InlineData("vi", "vi")]
-    [InlineData("VI-vn", "vi")]
-    [InlineData("en", "en")]
-    [InlineData("English", "en")]
-    [InlineData("ko", "vi")]           // ngoài danh sách trắng → mặc định
-    [InlineData("en;rm -rf /", "vi")]  // giá trị lạ không bao giờ được dùng nguyên văn
-    public void Language_from_environment_is_whitelisted(string? value, string expected) =>
-        Assert.Equal(expected, CliLanguage.FromEnvironment(value));
+    [InlineData("vi", "en-US", "vi")]
+    [InlineData("VI-vn", "en-US", "vi")]
+    [InlineData("en", "vi-VN", "en")]
+    [InlineData("English", "vi-VN", "en")]
+    [InlineData("ko", "vi-VN", "vi")]           // ngoài danh sách trắng → ngôn ngữ hệ thống
+    [InlineData("en;rm -rf /", "en-US", "en")]  // giá trị lạ không bao giờ được dùng nguyên văn
+    [InlineData("en;rm -rf /", "vi-VN", "vi")]
+    public void Language_from_environment_is_whitelisted(string? value, string system, string expected) =>
+        Assert.Equal(expected, CliLanguage.FromEnvironment(value, system));
+
+    // PRODUCT_POLICY mục 1.4: không đặt TSUFILES_LANG ⇒ hệ thống vi → vi, en → en, ngôn ngữ chưa hỗ trợ (ja) → en.
+    [Theory]
+    [InlineData(null, "vi-VN", "vi")]
+    [InlineData("", "vi", "vi")]
+    [InlineData(null, "en-US", "en")]
+    [InlineData(null, "ja-JP", "en")]
+    [InlineData(null, "vin-TZ", "en")]  // Vinza, không phải tiếng Việt
+    [InlineData(null, "", "en")]        // Linux không có LANG: văn hóa bất biến
+    public void Without_tsufiles_lang_the_system_language_decides(string? value, string system, string expected) =>
+        Assert.Equal(expected, CliLanguage.FromEnvironment(value, system));
 
     [Theory]
     [InlineData("vi")]
@@ -49,7 +59,7 @@ public sealed class ForkLanguageTests
     }
 
     [Fact]
-    public void Help_is_vietnamese_by_default_and_english_on_request()
+    public void Help_is_vietnamese_or_english()
     {
         Assert.Contains("Cách dùng", Help.Text(null, "vi"));
         Assert.Contains("Cách dùng", Help.Text("convert", "vi"));

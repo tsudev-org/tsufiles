@@ -1,6 +1,6 @@
-HƯỚNG DẪN CÀI ĐẶT TSUFILES TRÊN macOS (bản Việt hóa của TsuFiles)
-Bản tiếng Anh: INSTALL.txt. Thông báo của install.sh/uninstall.sh mặc định là
-tiếng Việt; đặt TSUFILES_LANG=en để xem tiếng Anh.
+HƯỚNG DẪN CÀI ĐẶT TSUFILES TRÊN macOS
+Bản tiếng Anh: INSTALL.txt. Thông báo của install.sh/uninstall.sh theo ngôn ngữ
+hệ thống (LANG); đặt TSUFILES_LANG=vi hoặc TSUFILES_LANG=en để chọn.
 
 Yêu cầu macOS 13 trở lên. Gói có bản riêng cho Apple Silicon hoặc Intel, đã kèm
 .NET runtime.

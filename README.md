@@ -8,7 +8,7 @@
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/tsudev-org/tsufiles/badge)](https://scorecard.dev/viewer/?uri=github.com/tsudev-org/tsufiles)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/16719/badge)](https://www.bestpractices.dev/projects/16719)
 
-**Trình chuyển đổi tệp ngoại tuyến, miễn phí, mã nguồn mở - tiếng Việt mặc định, gia cố bảo mật.**
+**Trình chuyển đổi tệp ngoại tuyến, miễn phí, mã nguồn mở - tiếng Việt đầy đủ, gia cố bảo mật.**
 
 Một sản phẩm của [TsuDEV](https://tsudev.com).
 
@@ -47,8 +47,8 @@ gốc build: `gh attestation verify <tệp> -R tsudev-org/tsufiles`.
 
 | Hạng mục | TsuFiles |
 | --- | --- |
-| Ngôn ngữ | **Tiếng Việt** mặc định cho giao diện, trình cài đặt và dòng lệnh; đổi được trong Cài đặt (`auto`, `en`, ...) |
-| Dòng lệnh `tsufiles` | Tiếng Việt mặc định, `TSUFILES_LANG=en` để dùng tiếng Anh; khóa JSON ổn định cho script |
+| Ngôn ngữ | Lần chạy đầu **theo ngôn ngữ hệ điều hành** (tiếng Việt đầy đủ, 22 ngôn ngữ; chưa có bản dịch thì tiếng Anh) cho giao diện, trình cài đặt và dòng lệnh; đổi trong Cài đặt, chọn lại "Mặc định của hệ thống" để theo hệ điều hành |
+| Dòng lệnh `tsufiles` | Tiếng Việt khi hệ thống dùng tiếng Việt, ngoài ra tiếng Anh; `TSUFILES_LANG=vi` / `en` để chọn; khóa JSON ổn định cho script |
 | Cập nhật | Chỉ nhận bản phát hành của `tsudev-org/tsufiles` ký bằng **khóa ECDSA P-256 riêng**; tệp khác bị từ chối |
 | Nhận diện | Logo con cú, kiểu giao diện Cú đêm ([ADR-0003](docs/adr/0003-ten-san-pham-tsufiles.md)) |
 | GitHub Actions | **Ghim theo SHA commit** (chống tag bị sửa) |

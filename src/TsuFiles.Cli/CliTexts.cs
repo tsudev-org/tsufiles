@@ -1,6 +1,6 @@
 // TsuFiles: văn bản của dòng lệnh, đọc từ file dịch của ứng dụng (nhúng sẵn): thông báo lỗi của từng file và tên
-// các preset có sẵn. Mặc định tiếng Việt (vi.json), thiếu chuỗi nào thì lấy tiếng Anh (en.json).
-// Chọn ngôn ngữ bằng biến môi trường TSUFILES_LANG=vi|en (xem CliLanguage).
+// các preset có sẵn. Tiếng Việt (vi.json) khi hệ thống dùng tiếng Việt, ngoài ra tiếng Anh; thiếu chuỗi nào thì lấy tiếng
+// Anh (en.json). Biến môi trường TSUFILES_LANG=vi|en thắng ngôn ngữ hệ thống (xem CliLanguage).
 
 using System.Globalization;
 using System.Text.Json;
@@ -9,23 +9,24 @@ using TsuFiles.Core.Localization;
 
 namespace TsuFiles.Cli;
 
-/// <summary>Ngôn ngữ của dòng lệnh: "vi" (mặc định) hoặc "en".</summary>
+/// <summary>Ngôn ngữ của dòng lệnh: "vi" hoặc "en", mặc định theo ngôn ngữ hệ thống (PRODUCT_POLICY mục 1).</summary>
 internal static class CliLanguage
 {
     /// <summary>Biến môi trường chọn ngôn ngữ dòng lệnh.</summary>
     public const string EnvironmentVariable = "TSUFILES_LANG";
 
-    /// <summary>Ngôn ngữ đang dùng. Chỉ nhận danh sách trắng "vi" | "en"; giá trị lạ quay về mặc định.</summary>
-    public static string Current { get; set; } = FromEnvironment(Environment.GetEnvironmentVariable(EnvironmentVariable));
+    /// <summary>Ngôn ngữ đang dùng. Chỉ nhận danh sách trắng "vi" | "en"; giá trị lạ theo ngôn ngữ hệ thống.</summary>
+    public static string Current { get; set; } =
+        FromEnvironment(Environment.GetEnvironmentVariable(EnvironmentVariable), CultureInfo.CurrentUICulture.Name);
 
     public static bool IsVietnamese => Current == "vi";
 
-    internal static string FromEnvironment(string? value) =>
+    internal static string FromEnvironment(string? value, string? systemLanguage) =>
         value?.Trim().ToLowerInvariant() switch
         {
             "en" or "en-us" or "english" => "en",
             "vi" or "vi-vn" or "vietnamese" => "vi",
-            _ => ForkDefaults.DefaultLanguage,
+            _ => ForkDefaults.CommandLineLanguage(systemLanguage),
         };
 
     /// <summary>Chọn câu theo ngôn ngữ đang dùng.</summary>
