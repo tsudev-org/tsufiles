@@ -11,7 +11,7 @@
 
 - [ ] ⚡⚡ TIẾP THEO: phiếu `logs/handover/20261119-02_ban-giao-tc1-ten-goi-rieng.md` mục 2. TC1 việc B (nút "Gửi bằng
       Lotus Share", #119) ĐÃ GỘP 19/11 → 👤 thử thật trên Windows (cài cả hai). T3 (ngôn ngữ + giao diện theo hệ thống):
-      PR `feat/t3-mac-dinh-theo-he-thong` → gộp khi CI xanh → 👤 deploy website (`cd website && npm run deploy`).
+      #121 ĐÃ GỘP (CI 22/22) + website ĐÃ DEPLOY 19/11 (version `53e4fbfd`, `/` và `/huong-dan/` khớp `dist/`).
       Phase kế của phiếu toàn hệ `20261119-01`: T7 (Pro/Ủng hộ, tsufiles xếp sau sound-db), T8 (ảnh/video website), M4.
 - [ ] Phiếu toàn hệ `20261117-V1` (thống nhất phiên bản): tsufiles là bước 5, CHỜ bước 2-4 (tsucwico, tsuswico,
       trafficmonitor - đo 18/11 chưa repo nào theo khuôn mới); test khóa hợp đồng updater ở #107. Khảo sát
