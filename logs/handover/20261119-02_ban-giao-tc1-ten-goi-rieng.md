@@ -44,7 +44,8 @@ Bài học:
      KHÔNG đổi `NightOwlPalette` sang xanh.
      **Sau đó chủ dự án chốt thêm (19/11, phiếu `~/projects/logs/handover/20261119-TF1_*`): website files.tsudev.com cũng
      tím logo cú** (ECOSYSTEM_IDENTITY 4.2.1, chuẩn v3.8.3) - đảo phần website của #115; chữ TsuDEV giữ nguyên.
-   - **T3**: PRODUCT_POLICY mục 1 - lần chạy đầu ngôn ngữ + giao diện **theo hệ thống** (hiện TsuFiles ÉP tiếng Việt:
+   - **T3** (XONG phần mã 19/11, phiên tsufiles-d3: PR `feat/t3-mac-dinh-theo-he-thong`; máy đã cài giữ nguyên vì settings.json
+     luôn ghi rõ `language`/`theme`, thiếu trường ⇒ vi + Soft): PRODUCT_POLICY mục 1 - lần chạy đầu ngôn ngữ + giao diện **theo hệ thống** (hiện TsuFiles ÉP tiếng Việt:
      ngược quy ước). Sửa cùng lúc mã, README ("Tiếng Việt mặc định" ở bảng Điểm nổi bật), website, 3 test bắt buộc
      (hệ thống `vi`, `en`, ngôn ngữ chưa hỗ trợ ⇒ tiếng Anh; hệ thống sáng/tối).
 4. V1 bước 5 (khuôn phiên bản `26.M.DDNN`): vẫn CHỜ tsucwico/tsuswico/trafficmonitor; test #107 khóa hợp đồng.
