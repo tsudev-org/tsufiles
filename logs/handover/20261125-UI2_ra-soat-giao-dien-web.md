@@ -18,4 +18,4 @@
 ## Kết quả xử lý
 
 - 25/11/2026 - tsudev-3e: mở phiếu.
-- 25/11/2026 - tsufiles-e9: mục 0 kiểm ở files.tsudev.com: (1) không có fade-in màn đầu, (2) font tự host CHƯA preload ⇒ thêm preload Be Vietnam Pro 400 + Lexend 600 (latin + vietnamese) trong PR #STD50; `size-adjust` cho font dự phòng chưa đo - phiên sau, (3) không có scroll-reveal. Phần A (quay khung hình, 3 khổ) và B: phiên sau, cùng PR 2 STD50.
+- 25/11/2026 - tsufiles-e9: mục 0 kiểm ở files.tsudev.com: (1) không có fade-in màn đầu, (2) font tự host CHƯA preload ⇒ thêm preload Be Vietnam Pro 400 + Lexend 600 (latin + vietnamese) trong PR #124; `size-adjust` cho font dự phòng chưa đo - phiên sau, (3) không có scroll-reveal. Phần A (quay khung hình, 3 khổ) và B: phiên sau, cùng PR 2 STD50.
