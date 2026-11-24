@@ -1,0 +1,105 @@
+{
+  "$comment": "Nguồn dữ liệu của trang https://files.tsudev.com/security/ (phiếu 20261125-SEC2). Chỉ ghi số đo THẬT, mỗi mục 'bang_chung' phải có liên kết tới trang kết quả do bên thứ ba lưu trữ + ngày đo (YYYY-MM-DD). Không có liên kết kiểm chứng => đưa vào 'chua_co' kèm lý do. website/src/lib/tin-cay.ts dừng build khi thiếu trường hoặc ngày đo quá 120 ngày.",
+  "cap_nhat": "2026-11-25",
+  "bang_chung": [
+    {
+      "ma": "E5",
+      "ten": "SSL Labs (Qualys)",
+      "ket_qua": "A+ trên cả 4 địa chỉ IPv4/IPv6",
+      "lien_ket": "https://www.ssllabs.com/ssltest/analyze.html?d=files.tsudev.com&hideResults=on",
+      "ngay_do": "2026-11-25",
+      "ghi_chu": "Kiểm cấu hình TLS của files.tsudev.com; bấm liên kết để chạy lại (không công khai lên bảng xếp hạng)."
+    },
+    {
+      "ma": "E6",
+      "ten": "Mozilla HTTP Observatory",
+      "ket_qua": "A+ (140 điểm, đạt 12/12 bài kiểm tra)",
+      "lien_ket": "https://developer.mozilla.org/en-US/observatory/analyze?host=files.tsudev.com",
+      "ngay_do": "2026-11-25",
+      "ghi_chu": "Kiểm header bảo mật: CSP không 'unsafe-inline', HSTS có preload, X-Content-Type-Options, Referrer-Policy, chống nhúng khung."
+    },
+    {
+      "ma": "E1",
+      "ten": "OpenSSF Best Practices",
+      "ket_qua": "Passing (100%)",
+      "lien_ket": "https://www.bestpractices.dev/projects/16719",
+      "ngay_do": "2026-11-25",
+      "ghi_chu": "Hồ sơ tự khai của dự án, mỗi tiêu chí kèm liên kết bằng chứng; bestpractices.dev kiểm một phần tự động."
+    },
+    {
+      "ma": "E2",
+      "ten": "OpenSSF Scorecard",
+      "ket_qua": "7.2/10",
+      "lien_ket": "https://scorecard.dev/viewer/?uri=github.com/tsudev-org/tsufiles",
+      "ngay_do": "2026-11-24",
+      "ghi_chu": "Chấm tự động thực hành bảo mật của repo. Điểm thấp: Code-Review 0 (một người bảo trì, không có người duyệt thứ hai), Maintained 0 (repo tạo chưa đủ 90 ngày), Fuzzing 0 (bộ fuzz chạy trong CI riêng, chưa phải OSS-Fuzz/ClusterFuzzLite mà Scorecard nhận), Branch-Protection 3."
+    },
+    {
+      "ma": "E3",
+      "ten": "Bản phát hành 2.4.1-vn.1: SHA-256 ký, chứng thực build, SBOM",
+      "ket_qua": "Mỗi bản có SHA256SUMS ký ECDSA P-256 (.sig), chứng thực nguồn gốc build của GitHub Actions và SBOM CycloneDX",
+      "lien_ket": "https://github.com/tsudev-org/tsufiles/releases/tag/v2.4.1-vn.1",
+      "ngay_do": "2026-11-14",
+      "ghi_chu": "Cách tự kiểm ở mục \"Tự kiểm bản tải về\" bên dưới."
+    },
+    {
+      "ma": "E3",
+      "ten": "VirusTotal - bộ cài Windows 2.4.1-vn.1",
+      "ket_qua": "0/74 engine gắn cờ",
+      "lien_ket": "https://www.virustotal.com/gui/file/3b749a46fab5fd500633c9c9fa5f22fe68a393dd793ad8a22e893dd1aa266b6a",
+      "ngay_do": "2026-11-22"
+    },
+    {
+      "ma": "E3",
+      "ten": "VirusTotal - bản di động Windows 2.4.1-vn.1",
+      "ket_qua": "0/74 engine gắn cờ",
+      "lien_ket": "https://www.virustotal.com/gui/file/3bd7d4e36d0db19f4be4fcd0b9e5ef30fe870b1b70fe085d028d332f18f310f0",
+      "ngay_do": "2026-11-22"
+    },
+    {
+      "ma": "E3",
+      "ten": "VirusTotal - macOS Apple Silicon (dmg) 2.4.1-vn.1",
+      "ket_qua": "0/74 engine gắn cờ",
+      "lien_ket": "https://www.virustotal.com/gui/file/b404220289bcb5bddabefabb423a6232ce788f0a5bdce1316122bce1e0fa9127",
+      "ngay_do": "2026-11-25",
+      "ghi_chu": "Lần quét 22/11/2026 có 1/74 (Microsoft, nhận diện học máy Wacatac.C!ml); quét lại 25/11/2026 đã sạch."
+    },
+    {
+      "ma": "E3",
+      "ten": "VirusTotal - macOS Intel (dmg) 2.4.1-vn.1",
+      "ket_qua": "0/74 engine gắn cờ",
+      "lien_ket": "https://www.virustotal.com/gui/file/919caa346d47032bc8dd4dd1c61944c25b1c32540e3e1d365892ebdc8e1b261f",
+      "ngay_do": "2026-11-22"
+    },
+    {
+      "ma": "E10",
+      "ten": "Báo lỗ hổng riêng tư trên GitHub",
+      "ket_qua": "Đang bật; có chính sách SECURITY.md",
+      "lien_ket": "https://github.com/tsudev-org/tsufiles/security",
+      "ngay_do": "2026-11-25"
+    }
+  ],
+  "chua_co": [
+    {
+      "ma": "E8",
+      "ten": "Chữ ký số Authenticode cho bản Windows",
+      "ly_do": "Chưa có: chưa nộp đơn SignPath Foundation (ký mã miễn phí cho dự án mã nguồn mở) và chưa mua chứng thư thương mại. Thay vào đó mỗi bản có SHA-256 ký ECDSA, chứng thực build; trình cập nhật từ chối bản không đúng chữ ký."
+    },
+    {
+      "ma": "E7",
+      "ten": "HSTS preload",
+      "ly_do": "Website đã gửi header Strict-Transport-Security có preload; tên miền gốc tsudev.com chưa nộp vào danh sách preload của trình duyệt (việc chung của hệ TsuDEV).",
+      "lien_ket": "https://hstspreload.org/?domain=tsudev.com"
+    },
+    {
+      "ma": "E9",
+      "ten": "Tín nhiệm mạng / Thông báo Bộ Công Thương",
+      "ly_do": "Chưa có cho files.tsudev.com. Website không bán hàng, không thanh toán nên không thuộc diện thông báo Bộ Công Thương."
+    },
+    {
+      "ma": "macOS",
+      "ten": "Công chứng Apple (notarize)",
+      "ly_do": "Chưa có: cần tài khoản Apple Developer trả phí. Bản macOS là bản xem trước, lần mở đầu phải chọn Vẫn mở trong Cài đặt hệ thống."
+    }
+  ]
+}

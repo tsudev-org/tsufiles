@@ -1,0 +1,44 @@
+/* Lexend tự host (SIL OFL 1.1, xem /fonts/OFL-Lexend.txt; @fontsource/lexend 5.3.0). Font tiêu đề của TsuFiles theo
+   tsudev-standards DESIGN_SYSTEM 1.2 (products/files.json "fontDisplay"): chỉ hai độ đậm 500/600. */
+@font-face {
+  font-family: 'Lexend';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url('/fonts/lexend-500-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Lexend';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url('/fonts/lexend-500-latin-ext.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Lexend';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url('/fonts/lexend-500-vietnamese.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Lexend';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url('/fonts/lexend-600-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Lexend';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url('/fonts/lexend-600-latin-ext.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Lexend';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url('/fonts/lexend-600-vietnamese.woff2') format('woff2');
+}

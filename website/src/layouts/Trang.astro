@@ -2,8 +2,11 @@
 // Khung chung: <head> theo ECOSYSTEM_IDENTITY mục 2.2, đầu trang, chân trang nối về tsudev.com (mục 4).
 import '../styles/fonts.css';
 import '../styles/fonts-mono.css';
-import '../styles/tokens.css';
-import '../styles/palette.css';
+import '../styles/fonts-display.css';
+// Token chuẩn v5 (nền chung + bản sắc files) nạp thẳng từ bản sao .standards/ - KHÔNG chép mã màu vào CSS riêng
+// (DESIGN_SYSTEM 1.2.1). Bảng tím logo cú nằm ở .standards/tokens/products/files.json.
+import '../../../.standards/tokens/tokens.css';
+import '../../../.standards/tokens/products.css';
 import '../styles/site.css';
 import { REPO_URL, SAN_PHAM, SITE } from '../lib/noi-dung';
 
@@ -33,7 +36,7 @@ const cheDo = [
 const dangO = (href: string) => duongDan.startsWith(href);
 ---
 <!doctype html>
-<html lang="vi" data-theme="dark">
+<html lang="vi" data-theme="dark" data-product="files">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -112,6 +115,7 @@ const dangO = (href: string) => duongDan.startsWith(href);
             <ul class="chan-trang__lien-ket">
               <li><a href="/nhat-ky/">Nhật ký thay đổi</a></li>
               <li><a href="/ban-quyen/">Bản quyền</a></li>
+              <li><a href="/security/">Bảo mật và tin cậy</a></li>
               <li><a href="/ung-ho/">Ủng hộ</a></li>
               <li><a href={REPO_URL} target="_blank" rel="noopener noreferrer">Mã nguồn</a></li>
               <li><a href={`${REPO_URL}/issues`} target="_blank" rel="noopener noreferrer">Báo lỗi, góp ý</a></li>

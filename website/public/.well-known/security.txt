@@ -1,6 +1,7 @@
-# Báo cáo lỗ hổng bảo mật của TsuFiles (RFC 9116)
+# Báo cáo lỗ hổng bảo mật của TsuFiles (RFC 9116). Expires <= 1 năm: scripts/check-dist.mjs dừng build khi còn < 30 ngày.
+Contact: mailto:security@tsudev.com
 Contact: https://github.com/tsudev-org/tsufiles/security/advisories/new
-Expires: 2027-11-01T00:00:00.000Z
+Expires: 2027-11-24T00:00:00.000Z
 Preferred-Languages: vi, en
 Canonical: https://files.tsudev.com/.well-known/security.txt
-Policy: https://files.tsudev.com/bao-mat/
+Policy: https://files.tsudev.com/security/

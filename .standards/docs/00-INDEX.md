@@ -25,8 +25,9 @@
 
 **Bạn đang làm chức năng đăng nhập, đăng ký, tài khoản:**
 1. [`AUTH_AND_ACCOUNT.md`](AUTH_AND_ACCOUNT.md) - kiến trúc, ba lối vào, xác minh, ma trận quyền
-2. [`SECURITY_BASELINE.md`](SECURITY_BASELINE.md) mục 6 - ngưỡng mật khẩu, phiên, phân quyền
-3. [`ECOSYSTEM_IDENTITY.md`](ECOSYSTEM_IDENTITY.md) mục 6 và 7 - ảnh đại diện, trang hồ sơ
+2. [`CROSS_DEVICE_LOGIN.md`](CROSS_DEVICE_LOGIN.md) - "Quét để đăng nhập" bằng QR + mã khớp
+3. [`SECURITY_BASELINE.md`](SECURITY_BASELINE.md) mục 6 - ngưỡng mật khẩu, phiên, phân quyền
+4. [`ECOSYSTEM_IDENTITY.md`](ECOSYSTEM_IDENTITY.md) mục 6 và 7 - ảnh đại diện, trang hồ sơ
 
 **Bạn đang làm bảng, danh sách, modal có bản ghi:**
 1. [`DATA_TABLE.md`](DATA_TABLE.md) - bộ chọn số bản ghi, vị trí, hành vi
@@ -41,6 +42,7 @@
 5. [`DISTRIBUTION_TRUST.md`](DISTRIBUTION_TRUST.md) - cửa hàng, ký mã, chống báo nhầm antivirus, hồ sơ nền tảng
 6. [`PRODUCT_POLICY.md`](PRODUCT_POLICY.md) - ngôn ngữ/giao diện theo hệ thống, không quảng cáo, Pro + Ủng hộ, huy hiệu, iOS, ảnh/video website, lưu cục bộ - đồng bộ là Pro
 7. [`STORE_SUBMISSION.md`](STORE_SUBMISSION.md) - phiên agent tự điền biểu mẫu nộp duyệt cửa hàng/antivirus
+8. [`EMAIL.md`](EMAIL.md) - địa chỉ `@tsudev.com` công bố trên README, cửa hàng, SECURITY/PRIVACY phải có trong danh mục
 
 **Bạn sắp commit hoặc mở PR:**
 1. [`GIT_WORKFLOW.md`](GIT_WORKFLOW.md) - nhánh, commit, PR
@@ -52,6 +54,9 @@
 2. [`KNOWLEDGE_BASE.md`](KNOWLEDGE_BASE.md) - kho tri thức AKB: `akb start` đầu phiên, `akb search` trước khi tự mò, `akb sync` cuối phiên
 3. [`SECURITY_BASELINE.md`](SECURITY_BASELINE.md) mục 12 - ranh giới của agent
 4. [`LANGUAGE_SELECTION.md`](LANGUAGE_SELECTION.md) mục 8 - ràng buộc khi chọn stack
+
+**Bạn đang đụng tới thư điện tử (`*@tsudev.com`, gửi thư từ mã, DNS thư):**
+1. [`EMAIL.md`](EMAIL.md) - danh mục địa chỉ, gửi qua Resend, DNS chỉ phiên điều phối sửa, quy trình thêm địa chỉ, bảng lỗi
 
 **Bạn đang làm chức năng nội dung:**
 1. [`RICH_TEXT_EDITOR.md`](RICH_TEXT_EDITOR.md) - trình soạn thảo ngang Word
@@ -72,6 +77,7 @@
 | [`SYNC.md`](SYNC.md) | Đồng bộ quy ước xuống repo con | Bất khả xâm phạm |
 | [`PROJECT_STRUCTURE.md`](PROJECT_STRUCTURE.md) | Cây thư mục chuẩn | Bất khả xâm phạm |
 | [`AUTH_AND_ACCOUNT.md`](AUTH_AND_ACCOUNT.md) | Đăng nhập, đăng ký, xác minh tài khoản | Bất khả xâm phạm |
+| [`CROSS_DEVICE_LOGIN.md`](CROSS_DEVICE_LOGIN.md) | Đăng nhập chéo thiết bị bằng QR + mã khớp | Bất khả xâm phạm |
 | [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md) | Giao diện, token, component | Bất khả xâm phạm |
 | [`DATA_TABLE.md`](DATA_TABLE.md) | Vùng bản ghi, bộ chọn số bản ghi | Bất khả xâm phạm |
 | [`BRAND_ASSETS.md`](BRAND_ASSETS.md) | Logo, wordmark, favicon, icon ứng dụng | Bất khả xâm phạm |

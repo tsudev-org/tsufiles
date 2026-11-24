@@ -52,6 +52,12 @@
     <AvaloniaResource Include="..\..\THIRD-PARTY-NOTICES.md" Link="Assets\THIRD-PARTY-NOTICES.md" />
   </ItemGroup>
 
+  <!-- Token giao diện chuẩn (tsudev-standards v5, DESIGN_SYSTEM 1.2.1/7): lớp nền + bản sắc `files`, đọc ở Services/StandardTokens.cs. -->
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\.standards\tokens\design-tokens.json" LogicalName="TsuFiles.Standards.design-tokens.json" Link="Standards\design-tokens.json" />
+    <EmbeddedResource Include="..\..\.standards\tokens\products\files.json" LogicalName="TsuFiles.Standards.product.json" Link="Standards\files.json" />
+  </ItemGroup>
+
   <ItemGroup>
     <InternalsVisibleTo Include="TsuFiles.App.Tests" />
   </ItemGroup>

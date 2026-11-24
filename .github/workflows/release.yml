@@ -21,7 +21,7 @@ on:
     tags: ['v*']
 
 # TsuFiles: quyền tối thiểu ở cấp workflow (OpenSSF Scorecard Token-Permissions); chỉ job windows (tạo bản nháp,
-# tải tệp lên) xin contents: write. portable.yml chỉ đọc.
+# tải tệp lên) và job virustotal (sửa notes bản nháp) xin contents: write. portable.yml chỉ đọc.
 permissions:
   contents: read
 
@@ -208,3 +208,16 @@ jobs:
           Set-Content $notesFile ($parts -join "`n`n") -Encoding utf8
           # TsuFiles: tiêu đề bản phát hành mang tên hiển thị của fork.
           gh release create '${{ github.ref_name }}' --draft --title "TsuFiles $version" --notes-file $notesFile --verify-tag @files
+
+  # TsuFiles: quét VirusTotal bản NHÁP trước khi công bố (phiếu 20261122-AV1, DISTRIBUTION_TRUST mục 3). Workflow dùng
+  # chung của tsudev-org ghim SHA; có engine gắn cờ ⇒ giữ nháp + báo đỏ. Chưa có secret VT_API_KEY ⇒ job xanh, ghi
+  # "bỏ qua". Tệp Windows ký sau (build/sign-release.ps1) thì quét lại bằng tay theo docs/store/antivirus.md mục 3.
+  virustotal:
+    needs: windows
+    permissions:
+      contents: write
+    uses: tsudev-org/.github/.github/workflows/virustotal.yml@8a393ebd89349300637c8c57e89c12492b174e4d # main 18/11/2026
+    with:
+      tag: ${{ github.ref_name }}
+    secrets:
+      VT_API_KEY: ${{ secrets.VT_API_KEY }}

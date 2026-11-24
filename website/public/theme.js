@@ -1,13 +1,13 @@
 // Giao diện của files.tsudev.com, cùng hợp đồng với tsudev.com (phiếu logs/handover/20261110-05 mục 3):
-// localStorage "tsudev-theme" = light|dark|system; giá trị cũ "warm" đọc thành "light"; không có/không đọc được -> "dark".
+// localStorage "tsudev-theme" = light|dark|system; giá trị cũ "warm" đọc thành "light"; không có/không đọc được -> "system" (PRODUCT_POLICY mục 1.2: lần đầu theo hệ điều hành).
 // Nạp CHẶN trong <head>, sau <meta name="theme-color"> và trước stylesheet (không defer/async/module): đặt data-theme
 // và màu thanh địa chỉ trước khung hình đầu, không nháy màu. Tệp tĩnh cùng nguồn nên CSP chỉ cần script-src 'self'.
 (function () {
   'use strict';
   var KHOA = 'tsudev-theme';
   var LUA_CHON = ['light', 'dark', 'system'];
-  var MAC_DINH = 'dark';
-  var NEN = { light: '#fafafa', dark: '#0a0a0a' };   // --bg-base của src/styles/palette.css
+  var MAC_DINH = 'system';
+  var NEN = { light: '#fafafa', dark: '#0a0a0a' };   // --bg-base của .standards/tokens/tokens.css
   var goc = document.documentElement;
   var heThong = null;
   try { heThong = window.matchMedia('(prefers-color-scheme: dark)'); } catch (e) { heThong = null; }
