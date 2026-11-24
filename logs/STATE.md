@@ -9,6 +9,9 @@
 
 ## Hàng đợi task (làm từ trên xuống)
 
+- [ ] ⚡⚡⚡ TIẾP THEO: phiếu `logs/handover/20261125-01_ban-giao-std50-sec2-av1.md` mục 2: STD50 PR 2 (bố cục
+      `cong-cu` + hoạ tiết `quy-dao` + og-image) gộp với UI2 phần A/B; SignPath (SEC2 E8); PRO1/PRO2 + QR4 khi có
+      thư viện `TsuSync`. 👤: secret `VT_API_KEY`, ĐỔI khóa VirusTotal (đã lộ vào log phiên 25/11).
 - [ ] ⚡⚡ TIẾP THEO: phiếu `logs/handover/20261119-02_ban-giao-tc1-ten-goi-rieng.md` mục 2. TC1 việc B (nút "Gửi bằng
       Lotus Share", #119) ĐÃ GỘP 19/11 → 👤 thử thật trên Windows (cài cả hai). T3 (ngôn ngữ + giao diện theo hệ thống):
       #121 ĐÃ GỘP (CI 22/22) + website ĐÃ DEPLOY 19/11 (version `53e4fbfd`, `/` và `/huong-dan/` khớp `dist/`).
@@ -68,6 +71,11 @@
 | --- | --- | --- |
 
 ## Đã hoàn thành (mới nhất trên cùng)
+
+- 25/11/2026 - #124 gộp (`783437d3`): chuẩn v5.4.0, bản sắc `files` (token chuẩn trên website + app desktop đọc JSON
+  chuẩn lúc build, Lexend, bo góc mem, mặc định Hệ thống), trang `/security/` (SEC2), AV1 + SEC1 ĐÓNG, UI1 test viên
+  chỉ báo, preload font (UI2 mục 0). Website deploy version `91a753e3`, đã kiểm nội dung production. Bàn giao
+  `20261125-01`.
 
 - 19/11/2026 - #119 TC1 việc B đổi hướng (nút "Gửi bằng Lotus Share", không tự nói giao thức) gộp sau khi chạy lại job
   macOS Intel (`hdiutil create failed - Resource busy`, chập chờn của runner). T3: bản cài mới ngôn ngữ `auto` + Cú đêm
