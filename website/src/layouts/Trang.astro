@@ -46,6 +46,12 @@ const dangO = (href: string) => duongDan.startsWith(href);
     <meta name="color-scheme" content="dark light">
     <!-- Giao diện: chạy chặn, SAU meta theme-color và TRƯỚC stylesheet, để không nháy màu (public/theme.js; CSP script-src 'self') -->
     <script is:inline src="/theme.js"></script>
+    <!-- Font màn đầu nạp sớm (phiếu UI2 mục 0.2): thân Be Vietnam Pro 400 + tiêu đề Lexend 600, subset latin + vietnamese,
+         để chữ không vẽ bằng font hệ thống rồi nhảy bề rộng khi tải lạnh -->
+    <link rel="preload" href="/fonts/be-vietnam-pro-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/be-vietnam-pro-400-vietnamese.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/lexend-600-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/lexend-600-vietnamese.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="canonical" href={url}>
     <meta property="og:site_name" content="TsuDEV">
     <meta property="og:type" content="website">
