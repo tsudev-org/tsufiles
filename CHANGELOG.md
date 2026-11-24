@@ -30,6 +30,8 @@ en: PDF to DOCX keeps digital signatures, stamps and borderless tables of offici
 en: Send results to a phone or another computer with Lotus Share right from the result card (when Lotus Share is installed)
 en: Closing the window keeps TsuFiles running in the system tray; the Windows taskbar shows the right icon
 en: New installs follow the computer's language and light/dark mode; existing installs keep their choices
+vi: Màu Cú đêm theo bộ nhận diện chuẩn TsuDEV: tím logo cú #A970FF (Tối) / #7C3AED (Sáng), viền nút rõ hơn
+en: Night Owl colours follow the TsuDEV design standard: owl purple #A970FF (dark) / #7C3AED (light), clearer button borders
 -->
 
 ### English summary
@@ -40,6 +42,7 @@ en: New installs follow the computer's language and light/dark mode; existing in
 - **Send with Lotus Share:** when Lotus Share is installed, each result card on Home has a share button that opens Lotus Share with the results ready to send. TsuFiles opens no extra network port for this.
 - **Tray:** closing the window now keeps TsuFiles running in the tray (change it in Settings). The GitHub and Donate buttons left the sidebar.
 - **Language and theme follow the system:** a new install starts in the operating system's language (English when TsuFiles has no translation for it) and in the Night Owl style following the system's light or dark mode. Existing installs keep their language and theme. The CLI and the Linux/macOS install scripts speak Vietnamese on a Vietnamese system and English otherwise; `TSUFILES_LANG=vi` or `en` still chooses.
+- **Design standard v5:** the Night Owl palette is read at build time from the TsuDEV design tokens (owl purple #A970FF / #7C3AED, shared surfaces, 3:1 button borders); files.tsudev.com uses the same tokens, the Lexend heading font and the soft corner set, follows the system light/dark mode on first visit and has a new [/security](https://files.tsudev.com/security/) page with third-party-verifiable evidence (SSL Labs, Observatory, Scorecard, Best Practices, VirusTotal).
 
 ### Chi tiết (tiếng Việt)
 
@@ -64,6 +67,11 @@ en: New installs follow the computer's language and light/dark mode; existing in
   Anh) và kiểu Cú đêm theo chế độ sáng/tối của máy. Máy đã cài giữ nguyên ngôn ngữ và giao diện đang dùng. Dòng lệnh và
   script cài/gỡ Linux/macOS nói tiếng Việt khi hệ thống dùng tiếng Việt, ngoài ra tiếng Anh; `TSUFILES_LANG=vi` hoặc `en`
   vẫn chọn được.
+- **Bộ nhận diện chuẩn v5** (tsudev-standards v5.4.0, phiếu STD50): màu Cú đêm đọc lúc build từ token chuẩn
+  (`.standards/tokens/`): tím logo cú `#A970FF` (Tối) / `#7C3AED` (Sáng), nền và chữ theo lớp nền chung, viền nút đạt
+  3:1. Website files.tsudev.com dùng cùng token, font tiêu đề Lexend, bộ bo góc "mềm", lần đầu theo chế độ sáng/tối của
+  máy, và có trang [/security](https://files.tsudev.com/security/) liệt kê bằng chứng tin cậy tự kiểm được (SSL Labs,
+  Observatory, Scorecard, Best Practices, VirusTotal).
 - Kiểm thử: trang điện thoại chạy đầu-cuối trên WebKit giả lập iPhone 8 ở mỗi PR chạm phần chia sẻ
   (`tests/share-web/`).
 

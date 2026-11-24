@@ -37,7 +37,7 @@ function kiemTra(tep, html) {
   if (luaChon !== 'light,dark,system') loi.push(`${ten}: bộ chọn giao diện cần đúng light,dark,system: ${luaChon}`);
   const viTriChon = html.indexOf('id="giao-dien"');
   if (viTriChon < html.indexOf('<footer') || !/id="giao-dien" role="radiogroup" aria-label="Giao diện"/.test(html)) loi.push(`${ten}: bộ chọn giao diện phải là radiogroup trong <footer>`);
-  if (!/<html lang="vi" data-theme="dark">/.test(html)) loi.push(`${ten}: mặc định phải là data-theme="dark"`);
+  if (!/<html lang="vi" data-theme="dark" data-product="files">/.test(html)) loi.push(`${ten}: thẻ html phải có data-theme="dark" (dự phòng khi tắt JS) và data-product="files" (bản sắc v5)`);
   if (/<style[\s>]/.test(html) || / style="/.test(html)) loi.push(`${ten}: có CSS nội tuyến (CSP chặn)`);
   for (const a of html.matchAll(/<a [^>]*target="_blank"[^>]*>/g)) {
     if (!a[0].includes('rel="noopener noreferrer"')) loi.push(`${ten}: thiếu rel noopener noreferrer: ${a[0]}`);
@@ -81,6 +81,16 @@ for (const [ten, duong] of lienKet) {
   }
   const headers = readFileSync(join(dist, '_headers'), 'utf8');
   if (!/\/phien-ban\.json\n(?:  .+\n)*  Cache-Control: public, max-age=300/.test(headers)) loi.push('_headers: phien-ban.json cần Cache-Control max-age=300');
+}
+// security.txt (RFC 9116, phiếu 20261125-SEC2 E4): có mailto security@tsudev.com, Policy trỏ /security/, Expires còn
+// >= 30 ngày và không quá 1 năm tính từ lúc build - quá hạn thì dừng build để nhớ gia hạn.
+{
+  const st = readFileSync(join(dist, '.well-known/security.txt'), 'utf8');
+  if (!/^Contact: mailto:security@tsudev\.com$/m.test(st)) loi.push('security.txt: thiếu Contact: mailto:security@tsudev.com');
+  if (!/^Policy: https:\/\/files\.tsudev\.com\/security\/$/m.test(st)) loi.push('security.txt: Policy phải là https://files.tsudev.com/security/');
+  const het = Date.parse(st.match(/^Expires: (\S+)$/m)?.[1] ?? '');
+  const conNgay = (het - Date.now()) / 86_400_000;
+  if (!(conNgay >= 30 && conNgay <= 366)) loi.push(`security.txt: Expires còn ${Math.round(conNgay)} ngày (cần 30-366)`);
 }
 for (const l of loi) console.error('[check-dist] LỖI', l);
 console.log(`[check-dist] ${loi.length} lỗi`);
