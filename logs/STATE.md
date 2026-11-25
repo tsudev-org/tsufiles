@@ -9,9 +9,9 @@
 
 ## Hàng đợi task (làm từ trên xuống)
 
-- [ ] ⚡⚡⚡ TIẾP THEO: phiếu `logs/handover/20261125-01_ban-giao-std50-sec2-av1.md` mục 2: STD50 PR 2 (bố cục
-      `cong-cu` + hoạ tiết `quy-dao` + og-image) gộp với UI2 phần A/B; SignPath (SEC2 E8); PRO1/PRO2 + QR4 khi có
-      thư viện `TsuSync`. 👤: secret `VT_API_KEY`, ĐỔI khóa VirusTotal (đã lộ vào log phiên 25/11).
+- [ ] ⚡⚡⚡ TIẾP THEO: phiếu `logs/handover/20261125-02_ban-giao-std50-pr2-ui2-signpath.md` mục 2: UI2 phần B khi
+      tsudev-standards có bảng màu Sáng dịu; PRO1/PRO2 + QR4 khi có thư viện `TsuSync`; SignPath nộp khi đạt >= 4/6
+      (đo 25/11: 1/6). 👤: secret `VT_API_KEY`, ĐỔI khóa VirusTotal (đã lộ vào log phiên 25/11).
 - [ ] ⚡⚡ TIẾP THEO: phiếu `logs/handover/20261119-02_ban-giao-tc1-ten-goi-rieng.md` mục 2. TC1 việc B (nút "Gửi bằng
       Lotus Share", #119) ĐÃ GỘP 19/11 → 👤 thử thật trên Windows (cài cả hai). T3 (ngôn ngữ + giao diện theo hệ thống):
       #121 ĐÃ GỘP (CI 22/22) + website ĐÃ DEPLOY 19/11 (version `53e4fbfd`, `/` và `/huong-dan/` khớp `dist/`).
@@ -71,6 +71,11 @@
 | --- | --- | --- |
 
 ## Đã hoàn thành (mới nhất trên cùng)
+
+- 25/11/2026 - #126 gộp (`391c97e9`): STD50 PR 2 (trang chủ `cong-cu`, hoạ tiết `quy-dao`, og-image) - phiếu STD50
+  ĐÓNG; UI2 phần A (tràn ngang /ban-quyen/ 360, trình chép theme.js, font dự phòng đo thật). #127 gộp (`305347a2`):
+  trang `/code-signing-policy/` + đơn SignPath nháp (CHƯA nộp, 1/6). Website deploy version `22a79ee0`, rà production
+  12 trang x 3 khổ x 2 chế độ sạch, LCP 0,9-1,5 s, CLS <= 0,0003. Bàn giao `20261125-02`.
 
 - 25/11/2026 - #124 gộp (`783437d3`): chuẩn v5.4.0, bản sắc `files` (token chuẩn trên website + app desktop đọc JSON
   chuẩn lúc build, Lexend, bo góc mem, mặc định Hệ thống), trang `/security/` (SEC2), AV1 + SEC1 ĐÓNG, UI1 test viên
