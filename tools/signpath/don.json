@@ -1,0 +1,18 @@
+{
+  "_ghi_chu": "Nội dung đơn SignPath Foundation (https://signpath.org/apply) - phần CÔNG KHAI. Họ tên/email người nộp ở ~/.config/tsudev/signpath-applicant.json (ngoài repo). {{...}} được tools/signpath/nop-don.mjs thay bằng số đo thật lúc chạy. Chỉ CHỦ DỰ ÁN nộp, khi đạt >= 4/6 ngưỡng (phiếu toàn hệ ~/projects/logs/handover/20261113-02 mục 5); đo 25/11/2026: 1/6.",
+  "name": "TsuFiles",
+  "repository_url": "https://github.com/tsudev-org/tsufiles",
+  "homepage_url": "https://files.tsudev.com",
+  "download_url": "https://files.tsudev.com/tai-ve/",
+  "privacy_policy_url": "https://tsudev.com/privacy",
+  "wikipedia_url": "",
+  "tagline": "Offline drag-and-drop file converter for Windows, macOS and Linux: 260+ formats, files never leave the computer.",
+  "category": "Productivity",
+  "description": "TsuFiles is a desktop file converter (C# / .NET 10, Avalonia, MIT) with a command-line tool. Hold a key and drag files: a ring of target formats opens at the cursor; drop on one to convert. It handles 260+ formats (images incl. HEIC/RAW, PDF to DOCX, Office documents without Microsoft Office, HWP, video/audio via optional FFmpeg, e-books, archives, CAD, fonts, 3D), batch and multi-step conversions, presets and watched folders. Files are converted locally: no upload, no telemetry, no account; optional engines are downloaded only on request and checked against pinned SHA-256. It hardens its readers against zip slip, decompression bombs, XXE and documents that fetch remote content, with fuzz tests. Windows releases are built only by GitHub Actions from version tags: an installer with a standard uninstaller (all users or current user) and a portable zip. Every release ships a CycloneDX SBOM, SLSA build provenance (gh attestation verify), SHA256SUMS signed with the project's update key (the built-in updater refuses anything else) and VirusTotal reports. Code signing policy: https://files.tsudev.com/code-signing-policy/",
+  "reputation": "Public since November 2026, {{so_ban}} releases (latest {{ban_moi}}), {{luot_tai}} release downloads, {{sao}} GitHub stars. Distributed via Scoop (scoop install tsudev/tsudev-files), Homebrew (brew install --cask tsudev-org/tap/tsudev-files) and signed APT/RPM repositories at pkg.tsudev.com{{winget}}. OpenSSF Best Practices passing: https://www.bestpractices.dev/projects/16719 . OpenSSF Scorecard {{scorecard}}: https://securityscorecards.dev/viewer/?uri=github.com/tsudev-org/tsufiles . Public security evidence: https://files.tsudev.com/security/ . All changes go through pull requests with required CI (tests on Windows, Linux and macOS, CodeQL, secret scanning); readers are fuzz-tested in a separate workflow. Part of the TsuDEV open-source ecosystem: https://tsudev.com",
+  "maintainer": "Individual maintainer(s)",
+  "build_system": "GitHub Actions",
+  "discovery_channel": "Developer platforms (e.g. GitHub)",
+  "discovery_source": "",
+  "dong_y": { "code_of_conduct": true, "marketing": false, "processing": true }
+}

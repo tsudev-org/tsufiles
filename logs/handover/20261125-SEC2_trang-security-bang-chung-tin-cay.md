@@ -24,3 +24,11 @@ E4 security.txt (Contact security@tsudev.com, test Expires) · E5 SSL Labs · E6
   30-366 ngày trong `check-dist.mjs`; trang `/security/` + `docs/security/trust.json` (E1 16719 passing 100%, E2 7.2, E5
   SSL Labs A+ x4, E6 Observatory A+ 140 12/12, E3 Release ký + VirusTotal 0/74, E10); liên kết chân trang. E8 SignPath:
   CHƯA nộp đơn (ghi "Chưa có" trên trang) - phiên sau điền đơn qua Edge `tsudev-bp`.
+- 25/11/2026 - tsufiles-c4: E8 SignPath - đo ngưỡng phiếu toàn hệ `20261113-02` mục 5: **1/6** (chỉ đạt mục 5: Scorecard
+  7.2 + Best Practices passing; 0 sao, 0 fork, 0 người đóng góp ngoài - 60 tác giả trên GitHub là commit upstream
+  Filee; 2 bản phát hành trong 2 tuần; 1.160 lượt tải chưa thành xu hướng) ⇒ **KHÔNG nộp** (SignPath đã từ chối một dự án
+  TsuDEV 12/11 vì thiếu uy tín; agent không nộp thay chủ dự án - mục 0.6). Đã chuẩn bị: `docs/CODE_SIGNING_POLICY.md`
+  + trang `/code-signing-policy/` (liên kết từ chân trang mọi trang + trang tải; nêu ĐÚNG việc kiểm cập nhật mặc định
+  bật nên không dùng nguyên câu quyền riêng tư mẫu), `tools/signpath/don.json` + `nop-don.mjs` (chép tsucontact; chưa
+  chạy thử vì sẽ gõ họ tên/email thật vào HubSpot), `trust.json` E8 nhắc tới trang chính sách (không gắn liên kết: cổng build chỉ cho liên kết bên thứ ba). 👤 khi đạt >= 4/6:
+  `cd website && node ../tools/signpath/nop-don.mjs --headed` (xem ảnh) rồi `--submit`, xác nhận email.

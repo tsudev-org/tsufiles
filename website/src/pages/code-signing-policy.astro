@@ -1,0 +1,8 @@
+---
+// Trang "Code signing policy" theo điều kiện của SignPath Foundation (signpath.org/terms): liên kết từ trang chủ (chân
+// trang) và trang tải; nội dung là docs/CODE_SIGNING_POLICY.md (tiếng Anh, người duyệt SignPath đọc). Phiếu SEC2 E8.
+import TaiLieu from '../components/TaiLieu.astro';
+import { renderMd } from '../lib/noi-dung';
+const { html } = renderMd('docs/CODE_SIGNING_POLICY.md');
+---
+<TaiLieu tieuDe="Code signing policy" moTa="TsuFiles code signing policy: which Windows release files are signed, team roles, privacy, system changes, uninstall and how to verify a download." duongDan="/code-signing-policy/" html={html} nguon="docs/CODE_SIGNING_POLICY.md" lang="en" />

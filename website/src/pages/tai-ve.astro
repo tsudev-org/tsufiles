@@ -107,7 +107,7 @@ const vd = ban?.goi.find((g) => g.ten.endsWith('-win-Setup.exe'))?.ten ?? 'tsude
       <pre tabindex="0"><code>sha256sum -c --ignore-missing tsudev-files-*-SHA256SUMS.txt     # macOS: shasum -a 256 -c</code></pre>
       <div class="chu-y">
         <p><strong>Chỉ tải từ trang này hoặc từ <a href={`${REPO_URL}/releases`} target="_blank" rel="noopener noreferrer">github.com/{REPO}</a>.</strong> Mọi trang khác tự xưng "bản chính thức" đều không liên quan tới TsuDEV.</p>
-        <p>Bản Windows hiện chưa có chứng thư Authenticode nên SmartScreen có thể cảnh báo ở lần chạy đầu: chọn <em>Thông tin thêm</em>, rồi <em>Vẫn chạy</em> sau khi đã kiểm SHA-256. Trình cập nhật chỉ nhận bản phát hành ký bằng khóa của TsuFiles; tệp tải từ nơi khác bị từ chối.</p>
+        <p>Bản Windows hiện chưa có chứng thư Authenticode nên SmartScreen có thể cảnh báo ở lần chạy đầu: chọn <em>Thông tin thêm</em>, rồi <em>Vẫn chạy</em> sau khi đã kiểm SHA-256. Trình cập nhật chỉ nhận bản phát hành ký bằng khóa của TsuFiles; tệp tải từ nơi khác bị từ chối. Quy trình ký mã Windows: <a href="/code-signing-policy/" lang="en">Code signing policy</a>.</p>
       </div>
 
       <h2 id="windows">Cài trên Windows 10/11</h2>
