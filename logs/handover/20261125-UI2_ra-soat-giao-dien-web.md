@@ -37,4 +37,5 @@
   - **Phần B**: B2 hoạ tiết tĩnh hero = `quy-dao` (STD50 PR 2). B1 nền Sáng dịu + B4 đổi font: CHỜ bản tsudev-standards mới
     (không tự đổi hex). B3: thẻ không có dải viền màu trên đầu; hoạ tiết hình học cho nền thẻ - chờ chuẩn. Phiếu còn MỞ
     tới khi sync bảng màu mới.
-
+- 25/11/2026 - tsufiles-c4: #126 gộp + deploy `22a79ee0`; rà lại production 12 trang x 3 khổ x Sáng/Tối 0 lỗi, LCP 0,9-1,5 s
+  (phần tử LCP là h1), CLS <= 0,0003.
