@@ -4,7 +4,7 @@
    Chế độ màu do public/theme.js đặt vào data-theme; CSS không hỏi hệ điều hành. */
 
 :root {
-  --font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-family: 'Be Vietnam Pro', 'Be Vietnam Pro Fallback', 'Segoe UI', system-ui, -apple-system, sans-serif;
   /* Chivo Mono: số 0 trơn, chủ dự án yêu cầu (tự host ở styles/fonts-mono.css) */
   --font-mono: 'Chivo Mono', 'Cascadia Code', ui-monospace, monospace;
   --khung: 72rem;
@@ -84,6 +84,37 @@ pre {
 /* Trang chủ: hero canh giữa */
 .mo-dau { padding: 5rem 0 3rem; text-align: center; }
 .mo-dau__luoi { display: grid; gap: 3rem; justify-items: center; }
+/* Bố cục chữ ký `cong-cu` (DESIGN_SYSTEM 1.2.2): vùng thao tác chính ngay màn đầu, căn giữa; ảnh ứng dụng xuống dưới */
+.mo-dau--cong-cu { position: relative; overflow: hidden; isolation: isolate; padding: 3.5rem 0 2.5rem; }
+.khong-ngat { white-space: nowrap; }
+.mo-dau--cong-cu .mo-dau__luoi { gap: 1.5rem; }
+.mo-dau--cong-cu .mo-dau__phu { margin-bottom: 0; }
+.thao-tac {
+  width: 100%; max-width: 40rem; display: grid; gap: 1rem; justify-items: center;
+  background: var(--bg-surface); border: 1px solid var(--border-strong); border-radius: var(--radius-lg);
+  padding: 1.5rem clamp(1rem, 4vw, 2.25rem); box-shadow: 0 0 0 6px var(--glow);
+}
+.thao-tac__vi-du { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; list-style: none; padding: 0; margin: 0; }
+.thao-tac__vi-du li {
+  padding: 0.25rem 0.7rem; border-radius: var(--radius-sm); background: var(--bg-subtle); border: 1px solid var(--border);
+  color: var(--text-secondary); font-family: var(--font-mono); font-size: 0.8rem;
+}
+.thao-tac__vi-du b { color: var(--text-link); font-weight: 400; }
+.thao-tac__vi-du .thao-tac__them { font-family: var(--font-family); background: transparent; border-style: dashed; }
+.nut--lon { min-height: 3.25rem; padding: 0.8rem 2rem; font-size: 1.06rem; font-weight: 600; flex-wrap: wrap; }
+.nut__phu { font-weight: 500; opacity: 0.85; font-size: 0.88rem; }
+.thao-tac__he, .thao-tac__ghi-chu { margin: 0; color: var(--text-muted); font-size: 0.88rem; }
+.thao-tac__lenh { width: 100%; display: grid; gap: 0.4rem; text-align: left; min-width: 0; }
+.thao-tac__lenh .lenh-cai__dau { margin: 0; }
+.thao-tac__lenh p { margin: 0; color: var(--text-muted); font-size: 0.86rem; }
+.thao-tac__lenh pre { margin: 0; font-size: 0.8rem; padding: 0.65rem 0.8rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+.muc--anh { padding-top: 1rem; }
+.muc--anh .minh-hoa { margin: 0 auto; }
+/* Hoạ tiết `quy-dao`: vòng quỹ đạo tĩnh, nét --accent mờ + điểm --glow; tổng độ phủ <= 15%, không chuyển động */
+.hoa-tiet { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+.hoa-tiet__vong ellipse { fill: none; stroke: var(--accent); stroke-opacity: 0.16; stroke-width: 1.25; }
+.hoa-tiet__vong ellipse:first-child { stroke-dasharray: 2 10; stroke-linecap: round; stroke-width: 2; }
+.hoa-tiet__diem circle { fill: var(--accent); fill-opacity: 0.14; stroke: var(--accent); stroke-opacity: 0.2; }
 .mo-dau h1 { font-size: clamp(2.1rem, 5vw, 3.4rem); line-height: 1.12; margin: 0 auto 1.1rem; letter-spacing: -0.025em; max-width: 46rem; }
 .chu-tim {
   background: linear-gradient(90deg, var(--primary), var(--accent));
@@ -164,6 +195,8 @@ kbd { border: 1px solid var(--border-strong); border-bottom-width: 2px; border-r
 .tai-lieu__menu p { font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 0 0 0.5rem 0.7rem; }
 .van-ban th[scope="row"] { white-space: nowrap; }
 .van-ban { min-width: 0; max-width: 48rem; }
+/* URL dài trong đoạn văn (vd. /ban-quyen/ libuiohook) làm trang cuộn ngang 9px ở khổ 360 (UI2 phần A) */
+.van-ban :is(p, li) > a { overflow-wrap: anywhere; }
 .van-ban h1 { font-size: 2.1rem; line-height: 1.2; margin: 0 0 1.25rem; letter-spacing: -0.02em; }
 .van-ban h2 { font-size: 1.45rem; margin: 2.6rem 0 0.75rem; }
 .van-ban h3 { font-size: 1.15rem; margin: 1.8rem 0 0.5rem; }

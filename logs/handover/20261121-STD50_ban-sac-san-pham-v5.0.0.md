@@ -2,7 +2,7 @@
 
 - **Mã phiếu**: 20261121-STD50
 - **Từ**: phiên tsudev-standards, 21/11/2026 - **Đến**: phiên kế tiếp của `tsufiles`
-- **Trạng thái**: MỞ - PR 1 xong 25/11/2026, còn PR 2
+- **Trạng thái**: ĐÓNG 25/11/2026 (PR 1 #124, PR 2 nhánh `feat/std5-cong-cu-quy-dao`)
 - **Nguồn**: https://github.com/tsudev-org/tsudev-standards/releases/tag/v5.0.0 - `docs/DESIGN_SYSTEM.md` mục 1.2,
   CHANGELOG 5.0.0 "Hướng dẫn nâng cấp"
 - **Bối cảnh**: chủ dự án muốn mỗi sản phẩm có đặc trưng nổi bật riêng (màu, giao diện, bố cục). Trước v5.0.0, 9/11
@@ -54,3 +54,10 @@ kiểm chống trùng phải xanh. KHÔNG ghi đè tại repo này.
   `products/files.json` lúc build, `NightOwlPalette` đọc từ đó (tím đổi từ #A06BF5/#6A2BD0 sang chuẩn #A970FF/#7C3AED,
   bề mặt theo lớp nền chung, viền nút `border-control`); test `StandardTokensTests`. Font Lexend chưa nhúng vào app
   desktop (tiêu đề app vẫn font thân). **PR 2 (bố cục cong-cu + hoạ tiết quy-dao + og-image) CHƯA làm - phiên sau.**
+- 25/11/2026 - tsufiles-c4: **PR 2 xong** (nhánh `feat/std5-cong-cu-quy-dao`): trang chủ theo `cong-cu` - khối thao tác căn
+  giữa ngay màn đầu (ví dụ đường chuyển đổi, nút "Tải cho Windows" kèm dung lượng bộ cài, liên kết hệ khác tới đúng
+  neo `/tai-ve/#goi-*`, lệnh Scoop có nút Chép), ảnh ứng dụng xuống dưới (`loading=lazy`). Hoạ tiết `quy-dao` tĩnh (SVG
+  nội tuyến, `--accent`, nét 16%/điểm 14%) ở hero; `og-image.png` sinh lại có vòng quỹ đạo, màu đọc từ
+  `.standards/tokens/products/files.json` (bỏ mã màu chép tay trong `tao-tai-san.py`). Ảnh trước/sau 1366 + 360 x
+  Sáng/Tối + og-image: `docs/anh-chup/20261125-std50-pr2/`. App desktop: màn đầu (Trang chủ) đã là vùng thả tệp lớn
+  căn giữa = `cong-cu`, không đổi; font Lexend vẫn chưa nhúng vào app (tiêu đề app dùng font thân).
