@@ -319,6 +319,8 @@ internal static class Cli
         // The pages of PDFs; asked for on the donut (AskedPages), given here.
         if (options.Pages is { } pages)
             preset.Pdf.PageRange = pages;
+        if (options.WordLayout is { } wordLayout)
+            preset.Pdf.WordLayout = wordLayout;
         if (options.Conflict is { } conflict)
             preset.Output.Conflict = conflict;
         if (options.KeepDates)

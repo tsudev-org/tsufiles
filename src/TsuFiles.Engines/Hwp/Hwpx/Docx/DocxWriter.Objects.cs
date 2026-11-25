@@ -180,7 +180,7 @@ internal sealed partial class DocxWriter
             "<wps:wsp><wps:cNvSpPr txBox=\"1\"/>" +
             ShapeProperties(w, h, geometry, box.CornerRatio, box.Fill, box.Gradient, box.Line, flipH: false, flipV: false) +
             $"<wps:txbx><w:txbxContent>{content}</w:txbxContent></wps:txbx>" +
-            $"<wps:bodyPr rot=\"0\" vert=\"horz\" wrap=\"square\" lIns=\"{Number(Emu(box.Padding.Left))}\" tIns=\"{Number(Emu(box.Padding.Top))}\" " +
+            $"<wps:bodyPr rot=\"0\" vert=\"horz\" wrap=\"{(box.NoWrap ? "none" : "square")}\" lIns=\"{Number(Emu(box.Padding.Left))}\" tIns=\"{Number(Emu(box.Padding.Top))}\" " +
             $"rIns=\"{Number(Emu(box.Padding.Right))}\" bIns=\"{Number(Emu(box.Padding.Bottom))}\" anchor=\"{anchor}\" anchorCtr=\"0\"><a:noAutofit/></wps:bodyPr>" +
             "</wps:wsp>";
         return DrawingRun(box.Anchor, w, h, "Text Box", shape);

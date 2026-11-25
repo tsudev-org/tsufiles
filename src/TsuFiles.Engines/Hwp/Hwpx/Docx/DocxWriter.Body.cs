@@ -436,7 +436,12 @@ internal sealed partial class DocxWriter
         if (Hex(format.Color) is { } color)
             sb.Append($"<w:color w:val=\"{color}\"/>");
         var size = format.Size ?? DefaultSize;
-        if (format.Spacing is { } spacing and not 0)
+        if (format.Tracking is { } tracking)
+        {
+            // 1/100 pt → twips (1/20 pt), within Word's range.
+            sb.Append($"<w:spacing w:val=\"{Number(Math.Clamp((int)Math.Round(tracking / 5.0), -31680, 31680))}\"/>");
+        }
+        else if (format.Spacing is { } spacing and not 0)
         {
             // 한글 letter spacing is a percentage of the font size, Word's an absolute distance in twips.
             sb.Append($"<w:spacing w:val=\"{Number((int)Math.Round(spacing * size / 500.0))}\"/>");

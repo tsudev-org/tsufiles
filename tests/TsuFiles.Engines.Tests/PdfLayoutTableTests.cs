@@ -21,7 +21,7 @@ public class PdfLayoutTableTests(EngineFixture fx) : IClassFixture<EngineFixture
 {
     private async Task<string> ConvertAsync(string input, string target)
     {
-        var job = await fx.ConvertAsync([input], new Preset { TargetFormat = target });
+        var job = await fx.ConvertAsync([input], new Preset { TargetFormat = target, Pdf = { WordLayout = PdfWordLayout.Flowing } });
         Assert.True(job.State == JobState.Completed, string.Join("; ", job.Files.Select(f => $"{f.ErrorKey} {f.ErrorDetail}")));
         return job.Outputs.Single();
     }

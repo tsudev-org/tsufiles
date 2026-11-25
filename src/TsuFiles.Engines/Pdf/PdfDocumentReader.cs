@@ -21,6 +21,9 @@
 // and signature block of administrative documents) and the annotation layer (digital signatures, seals, filled form
 // fields) floats in front of the text as pictures with transparency (PdfDocumentReader.Annotations). Not converted:
 // other vector drawings on text pages, annotations without an appearance.
+//
+// This is the flowing layout. PDF → DOCX writes the exact layout by default (PdfDocumentReader.Exact: the page's
+// drawing behind, the words at their place), which keeps the vector drawings too.
 
 using System.Text;
 using System.Text.RegularExpressions;
@@ -322,43 +325,7 @@ internal sealed partial class PdfDocumentReader
         // are that part's size, width and height swapped on a page turned by 90°, as PDFium renders it.
         var content = new PageContent(page.Number - 1, page.Width, page.Height);
 
-        var links = page.GetHyperlinks()
-            .Where(h => h.Uri is { } uri && (uri.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || uri.StartsWith("https://", StringComparison.OrdinalIgnoreCase) || uri.StartsWith("mailto:", StringComparison.OrdinalIgnoreCase)))
-            .Select(h => (h.Bounds, Uri: h.Uri!))
-            .ToList();
-
-        // Text that needs shaping (Arabic, Indic, ...) is read in content-stream order (PdfDocumentReader.ComplexText).
-        var pageLetters = ContentLetters(page);
-        var pageWords = HasComplexText(pageLetters)
-            ? ComplexWords(pageLetters)
-            : NearestNeighbourWordExtractor.Instance.GetWords(pageLetters.Where(l => l.Value.Length > 0).ToList())
-                .Where(w => w.TextOrientation == TextOrientation.Horizontal && w.Letters.Count > 0)
-                .Select(w => new PageWord(w.Text, w.BoundingBox, w.Letters, w.Letters[0]));
-
-        var words = new List<TextWord>();
-        foreach (var word in pageWords)
-        {
-            if (string.IsNullOrWhiteSpace(word.Text))
-                continue;
-            var letters = word.Letters.Where(l => !string.IsNullOrWhiteSpace(l.Value)).ToList();
-            if (letters.Count == 0)
-                continue;
-            // Invisible text is the OCR layer of a scan: part of the text, not of the page's look (unless OCR was asked for).
-            var invisible = letters.All(l => l.RenderingMode == TextRenderingMode.Neither);
-            if (!_textOnly && !_ocrLayer && invisible)
-                continue;
-            var lead = string.IsNullOrWhiteSpace(word.Lead.Value) ? letters[0] : word.Lead;
-            var box = word.Box;
-            var size = Median(letters.Select(LetterSize));
-            var center = new PdfPoint((box.Left + box.Right) / 2, (box.Top + box.Bottom) / 2);
-            var link = links.FirstOrDefault(l => Inside(l.Bounds, center)).Uri;
-            var format = Format(lead, size);
-            // An OCR layer's font only places the words (Tesseract's GlyphLessFont): the document's own font is used.
-            if (invisible)
-                format = format with { Font = null, Bold = false, Italic = false };
-            words.Add(new TextWord(CleanText(word.Text), box.Left, box.Right, box.Top, box.Bottom,
-                lead.StartBaseLine.Y, Math.Max(1, size), format, link, word.DrawnForward));
-        }
+        var words = PageWords(page);
 
         if (words.Count == 0)
         {
@@ -393,6 +360,61 @@ internal sealed partial class PdfDocumentReader
         if (!_textOnly)
             content.Items.AddRange(PlacePictures(tables, pictures));
         return content;
+    }
+
+    /// <summary>
+    /// The visible words of <paramref name="page"/> (and its invisible OCR words when the text is read or OCR was asked
+    /// for), with their places and formatting. Words that do not run left to right on the page are left out; when
+    /// <paramref name="skipped"/> is given, their boxes are added to it (the exact layout keeps them as pixels).
+    /// </summary>
+    private List<TextWord> PageWords(Page page, List<PdfRectangle>? skipped = null)
+    {
+        var links = page.GetHyperlinks()
+            .Where(h => h.Uri is { } uri && (uri.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || uri.StartsWith("https://", StringComparison.OrdinalIgnoreCase) || uri.StartsWith("mailto:", StringComparison.OrdinalIgnoreCase)))
+            .Select(h => (h.Bounds, Uri: h.Uri!))
+            .ToList();
+
+        // Text that needs shaping (Arabic, Indic, ...) is read in content-stream order (PdfDocumentReader.ComplexText).
+        var pageLetters = ContentLetters(page);
+        IEnumerable<PageWord> pageWords;
+        if (HasComplexText(pageLetters))
+        {
+            pageWords = ComplexWords(pageLetters);
+        }
+        else
+        {
+            var found = NearestNeighbourWordExtractor.Instance.GetWords(pageLetters.Where(l => l.Value.Length > 0).ToList())
+                .Where(w => w.Letters.Count > 0).ToList();
+            skipped?.AddRange(found.Where(w => w.TextOrientation != TextOrientation.Horizontal).Select(w => w.BoundingBox));
+            pageWords = found.Where(w => w.TextOrientation == TextOrientation.Horizontal)
+                .Select(w => new PageWord(w.Text, w.BoundingBox, w.Letters, w.Letters[0]));
+        }
+
+        var words = new List<TextWord>();
+        foreach (var word in pageWords)
+        {
+            if (string.IsNullOrWhiteSpace(word.Text))
+                continue;
+            var letters = word.Letters.Where(l => !string.IsNullOrWhiteSpace(l.Value)).ToList();
+            if (letters.Count == 0)
+                continue;
+            // Invisible text is the OCR layer of a scan: part of the text, not of the page's look (unless OCR was asked for).
+            var invisible = letters.All(l => l.RenderingMode == TextRenderingMode.Neither);
+            if (!_textOnly && !_ocrLayer && invisible)
+                continue;
+            var lead = string.IsNullOrWhiteSpace(word.Lead.Value) ? letters[0] : word.Lead;
+            var box = word.Box;
+            var size = Median(letters.Select(LetterSize));
+            var center = new PdfPoint((box.Left + box.Right) / 2, (box.Top + box.Bottom) / 2);
+            var link = links.FirstOrDefault(l => Inside(l.Bounds, center)).Uri;
+            var format = Format(lead, size);
+            // An OCR layer's font only places the words (Tesseract's GlyphLessFont): the document's own font is used.
+            if (invisible)
+                format = format with { Font = null, Bold = false, Italic = false };
+            words.Add(new TextWord(CleanText(word.Text), box.Left, box.Right, box.Top, box.Bottom,
+                lead.StartBaseLine.Y, Math.Max(1, size), format, link, word.DrawnForward));
+        }
+        return words;
     }
 
     /// <summary>
