@@ -339,7 +339,7 @@ def og_image(tight, resize, Image, ImageDraw):
     W, H = 1200, 630
     # website/src/styles/palette.css, [data-theme="dark"]
     BG, SURFACE, BORDER = (0x0A, 0x0A, 0x0A), (0x11, 0x11, 0x11), (0x2E, 0x2E, 0x2E)
-    TEXT, TEXT2, PRIMARY, ON_PRIMARY = (0xED, 0xED, 0xED), (0xB4, 0xB4, 0xB4), (0xA9, 0x70, 0xFF), (0x0A, 0x0A, 0x0A)
+    TEXT, TEXT2 = (0xED, 0xED, 0xED), (0xB4, 0xB4, 0xB4)
 
     class Font:
         """Be Vietnam Pro tự host chia theo bộ ký tự: chọn tệp có glyph cho từng ký tự."""
@@ -364,9 +364,38 @@ def og_image(tight, resize, Image, ImageDraw):
                 d.text((x, y), ch, font=f, fill=fill, anchor="ls")
                 x += f.getlength(ch)
 
+    # Lớp bản sắc tsudev-standards (products/files.json, chế độ Tối vì ảnh chia sẻ nền tối): không chép tay mã màu.
+    import json
+    product = json.loads((ROOT / ".standards/tokens/products/files.json").read_text(encoding="utf-8"))
+    hexrgb = lambda h: tuple(int(h[i:i + 2], 16) for i in (1, 3, 5))
+    PRIMARY = hexrgb(product["colors"]["dark"]["primary"])
+    ON_PRIMARY = hexrgb(product["colors"]["dark"]["on-primary"])
+    ACCENT = hexrgb(product["colors"]["dark"]["accent"])
+
     og = Image.new("RGB", (W, H), BG)
     d = ImageDraw.Draw(og)
     d.rounded_rectangle((48, 48, W - 48, H - 48), radius=32, fill=SURFACE, outline=BORDER, width=2)
+    if product.get("motif") == "quy-dao":
+        # Hoạ tiết `quy-dao` (DESIGN_SYSTEM 1.2.4): vòng quỹ đạo tĩnh quanh con cú, nét accent mờ (<= 15% độ đậm).
+        S = 2   # vẽ gấp đôi rồi thu nhỏ cho nét mượt
+        lop = Image.new("RGBA", (W * S, H * S), (0, 0, 0, 0))
+        ld = ImageDraw.Draw(lop)
+        cx, cy = 290 * S, 315 * S
+        for rx, ry, a in ((250, 120, 40), (330, 160, 30), (420, 205, 22)):
+            ld.ellipse((cx - rx * S, cy - ry * S, cx + rx * S, cy + ry * S), outline=ACCENT + (a,), width=2 * S)
+        lop = lop.rotate(12, resample=Image.BICUBIC, center=(cx, cy))
+        ld = ImageDraw.Draw(lop)
+        for x, y, r in ((540, 220, 9), (95, 420, 7), (470, 470, 6), (150, 150, 5)):
+            ld.ellipse(((x - r) * S, (y - r) * S, (x + r) * S, (y + r) * S), fill=ACCENT + (38,))
+        lop = lop.resize((W, H), Image.LANCZOS)
+        # Chỉ trong khung thẻ (không tràn ra lề ngoài)
+        mask = Image.new("L", (W, H), 0)
+        ImageDraw.Draw(mask).rounded_rectangle((50, 50, W - 50, H - 50), radius=30, fill=255)
+        # Nhân alpha với mặt nạ (paste qua mặt nạ lấy từ chính alpha sẽ nhân alpha hai lần - nét gần như biến mất)
+        from PIL import ImageChops
+        lop.putalpha(ImageChops.multiply(lop.getchannel("A"), mask))
+        og = Image.alpha_composite(og.convert("RGBA"), lop).convert("RGB")
+        d = ImageDraw.Draw(og)
     mh = 340
     mark = resize(tight, (round(tight.width * mh / tight.height), mh))
     og.paste(mark, (120, (H - mh) // 2), mark)

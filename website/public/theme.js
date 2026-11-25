@@ -106,6 +106,8 @@
   // Nút "Chép" ở trang Ủng hộ (components/KhoiUngHo.astro): gắn ở đây vì theme.js là script DUY NHẤT của site.
   function ganNutChep() {
     Array.prototype.slice.call(document.querySelectorAll('[data-chep]')).forEach(function (n) {
+      // data-chep là id của khối lệnh (/tai-ve/, trang chủ): đã có trình xử lý ủy quyền ở trên, không chép chuỗi id.
+      if (document.getElementById(n.getAttribute('data-chep') || '')) return;
       n.addEventListener('click', function () {
         var chu = n.querySelector('[aria-live]');
         if (!navigator.clipboard) return;   // không có clipboard: giá trị vẫn hiện để chép tay
