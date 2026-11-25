@@ -11,7 +11,9 @@
 
 - [ ] ⚡⚡⚡ TIẾP THEO: phiếu `logs/handover/20261125-02_ban-giao-std50-pr2-ui2-signpath.md` mục 2: UI2 phần B khi
       tsudev-standards có bảng màu Sáng dịu; PRO1/PRO2 + QR4 khi có thư viện `TsuSync`; SignPath nộp khi đạt >= 4/6
-      (đo 25/11: 1/6). 👤: secret `VT_API_KEY`, ĐỔI khóa VirusTotal (đã lộ vào log phiên 25/11).
+      (đo 25/11: 1/6). 👤: secret `VT_API_KEY` (GitHub Actions, không phải Render - phiếu mục 3), ĐỔI khóa VirusTotal.
+- [ ] 📅 Từ 28/11/2026: đo lại ngưỡng SignPath theo phiếu `20261125-02` **mục 5** (bảng 6 ngưỡng + lệnh đo); ghi
+      kết quả vào phiếu SEC2; >= 4/6 thì chuẩn bị để 👤 nộp, < 4/6 thì hẹn đo đầu tháng sau.
 - [ ] ⚡⚡ TIẾP THEO: phiếu `logs/handover/20261119-02_ban-giao-tc1-ten-goi-rieng.md` mục 2. TC1 việc B (nút "Gửi bằng
       Lotus Share", #119) ĐÃ GỘP 19/11 → 👤 thử thật trên Windows (cài cả hai). T3 (ngôn ngữ + giao diện theo hệ thống):
       #121 ĐÃ GỘP (CI 22/22) + website ĐÃ DEPLOY 19/11 (version `53e4fbfd`, `/` và `/huong-dan/` khớp `dist/`).
