@@ -389,7 +389,7 @@ public class ComplexScriptTests(EngineFixture fx) : IClassFixture<EngineFixture>
             "هذا نص عربي للاختبار مع كلمة English في الوسط والرقم وهذه جملة طويلة جدا اللغة العربية جميلة 2024.\r\n\r\n" +
             "مُحَمَّد\r\n\r\nPlain English paragraph.", PlainText(path));
 
-        var job = await fx.ConvertAsync([path], new Preset { TargetFormat = "docx" });
+        var job = await fx.ConvertAsync([path], new Preset { TargetFormat = "docx", Pdf = { WordLayout = PdfWordLayout.Flowing } });
         Assert.Equal(JobState.Completed, job.State);
         var docx = job.Outputs.Single();
         ValidPackage(docx);
@@ -515,7 +515,7 @@ public class ComplexScriptTests(EngineFixture fx) : IClassFixture<EngineFixture>
         RightToLeft(pdf, ["البطولة", ")3(", "في", "الرياض"], 523, 100);
         var path = pdf.Save(Path.Combine(fx.NewFolder(), "docx.pdf"));
 
-        var job = await fx.ConvertAsync([path], new Preset { TargetFormat = "docx" });
+        var job = await fx.ConvertAsync([path], new Preset { TargetFormat = "docx", Pdf = { WordLayout = PdfWordLayout.Flowing } });
 
         Assert.Equal(JobState.Completed, job.State);
         Assert.Equal("البطولة (3) في الرياض", string.Concat(Body(job.Outputs.Single()).Descendants(W + "t").Select(t => t.Value)));
