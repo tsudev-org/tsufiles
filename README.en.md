@@ -43,7 +43,7 @@ and build provenance: `gh attestation verify <file> -R tsudev-org/tsufiles`.
 
 | Area | TsuFiles |
 | --- | --- |
-| Language | The first run **follows the operating system's language** (22 languages, English when there is no translation) for the app, the installer and the CLI; change it in Settings, pick "System default" to follow the OS again |
+| Language | The first run **follows the operating system's language** (Vietnamese on a Vietnamese system, English otherwise - the only two languages) for the app, the installer and the CLI; change it in Settings, pick "System default" to follow the OS again |
 | `tsufiles` command line | Vietnamese on a Vietnamese system, English otherwise; `TSUFILES_LANG=vi` / `en` to choose; stable JSON keys for scripts |
 | Updates | Only releases of `tsudev-org/tsufiles` signed with **its own ECDSA P-256 key**; anything else is refused |
 | Identity | Owl logo, Night Owl theme ([ADR-0003](docs/adr/0003-ten-san-pham-tsufiles.md)) |

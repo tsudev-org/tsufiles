@@ -61,13 +61,13 @@ public partial class UserDataStoreTests
         store.SaveLibrary();
         Assert.Equal(slots, store.Profiles.Single(p => p.Id == "images").PresetIds);
         Assert.Equal(slots, StoredImageSlots(dir.Path));
-        File.WriteAllText(Path.Combine(dir.Path, "settings.json"), $$"""{"schemaVersion":{{AppSettings.CurrentSchemaVersion}},"language":"ko"}""");
+        File.WriteAllText(Path.Combine(dir.Path, "settings.json"), $$"""{"schemaVersion":{{AppSettings.CurrentSchemaVersion}},"language":"en"}""");
         var paths = new[] { "settings.json", "presets.json", "profiles.json" }.Select(f => Path.Combine(dir.Path, f)).ToArray();
         var before = paths.Select(File.ReadAllBytes).ToArray();
         var again = new UserDataStore(dir.Path);
         again.Load();
         Assert.Empty(again.Settings.TurnedOffFields);
-        Assert.Equal("ko", again.Settings.Language);
+        Assert.Equal("en", again.Settings.Language);
         for (var i = 0; i < paths.Length; i++) Assert.Equal(before[i], File.ReadAllBytes(paths[i]));
         Assert.Equal(slots, again.Profiles.Single(p => p.Id == "images").PresetIds);
     }
@@ -412,7 +412,7 @@ public partial class UserDataStoreTests
         using var dir = new TempDir();
         var store = new UserDataStore(dir.Path);
         store.Load();
-        store.Settings.Language = "ko";
+        store.Settings.Language = "en";
         store.Settings.Theme.Accent = "#1D9E75";
         store.Settings.Triggers[0].Modifiers = ModifierKeys.Alt | ModifierKeys.Shift;
         store.Presets.Add(new Preset { Id = "mine", Name = "Mine", TargetFormat = "webp", Image = { Quality = 42 } });
@@ -423,7 +423,7 @@ public partial class UserDataStoreTests
         var reloaded = new UserDataStore(dir.Path);
         reloaded.Load();
 
-        Assert.Equal("ko", reloaded.Settings.Language);
+        Assert.Equal("en", reloaded.Settings.Language);
         Assert.Equal("#1D9E75", reloaded.Settings.Theme.Accent);
         Assert.Equal(ModifierKeys.Alt | ModifierKeys.Shift, reloaded.Settings.Triggers[0].Modifiers);
         Assert.Equal(42, reloaded.FindPreset("mine")!.Image.Quality);
@@ -467,25 +467,25 @@ public partial class UserDataStoreTests
     {
         using var dir = new TempDir();
         var path = Path.Combine(dir.Path, "settings.json");
-        File.WriteAllText(path, """{ "schemaVersion": 20, "language": "ko" }""");
+        File.WriteAllText(path, """{ "schemaVersion": 20, "language": "en" }""");
 
         var store = new UserDataStore(dir.Path);
         store.Load();
 
         Assert.Equal(AppSettings.CurrentSchemaVersion, store.Settings.SchemaVersion);
-        Assert.Equal("ko", store.Settings.Language);
+        Assert.Equal("en", store.Settings.Language);
         Assert.True(store.Settings.ShowInDock);
         Assert.True(store.Settings.ShowMenuBarIcon);
         var rewritten = System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllText(path))!.AsObject();
         Assert.Equal(AppSettings.CurrentSchemaVersion, (int?)rewritten["schemaVersion"]);
         Assert.True((bool?)rewritten["showInDock"]);
         Assert.True((bool?)rewritten["showMenuBarIcon"]);
-        Assert.Equal("ko", (string?)rewritten["language"]);
+        Assert.Equal("en", (string?)rewritten["language"]);
 
         var reloaded = new UserDataStore(dir.Path);
         reloaded.Load();
         Assert.Equal(AppSettings.CurrentSchemaVersion, reloaded.Settings.SchemaVersion);
-        Assert.Equal("ko", reloaded.Settings.Language);
+        Assert.Equal("en", reloaded.Settings.Language);
         Assert.True(reloaded.Settings.ShowInDock);
         Assert.True(reloaded.Settings.ShowMenuBarIcon);
     }
@@ -496,7 +496,7 @@ public partial class UserDataStoreTests
         using var dir = new TempDir();
         var store = new UserDataStore(dir.Path);
         store.Load();
-        store.Settings.Language = "ko";
+        store.Settings.Language = "en";
         store.Settings.ShowInDock = false;
         store.Settings.ShowMenuBarIcon = false;
         store.SaveSettings();
@@ -514,19 +514,19 @@ public partial class UserDataStoreTests
         Assert.Equal(AppSettings.CurrentSchemaVersion, migrated.Settings.SchemaVersion);
         Assert.True(migrated.Settings.ShowInDock);
         Assert.True(migrated.Settings.ShowMenuBarIcon);
-        Assert.Equal("ko", migrated.Settings.Language);
+        Assert.Equal("en", migrated.Settings.Language);
         Assert.False(File.Exists(path + ".broken"));
 
         var rewritten = System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllText(path))!.AsObject();
         Assert.Equal(AppSettings.CurrentSchemaVersion, (int?)rewritten["schemaVersion"]);
         Assert.True((bool?)rewritten["showInDock"]);
         Assert.True((bool?)rewritten["showMenuBarIcon"]);
-        Assert.Equal("ko", (string?)rewritten["language"]);
+        Assert.Equal("en", (string?)rewritten["language"]);
 
         var reloaded = new UserDataStore(dir.Path);
         reloaded.Load();
         Assert.Equal(AppSettings.CurrentSchemaVersion, reloaded.Settings.SchemaVersion);
-        Assert.Equal("ko", reloaded.Settings.Language);
+        Assert.Equal("en", reloaded.Settings.Language);
         Assert.True(reloaded.Settings.ShowInDock);
         Assert.True(reloaded.Settings.ShowMenuBarIcon);
     }
@@ -543,7 +543,7 @@ public partial class UserDataStoreTests
         using var dir = new TempDir();
         var store = new UserDataStore(dir.Path);
         store.Load();
-        store.Settings.Language = "ko";
+        store.Settings.Language = "en";
         store.Settings.ShowInDock = field == "showInDock";
         store.Settings.ShowMenuBarIcon = field == "showMenuBarIcon";
         store.SaveSettings();
@@ -556,7 +556,7 @@ public partial class UserDataStoreTests
         var reloaded = new UserDataStore(dir.Path);
         reloaded.Load();
 
-        Assert.Equal("ko", reloaded.Settings.Language);
+        Assert.Equal("en", reloaded.Settings.Language);
         Assert.True(field == "showInDock" ? reloaded.Settings.ShowInDock : reloaded.Settings.ShowMenuBarIcon);
         Assert.False(field == "showInDock" ? reloaded.Settings.ShowMenuBarIcon : reloaded.Settings.ShowInDock);
         Assert.False(File.Exists(path + ".broken"));
@@ -1892,5 +1892,21 @@ public partial class UserDataStoreTests
 
         Assert.NotNull(target.FindPreset("shared"));
         Assert.Single(target.Profiles, p => p.IsFallback);
+    }
+
+    /// <summary>Phiếu TG1: only Vietnamese and English ship; a language older versions shipped becomes "auto".</summary>
+    [Theory]
+    [InlineData("ko", "auto")]
+    [InlineData("zh-CN", "auto")]
+    [InlineData("pt-BR", "auto")]
+    [InlineData("vi", "vi")]
+    [InlineData("en", "en")]
+    [InlineData("auto", "auto")]
+    public void A_language_no_longer_shipped_becomes_auto(string saved, string expected)
+    {
+        var settings = new AppSettings { SchemaVersion = 75, Language = saved };
+        SettingsMigrations.Apply(settings);
+        Assert.Equal(expected, settings.Language);
+        Assert.Equal(AppSettings.CurrentSchemaVersion, settings.SchemaVersion);
     }
 }

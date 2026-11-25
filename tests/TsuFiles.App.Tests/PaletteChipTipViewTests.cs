@@ -244,39 +244,6 @@ public class PaletteChipTipViewTests
     }
 
     [AvaloniaFact]
-    public void T2_in_arabic_the_names_and_the_output_format_read_left_to_right()
-    {
-        var extra = new FakeConverter("test-sheets", ("csv", "xlsx"), ("ods", "xlsx"), ("xlsm", "xlsx"), ("xltx", "xlsx"));
-        using var f = new Fixture(extra);
-        using var vm = f.PageWithPalette();
-        using var view = new View(vm);
-        try
-        {
-            TestServices.EnsureInitialized("ar");
-            var preset = f.Preset("to-xlsx");
-            var kinds = ExpectedKinds(f, preset);
-            var shown = Read(View.Open(view.Chip(preset.Id)));
-
-            var output = "\u200E" + FormatLabels.Name(f.Loc, FormatRegistry.Get("xlsx")) + "\u200E";
-            Assert.Contains(output, shown.Makes);
-            Assert.Equal(ExpectedMakes(f, preset), shown.Makes);
-            Assert.NotEmpty(shown.Rows);
-            for (var i = 0; i < shown.Rows.Count; i++)
-            {
-                var names = string.Join(f.Loc["toolbar.chip_tip.name_separator"],
-                    kinds[i].Formats.Take(3).Select(format => FormatLabels.Name(f.Loc, format)));
-                Assert.Contains("\u200E" + names + "\u200E", shown.Rows[i].Names);
-            }
-            Assert.Equal(SummaryRows(f, kinds), shown.Rows);
-            View.Close(view.Chip(preset.Id));
-        }
-        finally
-        {
-            TestServices.EnsureInitialized("en");
-        }
-    }
-
-    [AvaloniaFact]
     public void T3_a_kind_reached_only_in_three_steps_is_counted_in_the_summary_and_listed_with_shift()
     {
         using var f = new Fixture(TipsConverter());

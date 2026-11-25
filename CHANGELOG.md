@@ -7,8 +7,8 @@ Add a `## <version>` section before tagging a release. Write what someone using 
 find it, what it does and doesn't do.
 
 Start the section with an `<!-- update -->` block (hidden on GitHub). The app's update notice shows its level and its
-one-line summaries in the user's language (any language TsuFiles ships: `ko`, `en`, `zh`, `pl`, `pt-BR`, …; a line per
-change, a language may repeat; a language without lines shows the English ones):
+one-line summaries in the user's language (`vi` or `en`, the languages TsuFiles ships; a line per change, a language may
+repeat; a language without lines shows the English ones):
 
 - `required`: wrong or lost results, security, TsuFiles not starting. The card shows every time TsuFiles starts.
 - `recommended`: bug fixes. The card shows once per version.
@@ -34,6 +34,8 @@ en: Closing the window keeps TsuFiles running in the system tray; the Windows ta
 en: New installs follow the computer's language and light/dark mode; existing installs keep their choices
 vi: Màu Cú đêm theo bộ nhận diện chuẩn TsuDEV: tím logo cú #A970FF (Tối) / #7C3AED (Sáng), viền nút rõ hơn
 en: Night Owl colours follow the TsuDEV design standard: owl purple #A970FF (dark) / #7C3AED (light), clearer button borders
+vi: Gọn nhẹ hơn: giao diện, bộ cài và dòng lệnh chỉ còn tiếng Việt và tiếng Anh; gói cài nhỏ hơn khoảng 35 MB
+en: Leaner: the app, the installer and the CLI now ship Vietnamese and English only; the package is about 35 MB smaller
 -->
 
 ### English summary
@@ -45,6 +47,7 @@ en: Night Owl colours follow the TsuDEV design standard: owl purple #A970FF (dar
 - **Send with Lotus Share:** when Lotus Share is installed, each result card on Home has a share button that opens Lotus Share with the results ready to send. TsuFiles opens no extra network port for this.
 - **Tray:** closing the window now keeps TsuFiles running in the tray (change it in Settings). The GitHub and Donate buttons left the sidebar.
 - **Language and theme follow the system:** a new install starts in the operating system's language (English when TsuFiles has no translation for it) and in the Night Owl style following the system's light or dark mode. Existing installs keep their language and theme. The CLI and the Linux/macOS install scripts speak Vietnamese on a Vietnamese system and English otherwise; `TSUFILES_LANG=vi` or `en` still chooses.
+- **Vietnamese and English only** (plan TG1): the other 20 UI languages and the fonts embedded for them (Arabic, Indic, Thai, Japanese, Korean, Chinese; about 35 MB) are gone. An install set to one of them opens in Vietnamese on a Vietnamese system and English otherwise; file names in other scripts still show through the system's fonts.
 - **Design standard v5:** the Night Owl palette is read at build time from the TsuDEV design tokens (owl purple #A970FF / #7C3AED, shared surfaces, 3:1 button borders); files.tsudev.com uses the same tokens, the Lexend heading font and the soft corner set, follows the system light/dark mode on first visit and has a new [/security](https://files.tsudev.com/security/) page with third-party-verifiable evidence (SSL Labs, Observatory, Scorecard, Best Practices, VirusTotal).
 
 ### Chi tiết (tiếng Việt)
@@ -78,6 +81,9 @@ en: Night Owl colours follow the TsuDEV design standard: owl purple #A970FF (dar
   Anh) và kiểu Cú đêm theo chế độ sáng/tối của máy. Máy đã cài giữ nguyên ngôn ngữ và giao diện đang dùng. Dòng lệnh và
   script cài/gỡ Linux/macOS nói tiếng Việt khi hệ thống dùng tiếng Việt, ngoài ra tiếng Anh; `TSUFILES_LANG=vi` hoặc `en`
   vẫn chọn được.
+- **Chỉ tiếng Việt và tiếng Anh** (phiếu TG1): bỏ 20 ngôn ngữ giao diện khác cùng font nhúng cho chúng (Ả Rập, Ấn,
+  Thái, Nhật, Hàn, Trung; khoảng 35 MB). Máy đang đặt một ngôn ngữ đã bỏ sẽ mở bằng tiếng Việt nếu hệ điều hành dùng
+  tiếng Việt, còn lại tiếng Anh; tên tệp chữ khác vẫn hiện bằng font của hệ điều hành.
 - **Bộ nhận diện chuẩn v5** (tsudev-standards v5.4.0, phiếu STD50): màu Cú đêm đọc lúc build từ token chuẩn
   (`.standards/tokens/`): tím logo cú `#A970FF` (Tối) / `#7C3AED` (Sáng), nền và chữ theo lớp nền chung, viền nút đạt
   3:1. Website files.tsudev.com dùng cùng token, font tiêu đề Lexend, bộ bo góc "mềm", lần đầu theo chế độ sáng/tối của

@@ -748,7 +748,7 @@ public sealed class BackgroundWindowTests : IDisposable
             vm.SetKindCommand.Execute(BackdropKind.Picture);
             Wait(() => vm.IsPreviewCurrent);
             Assert.Equal(AppHost.Get<ILocalizer>()["background.picture_unreadable"], vm.PictureNotice);
-            languages.SetLanguage("de");
+            languages.SetLanguage("vi");
             Dispatcher.UIThread.RunJobs();
             Assert.Equal(AppHost.Get<ILocalizer>()["background.picture_unreadable"], vm.PictureNotice);
             vm.SetKindCommand.Execute(BackdropKind.Gradient);
@@ -1137,11 +1137,11 @@ public sealed class BackgroundWindowTests : IDisposable
             vm.Shadow = 80;
             Assert.Equal("Sunset", vm.Gradients[0].Name);
             Assert.Equal("Strong", vm.ShadowText);
-            languages.SetLanguage("ko");
+            languages.SetLanguage("vi");
             Dispatcher.UIThread.RunJobs();
             var loc = AppHost.Get<ILocalizer>();
             Assert.Equal(loc["background.gradient_sunset"], vm.Gradients[0].Name);
-            Assert.Equal("노을", vm.Gradients[0].Name);
+            Assert.Equal("Hoàng hôn", vm.Gradients[0].Name);
             Assert.Equal(loc["background.shadow_strong"], vm.ShadowText);
             Assert.Equal(loc["background.no_picture"], vm.PictureName);
             Assert.Equal(loc["background.save_next"], window.FindControl<Button>("SaveButton")!.Content);

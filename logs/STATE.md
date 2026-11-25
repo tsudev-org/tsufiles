@@ -9,8 +9,12 @@
 
 ## Hàng đợi task (làm từ trên xuống)
 
-- [ ] ⚡⚡⚡⚡ TIẾP THEO: phiếu `logs/handover/20261125-03_ban-giao-pdf-docx-bo-cuc-chinh-xac.md`: gộp #130 khi CI xanh;
-      DOCX/XLSX -> PDF lệch so với Word/Excel (đề xuất engine Microsoft Office trên Windows).
+- [ ] ⚡⚡⚡⚡⚡ TIẾP THEO: phiếu **`logs/handover/20261126-TG1_ke-hoach-tinh-gon-tsufiles.md`** (kế hoạch tinh gọn theo
+      yêu cầu chủ dự án 26/11: chỉ vi + en, bỏ engine trùng lặp, bỏ HWP/OFD, AI cục bộ, Font/Ghostscript/ISO; GIỮ CAD +
+      Bản đồ cho địa chính). Làm theo bảng giai đoạn G0-G6 mục 3, mỗi giai đoạn một PR.
+- [ ] ⚡⚡⚡⚡ Phiếu `logs/handover/20261125-03_ban-giao-pdf-docx-bo-cuc-chinh-xac.md`: #130 (G0 của TG1) gộp khi CI
+      xanh. Đề xuất engine Microsoft Office **HUỶ** (TG1 mục 1.3: không dùng phần mềm cài sẵn, quyết định settings v5);
+      DOCX/XLSX -> PDF cải thiện trong LibreOffice + bộ in XLSX dựng sẵn.
 - [ ] ⚡⚡⚡ TIẾP THEO: phiếu `logs/handover/20261125-02_ban-giao-std50-pr2-ui2-signpath.md` mục 2: UI2 phần B khi
       tsudev-standards có bảng màu Sáng dịu; PRO1/PRO2 + QR4 khi có thư viện `TsuSync`; SignPath nộp khi đạt >= 4/6
       (đo 25/11: 1/6). 👤: secret `VT_API_KEY` (GitHub Actions, không phải Render - phiếu mục 3), ĐỔI khóa VirusTotal.

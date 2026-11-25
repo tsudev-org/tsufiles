@@ -42,7 +42,7 @@ public class EnginesPageTests
         var failure = TsuFiles.Engines.Infrastructure.EngineInstaller.MsiFailure("libreoffice", 1620, @"C:\Temp\filee-msiexec.log");
         try
         {
-            loc.SetLanguage("ko");
+            loc.SetLanguage("vi");
             var text = EngineDownloadService.ErrorText(loc, failure);
             Assert.StartsWith(loc["error.msi_link"], text);
             Assert.NotEqual("error.msi_link", loc["error.msi_link"]);
@@ -65,7 +65,7 @@ public class EnginesPageTests
         var loc = AppHost.Get<LocalizationService>();
         try
         {
-            loc.SetLanguage("ko");
+            loc.SetLanguage("vi");
             var text = EngineDownloadService.ErrorText(loc, new TsuFiles.Engines.Infrastructure.EngineBusyException("libreoffice"));
             Assert.Equal(loc["error.engine_busy"], text);
             Assert.NotEqual("error.engine_busy", text);

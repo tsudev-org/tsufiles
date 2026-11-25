@@ -1,5 +1,5 @@
-// The languages TsuFiles ships (Assets/i18n/<code>.json). The installer (src/TsuFiles.Setup) links this file, so a language
-// added here is offered by Setup too.
+// The languages TsuFiles ships (Assets/i18n/<code>.json): Vietnamese and English only (phiếu TG1, 26/11/2026). The
+// installer (src/TsuFiles.Setup) links this file, so a language added here is offered by Setup too.
 
 namespace TsuFiles.App.Services;
 
@@ -8,60 +8,18 @@ internal static class AppLanguages
     /// <summary>Code → native name (shown in the language pickers of the app and of Setup).</summary>
     public static readonly IReadOnlyList<(string Code, string NativeName)> All =
     [
-        ("en", "English"),
-        ("de", "Deutsch"),
-        ("tr", "Türkçe"),
-        ("es", "Español"),
-        ("ja", "日本語"),
-        ("ko", "한국어"),
-        ("zh-CN", "简体中文"),
-        ("zh-TW", "繁體中文"),
-        ("pl", "Polski"),
-        ("hi", "हिन्दी"),
-        ("ru", "Русский"),
-        ("ar", "العربية"),
-        ("fa", "فارسی"),
-        ("pt-PT", "Português (Portugal)"),
-        ("pt-BR", "Português (Brasil)"),
-        ("fr", "Français"),
-        ("ne", "नेपाली"),
-        ("th", "ไทย"),
-        ("it", "Italiano"),
-        ("id", "Bahasa Indonesia"),
         ("vi", "Tiếng Việt"),
-        ("bn-BD", "বাংলা (বাংলাদেশ)"),
+        ("en", "English"),
     ];
 
-    /// <summary>Shared Portuguese region policy for the app and Setup, including legacy Inno language codes.</summary>
-    public static string? PortugueseVariant(string name)
-    {
-        var normalized = name.Trim().Replace('_', '-');
-        if (normalized.Equals("ptpt", StringComparison.OrdinalIgnoreCase))
-            return "pt-PT";
-        if (normalized.Equals("ptbr", StringComparison.OrdinalIgnoreCase))
-            return "pt-BR";
-        var parts = normalized.Split('-');
-        if (!parts[0].Equals("pt", StringComparison.OrdinalIgnoreCase))
-            return null;
-        // The region follows the language and optional script (pt-Latn-BR). Do not mistake an extension or
-        // private-use subtag for a region: pt-PT-x-br still means Portuguese as used in Portugal.
-        var regionIndex = parts.Length > 1 && parts[1].Length == 4 && parts[1].All(char.IsAsciiLetter) ? 2 : 1;
-        return parts.ElementAtOrDefault(regionIndex)?.Equals("BR", StringComparison.OrdinalIgnoreCase) == true
-            ? "pt-BR" : "pt-PT";
-    }
-
     /// <summary>
-    /// True for a Chinese culture name written in Traditional characters: "zh-TW", "zh-HK", "zh-Hant-TW", "zh-CHT" …
-    /// An explicit script wins over the region (macOS has "zh-Hans-TW", Simplified in Taiwan); a bare "zh" is Simplified.
+    /// The shipped language for a culture name: "vi" for Vietnamese ("vi", "vi-VN", not Vinza "vin"), "en" for anything
+    /// else, including the languages earlier versions shipped (a saved "ko" or "zh-CN" opens in English).
     /// </summary>
-    public static bool IsTraditionalChinese(string culture)
+    public static string Match(string? name)
     {
-        var parts = culture.Trim().Replace('_', '-').Split('-');
-        if (!parts[0].Equals("zh", StringComparison.OrdinalIgnoreCase))
-            return false;
-        var rest = parts.Skip(1).ToArray();
-        if (rest.Contains("Hans", StringComparer.OrdinalIgnoreCase))
-            return false;
-        return rest.Intersect(["Hant", "TW", "HK", "MO", "CHT"], StringComparer.OrdinalIgnoreCase).Any();
+        var normalized = (name ?? "").Trim().Replace('_', '-');
+        return normalized.Equals("vi", StringComparison.OrdinalIgnoreCase) || normalized.StartsWith("vi-", StringComparison.OrdinalIgnoreCase)
+            ? "vi" : "en";
     }
 }

@@ -16,10 +16,9 @@ public class ReleaseNotesTests
 
         <!-- update
         level: required
-        ko: 엑셀 페이지 나누기가 PDF에 반영돼요
-        ko: 한글 수식이 제대로 나와요
+        vi: Ngắt trang Excel được giữ khi sang PDF
+        vi: Công thức hiển thị đúng
         en: Excel page breaks carry over to PDF
-        zh: Excel 分页符会保留到 PDF 中
         -->
 
         ### Fixed
@@ -31,9 +30,8 @@ public class ReleaseNotesTests
         var note = ReleaseNotes.Parse("1.10.3", Body);
 
         Assert.Equal(UpdateLevel.Required, note.Level);
-        Assert.Equal(["엑셀 페이지 나누기가 PDF에 반영돼요", "한글 수식이 제대로 나와요"], note.In("ko"));
-        Assert.Equal(["Excel 分页符会保留到 PDF 中"], note.In("zh-CN"));
-        Assert.Equal(["Excel page breaks carry over to PDF"], note.In("ja")); // no Japanese: English
+        Assert.Equal(["Ngắt trang Excel được giữ khi sang PDF", "Công thức hiển thị đúng"], note.In("vi"));
+        Assert.Equal(["Excel page breaks carry over to PDF"], note.In("ja")); // not shipped: English
     }
 
     [Fact]
@@ -41,16 +39,16 @@ public class ReleaseNotesTests
     {
         var note = ReleaseNotes.Parse("1.12.0", """
             <!-- update
-            en: Polish translation
+            en: Better PDF
+            vi: PDF tốt hơn
             pl: Język polski
-            pt-BR: Português do Brasil
-            xx: from a newer Filee
+            xx: from a newer TsuFiles
             -->
             """);
 
-        Assert.Equal(["Język polski"], note.In("pl"));
-        Assert.Equal(["Português do Brasil"], note.In("pt-BR"));
-        Assert.Equal(["Polish translation"], note.In("xx")); // not a Filee language: English
+        Assert.Equal(["PDF tốt hơn"], note.In("vi"));
+        Assert.Equal(["Better PDF"], note.In("pl")); // no longer shipped (phiếu TG1): English
+        Assert.Equal(["Better PDF"], note.In("xx")); // not a TsuFiles language: English
     }
 
     [Fact]
@@ -59,7 +57,7 @@ public class ReleaseNotesTests
         var note = ReleaseNotes.Parse("1.9.0", "### New\n\n- Something");
 
         Assert.Equal(UpdateLevel.Recommended, note.Level);
-        Assert.Empty(note.In("ko"));
+        Assert.Empty(note.In("vi"));
     }
 
     [Fact]
@@ -68,8 +66,8 @@ public class ReleaseNotesTests
         var notes = ReleaseNotes.Between(
         [
             ("v9.9.12", "<!-- update\nlevel: optional\n-->"),   // newer than the latest the check found: not yet
-            ("v9.9.11", "<!-- update\nlevel: optional\nko: 새 기능\n-->"),
-            ("v9.9.10", "<!-- update\nlevel: required\nko: 중요한 수정\n-->"),
+            ("v9.9.11", "<!-- update\nlevel: optional\nvi: Tính năng mới\n-->"),
+            ("v9.9.10", "<!-- update\nlevel: required\nvi: Bản sửa quan trọng\n-->"),
             ("v9.9.9", "no block"),
             ("v1.0.0", "<!-- update\nlevel: required\n-->"),    // older than this version
         ], current: "9.9.9", latest: "9.9.11");
@@ -90,12 +88,12 @@ public class ReleaseNotesTests
         Assert.Equal("9.9.11", updates.LatestVersion);
         Assert.Equal(["9.9.11", "9.9.10"], updates.Notes.Select(n => n.Version));
         Assert.True(updates.IsRequired);
-        Assert.Contains("• 중요한 수정", UpdateTexts.Changes(updates, new KoreanOnly()));
+        Assert.Contains("• Bản sửa quan trọng", UpdateTexts.Changes(updates, new VietnameseOnly()));
     }
 
-    private sealed class KoreanOnly : TsuFiles.Core.Localization.ILocalizer
+    private sealed class VietnameseOnly : TsuFiles.Core.Localization.ILocalizer
     {
-        public string Language => "ko";
+        public string Language => "vi";
         public string this[string key] => key;
         public string Format(string key, params object[] args) => key;
         public event EventHandler? LanguageChanged { add { } remove { } }
@@ -111,13 +109,13 @@ public class ReleaseNotesTests
         {
             var path = request.RequestUri!.AbsolutePath;
             object? answer = path.EndsWith("/releases/latest", StringComparison.Ordinal)
-                ? Release("v9.9.11", "<!-- update\nlevel: optional\nko: 새 기능\n-->")
+                ? Release("v9.9.11", "<!-- update\nlevel: optional\nvi: Tính năng mới\n-->")
                 : path.EndsWith("/releases", StringComparison.Ordinal)
                     ? new[]
                     {
                         Release("v9.9.12", "<!-- update\nlevel: optional\n-->", draft: true),
-                        Release("v9.9.11", "<!-- update\nlevel: optional\nko: 새 기능\n-->"),
-                        Release("v9.9.10", "<!-- update\nlevel: required\nko: 중요한 수정\n-->"),
+                        Release("v9.9.11", "<!-- update\nlevel: optional\nvi: Tính năng mới\n-->"),
+                        Release("v9.9.10", "<!-- update\nlevel: required\nvi: Bản sửa quan trọng\n-->"),
                         Release("v1.0.0", "old"),
                     }
                     : null;

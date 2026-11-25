@@ -1002,10 +1002,10 @@ public sealed class AnnotateWindowTests : IDisposable
         try
         {
             Assert.Equal("Red", vm.Swatches[0].Name);
-            languages.SetLanguage("ko");
+            languages.SetLanguage("vi");
             Dispatcher.UIThread.RunJobs();
-            Assert.Equal("빨강", vm.Swatches[0].Name);
-            Assert.Equal("저장하고 다음", window.FindControl<Button>("SaveButton")!.Content);
+            Assert.Equal("Đỏ", vm.Swatches[0].Name);
+            Assert.Equal("Lưu & tiếp", window.FindControl<Button>("SaveButton")!.Content);
             Assert.Equal(AppHost.Get<ILocalizer>().Format("crop.page_counter", 1, 2), vm.CounterText);
 
             vm.Swatches[4].ChooseCommand.Execute(null);
