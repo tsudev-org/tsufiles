@@ -24,7 +24,7 @@ public class PdfReaderTests(EngineFixture fx) : IClassFixture<EngineFixture>
         "The second page continues the report with more details. Headers and footers repeat on every page and are left out.";
 
     private async Task<ConversionJob> RunAsync(string input, string target) =>
-        await fx.ConvertAsync([input], new Preset { TargetFormat = target });
+        await fx.ConvertAsync([input], new Preset { TargetFormat = target, Pdf = { WordLayout = PdfWordLayout.Flowing } });
 
     private async Task<string> ConvertAsync(string input, string target)
     {

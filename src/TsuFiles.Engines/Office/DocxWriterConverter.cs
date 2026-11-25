@@ -3,6 +3,7 @@
 // built-in writer is used wherever it can read the source.
 
 using TsuFiles.Core.Conversion;
+using TsuFiles.Core.Presets;
 using TsuFiles.Engines.Hwp.Hwpx;
 using TsuFiles.Engines.Hwp.Hwpx.Docx;
 using TsuFiles.Engines.Infrastructure;
@@ -33,7 +34,7 @@ public sealed class DocxWriterConverter : IConverter
     {
         progress?.Report(0.1);
         var document = await DocumentReaders.ReadAsync(step.InputPath, step.From, step.WorkDirectory, cancellationToken,
-            ocrLayer: step.Preset.Pdf.Ocr);
+            ocrLayer: step.Preset.Pdf.Ocr, exactLayout: step.Preset.Pdf.WordLayout == PdfWordLayout.Exact);
         progress?.Report(0.6);
 
         var output = step.Output.Allocate("docx");

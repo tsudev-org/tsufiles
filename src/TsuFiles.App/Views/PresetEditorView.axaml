@@ -541,6 +541,12 @@
             <CheckBox Content="{DynamicResource presets.pdf_keep_metadata}" IsChecked="{Binding KeepMetadata}" />
           </StackPanel>
         </StackPanel>
+        <!-- PDF → DOCX: the exact look of the pages (default) or flowing paragraphs -->
+        <StackPanel Spacing="2" IsVisible="{Binding ShowWordLayout}">
+          <TextBlock Classes="label" Text="{DynamicResource presets.word_layout}" />
+          <ComboBox ItemsSource="{Binding WordLayouts}" SelectedItem="{Binding WordLayout}" HorizontalAlignment="Stretch" AutomationProperties.Name="{DynamicResource presets.word_layout}" />
+          <TextBlock Classes="caption" TextWrapping="Wrap" Text="{DynamicResource presets.word_layout_hint}" />
+        </StackPanel>
         <!-- Scans and pictures → searchable PDF, DOCX, TXT, … with Tesseract (Apple Vision on a Mac) -->
         <StackPanel Spacing="2" IsVisible="{Binding ShowOcr}">
           <CheckBox Content="{DynamicResource presets.ocr}" IsChecked="{Binding Ocr}" />

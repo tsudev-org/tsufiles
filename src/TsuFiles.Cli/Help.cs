@@ -129,6 +129,8 @@ internal static class Help
                                  ngày tạo (một số hệ thống tệp Linux) thì created dùng ngày thay đổi hoặc ngày sửa
           -q, --quality <1-100>  Chất lượng ảnh cho JPG, WebP, AVIF, …
               --pages <khoảng>   Các trang PDF, ví dụ 13-55 hoặc 1-3,8,12-15 (mặc định: theo preset)
+          --word-layout <bố cục>  PDF sang DOCX: exact (giống hệt PDF: đường kẻ, khung, màu, hình, chữ ký
+                                 đúng vị trí; mặc định) hoặc flowing (đoạn văn liền mạch, dễ sửa)
               --overwrite        Ghi đè tệp kết quả đã có (mặc định: thêm số thứ tự)
               --skip             Bỏ qua nếu tệp kết quả đã có
               --keep-dates       Giữ ngày tạo và ngày sửa của tệp gốc cho tệp đã chuyển đổi
@@ -229,6 +231,8 @@ internal static class Help
                                  no creation date (some Linux file systems), created uses its change or modified date
           -q, --quality <1-100>  Image quality for JPG, WebP, AVIF, …
               --pages <range>    The pages of PDFs, e.g. 13-55 or 1-3,8,12-15 (default: the preset's)
+          --word-layout <layout>  PDF to DOCX: exact (looks like the PDF: lines, boxes, colours, pictures and
+                                 signatures in place; the default) or flowing (paragraphs, easiest to edit)
               --overwrite        Replace existing output files (default: add a number)
               --skip             Leave existing output files alone
               --keep-dates       Give converted files the created and modified dates of the originals

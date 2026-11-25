@@ -104,12 +104,15 @@ internal static class DocumentReaders
     /// <summary>Reads <paramref name="path"/> (of format <paramref name="format"/>) into the document model.</summary>
     /// <param name="workDirectory">Scratch folder of the job: extracted pictures go into a new folder inside it.</param>
     /// <param name="ocrLayer">A PDF's OCR layer is its text (<see cref="PdfDocumentReader.ReadWithOcrLayer"/>).</param>
+    /// <param name="exactLayout">A PDF keeps the look of its pages (<see cref="PdfDocumentReader.ReadExact"/>).</param>
     public static async Task<HDocument> ReadAsync(string path, string format, string workDirectory, CancellationToken cancellationToken,
-        bool ocrLayer = false)
+        bool ocrLayer = false, bool exactLayout = false)
     {
         var media = Path.Combine(workDirectory, $"media-{Guid.NewGuid():N}");
         if (ocrLayer && format == "pdf")
             return await Task.Run(() => PdfDocumentReader.ReadWithOcrLayer(path, media), cancellationToken);
+        if (exactLayout && format == "pdf")
+            return await Task.Run(() => PdfDocumentReader.ReadExact(path, media), cancellationToken);
         if (BuiltIn.TryGetValue(format, out var reader))
             return await Task.Run(() => reader(path, media), cancellationToken);
         if (ThroughPandoc.TryGetValue(format, out var pandocReader))

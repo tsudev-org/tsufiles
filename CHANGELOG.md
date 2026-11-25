@@ -21,11 +21,13 @@ change, a language may repeat; a language without lines shows the English ones):
 <!-- update
 level: recommended
 vi: Chia sẻ với điện thoại: quét mã QR để gửi/nhận tệp với iPhone (kể cả iPhone 8), Android qua Wi-Fi, không cần cài app
+vi: PDF sang Word giữ nguyên bố cục: đường kẻ, khung, màu, hình ảnh, chữ ký, con dấu đúng vị trí như PDF, chữ vẫn sửa được
 vi: PDF sang DOCX giữ chữ ký số, con dấu và bảng không viền của văn bản hành chính
 vi: Gửi kết quả sang điện thoại, máy tính khác bằng Lotus Share ngay từ thẻ kết quả (khi đã cài Lotus Share)
 vi: Đóng cửa sổ thì TsuFiles chạy tiếp trong khay hệ thống; icon hiện đúng trên thanh tác vụ Windows
 vi: Bản cài mới dùng ngôn ngữ và chế độ sáng/tối của máy; máy đã cài giữ nguyên lựa chọn đang dùng
 en: Share with your phone: scan a QR code to send and receive files with an iPhone (even an iPhone 8) or Android over Wi-Fi, no app needed
+en: PDF to Word keeps the page layout: lines, boxes, colours, pictures, signatures and stamps where the PDF has them, with editable text
 en: PDF to DOCX keeps digital signatures, stamps and borderless tables of official documents
 en: Send results to a phone or another computer with Lotus Share right from the result card (when Lotus Share is installed)
 en: Closing the window keeps TsuFiles running in the system tray; the Windows taskbar shows the right icon
@@ -38,6 +40,7 @@ en: Night Owl colours follow the TsuDEV design standard: owl purple #A970FF (dar
 
 - **Share with your phone** ([ADR-0004](https://github.com/tsudev-org/tsufiles/blob/main/docs/adr/0004-chia-se-giua-thiet-bi-va-ios.md)): turn on **Share with phone** in the sidebar and scan the QR code. The phone's browser sends files to the computer and downloads the files you drop in - iPhone 8 (Safari 16) and newer, Android, other computers. Nothing to install on the phone. Each new device must be allowed on the computer; only local network addresses are accepted, links carry a random 128-bit session code, sharing turns itself off after 15 minutes idle. The connection is plain HTTP inside the local network: use it on trusted Wi-Fi only.
 - **Headless:** `tsufiles share [files...] -o <folder>` serves the same page from the command line and asks before each device connects.
+- **PDF to Word, exact layout (new default):** every page of the DOCX looks like the PDF. The page's drawing (table rules, lines, boxes, fills, pictures) is a 200 dpi picture behind the text, rendered from a copy of the PDF whose text is drawn invisibly; the words sit in borderless text boxes at their place on the paper with the PDF's font, size, colour, bold and italic, each word fitted to its width with letter spacing measured on the font Word uses. Signatures, seals and the stamped number of signed documents float in front. Checked against Microsoft Word on 18 real administrative PDFs (133 pages): the same page count everywhere and 99.8% of the ink in place (the flowing layout reached 82% and moved page breaks). **Preset > PDF to Word layout > Flowing text** (or `--word-layout flowing` on the command line) gives the previous paragraphs, easier to rewrite. Rotated and right-to-left text and glyphs without a Unicode character stay in the picture.
 - **PDF to DOCX** keeps signature and stamp annotations and turns side-by-side text blocks into borderless tables.
 - **Send with Lotus Share:** when Lotus Share is installed, each result card on Home has a share button that opens Lotus Share with the results ready to send. TsuFiles opens no extra network port for this.
 - **Tray:** closing the window now keeps TsuFiles running in the tray (change it in Settings). The GitHub and Donate buttons left the sidebar.
@@ -57,6 +60,14 @@ en: Night Owl colours follow the TsuDEV design standard: owl purple #A970FF (dar
   **Riêng tư**.
 - **Dòng lệnh:** `tsufiles share [tệp...] -o <thư mục>` mở cùng trang đó trên máy không màn hình, hỏi `[y/N]` trước
   khi cho mỗi thiết bị kết nối.
+- **PDF sang Word giữ nguyên bố cục (mặc định mới):** mỗi trang DOCX giống hệt trang PDF. Phần hình của trang
+  (đường kẻ bảng, đường thẳng, khung, nền màu, hình ảnh) là ảnh 200 dpi nằm sau chữ, render từ bản sao PDF có chữ vẽ
+  ẩn; chữ đặt trong hộp văn bản không viền đúng vị trí trên giấy với đúng font, cỡ, màu, đậm, nghiêng; từng từ được
+  căn đúng bề rộng bằng giãn ký tự đo trên chính font Word dùng. Chữ ký số, con dấu, số văn bản đóng dấu nằm phía
+  trước. Đối chiếu bằng Microsoft Word trên 18 PDF văn bản hành chính thật (133 trang): số trang khớp 100%, 99,8% nét
+  mực đúng chỗ (cách cũ đạt 82% và lệch ngắt trang). Cần sửa nhiều chữ thì chọn **Preset > Bố cục khi chuyển PDF
+  sang Word > Văn bản liền mạch** (dòng lệnh: `--word-layout flowing`). Chữ xoay, chữ viết từ phải sang trái và ký
+  tự không có mã Unicode được giữ trong ảnh nền.
 - **PDF sang DOCX** giữ lớp chú thích (chữ ký số, con dấu) và gộp các khối chữ đặt cạnh nhau thành bảng không viền.
 - **Gửi bằng Lotus Share:** máy đã cài [Lotus Share](https://lotus.tsudev.com) thì mỗi thẻ kết quả ở trang chủ có nút
   chia sẻ, mở Lotus Share với sẵn các tệp kết quả để gửi sang điện thoại hay máy tính khác. TsuFiles không mở thêm cổng

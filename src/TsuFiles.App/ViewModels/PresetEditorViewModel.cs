@@ -134,6 +134,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         Rotations = Enum.GetValues<ImageRotation>().Select(v => new Choice<ImageRotation>(v, loc[$"presets.rotation.{v}"])).ToList();
         Flips = Enum.GetValues<ImageFlip>().Select(v => new Choice<ImageFlip>(v, loc[$"presets.flip.{v}"])).ToList();
         PageSizes = Enum.GetValues<PdfPageSize>().Select(v => new Choice<PdfPageSize>(v, loc[$"presets.page_size.{v}"])).ToList();
+        WordLayouts = Enum.GetValues<PdfWordLayout>().Select(v => new Choice<PdfWordLayout>(v, loc[$"presets.word_layout.{v}"])).ToList();
         CompressionLevels = Enum.GetValues<PdfCompression>().Select(v => new Choice<PdfCompression>(v, loc[$"presets.pdf_compression.{v}"])).ToList();
         // Each language under its own name; one not downloaded yet shows its size (it downloads with the first file).
         // On a Mac, Apple Vision reads the common languages without a download (ShowOcrDownloads).
@@ -206,6 +207,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         _rotation = Rotations.FirstOrDefault(r => r.Value == _edit.Image.Rotation) ?? Rotations[0];
         _flip = Flips.FirstOrDefault(f => f.Value == _edit.Image.Flip) ?? Flips[0];
         _pageSize = PageSizes.First(p => p.Value == _edit.Pdf.PageSize);
+        _wordLayout = WordLayouts.FirstOrDefault(l => l.Value == _edit.Pdf.WordLayout) ?? WordLayouts[0];
         _compressionLevel = CompressionLevels.FirstOrDefault(c => c.Value == _edit.Pdf.Compression) ?? CompressionLevels[0];
         _compressWithGhostscript = _edit.Pdf.CompressWithGhostscript;
         _watermark = _edit.Pdf.Watermark;
@@ -357,6 +359,9 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     public IReadOnlyList<Choice<ImageFlip>> Flips { get; }
     public IReadOnlyList<Choice<PdfPageSize>> PageSizes { get; }
 
+    /// <summary>PDF → DOCX: the exact look of the pages or flowing paragraphs (PdfOptions.WordLayout).</summary>
+    public IReadOnlyList<Choice<PdfWordLayout>> WordLayouts { get; }
+
     /// <summary>Languages Tesseract reads (PdfOptions.OcrLanguage), English first.</summary>
     public IReadOnlyList<OcrLanguageChoice> OcrLanguageChoices { get; }
 
@@ -460,7 +465,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         nameof(ShowFitsTiff), nameof(ShowFitsDebayer),
         nameof(ShowZipResult), nameof(ShowPdf), nameof(ShowPdfBuild), nameof(ShowDocument), nameof(ShowLeaveOutPictures), nameof(ShowPdfSplit), nameof(ShowPdfCombine),
         nameof(ShowAskPages), nameof(ShowAskPagesHint),
-        nameof(ShowPdfCompression), nameof(ShowPdfCompressionOptions), nameof(ShowSheets), nameof(ShowOcr), nameof(ShowPageSize), nameof(ShowPdfTablesNote),
+        nameof(ShowPdfCompression), nameof(ShowPdfCompressionOptions), nameof(ShowSheets), nameof(ShowOcr), nameof(ShowWordLayout), nameof(ShowPageSize), nameof(ShowPdfTablesNote),
         nameof(ShowMedia), nameof(ShowMediaQuality), nameof(ShowMaxHeight), nameof(ShowVideoMaxSize), nameof(ShowAudioBitrate), nameof(ShowRemoveAudio),
         nameof(ShowAudioChannels), nameof(ShowWav), nameof(VideoCodecs), nameof(VideoCodecChoice), nameof(ShowVideoCodec), nameof(ShowHardwareEncoding), nameof(ShowCaption),
         nameof(AudioCodecs), nameof(AudioCodecChoice), nameof(ShowAudioCodec),
@@ -612,6 +617,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     private Choice<ResizeMode> _resize;
 
     [ObservableProperty] private Choice<ImageRotation> _rotation;
+    [ObservableProperty] private Choice<PdfWordLayout> _wordLayout;
     [ObservableProperty] private Choice<ImageFlip> _flip;
 
     [ObservableProperty, NotifyPropertyChangedFor(nameof(ShowMargin))]
@@ -964,6 +970,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     partial void OnResizeChanged(Choice<ResizeMode>? oldValue, Choice<ResizeMode> newValue) => Choices.Restore(oldValue, newValue, v => Resize = v);
     partial void OnRotationChanged(Choice<ImageRotation>? oldValue, Choice<ImageRotation> newValue) => Choices.Restore(oldValue, newValue, v => Rotation = v);
     partial void OnFlipChanged(Choice<ImageFlip>? oldValue, Choice<ImageFlip> newValue) => Choices.Restore(oldValue, newValue, v => Flip = v);
+    partial void OnWordLayoutChanged(Choice<PdfWordLayout>? oldValue, Choice<PdfWordLayout> newValue) => Choices.Restore(oldValue, newValue, v => WordLayout = v);
     partial void OnPageSizeChanged(Choice<PdfPageSize>? oldValue, Choice<PdfPageSize> newValue) => Choices.Restore(oldValue, newValue, v => PageSize = v);
     partial void OnLocationChanged(Choice<OutputLocation?>? oldValue, Choice<OutputLocation?> newValue) => Choices.Restore(oldValue, newValue, v => Location = v);
     partial void OnConflictChanged(Choice<ConflictPolicy>? oldValue, Choice<ConflictPolicy> newValue) => Choices.Restore(oldValue, newValue, v => Conflict = v);
@@ -1047,6 +1054,9 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     /// <summary>XLSX: what a PDF becomes (its ruled tables, PdfTablesConverter).</summary>
     public bool ShowPdfTablesNote => TargetId == "xlsx";
     public bool ShowPdfCompressionOptions => ShowPdfCompression && CompressionLevel.Value != PdfCompression.None;
+
+    /// <summary>A PDF becomes a Word document: how its pages are laid out (PdfOptions.WordLayout).</summary>
+    public bool ShowWordLayout => !IsTool && TargetId == "docx";
 
     /// <summary>Text from scans goes into the formats TsuFiles writes from a PDF's text itself (PdfOptions.OcrTargets).</summary>
     public bool ShowOcr => !IsTool && PdfOptions.OcrTargets.Contains(TargetId);
@@ -1228,6 +1238,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         pdf.PasswordLeftOut = false;
         // Only where the option is shown, as with SaveEveryFrame below.
         pdf.Ocr = Recognizes;
+        pdf.WordLayout = ShowWordLayout ? WordLayout.Value : PdfWordLayout.Exact;
         AddOcrLanguage(); // picked in the list without pressing Add: it looks chosen, so it counts
         pdf.OcrLanguage = OcrLanguages.Join([OcrLanguage.Value, .. MoreOcrLanguages.Select(l => l.Value)]);
         if (pdf.Ocr)

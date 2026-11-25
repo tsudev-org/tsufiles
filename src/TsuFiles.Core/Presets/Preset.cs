@@ -1140,6 +1140,15 @@ public enum PdfSheetOrientation
     Landscape,
 }
 
+/// <summary>How a PDF becomes a Word document (<see cref="PdfOptions.WordLayout"/>).</summary>
+public enum PdfWordLayout
+{
+    /// <summary>The pages look exactly like the PDF: the drawing behind the text, every line of text at its place.</summary>
+    Exact,
+    /// <summary>Paragraphs, headings and tables that Word lays out again: easiest to edit, the look may change.</summary>
+    Flowing,
+}
+
 /// <summary>The order the pages fill a sheet of "Pages per sheet" in.</summary>
 public enum PdfSheetOrder
 {
@@ -1287,6 +1296,15 @@ public sealed class PdfOptions
     /// that mixes languages has several, the main one first, joined with <c>+</c> as Tesseract takes them (<c>chi_sim+eng</c>).
     /// </summary>
     public string OcrLanguage { get; set; } = "eng";
+
+    /// <summary>
+    /// For PDF → DOCX: <see cref="PdfWordLayout.Exact"/> (the default) keeps every page as the PDF draws it (lines,
+    /// boxes, colours, pictures and signatures behind the text, each line of text at its place), <see cref="PdfWordLayout.Flowing"/>
+    /// writes the text as paragraphs that Word lays out again. A preset saved before this option reads as Exact.
+    /// With <see cref="Ocr"/> the recognized text of scans is written flowing.
+    /// </summary>
+    [JsonConverter(typeof(LenientEnumJsonConverter<PdfWordLayout>))]
+    public PdfWordLayout WordLayout { get; set; }
 
     public PdfOptions Clone() => (PdfOptions)MemberwiseClone();
 }

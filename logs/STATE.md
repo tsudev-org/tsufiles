@@ -9,6 +9,8 @@
 
 ## Hàng đợi task (làm từ trên xuống)
 
+- [ ] ⚡⚡⚡⚡ TIẾP THEO: phiếu `logs/handover/20261125-03_ban-giao-pdf-docx-bo-cuc-chinh-xac.md`: gộp #130 khi CI xanh;
+      DOCX/XLSX -> PDF lệch so với Word/Excel (đề xuất engine Microsoft Office trên Windows).
 - [ ] ⚡⚡⚡ TIẾP THEO: phiếu `logs/handover/20261125-02_ban-giao-std50-pr2-ui2-signpath.md` mục 2: UI2 phần B khi
       tsudev-standards có bảng màu Sáng dịu; PRO1/PRO2 + QR4 khi có thư viện `TsuSync`; SignPath nộp khi đạt >= 4/6
       (đo 25/11: 1/6). 👤: secret `VT_API_KEY` (GitHub Actions, không phải Render - phiếu mục 3), ĐỔI khóa VirusTotal.

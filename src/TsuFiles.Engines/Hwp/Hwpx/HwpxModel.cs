@@ -296,6 +296,10 @@ internal sealed class HTextBox : HInline
 
     public HInsets Padding { get; set; } = new(283, 283, 283, 283);
     public HVerticalAlign VerticalAlign { get; set; }
+
+    /// <summary>The lines never wrap inside the box (a line of the PDF's exact layout keeps its words on one line).</summary>
+    public bool NoWrap { get; set; }
+
     public List<HBlock> Blocks { get; } = [];
 }
 
@@ -416,6 +420,12 @@ internal readonly record struct HTabStop(int Position, HTabKind Kind, string Lea
 /// <param name="EastAsianFont">Font for Hangul / Hanja / Japanese text and CJK punctuation (the symbol slot).</param>
 /// <param name="Color">Text colour "#RRGGBB".</param>
 /// <param name="Shade">Background (highlight) colour "#RRGGBB".</param>
+/// <param name="Spacing">Letter spacing in percent of the font size (한글's measure).</param>
+/// <param name="Tracking">
+/// Letter spacing as a distance in 1/100 pt, added after every character (Word's w:spacing); wins over
+/// <paramref name="Spacing"/>. The exact layout of PDF → DOCX fits each word to its width in the PDF with it.
+/// Written to DOCX only.
+/// </param>
 internal readonly record struct HCharFormat(
     bool? Bold = null,
     bool? Italic = null,
@@ -428,7 +438,8 @@ internal readonly record struct HCharFormat(
     string? EastAsianFont = null,
     string? Color = null,
     string? Shade = null,
-    int? Spacing = null)
+    int? Spacing = null,
+    int? Tracking = null)
 {
     public bool IsEmpty => this == default;
 }

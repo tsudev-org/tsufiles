@@ -17,6 +17,7 @@ internal sealed record CliOptions
     public FileSortOrder? Sort { get; set; }
     public int? Quality { get; set; }
     public string? Pages { get; set; }
+    public PdfWordLayout? WordLayout { get; set; }
     public ConflictPolicy? Conflict { get; set; }
     public bool Json { get; set; }
     public bool Quiet { get; set; }
@@ -109,6 +110,20 @@ internal sealed record CliOptions
                             options.Pages = check.Text;
                         else
                             options.Error ??= CliLanguage.T("--pages phải là số trang hoặc khoảng trang tính từ 1, ví dụ 13-55 hoặc 1-3,8,12-15.", "--pages must be page numbers or ranges from 1, e.g. 13-55 or 1-3,8,12-15.");
+                    }
+                    break;
+                case "--word-layout":
+                    var layout = Value();
+                    if (layout is not null)
+                    {
+                        options.WordLayout = layout.ToLowerInvariant() switch
+                        {
+                            "exact" => PdfWordLayout.Exact,
+                            "flowing" => PdfWordLayout.Flowing,
+                            _ => null,
+                        };
+                        if (options.WordLayout is null)
+                            options.Error ??= CliLanguage.T("--word-layout phải là exact hoặc flowing.", "--word-layout must be exact or flowing.");
                     }
                     break;
                 case "--overwrite":
