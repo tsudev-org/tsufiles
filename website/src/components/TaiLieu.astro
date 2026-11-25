@@ -3,8 +3,8 @@
 import Trang from '../layouts/Trang.astro';
 import { REPO_URL } from '../lib/noi-dung';
 
-interface Props { tieuDe: string; moTa: string; duongDan: string; html?: string; nguon?: string; mucLuc?: { id: string; ten: string }[] }
-const { tieuDe, moTa, duongDan, html, nguon, mucLuc } = Astro.props;
+interface Props { tieuDe: string; moTa: string; duongDan: string; html?: string; nguon?: string; mucLuc?: { id: string; ten: string }[]; lang?: string }
+const { tieuDe, moTa, duongDan, html, nguon, mucLuc, lang } = Astro.props;
 const MENU = [
   { href: '/huong-dan/', ten: 'Hướng dẫn sử dụng' },
   { href: '/dinh-dang/', ten: 'Định dạng hỗ trợ' },
@@ -33,7 +33,7 @@ const MENU = [
       )}
     </nav>
     <article class="van-ban">
-      {html && <Fragment set:html={html} />}
+      {html && (lang ? <div lang={lang}><Fragment set:html={html} /></div> : <Fragment set:html={html} />)}
       <slot />
       {nguon && <p class="goi__ten">Nguồn trang: <a href={`${REPO_URL}/blob/main/${nguon}`} target="_blank" rel="noopener noreferrer">{nguon}</a> trên GitHub.</p>}
     </article>

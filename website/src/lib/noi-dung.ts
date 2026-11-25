@@ -20,6 +20,7 @@ export const TRANG_MD: Record<string, string> = {
   'CHANGELOG.md': '/nhat-ky/',
   'THIRD-PARTY-NOTICES.md': '/ban-quyen/#thanh-phan-ben-thu-ba',
   'LICENSE': '/ban-quyen/#giay-phep-mit',
+  'docs/CODE_SIGNING_POLICY.md': '/code-signing-policy/',
 };
 
 export function docTep(duongDan: string): string {
