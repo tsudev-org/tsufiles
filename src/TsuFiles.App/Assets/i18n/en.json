@@ -261,6 +261,7 @@
   "engine.tesseract.description": "Recognizes the text of scans and pictures (OCR): searchable PDF, DOCX, TXT.",
   "engine.vision.description": "Recognizes the text of scans and pictures with macOS's own text recognition (OCR): searchable PDF, DOCX, TXT. Nothing to download.",
   "engine.calibre.description": "Rare e-book formats (LIT, LRF, CHM, PDB, RB…) and Kindle output (MOBI, AZW3).\nAbove the HWPX writer, it also makes the PDFs of e-books (much faster for long books).",
+  "engine.msoffice.description": "Word, Excel and PowerPoint files to PDF through the Microsoft Office installed on this Windows PC, exactly as Office prints them; old DOC, XLS and PPT to DOCX, XLSX and PPTX.\nMacros never run. A file Office can't finish goes on through LibreOffice or the built-in engines.",
   "engine.libreoffice.description": "Reads older and less common formats: DOC, PPT, Pages, Keynote, Numbers, WordPerfect, ClarisWorks, Publisher, Visio…\nAlso saves as DOC, XLS, PPT, ODT, ODP, OpenDocument templates and EMF.",
   "engine.translator.description": "Translates documents and e-books locally using offline Ollama models.\nAlso translates SRT and WebVTT subtitles: only the cue text is sent to the model, cue numbers and timestamps are kept.",
   "engine.exiftool.description": "Reads every metadata field of pictures, PDFs, video and sound, and edits them in most kinds of file without touching the file's content.\nUsed by the Metadata tool; without it the fields are shown read-only.",

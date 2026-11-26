@@ -330,3 +330,10 @@ public interface IFileCombiner
     Task CombineAsync(IReadOnlyList<string> inputPaths, string outputPath, string format, Preset preset,
         string workDirectory, IProgress<double>? progress, CancellationToken cancellationToken);
 }
+
+/// <summary>
+/// An engine that, when it fails on a file, gives way to the next best route instead of failing the file: Microsoft
+/// Office, which may not finish a workbook whose print area spans thousands of pages, or may refuse a file it cannot
+/// open, where LibreOffice and the built-in route still convert it.
+/// </summary>
+public interface IGivesWay;
