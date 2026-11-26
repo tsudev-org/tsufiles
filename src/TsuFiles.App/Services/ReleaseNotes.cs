@@ -5,7 +5,6 @@
 //   level: recommended
 //   ko: 엑셀 페이지 나누기가 PDF에 반영돼요
 //   en: Excel page breaks carry over to PDF
-//   zh: Excel 分页符会保留到 PDF 中
 //   -->
 //
 // level is required (wrong results, lost data, security, TsuFiles not starting), recommended (bug fixes) or optional (new
@@ -77,12 +76,11 @@ public static class ReleaseNotes
     }
 
     /// <summary>
-    /// The UI language a summary line is for: any language TsuFiles ships ("pl"), with "zh" for Chinese. Null for other
-    /// keys, which a newer TsuFiles may know.
+    /// The UI language a summary line is for: a language TsuFiles ships ("vi", "en"). Null for other keys (languages
+    /// older versions shipped, or ones a newer TsuFiles may know).
     /// </summary>
     private static string? LanguageOf(string key) =>
-        key is "zh" ? "zh-CN"
-        : LocalizationService.Languages.FirstOrDefault(l => l.Code.Equals(key, StringComparison.OrdinalIgnoreCase)).Code;
+        LocalizationService.Languages.FirstOrDefault(l => l.Code.Equals(key, StringComparison.OrdinalIgnoreCase)).Code;
 
     /// <summary>The notes of the releases newer than <paramref name="current"/> up to <paramref name="latest"/>, newest first.</summary>
     public static IReadOnlyList<ReleaseNote> Between(IEnumerable<(string Tag, string? Body)> releases, string current, string latest)

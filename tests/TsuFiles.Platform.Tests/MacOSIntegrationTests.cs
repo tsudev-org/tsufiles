@@ -1,5 +1,3 @@
-using System.Text.Json;
-using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using TsuFiles.Platform.MacOS;
 
@@ -45,38 +43,6 @@ public sealed class MacOSIntegrationTests
             .Select(path => Path.GetFileNameWithoutExtension(Path.GetDirectoryName(path)!)).Order();
         Assert.Equal(declared, folders);
     }
-
-    [Theory]
-    [InlineData("pt-PT", "ficheiros", "deteta", "arquivos")]
-    [InlineData("pt-BR", "arquivos", "detecta", "ficheiros")]
-    public void PortugueseNativeTextsKeepTheirVariantAndMatchTheApp(string language, string files, string detects, string otherFiles)
-    {
-        var repository = RepositoryRoot();
-        var installer = Path.Combine(repository, "installer", "macos");
-        var root = ReadPlist(File.ReadAllText(Path.Combine(installer, "Info.plist")));
-        Assert.Contains(language, Property(root, "CFBundleLocalizations").Elements("string").Select(x => x.Value));
-        var folder = Path.Combine(installer, language + ".lproj");
-        var menu = ReadStrings(Path.Combine(folder, "ServicesMenu.strings"));
-        using var app = JsonDocument.Parse(File.ReadAllText(Path.Combine(repository, "src", "TsuFiles.App", "Assets", "i18n", language + ".json")));
-        // TsuFiles: ứng dụng đổi tên hiển thị lúc nạp bản dịch (ForkDefaults.Brand); .lproj ghi sẵn tên mới.
-        Assert.Equal(TsuFiles.Core.ForkDefaults.Brand(app.RootElement.GetProperty("general.context_menu_label").GetString()!), menu[MacOSServicesProvider.MenuItem]);
-
-        var permissions = ReadStrings(Path.Combine(folder, "InfoPlist.strings"));
-        Assert.Equal(2, permissions.Count);
-        foreach (var (key, value) in permissions)
-        {
-            Assert.NotEqual(Property(root, key).Value, value);
-            Assert.StartsWith("O TsuFiles ", value); // TsuFiles: tên hiển thị
-            Assert.True(value.IsNormalized(), $"{language}: {key} is not NFC");
-        }
-        Assert.Contains(files, permissions["NSAppleEventsUsageDescription"]);
-        Assert.DoesNotContain(otherFiles, permissions["NSAppleEventsUsageDescription"]);
-        Assert.Contains(detects, permissions["NSInputMonitoringUsageDescription"]);
-    }
-
-    private static Dictionary<string, string> ReadStrings(string path) =>
-        Regex.Matches(File.ReadAllText(path).ReplaceLineEndings("\n"), "^\"([^\"]+)\" = \"([^\"]+)\";$", RegexOptions.Multiline)
-            .ToDictionary(match => match.Groups[1].Value, match => match.Groups[2].Value);
 
     private static string RepositoryRoot()
     {

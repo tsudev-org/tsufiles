@@ -562,7 +562,7 @@ public class RenderTests
     [AvaloniaFact]
     public void Engines_page_shows_versions_descriptions_and_download_speed()
     {
-        TestServices.EnsureInitialized("ko");
+        TestServices.EnsureInitialized("vi");
         var downloads = AppHost.Get<EngineDownloadService>();
         var package = downloads.Packages[0];
         var before = (package.Status, package.Progress, package.ProgressDetail);
@@ -646,7 +646,7 @@ public class RenderTests
     [AvaloniaFact]
     public void Dragging_a_preset_opens_a_gap_with_a_preview_slice()
     {
-        TestServices.EnsureInitialized("ko");
+        TestServices.EnsureInitialized("vi");
         using var vm = new MainWindowViewModel(AppHost.Services, AppHost.Get<TsuFiles.Core.Localization.ILocalizer>(), AppHost.Get<UpdateService>(), AppHost.Get<UserDataStore>());
         vm.Navigate("toolbar");
         var window = new MainWindow { DataContext = vm, Width = 1080, Height = 820 };
@@ -912,9 +912,8 @@ public class RenderTests
     }
 
     [AvaloniaTheory]
-    [InlineData("ko", "JPG 3개")]
-    [InlineData("ru", "3 × JPG")]
-    [InlineData("ar", "3 × JPG")]
+    [InlineData("vi", "3 × JPG")]
+    [InlineData("en", "3 × JPG")]
     public void Donut_toolbar_renders_for_images(string language, string title)
     {
         TestServices.EnsureInitialized(language);
@@ -935,7 +934,7 @@ public class RenderTests
     [AvaloniaFact]
     public void LibreOffice_options_window_renders()
     {
-        TestServices.EnsureInitialized("ko");
+        TestServices.EnsureInitialized("vi");
         using var vm = new TsuFiles.App.ViewModels.Pages.EnginesPageViewModel(AppHost.Get<TsuFiles.Core.Settings.UserDataStore>(),
             AppHost.Get<TsuFiles.Core.Conversion.ConverterCatalog>(), AppHost.Get<TsuFiles.Core.Localization.ILocalizer>(), AppHost.Get<EngineDownloadService>());
         var window = new TsuFiles.App.Views.LibreOfficeOptionsWindow { DataContext = vm };
@@ -1176,7 +1175,7 @@ public class RenderTests
     [AvaloniaFact]
     public void Preset_popup_renders()
     {
-        TestServices.EnsureInitialized("ko");
+        TestServices.EnsureInitialized("vi");
         var preset = AppHost.Get<UserDataStore>().FindPreset("jpg-70")!;
         var window = new PresetEditorWindow { DataContext = new PresetEditorViewModel(preset, AppHost.Get<TsuFiles.Core.Localization.ILocalizer>()) };
         window.Show();
@@ -1189,7 +1188,7 @@ public class RenderTests
     [AvaloniaFact]
     public void Preset_editor_shows_and_saves_rotation_and_flip()
     {
-        TestServices.EnsureInitialized("ko");
+        TestServices.EnsureInitialized("vi");
         var preset = TsuFiles.Core.Presets.BuiltInData.CreatePresets().Single(p => p.Id == "rotate-left");
         var vm = new PresetEditorViewModel(preset, AppHost.Get<TsuFiles.Core.Localization.ILocalizer>());
         Assert.Equal(TsuFiles.Core.Presets.ImageRotation.Left90, vm.Rotation.Value); // not a hidden option any more
@@ -1811,14 +1810,14 @@ public class RenderTests
     [AvaloniaFact]
     public void Preset_editor_shows_playback_speed_only_for_targets_that_keep_animations()
     {
-        TestServices.EnsureInitialized("ko");
+        TestServices.EnsureInitialized("vi");
         using var culture = new CultureScope("ko-KR"); // "0.25×": numbers follow the regional format
         var loc = AppHost.Get<TsuFiles.Core.Localization.ILocalizer>();
         var preset = new TsuFiles.Core.Presets.Preset { TargetFormat = "gif", Name = "Slow GIF" };
         var vm = new PresetEditorViewModel(preset, loc);
         Assert.True(vm.ShowAnimationSpeed);
         Assert.Equal(1, vm.AnimationSpeed.Value);
-        Assert.Equal(["0.25×", "0.5×", "0.75×", "1× (원본)", "1.5×", "2×", "4×"], vm.AnimationSpeeds.Select(s => s.Label));
+        Assert.Equal(["0.25×", "0.5×", "0.75×", "1× (gốc)", "1.5×", "2×", "4×"], vm.AnimationSpeeds.Select(s => s.Label));
         vm.AnimationSpeed = vm.AnimationSpeeds.Single(s => s.Value == 0.5);
         var window = new PresetEditorWindow { DataContext = vm, Height = 900 };
         window.Show();
@@ -1857,7 +1856,7 @@ public class RenderTests
     [AvaloniaFact]
     public void Preset_editor_shows_and_saves_background_removal()
     {
-        TestServices.EnsureInitialized("ko");
+        TestServices.EnsureInitialized("vi");
         var preset = TsuFiles.Core.Presets.BuiltInData.CreatePresets().Single(p => p.Id == "remove-background");
         var vm = new PresetEditorViewModel(preset, AppHost.Get<TsuFiles.Core.Localization.ILocalizer>());
         Assert.True(vm.RemoveBackground);
@@ -1880,7 +1879,7 @@ public class RenderTests
     [AvaloniaFact]
     public void Preset_editor_shows_and_saves_pdf_compression()
     {
-        TestServices.EnsureInitialized("ko");
+        TestServices.EnsureInitialized("vi");
         var preset = TsuFiles.Core.Presets.BuiltInData.CreatePresets().Single(p => p.Id == "compress-pdf");
         var vm = new PresetEditorViewModel(preset, AppHost.Get<TsuFiles.Core.Localization.ILocalizer>());
         Assert.True(vm.ShowPdfCompression);

@@ -617,8 +617,9 @@ public sealed class AnnotateWindowTests : IDisposable
 
     public static TheoryData<string> Labels => new()
     {
-        "Save when done", "저장하기 완료", "東京 OK", "مرحبا بالعالم", "Save مرحبا بالعالم", "المجموع 1,200 ريال",
-        "मेरा नाम हिन्दी", "ภาษาไทย ที่นี่", "Done 👍",
+        // Vietnamese and English, the UI languages, plus CJK and emoji that system fonts draw (the fonts embedded for
+        // Arabic, Indic and Thai went with those UI languages, phiếu TG1).
+        "Save when done", "Đã duyệt - Trưởng phòng", "Ký thay Chủ tịch ỦY BAN", "저장하기 완료", "東京 OK", "Done 👍",
     };
 
     [AvaloniaTheory]
@@ -1002,10 +1003,10 @@ public sealed class AnnotateWindowTests : IDisposable
         try
         {
             Assert.Equal("Red", vm.Swatches[0].Name);
-            languages.SetLanguage("ko");
+            languages.SetLanguage("vi");
             Dispatcher.UIThread.RunJobs();
-            Assert.Equal("빨강", vm.Swatches[0].Name);
-            Assert.Equal("저장하고 다음", window.FindControl<Button>("SaveButton")!.Content);
+            Assert.Equal("Đỏ", vm.Swatches[0].Name);
+            Assert.Equal("Lưu & tiếp", window.FindControl<Button>("SaveButton")!.Content);
             Assert.Equal(AppHost.Get<ILocalizer>().Format("crop.page_counter", 1, 2), vm.CounterText);
 
             vm.Swatches[4].ChooseCommand.Execute(null);

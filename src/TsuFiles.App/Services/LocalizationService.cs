@@ -107,52 +107,7 @@ public sealed class LocalizationService : ILocalizer
             Languages.Any(l => l.Code.Equals(setting, StringComparison.OrdinalIgnoreCase)))
             return Languages.First(l => l.Code.Equals(setting, StringComparison.OrdinalIgnoreCase)).Code;
 
-        var ui = osLanguage();
-        if (ui.Equals("de", StringComparison.OrdinalIgnoreCase) || ui.StartsWith("de-", StringComparison.OrdinalIgnoreCase))
-            return "de";
-        // "it" and every region ("it-IT", "it-CH", …), but not Itelmen "itl".
-        if (ui.Equals("it", StringComparison.OrdinalIgnoreCase) || ui.StartsWith("it-", StringComparison.OrdinalIgnoreCase))
-            return "it";
-        // "id" and "id-ID", but not Idoma "idu" or other codes starting with "id".
-        if (ui.Equals("id", StringComparison.OrdinalIgnoreCase) || ui.StartsWith("id-", StringComparison.OrdinalIgnoreCase))
-            return "id";
-        // "vi" and "vi-VN", but not Vinza "vin" or other codes starting with "vi".
-        if (ui.Equals("vi", StringComparison.OrdinalIgnoreCase) || ui.StartsWith("vi-", StringComparison.OrdinalIgnoreCase))
-            return "vi";
-        if (AppLanguages.PortugueseVariant(ui) is { } portuguese)
-            return portuguese;
-        if (ui.Equals("tr", StringComparison.OrdinalIgnoreCase) || ui.StartsWith("tr-", StringComparison.OrdinalIgnoreCase))
-            return "tr";
-        if (ui.StartsWith("ja", StringComparison.OrdinalIgnoreCase))
-            return "ja";
-        if (ui.StartsWith("ko", StringComparison.OrdinalIgnoreCase))
-            return "ko";
-        if (ui.StartsWith("zh", StringComparison.OrdinalIgnoreCase))
-            return AppLanguages.IsTraditionalChinese(ui) ? "zh-TW" : "zh-CN";
-        if (ui.StartsWith("pl", StringComparison.OrdinalIgnoreCase))
-            return "pl";
-        if (ui.StartsWith("es", StringComparison.OrdinalIgnoreCase))
-            return "es";
-        if (ui.StartsWith("hi", StringComparison.OrdinalIgnoreCase))
-            return "hi";
-        if (ui.StartsWith("ru", StringComparison.OrdinalIgnoreCase))
-            return "ru";
-        // "ar" and every region ("ar-SA", "ar-EG", …), but not other codes starting with "ar".
-        if (ui.Equals("ar", StringComparison.OrdinalIgnoreCase) || ui.StartsWith("ar-", StringComparison.OrdinalIgnoreCase))
-            return "ar";
-        // "fa" and every region ("fa-IR", "fa-AF", …), but not Fang "fan".
-        if (ui.Equals("fa", StringComparison.OrdinalIgnoreCase) || ui.StartsWith("fa-", StringComparison.OrdinalIgnoreCase))
-            return "fa";
-        // "fr" and every region ("fr-FR", "fr-CA", …), but not North Frisian "frr".
-        if (ui.Equals("fr", StringComparison.OrdinalIgnoreCase) || ui.StartsWith("fr-", StringComparison.OrdinalIgnoreCase))
-            return "fr";
-        // "ne" and "ne-NP", but not Newari "new".
-        if (ui.Equals("ne", StringComparison.OrdinalIgnoreCase) || ui.StartsWith("ne-", StringComparison.OrdinalIgnoreCase))
-            return "ne";
-        // "th" and "th-TH", but not Tharu "thl".
-        if (ui.Equals("th", StringComparison.OrdinalIgnoreCase) || ui.StartsWith("th-", StringComparison.OrdinalIgnoreCase))
-            return "th";
-        return "en";
+        return AppLanguages.Match(osLanguage());
     }
 
     /// <summary>

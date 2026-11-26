@@ -114,13 +114,13 @@ public class WhatsNewTests
     [AvaloniaFact]
     public void Changing_language_refreshes_the_current_recording_without_resetting_the_slide()
     {
-        var window = Open("pt-PT");
+        var window = Open("vi");
         var loc = AppHost.Get<LocalizationService>();
         try
         {
             var slides = window.SlideShow;
             slides.GoTo(3);
-            foreach (var language in new[] { "pt-PT", "pt-BR", "en", "pt-PT" })
+            foreach (var language in new[] { "vi", "en", "vi" })
             {
                 loc.SetLanguage(language);
                 Pump();
@@ -451,8 +451,7 @@ public class WhatsNewTests
 
     [AvaloniaTheory]
     [InlineData("en")]
-    [InlineData("pt-PT")]
-    [InlineData("pt-BR")]
+    [InlineData("vi")]
     public void Reduced_motion_shows_each_slides_poster_frame(string language)
     {
         var before = Motion.Enabled;
@@ -478,8 +477,6 @@ public class WhatsNewTests
                 Assert.Equal(expected, media.CurrentFrame);
                 Assert.True(media.HasPicture);
                 Assert.False(media.IsPlaying);
-                if (language is "pt-PT" or "pt-BR")
-                    RenderTests.Save(window, $"whatsnew-poster-{language}-{window.SlideShow.Slides[i].Id}.png");
             }
             window.SlideShow.GoTo(0);
             Pump();

@@ -149,7 +149,7 @@ public class SetupWindowTests
         try
         {
             app.RequestedThemeVariant = ThemeVariant.Dark;
-            foreach (var language in new[] { "en", "ko", "ru", "ar", "pt-PT", "pt-BR" })
+            foreach (var language in new[] { "en", "vi" })
             {
                 var (model, _, runner) = Model(language);
                 var window = Show(model);
@@ -166,7 +166,7 @@ public class SetupWindowTests
                 Check(window, $"setup-dark-4-done-{language}.png");
                 window.Close();
             }
-            var (uninstall, _, _) = Model("ko", uninstall: true);
+            var (uninstall, _, _) = Model("vi", uninstall: true);
             var card = Show(uninstall);
             Check(card, "uninstall-dark-1-confirm-ko.png");
             card.Close();
@@ -180,7 +180,7 @@ public class SetupWindowTests
     [AvaloniaFact]
     public async Task Updates_and_failures_render()
     {
-        foreach (var language in new[] { "en", "ko", "ru", "ar", "pt-PT", "pt-BR" })
+        foreach (var language in new[] { "en", "vi" })
         {
             var (model, texts, runner) = Model(language, update: true);
             var window = Show(model);
@@ -201,7 +201,7 @@ public class SetupWindowTests
     [AvaloniaFact]
     public async Task Uninstall_renders_and_keeps_the_settings_by_default()
     {
-        foreach (var language in new[] { "en", "ko", "ru", "zh-CN", "ar", "pt-PT", "pt-BR" })
+        foreach (var language in new[] { "en", "vi" })
         {
             var (model, _, runner) = Model(language, uninstall: true);
             var window = Show(model);
@@ -265,7 +265,7 @@ public class SetupWindowTests
     [AvaloniaFact]
     public async Task Uninstall_that_left_files_behind_fails_and_names_the_folder()
     {
-        foreach (var language in new[] { "en", "ko" })
+        foreach (var language in new[] { "en", "vi" })
         {
             var (model, texts, runner) = Model(language, uninstall: true);
             runner.UninstallError = new SetupException("installer.uninstall.files_left", "Could not remove", @"C:\Program Files\Filee");
@@ -340,8 +340,7 @@ public class SetupWindowTests
     }
 
     [AvaloniaTheory]
-    [InlineData("ko")]
-    [InlineData("ar")]
+    [InlineData("vi")]
     public void Picking_a_language_changes_every_text_and_is_handed_to_filee(string language)
     {
         var (model, texts, _) = Model("en");
