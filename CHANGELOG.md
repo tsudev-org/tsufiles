@@ -36,6 +36,8 @@ vi: Màu Cú đêm theo bộ nhận diện chuẩn TsuDEV: tím logo cú #A970FF
 en: Night Owl colours follow the TsuDEV design standard: owl purple #A970FF (dark) / #7C3AED (light), clearer button borders
 vi: Windows có Microsoft Office: Word, Excel, PowerPoint sang PDF do chính Office xuất, bố cục, ngắt trang, vùng in giống hệt Office
 en: Windows with Microsoft Office: Word, Excel and PowerPoint files go to PDF through Office itself, with Office's exact layout, page breaks and print areas
+vi: Không tự bật cửa sổ "Có gì mới" sau khi cập nhật nữa (xem ở mục Giới thiệu); Cài đặt có mục Tài khoản, không nhắc đăng nhập
+en: The "What's new" window no longer opens by itself after an update (find it in About); Settings has an Account section, with no sign-in prompts
 vi: Gọn nhẹ hơn: giao diện, bộ cài và dòng lệnh chỉ còn tiếng Việt và tiếng Anh; gói cài nhỏ hơn khoảng 35 MB
 en: Leaner: the app, the installer and the CLI now ship Vietnamese and English only; the package is about 35 MB smaller
 vi: Bỏ các bộ xử lý trùng lặp (Pandoc, Calibre, Apple Vision, Unhwp): mỗi loại tệp chỉ một cách chuyển, kết quả như nhau trên mọi máy; nhận dạng chữ dùng Tesseract

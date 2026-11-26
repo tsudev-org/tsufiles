@@ -11,9 +11,17 @@ public partial class GeneralPage : UserControl
 {
     private static readonly FilePickerFileType JsonType = new("TsuFiles presets") { Patterns = ["*.json"] };
 
+    internal static readonly Uri WhySignInUrl = new("https://tsudev.com/privacy#dang-nhap");
+
     public GeneralPage() => InitializeComponent();
 
     private GeneralPageViewModel? Vm => DataContext as GeneralPageViewModel;
+
+    private async void OnWhySignIn(object? sender, RoutedEventArgs e)
+    {
+        if (TopLevel.GetTopLevel(this) is { } top)
+            await top.Launcher.LaunchUriAsync(WhySignInUrl);
+    }
 
     private async void OnExport(object? sender, RoutedEventArgs e)
     {

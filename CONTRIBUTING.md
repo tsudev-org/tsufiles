@@ -132,7 +132,7 @@ copies that carry the public key can only be updated with releases signed by it.
 
 ### "What's new" slides for a release
 
-A release with features worth showing gets slides, which TsuFiles shows once after updating to it (see
+A release with features worth showing gets slides, which About → "What's new" and the installer show (see
 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#whats-new-slides)). A release without slides shows nothing.
 
 1. Write the CHANGELOG section with its `<!-- update -->` lines first: the slides are the visual version of it.
@@ -155,9 +155,8 @@ A release with features worth showing gets slides, which TsuFiles shows once aft
    `bin/.../screenshots/whatsnew-*.png` and at the window in `whatsnew-window-*.png`.
 5. Run `dotnet test`: `WhatsNewTests` checks that every slide's media and keys exist.
 
-To try it in the app, build with the new version (`dotnet run --project src/TsuFiles.App -p:Version=X.Y.Z`) against a
-data folder whose settings say an older version was seen (`"whatsNewSeenVersion": "1.0.0"`, `TSUFILES_DATA_DIR`), or
-open About → "What's new".
+To try it in the app, build with the new version (`dotnet run --project src/TsuFiles.App -p:Version=X.Y.Z`) and open
+About → "What's new".
 
 To try the installer locally run `pwsh build/build-installer.ps1` (output in `Releases/`; it fetches the bundled
 engines, the C++ runtime and the Zig toolchain for the Explorer menu into `build/.cache`; run `build/fetch-fonts.ps1`

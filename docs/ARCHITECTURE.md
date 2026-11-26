@@ -408,7 +408,7 @@ Bump `AppSettings.CurrentSchemaVersion` and add a step to `SettingsMigrations` w
   height to it and scroll; the engine setup keeps itself on screen and scrolls its own list (`fitsItself`).
   Tracked: the main window, the preset, group, rename and merge-order editors, the engine setup, LibreOffice options,
   close, sponsor, what's new and update-progress windows and `WindowService`'s message dialog. Not tracked, so at
-  100 %: the donut (it has its own size), the toast and the corner notices (update, engine update, feedback, format
+  100 %: the donut (it has its own size), the toast and the corner notices (update, engine update, format
   request, elevation), which are placed in a screen corner like system notifications, and the crop overlay, whose
   wheel zooms the crop. Drop-down lists, context menus and tooltips open in their own popup windows outside the
   transform and stay at 100 % too. The size is `UiScale` in settings.json (1 when missing, so no schema step); it is
@@ -416,7 +416,7 @@ Bump `AppSettings.CurrentSchemaVersion` and add a step to `SettingsMigrations` w
 
 ## "What's new" slides
 
-After an update, TsuFiles shows the new version's features once as slides (an animation or picture, a title, a line or
+About → "What's new" shows the installed version's features as slides (an animation or picture, a title, a line or
 two). The pieces:
 
 - `Assets/WhatsNew/<version>/slides.json` lists the slides: `id`, `media` (a file next to it), and the i18n keys of
@@ -433,17 +433,9 @@ two). The pieces:
   files for a slideshow on its progress page (`AutoAdvance`). All slides' texts sit in one grid cell, only the
   current one visible, so the height is the tallest slide's and the window doesn't jump.
 - `WhatsNewWindow` adds the card, ✕, Previous / Next ("Get started" on the last slide), ←/→ and Esc.
-- `WhatsNewService` decides at start-up, before the first run is marked complete:
-  - a fresh install (first run not completed) needs no slides, as the first-run setup introduces TsuFiles; its
-    version is stored as seen;
-  - otherwise `AppSettings.WhatsNewSeenVersion` (null in settings older than the slides, which means "updated")
-    is compared with the running version, and the newest deck after it, up to this version, is shown;
-  - the same version or a downgrade shows nothing and never lowers what was seen; an update without a deck is
-    stored as seen quietly.
-  The version is stored when the window opens. A start in the background (`--background` at sign-in, or the
-  Explorer menu) keeps the deck until `WindowService.ShowMain` raises `MainShown`; the installer starts an updated
-  TsuFiles with `--background --whats-new`, which shows it at once. About → "What's new in TsuFiles X" opens the newest
-  deck again.
+- `WhatsNewService` opens the newest deck up to the running version, only from About → "What's new in TsuFiles X".
+  TsuFiles never opens the slides on its own (tsudev PRODUCT_POLICY 3.8). The installer still starts an updated
+  TsuFiles with `--background --whats-new`; the app accepts the switch and stays in the tray.
 
 The `<!-- update -->` lines of CHANGELOG.md are the other half: the update card shows them for a version that isn't
 installed yet; the slides introduce the installed one. The demo animations are rendered by

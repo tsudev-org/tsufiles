@@ -28,7 +28,6 @@ public sealed class WindowService(ILocalizer loc, IServiceProvider services, Mem
     private UpdateProgressWindow? _updateProgress;
     internal UpdateProgressWindow? UpdateProgress => _updateProgress;
     private EngineUpdateNoticeWindow? _engineNotice;
-    private FeedbackNoticeWindow? _feedbackNotice;
     private FormatRequestNoticeWindow? _formatRequestNotice;
     private WhatsNewWindow? _whatsNew;
 
@@ -588,7 +587,6 @@ public sealed class WindowService(ILocalizer loc, IServiceProvider services, Mem
         if (main.WindowState == WindowState.Minimized)
             main.WindowState = WindowState.Normal;
         main.Activate();
-        MainShown?.Invoke(this, EventArgs.Empty);
     }
 
     private MainWindow CreateMain(string? page)
@@ -627,9 +625,6 @@ public sealed class WindowService(ILocalizer loc, IServiceProvider services, Mem
     private readonly List<MainWindow> _mains = [];
     private bool _openingMain;
     private string? _openingMainPage;
-
-    /// <summary>Raised whenever <see cref="ShowMain"/> showed the main window (the user opened TsuFiles).</summary>
-    public event EventHandler? MainShown;
 
     /// <summary>
     /// Shows a version's "What's new" slides, centred on the main window when it is open; a second call replaces the
@@ -793,17 +788,6 @@ public sealed class WindowService(ILocalizer loc, IServiceProvider services, Mem
         };
         _engineNotice = notice;
         notice.Show();
-    }
-
-    /// <summary>Shows the one-time "Is TsuFiles helping you?" card in the bottom-right corner.</summary>
-    public void ShowFeedbackNotice()
-    {
-        if (_feedbackNotice is not null)
-            return;
-        _feedbackNotice = new FeedbackNoticeWindow();
-        PrepareWindow(_feedbackNotice);
-        _feedbackNotice.Closed += (_, _) => _feedbackNotice = null;
-        _feedbackNotice.Show();
     }
 
     /// <summary>Shows the "TsuFiles is running as administrator" card in the bottom-right corner (once per run).</summary>
