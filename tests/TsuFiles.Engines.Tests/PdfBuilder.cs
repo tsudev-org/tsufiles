@@ -67,6 +67,15 @@ internal sealed class PdfBuilder
         return this;
     }
 
+    /// <summary>Invisible text (rendering mode 3), as Tesseract writes the recognized words over a scanned page.</summary>
+    public PdfBuilder Invisible(string text, double size, PdfDocumentBuilder.AddedFont font, double x, double y)
+    {
+        Page.SetTextRenderingMode(TextRenderingMode.Neither);
+        Page.AddText(text, size, new PdfPoint(x, _height - y), font);
+        Page.SetTextRenderingMode(TextRenderingMode.Fill);
+        return this;
+    }
+
     /// <summary>Text wrapped at word boundaries into <paramref name="width"/>; returns the baseline below the last line.</summary>
     public double Paragraph(string text, double size, PdfDocumentBuilder.AddedFont font, double x, double y, double width, double leading, char separator = ' ')
     {

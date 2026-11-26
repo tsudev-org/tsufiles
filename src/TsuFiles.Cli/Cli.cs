@@ -321,6 +321,11 @@ internal static class Cli
             preset.Pdf.PageRange = pages;
         if (options.WordLayout is { } wordLayout)
             preset.Pdf.WordLayout = wordLayout;
+        if (options.Ocr is { } ocr)
+        {
+            preset.Pdf.Ocr = true;
+            preset.Pdf.OcrLanguage = ocr;
+        }
         if (options.Conflict is { } conflict)
             preset.Output.Conflict = conflict;
         if (options.KeepDates)

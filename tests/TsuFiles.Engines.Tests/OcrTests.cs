@@ -28,8 +28,11 @@ public class OcrLanguageListTests
             var component = OcrLanguages.Components[language.Code];
             Assert.Matches("^[0-9A-F]{64}$", component.Sha256);
             Assert.True(component.Size > 0);
-            Assert.Equal($"https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/4.1.0/{language.Code}.traineddata", component.Url);
+            // Vietnamese comes from the accurate model (scans of administrative documents), the others from the fast one.
+            var model = language.Code == "vie" ? "tessdata_best" : "tessdata_fast";
+            Assert.Equal($"https://raw.githubusercontent.com/tesseract-ocr/{model}/4.1.0/{language.Code}.traineddata", component.Url);
         });
+        Assert.Equal("4.1.0-best", OcrLanguages.Components["vie"].Version);
         Assert.Equal("Deutsch", OcrLanguages.Find("deu")!.NativeName);
         Assert.Null(OcrLanguages.Find("klingon"));
     }

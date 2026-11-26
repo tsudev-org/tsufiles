@@ -16,7 +16,12 @@
 //  * Text that cannot be written back as it looks stays in the picture: words that do not run left to right (rotated
 //    text), right-to-left words, and glyphs without a real character (a font without a Unicode map).
 //
-// Scanned pages are the rendered page (their invisible OCR text is not shown). Running headers, footers and page
+// Scanned pages are the rendered page. When their text was recognized (PdfOptions.Ocr, Tesseract's invisible layer),
+// the recognized words are written as text the same way, in the font of Vietnamese administrative documents (Times New
+// Roman), and the scan behind them loses those words' strokes (RecognizedWords): the paper's own colour is painted
+// over them, so rules, stamps, signatures and pictures stay and the letters are not shown twice. Each word takes the
+// colour of its strokes in the scan, and the words with clearly thicker strokes than the page's usual ones are bold.
+// Without OCR a scan's invisible text is not shown. Running headers, footers and page
 // numbers are kept: they are part of the page. If the PDF cannot be rewritten (encrypted, broken), the flowing layout
 // is used instead.
 
@@ -43,15 +48,18 @@ internal sealed partial class PdfDocumentReader
     /// <summary>Above this size a PNG background becomes a JPEG (a photo or a coloured page).</summary>
     private const int MaxPngBytes = 1_500_000;
 
-    /// <summary>The font used for words whose PDF font names no family (F1, T3Font_0).</summary>
+    /// <summary>The fonts the exact layout writes in, measured.</summary>
+    private readonly ExactFonts _fonts = new();
+
+    /// <summary>The font used for words whose PDF font names no family (F1, T3Font_0) and for recognized words.</summary>
     private const string FallbackFont = "Times New Roman";
 
     /// <summary>
     /// Reads <paramref name="path"/> for a DOCX that looks like the PDF (see the top of this file); falls back to
     /// <see cref="ReadLayout"/> if the PDF cannot be rewritten.
     /// </summary>
-    public static HDocument ReadExact(string path, string mediaFolder) =>
-        new PdfDocumentReader(path, mediaFolder, textOnly: false, layout: true).ReadExactDocument();
+    public static HDocument ReadExact(string path, string mediaFolder, bool ocrLayer = false) =>
+        new PdfDocumentReader(path, mediaFolder, textOnly: false, ocrLayer: ocrLayer, layout: true).ReadExactDocument();
 
     private sealed record ExactLine(List<TextWord> Words)
     {
@@ -77,7 +85,7 @@ internal sealed partial class PdfDocumentReader
         }
 
         var document = new HDocument { Title = null };
-        var fonts = new ExactFonts();
+        var fonts = _fonts;
         using (pdf)
         {
             HSection? section = null;
@@ -105,7 +113,7 @@ internal sealed partial class PdfDocumentReader
 
                     // One tiny paragraph per page holds the page's picture and text boxes, all placed on the paper.
                     var holder = new HParagraph { MarkFormat = new HCharFormat(Size: 100), PageBreakBefore = !newSection };
-                    if (Background(index, page.Width, page.Height, withoutText, raster, words.Count == 0) is { } picture)
+                    if (Background(index, page.Width, page.Height, withoutText, raster, words) is { } picture)
                     {
                         holder.Inlines.Add(new HImage(picture)
                         {
@@ -162,8 +170,9 @@ internal sealed partial class PdfDocumentReader
     /// The page rendered without its text, with the text of <paramref name="raster"/> (kept as pixels) copied in from
     /// the page as it is; null for a page with nothing but its text on white paper.
     /// </summary>
-    private string? Background(int index, double width, double height, byte[] withoutText, List<PdfRectangle> raster, bool wholePage)
+    private string? Background(int index, double width, double height, byte[] withoutText, List<PdfRectangle> raster, List<TextWord> words)
     {
+        var wholePage = words.Count == 0;
         // A page without words is the page as shown, annotations included; otherwise the annotations are pictures of
         // their own in front of the text (AnnotationOverlays).
         using var bitmap = wholePage
@@ -188,6 +197,8 @@ internal sealed partial class PdfDocumentReader
                 }
             }
         }
+        if (words.Any(w => w.Recognized))
+            RecognizedWords.Size(words, RecognizedWords.Clean(bitmap, words, width, height), bold => _fonts.Get(FallbackFont, bold, false));
         if (IsWhite(bitmap))
             return null;
 

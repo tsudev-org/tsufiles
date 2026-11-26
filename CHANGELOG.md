@@ -34,6 +34,8 @@ en: Closing the window keeps TsuFiles running in the system tray; the Windows ta
 en: New installs follow the computer's language and light/dark mode; existing installs keep their choices
 vi: Màu Cú đêm theo bộ nhận diện chuẩn TsuDEV: tím logo cú #A970FF (Tối) / #7C3AED (Sáng), viền nút rõ hơn
 en: Night Owl colours follow the TsuDEV design standard: owl purple #A970FF (dark) / #7C3AED (light), clearer button borders
+vi: PDF scan/ảnh chụp sang Word: chữ nhận dạng sửa được, nằm đúng chỗ trên trang, giữ đường kẻ, bảng, con dấu, chữ ký; nhận chữ đậm, nghiêng, màu chữ
+en: Scanned PDF to Word: recognized text you can edit, in place on the page, with the scan's rules, tables, seals and signatures; bold, italic and text colour detected
 -->
 
 ### English summary
@@ -41,6 +43,7 @@ en: Night Owl colours follow the TsuDEV design standard: owl purple #A970FF (dar
 - **Share with your phone** ([ADR-0004](https://github.com/tsudev-org/tsufiles/blob/main/docs/adr/0004-chia-se-giua-thiet-bi-va-ios.md)): turn on **Share with phone** in the sidebar and scan the QR code. The phone's browser sends files to the computer and downloads the files you drop in - iPhone 8 (Safari 16) and newer, Android, other computers. Nothing to install on the phone. Each new device must be allowed on the computer; only local network addresses are accepted, links carry a random 128-bit session code, sharing turns itself off after 15 minutes idle. The connection is plain HTTP inside the local network: use it on trusted Wi-Fi only.
 - **Headless:** `tsufiles share [files...] -o <folder>` serves the same page from the command line and asks before each device connects.
 - **PDF to Word, exact layout (new default):** every page of the DOCX looks like the PDF. The page's drawing (table rules, lines, boxes, fills, pictures) is a 200 dpi picture behind the text, rendered from a copy of the PDF whose text is drawn invisibly; the words sit in borderless text boxes at their place on the paper with the PDF's font, size, colour, bold and italic, each word fitted to its width with letter spacing measured on the font Word uses. Signatures, seals and the stamped number of signed documents float in front. Checked against Microsoft Word on 18 real administrative PDFs (133 pages): the same page count everywhere and 99.8% of the ink in place (the flowing layout reached 82% and moved page breaks). **Preset > PDF to Word layout > Flowing text** (or `--word-layout flowing` on the command line) gives the previous paragraphs, easier to rewrite. Rotated and right-to-left text and glyphs without a Unicode character stay in the picture.
+- **Scanned PDF to Word, editable and in place:** with text recognition on (**Preset > Recognize text (OCR)**, language Vietnamese, or `--ocr vie` on the command line) and the exact layout, each recognized word becomes text at its place on the page, in Times New Roman at the size its width on the scan gives; the scan stays behind the text with the recognized words' strokes painted out in the paper's colour, so table rules, seals, signatures and pictures are kept and nothing shows twice. Lines with thick strokes become bold, leaning ones italic, and each word takes the colour of its print. Vietnamese recognition uses Tesseract's accurate `tessdata_best` model (12 MB, downloaded on first use). Checked with Microsoft Word on 5 scanned administrative documents (92 pages): the same page count everywhere and 93-99.5% of the ink in place. Recognition is not perfect: proofread names and numbers.
 - **PDF to DOCX** keeps signature and stamp annotations and turns side-by-side text blocks into borderless tables.
 - **Send with Lotus Share:** when Lotus Share is installed, each result card on Home has a share button that opens Lotus Share with the results ready to send. TsuFiles opens no extra network port for this.
 - **Tray:** closing the window now keeps TsuFiles running in the tray (change it in Settings). The GitHub and Donate buttons left the sidebar.
@@ -68,6 +71,13 @@ en: Night Owl colours follow the TsuDEV design standard: owl purple #A970FF (dar
   mực đúng chỗ (cách cũ đạt 82% và lệch ngắt trang). Cần sửa nhiều chữ thì chọn **Preset > Bố cục khi chuyển PDF
   sang Word > Văn bản liền mạch** (dòng lệnh: `--word-layout flowing`). Chữ xoay, chữ viết từ phải sang trái và ký
   tự không có mã Unicode được giữ trong ảnh nền.
+- **PDF scan/ảnh chụp sang Word, sửa được và đúng chỗ:** bật nhận dạng chữ (**Preset > Nhận dạng văn bản (OCR)**, ngôn ngữ tiếng Việt, hoặc `--ocr vie`
+  ở dòng lệnh) với bố cục giữ nguyên: mỗi từ nhận dạng được thành chữ đúng vị trí trên trang, phông Times New Roman, cỡ
+  chữ tính theo bề rộng từ trên bản scan; bản scan nằm phía sau với nét chữ cũ được tô bằng màu giấy, nên đường kẻ bảng,
+  con dấu, chữ ký, hình vẫn còn và không hiện hai lớp chữ. Dòng nét dày thành chữ đậm, nét nghiêng thành chữ nghiêng,
+  mỗi từ lấy màu mực của nó. Tiếng Việt dùng mô hình chính xác `tessdata_best` của Tesseract (12 MB, tải lần đầu dùng).
+  Đối chiếu bằng Microsoft Word trên 5 văn bản hành chính scan (92 trang): số trang khớp 100%, 93-99,5% nét mực đúng
+  chỗ. Nhận dạng chữ không tuyệt đối: cần soát lại tên riêng và con số.
 - **PDF sang DOCX** giữ lớp chú thích (chữ ký số, con dấu) và gộp các khối chữ đặt cạnh nhau thành bảng không viền.
 - **Gửi bằng Lotus Share:** máy đã cài [Lotus Share](https://lotus.tsudev.com) thì mỗi thẻ kết quả ở trang chủ có nút
   chia sẻ, mở Lotus Share với sẵn các tệp kết quả để gửi sang điện thoại hay máy tính khác. TsuFiles không mở thêm cổng
