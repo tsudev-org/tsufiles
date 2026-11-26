@@ -33,7 +33,8 @@ public static class EngineRegistry
     /// <summary>
     /// Instantiates all converters. Order only matters as a tie-breaker when no priority is set, so it mirrors
     /// AppSettings.EnginePriority: built-in engines first, the optional downloads last. Software installed on the
-    /// system (Microsoft Office, a system-wide LibreOffice) is never used.
+    /// system is not used, except Microsoft Office on Windows (MicrosoftOfficeConverter, phiếu TG1): a system-wide
+    /// LibreOffice or tools on PATH are never used.
     /// </summary>
     /// <param name="loggers">
     /// The app's log; FFmpeg writes which hardware encoders work and when one failed, LibreOffice when a file needed
@@ -74,6 +75,7 @@ public static class EngineRegistry
         new EbookConverter(),
         new GhostscriptConverter(),
         new TesseractConverter(),
+        new MicrosoftOfficeConverter(),
         new LibreOfficeConverter(env, loggers?.CreateLogger<LibreOfficeConverter>()),
     ];
 

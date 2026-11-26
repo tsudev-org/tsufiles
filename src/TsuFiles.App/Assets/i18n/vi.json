@@ -254,6 +254,7 @@
   "engine.whisper.description": "Chuyển giọng nói thành văn bản bằng OpenAI Whisper. Tự động tạo phụ đề SRT từ lời nói trong video và âm thanh.",
   "engine.ghostscript.description": "EPS, PostScript và tệp Illustrator cũ hơn sang PDF và ảnh; PDF sang EPS và PS.",
   "engine.tesseract.description": "Nhận dạng văn bản trong bản quét và ảnh (OCR): PDF có thể tìm kiếm, DOCX, TXT.",
+  "engine.msoffice.description": "Tệp Word, Excel, PowerPoint sang PDF bằng Microsoft Office cài trên máy Windows này, giống hệt bản Office in ra; DOC, XLS, PPT cũ sang DOCX, XLSX, PPTX.\nKhông bao giờ chạy macro. Tệp Office không xử lý xong được chuyển tiếp qua LibreOffice hoặc bộ chuyển dựng sẵn.",
   "engine.libreoffice.description": "Đọc các định dạng cũ hơn và ít phổ biến: DOC, PPT, Pages, Keynote, Numbers, WordPerfect, ClarisWorks, Publisher, Visio…\nCũng lưu dưới dạng DOC, XLS, PPT, ODT, ODP, mẫu OpenDocument và EMF.",
   "engine.translator.description": "Dịch tài liệu và sách điện tử ngay trên máy bằng các mô hình Ollama ngoại tuyến.\nCũng dịch phụ đề SRT và WebVTT: chỉ văn bản của từng câu phụ đề được gửi tới mô hình, số thứ tự và mốc thời gian được giữ nguyên.",
   "engine.exiftool.description": "Đọc mọi trường siêu dữ liệu của ảnh, PDF, video và âm thanh, và sửa chúng ở hầu hết các loại tệp mà không đụng đến nội dung tệp.\nĐược công cụ Siêu dữ liệu dùng; không có nó, các trường chỉ đọc.",
