@@ -37,22 +37,6 @@
       "root": "tsudev-files-{tagVersion}-linux-arm64",
       "sums": "tsudev-files-{tagVersion}-linux-arm64-SHA256SUMS.txt",
       "bin": "tsufiles-cli"
-    },
-    "macos-arm64": {
-      "file": "tsudev-files-{tagVersion}-osx-arm64.tar.gz",
-      "kind": "tar",
-      "root": "tsudev-files-{tagVersion}-osx-arm64",
-      "sums": "tsudev-files-{tagVersion}-osx-arm64-SHA256SUMS.txt",
-      "app": "TsuFiles.app",
-      "bin": "TsuFiles.app/Contents/MacOS/tsufiles-cli"
-    },
-    "macos-x64": {
-      "file": "tsudev-files-{tagVersion}-osx-x64.tar.gz",
-      "kind": "tar",
-      "root": "tsudev-files-{tagVersion}-osx-x64",
-      "sums": "tsudev-files-{tagVersion}-osx-x64-SHA256SUMS.txt",
-      "app": "TsuFiles.app",
-      "bin": "TsuFiles.app/Contents/MacOS/tsufiles-cli"
     }
   },
   "linux": {
@@ -121,7 +105,6 @@
   },
   "channels": [
     "scoop",
-    "brew",
     "apt",
     "rpm"
   ],

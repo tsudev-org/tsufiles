@@ -26,14 +26,17 @@ máy của bạn**, không tải tệp lên bất kỳ máy chủ nào, không c
 | Hệ điều hành | Lệnh |
 | --- | --- |
 | Windows (Scoop) | `scoop bucket add tsudev https://github.com/tsudev-org/scoop-bucket; scoop install tsudev/tsudev-files` |
-| macOS (Homebrew) | `brew install --cask tsudev-org/tap/tsudev-files` |
-| Debian, Ubuntu, Fedora, macOS | `curl -fsSL https://tsudev.com/install.sh \| sh -s -- tsudev-files` |
+| Debian, Ubuntu, Fedora | `curl -fsSL https://tsudev.com/install.sh \| sh -s -- tsudev-files` |
 
 Lệnh một dòng chỉ thêm kho TsuDEV đã ký (APT/DNF, vân tay khóa `3883 10F4 7FA8 224D 76C0 A9C7 9745 B6AF 3EA3 3C74`)
-hoặc tap Homebrew rồi để trình quản lý gói tự kiểm và cài; đọc script trước tại <https://tsudev.com/install.sh>. Tải
-tay (Windows Setup/Portable, Linux tar.gz, macOS dmg) ở [trang Tải về](https://files.tsudev.com/tai-ve/) hoặc
+rồi để trình quản lý gói tự kiểm và cài; đọc script trước tại <https://tsudev.com/install.sh>. Tải
+tay (Windows Setup/Portable, Linux tar.gz) ở [trang Tải về](https://files.tsudev.com/tai-ve/) hoặc
 [GitHub Releases](https://github.com/tsudev-org/tsufiles/releases/latest), kèm `SHA256SUMS` đã ký và chứng thực nguồn
 gốc build: `gh attestation verify <tệp> -R tsudev-org/tsufiles`.
+
+**macOS tạm dừng đến Q1/2027** ([ADR-0005](docs/adr/0005-tam-dung-phat-hanh-macos.md)): bản cuối cho macOS là
+[2.4.1-vn.1](https://github.com/tsudev-org/tsufiles/releases/tag/v2.4.1-vn.1), không nhận bản cập nhật mới trong thời
+gian này. Windows và Linux phát hành bình thường.
 
 ## Liên kết
 

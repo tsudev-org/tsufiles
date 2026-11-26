@@ -58,7 +58,7 @@
 | G3b | Bỏ AI cục bộ (Whisper, Upscayl, Dịch) + Font, Ghostscript, ISO | Như G2 | ⬜ |
 | G4 | CI gọn: bỏ test/fixture của phần đã xoá, tách job theo vùng đổi (`changes`), tắt `win-arm64` tới khi có P1 | Đo thời gian CI trước/sau (mục tiêu <= 35 phút) | ⬜ |
 | G5 | Gói nhẹ: bật trimming có kiểm (ILLink, `TrimmerRootDescriptor` cho Avalonia), ReadyToRun chỉ assembly khởi động, nén | Đo gói (mục tiêu Setup <= 80 MB), smoke launch, thời gian mở app | ⬜ |
-| G6 | Tài liệu: README VI/EN, website (trang tính năng/hướng dẫn), CHANGELOG 2.5.0, ADR-0005 tinh gọn | Website build + rà production sau deploy | ⬜ |
+| G6 | Tài liệu: README VI/EN, website (trang tính năng/hướng dẫn), CHANGELOG 2.5.0, ADR-0006 tinh gọn | Website build + rà production sau deploy | ⬜ |
 
 ## 4. Rủi ro
 

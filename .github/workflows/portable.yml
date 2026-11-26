@@ -1,4 +1,4 @@
-name: Linux and macOS packages
+name: Linux packages
 
 # Linux packages are built on Ubuntu 24.04 but must run on Ubuntu 22.04 (glibc 2.35). The rhwp CLI release needs a
 # newer glibc, so it is built from pinned source on Ubuntu 22.04 first (linux-native, build/build-native.py) and
@@ -14,21 +14,12 @@ on:
         type: string
         default: ''
         required: false
-      # False leaves out the macOS packages (CI pull requests that don't touch macOS, see ci.yml).
-      macos:
-        type: boolean
-        default: true
-        required: false
   workflow_dispatch:
     inputs:
       version:
         description: 'Package version (empty uses Directory.Build.props)'
         type: string
         required: false
-      macos:
-        description: 'Build and test the macOS packages too'
-        type: boolean
-        default: true
 
 permissions:
   contents: read
@@ -117,18 +108,20 @@ jobs:
 
   portable:
     needs: linux-native
-    # macOS packages don't use the Linux builds: they still run when those failed (the Linux legs then stop at the
-    # download).
+    # Runs when one of the Linux native builds failed too: the other architecture still reports.
     if: ${{ !cancelled() }}
     strategy:
       fail-fast: false
-      # The Linux packages, plus the macOS ones unless the caller leaves them out.
+      # macOS is paused until Q1/2027 (docs/adr/0005-tam-dung-phat-hanh-macos.md): only Linux is built. The osx-*
+      # branches in the steps below are kept for when it comes back.
       matrix:
-        include: ${{ fromJSON(inputs.macos == false && '[{"runner":"ubuntu-24.04","rid":"linux-x64"},{"runner":"ubuntu-24.04-arm","rid":"linux-arm64"}]' || '[{"runner":"ubuntu-24.04","rid":"linux-x64"},{"runner":"ubuntu-24.04-arm","rid":"linux-arm64"},{"runner":"macos-15","rid":"osx-arm64"},{"runner":"macos-15-intel","rid":"osx-x64"}]') }}
+        include:
+          - runner: ubuntu-24.04
+            rid: linux-x64
+          - runner: ubuntu-24.04-arm
+            rid: linux-arm64
     runs-on: ${{ matrix.runner }}
-    # macOS Intel runners take 50 minutes and more for the App tests alone (the render tests in every language), and
-    # slow ones near two hours (#540).
-    timeout-minutes: 180
+    timeout-minutes: 90
     defaults:
       run:
         shell: pwsh

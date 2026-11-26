@@ -15,7 +15,7 @@ const HE = [
 const nhomLenh = HE.map((h) => ({ ...h, kenh: caiBangLenh.kenh.filter((k) => k.he === h.ma) })).filter((h) => h.kenh.length > 0);
 const vd = ban?.goi.find((g) => g.ten.endsWith('-win-Setup.exe'))?.ten ?? 'tsudev-files-<phiên bản>-win-Setup.exe';
 ---
-<Trang tieuDe="Tải về" moTa="Tải TsuFiles cho Windows, macOS và Linux; mã SHA-256 của từng gói, cách kiểm tra tệp và hướng dẫn cài đặt từng hệ điều hành." duongDan="/tai-ve/">
+<Trang tieuDe="Tải về" moTa="Tải TsuFiles cho Windows và Linux (macOS tạm dừng ở bản 2.4.1); mã SHA-256 của từng gói, cách kiểm tra tệp và hướng dẫn cài đặt từng hệ điều hành." duongDan="/tai-ve/">
   <div class="khung tai-lieu">
     <nav class="tai-lieu__menu" aria-label="Tải về">
       <p>Tải về</p>
@@ -91,7 +91,7 @@ const vd = ban?.goi.find((g) => g.ten.endsWith('-win-Setup.exe'))?.ten ?? 'tsude
             <tbody>
               <tr><td>Windows 10/11 x64</td><td><code>-win-Setup.exe</code> (bộ cài) hoặc <code>-win-Portable.zip</code> (di động)</td></tr>
               <tr><td>Windows 11 ARM64</td><td><code>-win-arm64-Setup.exe</code>, <code>-win-arm64-Portable.zip</code></td></tr>
-              <tr><td>macOS 13+ (Apple, Intel)</td><td><code>-osx-arm64</code>, <code>-osx-x64</code>: <code>.dmg</code> hoặc <code>.tar.gz</code></td></tr>
+              <tr><td>macOS 13+ (Apple, Intel)</td><td>Tạm dừng, bản cuối 2.4.1 (<a href="#macos">chi tiết</a>)</td></tr>
               <tr><td>Linux x64, ARM64</td><td><code>-linux-x64.tar.gz</code>, <code>-linux-arm64.tar.gz</code></td></tr>
             </tbody>
           </table>
@@ -119,7 +119,10 @@ const vd = ban?.goi.find((g) => g.ten.endsWith('-win-Setup.exe'))?.ten ?? 'tsude
       <p>Cài im lặng cho nhiều máy: bộ cài nhận tham số của Inno Setup, ví dụ <code>/VERYSILENT /SUPPRESSMSGBOXES</code>.</p>
       <p>Ứng dụng không mở (không cửa sổ, không báo lỗi) trên Windows 10 lâu ngày chưa cập nhật? Xem <a href="/huong-dan/#khong-mo-duoc-tren-windows">cách xử lý</a>.</p>
 
-      <h2 id="macos">Cài trên macOS 13 trở lên (bản xem trước)</h2>
+      <h2 id="macos">Cài trên macOS 13 trở lên (bản xem trước, tạm dừng)</h2>
+      <div class="chu-y">
+        <p><strong>Bản cho macOS tạm dừng đến quý 1/2027.</strong> Bản cuối là <a href={`${REPO_URL}/releases/tag/v2.4.1-vn.1`} target="_blank" rel="noopener noreferrer">TsuFiles 2.4.1</a> (<code>-osx-arm64</code> cho chip Apple, <code>-osx-x64</code> cho chip Intel); bản này không nhận cập nhật mới trong thời gian tạm dừng. Windows và Linux phát hành bình thường.</p>
+      </div>
       <ol>
         <li>Mở tệp <code>.dmg</code> rồi kéo ứng dụng vào thư mục Applications; hoặc giải nén gói <code>.tar.gz</code> và chạy <code>./install.sh</code> (cách này cài cả lệnh <code>tsufiles</code>).</li>
         <li>Bản build chưa được Apple công chứng (notarize). Lần mở đầu tiên, vào <strong>Cài đặt hệ thống, Quyền riêng tư và bảo mật</strong>, chọn <strong>Vẫn mở</strong>.</li>
