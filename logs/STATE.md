@@ -9,12 +9,21 @@
 
 ## Hàng đợi task (làm từ trên xuống)
 
-- [ ] ⚡⚡⚡⚡⚡ TIẾP THEO: phiếu **`logs/handover/20261126-03_ban-giao-gop-135-sec3.md`** mục 3: LG4, rồi ưu tiên 👤
-      **Windows 10/11 + Microsoft Office + tệp scan** (OCR mặc định `vie`, đo PowerPoint qua Office), rồi TG1 từ G3a.
-      👤: lệnh dọn nhánh ở mục 2 của phiếu.
-- [ ] ⚡⚡⚡⚡ Phiếu **LG4** `logs/handover/20261126-LG4_bo-nhac-dang-nhap-tu-dong-khong-lam-phien-toan-he.md` (cùng đợt
-      SEC3): đồng bộ `.standards` v8.0.0; rà cửa sổ ủng hộ/đánh giá/"có gì mới" tự bật, thông báo khay (PRODUCT_POLICY
-      3.8 "không làm phiền"); lối vào Tài khoản thụ động trong Cài đặt. KHÔNG dựng hộp thoại nhắc đăng nhập (LG3 đóng).
+- [ ] 🔐 Phiếu **XK1 MỞ** `logs/handover/20261126-XK1_xoay-virustotal-api-key.md`: nhắc 👤 xoay `VT_API_KEY` đầu phiên.
+- [ ] ⚡⚡⚡⚡⚡ TIẾP THEO: phiếu **`logs/handover/20261126-04_ban-giao-lg4.md`** mục 3 (prompt phiên kế ở mục 5): gộp #139 + PR LG4 khi CI xanh, rồi
+      Phase **MAC0** (dưới), rồi ưu tiên 👤 **Windows 10/11 + Microsoft Office + tệp scan** (OCR mặc định `vie`, đo PowerPoint qua Office), rồi TG1 G3a.
+- [ ] ⚡⚡⚡⚡⚡ **Phase MAC0 - Tạm dừng macOS đến Q1/2027** (chủ dự án chốt 26/11/2026, làm NGAY sau khi gộp #140, TRƯỚC
+      Phase Windows + Office + scan). Phạm vi: CHỈ macOS; **Linux vẫn build + phát hành song song Windows**. Lập phương án
+      bằng Opus (Plan Mode, quyết định kiến trúc) rồi:
+  - ADR-0005 "Tạm dừng phát hành macOS đến Q1/2027": lý do (CI ~80 phút do job macOS, ưu tiên Windows 10/11), ngoại lệ
+    với `PRODUCT_POLICY.md` mục 2 ("phát triển và kiểm thử đầy đủ ngay bây giờ") - cân nhắc đề xuất ở tsudev-standards;
+    điều kiện bật lại (có Mac + Apple Developer Program).
+  - `portable.yml`/`release.yml`: tắt job `macos-15` + `macos-15-intel` (và `magick-native-macos.yml` nếu chỉ phục vụ
+    macOS); giữ Linux x64/arm64 + Windows. Mã `Platform.MacOS` giữ nguyên (cân nhắc một bước kiểm biên dịch rẻ).
+  - Người đã cài macOS 2.4.1: không còn tệp `osx-*` ở bản sau => updater thấy "không có cập nhật"; GIỮ tệp của
+    2.4.1-vn.1 trên Releases; ghi rõ trong ghi chú phát hành, README, trang tải website; Homebrew tap đóng băng 2.4.1.
+  - Tiêu chí: CI PR không còn job macOS, Windows + Linux xanh; ADR + PLAN/STATE + website cập nhật; một PR.
+- [x] LG4 tsufiles (26/11): `.standards` v8.2.0, "Có gì mới" không tự bật, gỡ thẻ xin gắn sao, mục Tài khoản thụ động.
 - [ ] ⚡⚡⚡ TIẾP THEO: phiếu `logs/handover/20261125-02_ban-giao-std50-pr2-ui2-signpath.md` mục 2: UI2 phần B khi
       tsudev-standards có bảng màu Sáng dịu; PRO1/PRO2 + QR4 khi có thư viện `TsuSync`; SignPath nộp khi đạt >= 4/6
       (đo 25/11: 1/6). 👤: secret `VT_API_KEY` (GitHub Actions, không phải Render - phiếu mục 3), ĐỔI khóa VirusTotal.

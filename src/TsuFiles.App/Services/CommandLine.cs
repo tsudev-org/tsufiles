@@ -1,9 +1,8 @@
 // Command line options:
 //   Filee.exe                          open the main window
 //   Filee.exe --background             start in the tray only (used by "start with Windows")
-//   Filee.exe --whats-new[=1.12.0]     with --background: show this version's "What's new" slides anyway, if they
-//                                      are due (the installer after an update the user started); the value is the
-//                                      version updated from, which decides what is new
+//   Filee.exe --whats-new[=1.12.0]     passed by the installer after an update (the value is the version updated
+//                                      from); accepted, but TsuFiles opens nothing by itself
 //   Filee.exe --settings               open the main window
 //   Filee.exe --convert a b ...        open the donut for these files (Explorer context menu / Send To)
 //   Filee.exe --convert-list <file>    same, with one path per line in a UTF-8 file (Windows 11 Explorer menu, for
@@ -27,7 +26,7 @@ namespace TsuFiles.App.Services;
 /// <param name="StartWithWindows">Value of <c>--start-with-windows</c>; null when absent.</param>
 /// <param name="ContextMenu">Value of <c>--context-menu</c>; null when absent.</param>
 /// <param name="Language">Value of <c>--language</c>; null when absent.</param>
-/// <param name="WhatsNew"><c>--whats-new</c>: due slides show even when starting in the background.</param>
+/// <param name="WhatsNew"><c>--whats-new</c>: the installer started TsuFiles after an update.</param>
 /// <param name="UpdatedFrom">The value of <c>--whats-new</c>: the version the installer updated from; null when absent.</param>
 public sealed record CommandLine(
     bool Background,

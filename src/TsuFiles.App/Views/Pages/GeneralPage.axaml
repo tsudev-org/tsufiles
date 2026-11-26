@@ -144,6 +144,19 @@
       </StackPanel>
     </Border>
 
+    <!-- Passive entry only (tsudev AUTH_AND_ACCOUNT 14.4): a neutral status, nothing that asks to sign in. TsuFiles has
+         no sign-in flow yet, so there is no button that would pretend to have one. -->
+    <Border x:Name="AccountCard" Classes="card">
+      <DockPanel>
+        <Button DockPanel.Dock="Right" VerticalAlignment="Center" Content="{DynamicResource account.why}" Click="OnWhySignIn" />
+        <StackPanel Spacing="4" Margin="0,0,12,0">
+          <TextBlock Classes="h2" Text="{DynamicResource account.title}" />
+          <TextBlock Text="{DynamicResource account.signed_out}" TextWrapping="Wrap" />
+          <TextBlock Classes="muted" TextWrapping="Wrap" Text="{DynamicResource account.note}" />
+        </StackPanel>
+      </DockPanel>
+    </Border>
+
     <Border Classes="card">
       <DockPanel>
         <Button DockPanel.Dock="Right" Content="{DynamicResource general.open_data_folder}" Command="{Binding OpenDataFolderCommand}" />

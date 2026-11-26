@@ -1,4 +1,4 @@
-# XÁC THỰC VÀ KIẾN TRÚC TÀI KHOẢN - mọi project/tool/phần mềm tsudev (v3.3.0)
+# XÁC THỰC VÀ KIẾN TRÚC TÀI KHOẢN - mọi project/tool/phần mềm tsudev (v4.0.0)
 
 > Đăng nhập, đăng ký, liên kết nhà cung cấp, trạng thái tài khoản, và cơ chế
 > **Xác minh tài khoản**. Đây là chuẩn bắt buộc, không phải gợi ý.
@@ -8,6 +8,11 @@
 > lại** mà chỉ tham chiếu. Giao diện lấy token từ
 > [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md). Nhận diện và trang hồ sơ ở
 > [`ECOSYSTEM_IDENTITY.md`](ECOSYSTEM_IDENTITY.md).
+>
+> **v4.0.0 (26/11/2026, phiếu `20261126-LG4`)**: mục 14.4 viết lại - **bỏ hẳn nhắc đăng nhập tự động** (modal, thông
+> báo, biểu ngữ, chấm đỏ, dòng gợi ý CLI); đăng nhập chỉ mở khi người dùng chủ động bấm. Thay thế v3.5.0.
+> **v3.5.0 (26/11/2026, phiếu `20261126-LG3`, ĐÃ THAY bởi v4.0.0)**: mục 14.4 - nhắc đăng nhập bằng modal nổi khi thiết bị có internet mà
+> chưa đăng nhập (không chặn chức năng lõi, không gọi mạng ngầm, nhịp chống làm phiền, thư viện chung).
 
 ## Mục lục
 
@@ -24,7 +29,7 @@
 11. [Xác thực hai lớp và khôi phục](#11-xác-thực-hai-lớp-và-khôi-phục)
 12. [Đổi mật khẩu, đổi email, xóa tài khoản](#12-đổi-mật-khẩu-đổi-email-xóa-tài-khoản)
 13. [Giao diện bắt buộc](#13-giao-diện-bắt-buộc)
-14. [Sản phẩm chạy ngoại tuyến](#14-sản-phẩm-chạy-ngoại-tuyến)
+14. [Sản phẩm chạy ngoại tuyến](#14-sản-phẩm-chạy-ngoại-tuyến) (+ lối đăng nhập chủ động, mục 14.4)
 15. [Chuẩn API](#15-chuẩn-api)
 16. [Kiểm thử bắt buộc](#16-kiểm-thử-bắt-buộc)
 17. [Checklist nghiệm thu](#17-checklist-nghiệm-thu)
@@ -39,13 +44,13 @@ khi** viết dòng mã xác thực đầu tiên, rồi ghi hạng đó vào `REA
 | Hạng | Mô tả | Xác thực |
 | --- | --- | --- |
 | **A - Web có tài khoản** | Website, ứng dụng web, bảng quản trị. Ví dụ: `tsudev` | `MUST` đủ mục 3 tới 13 |
-| **B - Desktop/app có kết nối** | App cài đặt nhưng có tính năng cần máy chủ (đồng bộ, giấy phép, báo cáo) | `MUST` đủ mục 3 tới 13, thêm mục 14.1 |
+| **B - Desktop/app có kết nối** | App cài đặt nhưng có tính năng cần máy chủ (tài khoản, quyền lợi, giấy phép) - KHÔNG gửi dữ liệu người dùng (`PRODUCT_POLICY` 7.1 N2) | `MUST` đủ mục 3 tới 13, thêm mục 14.1 |
 | **C - Ngoại tuyến** | Chạy trọn vẹn không cần internet. Ví dụ: `tsuswico` rà quét máy tính, `tsucontact` chuyển CSV sang vCard | Đăng nhập là **tùy chọn**, theo mục 14 |
 
 **Quy tắc cứng:** hạng C `MUST NOT` chặn bất kỳ chức năng lõi nào sau một màn
 hình đăng nhập. Người dùng mở phần mềm ra là dùng được ngay. Đăng nhập ở hạng C
-chỉ mở thêm phần cộng thêm (đồng bộ báo cáo, lưu hồ sơ máy, cấu hình theo tài
-khoản), và `MUST` nêu rõ mở thêm cái gì ngay tại nút đăng nhập.
+chỉ mở thêm phần cộng thêm (huy hiệu, quyền lợi Pro, ghi nhận ủng hộ - KHÔNG
+đưa dữ liệu người dùng lên máy chủ, `PRODUCT_POLICY` mục 7), và `MUST` nêu rõ mở thêm cái gì ngay tại nút đăng nhập.
 
 Sản phẩm hạng A và B `MUST NOT` tự dựng kho người dùng riêng. Danh tính của hệ
 sinh thái là **một**, ở `tsudev.com` (mục 2).
@@ -599,13 +604,14 @@ kiện để chia sẻ liên kết giữa các sản phẩm mà không hỏng.
 - Chức năng lõi `MUST` chạy đủ ở **chế độ khách**, không tài khoản, không mạng.
   Với `tsuswico`, rà quét và xuất báo cáo là chức năng lõi.
 - Nút đăng nhập `MUST` nói rõ nó mở thêm gì. Ví dụ đúng: `Đăng nhập tài khoản
-  tsudev để đồng bộ báo cáo và lưu hồ sơ máy`. Ví dụ sai: một nút `Đăng nhập`
+  tsudev để nhận huy hiệu và quyền lợi Pro`. Ví dụ sai: một nút `Đăng nhập`
   trống nghĩa.
 - `MUST NOT` gọi mạng ngầm khi người dùng chưa đăng nhập. Phần mềm rà quét máy
   tính mà tự gọi ra ngoài là điều đầu tiên bị công cụ bảo mật gắn cờ, và đúng ra
   phải như vậy.
 - `MUST` có công tắc **Chế độ ngoại tuyến hoàn toàn** trong Cài đặt, khi bật thì
-  chặn mọi kết nối ra, kể cả kiểm tra bản cập nhật.
+  chặn mọi kết nối ra, kể cả kiểm tra bản cập nhật; khi đó mọi tính năng cần máy
+  chủ tắt và bật lại chỉ sau khi qua cổng phiên bản ([`APP_INTEGRITY.md`](APP_INTEGRITY.md) mục 2.2).
 
 ### 14.2. Token khi ngoại tuyến
 
@@ -620,8 +626,8 @@ kiện để chia sẻ liên kết giữa các sản phẩm mà không hỏng.
 
 ### 14.3. Mã cài đặt (từ v3.9.0)
 
-Dùng để đếm số thiết bị của một tài khoản cho quyền lợi Pro
-([`PRODUCT_POLICY.md`](PRODUCT_POLICY.md) mục 7.3), không để định danh máy.
+Dùng để ghi nhận sản phẩm/thiết bị đã dùng và chống lạm dụng
+([`PRODUCT_POLICY.md`](PRODUCT_POLICY.md) mục 7.7), không để định danh máy.
 
 - `MUST` là chuỗi **ngẫu nhiên 128 bit** từ bộ sinh số ngẫu nhiên mật mã của nền
   tảng, mã hoá base64url không đệm, sinh ở **lần chạy đầu** và lưu cục bộ cùng
@@ -631,13 +637,90 @@ Dùng để đếm số thiết bị của một tài khoản cho quyền lợi 
   tay trình duyệt/phần cứng, hay bất kỳ giá trị nào sống lâu hơn bản cài.
 - Chỉ gửi khi người dùng **đã đăng nhập**, trong header `X-Tsu-Installation` của
   các lượt gọi lấy quyền lợi (`/api/me/entitlements`, `/api/rp/entitlements/*`)
-  và máy chủ đồng bộ. Chưa đăng nhập ⇒ không gửi đi đâu (mục 14.1).
+  và API của sản phẩm. Chưa đăng nhập ⇒ không gửi đi đâu (mục 14.1).
 - Máy chủ chỉ lưu **HMAC-SHA-256** của mã với khoá bí mật phía máy chủ, trong
   bảng `AppInstallation {userId, clientId, installationIdHash, platform,
   lastSeenAt}`; JWS quyền lợi chỉ trả số đếm `devices_30d`, KHÔNG trả danh sách.
   Bản ghi không hoạt động quá 90 ngày `MUST` bị xóa.
 - Header sai định dạng (không phải 22 ký tự base64url) ⇒ bỏ qua, không đếm,
   không làm hỏng lượt gọi.
+
+### 14.4. Lối đăng nhập chủ động - không nhắc tự động (v4.0.0)
+
+> Chủ dự án 26/11/2026, phiếu `20261126-LG4` (thay `20261126-LG3`): định hướng của **mọi** sản phẩm TsuDEV là không
+> quảng cáo, không thông báo làm phiền ([`PRODUCT_POLICY.md`](PRODUCT_POLICY.md) mục 3.8). Đăng nhập - bằng tài khoản
+> TsuDEV hay Google, GitHub, Apple, nhà cung cấp khác ở mục 3.0 - là việc **người dùng tự chọn**, không bao giờ được
+> sản phẩm tự đẩy ra. Áp cho mọi sản phẩm có giao diện người dùng: web, app di động, desktop, trò chơi, CLI.
+
+**Vì sao vẫn nên có tài khoản** (khớp `PRODUCT_POLICY` 7.7): khôi phục tài khoản và quyền lợi khi đổi máy, gửi báo cáo
+sự cố gắn tài khoản, để máy chủ đánh giá trạng thái tài khoản (mục 9). Các lý do này được **giải thích tại chỗ người dùng
+tự tìm tới** (Cài đặt › Tài khoản, `https://tsudev.com/privacy#dang-nhap`), không bằng lời nhắc tự hiện.
+
+#### 14.4.1. Cấm (`MUST NOT`)
+
+Sản phẩm `MUST NOT` tự hiển thị, vào bất kỳ thời điểm nào (lần mở đầu, khi có mạng trở lại, sau tác vụ lõi, theo hẹn
+giờ, khi hết phiên ngoại tuyến 7 ngày), bất kỳ bề mặt nào mời/nhắc đăng nhập hay liên kết tài khoản nhà cung cấp:
+
+| # | Bề mặt bị cấm khi người dùng chưa bấm gì |
+| :-: | --- |
+| N1 | Modal, hộp thoại, bottom sheet, trang chen ngang (interstitial), màn chào "Đăng nhập để tiếp tục" có nút bỏ qua |
+| N2 | Toast, snackbar, biểu ngữ (banner) trong app, thẻ nổi trên màn chính |
+| N3 | Thông báo hệ điều hành (push/local notification), email, huy hiệu số trên biểu tượng app |
+| N4 | Chấm đỏ, nhấp nháy, viền nhấn, mũi tên chỉ vào mục Tài khoản để thu hút đăng nhập |
+| N5 | Dòng gợi ý tự in ở CLI (stderr/stdout) - CLI chỉ liệt kê lệnh `login` trong `--help` |
+| N6 | Google One Tap, "Sign in with Apple" tự bật, gợi ý tài khoản Credential Manager tự hiện, `prompt=none` dò ngầm |
+
+Không có hằng số nhịp, bộ đếm lần hiện, trạng thái "Để sau"/"Không nhắc 30 ngày": cơ chế đó bị **bỏ hẳn**.
+
+#### 14.4.2. Phải có (`MUST`)
+
+1. **Lối vào cố định, thụ động**: Cài đặt › Tài khoản (hoặc ảnh đại diện/biểu tượng người dùng ở góc trên). Khi chưa đăng
+   nhập, mục này chỉ ghi trạng thái trung tính ("Chưa đăng nhập") + nút **Đăng nhập**, cùng kiểu chữ/màu với các mục cài
+   đặt khác, kèm một đoạn ngắn "Vì sao nên đăng nhập?" mở `https://tsudev.com/privacy#dang-nhap`.
+2. **Theo ngữ cảnh, chỉ khi người dùng bấm**: chức năng tự bản chất cần tài khoản (mua/gia hạn Pro, Ủng hộ cấp huy hiệu,
+   xem hồ sơ/huy hiệu, gửi báo cáo gắn tài khoản, "Quét để đăng nhập" ở [`CROSS_DEVICE_LOGIN.md`](CROSS_DEVICE_LOGIN.md))
+   được mở trang/hộp chọn đăng nhập **như phản hồi trực tiếp của cú bấm đó**; đóng lại thì quay về chỗ cũ, không hỏi lại
+   trong cùng thao tác. Hạng A/B: chức năng cần tài khoản vẫn đi qua trang đăng nhập như mục 13.
+3. **Báo cáo sự cố** gửi được ẩn danh; ô "Gắn tài khoản" (không tích sẵn) chỉ mở đăng nhập khi người dùng tích.
+4. **Hạng C** không bao giờ chặn chức năng lõi (mục 1); chế độ khách là trải nghiệm đầy đủ, không phải bản "chờ đăng nhập".
+5. Phiên ngoại tuyến quá 7 ngày (mục 14.2): app lặng lẽ về trạng thái chưa đăng nhập ở mục Tài khoản (kèm dòng trạng
+   thái "Phiên đã hết hạn - Đăng nhập lại"), `MUST NOT` bật hộp thoại.
+6. Dữ liệu cục bộ của cơ chế cũ (`tsu.signin_reminder.next_at`, `tsu.signin_reminder.dismiss_count`, khoá tương đương ở
+   web/desktop) `MUST` bị xoá ở lần chạy đầu sau khi nâng cấp (Flutter: `removeLegacyLocalKeys` của `tsudev_ui`).
+
+#### 14.4.3. Bảo mật của luồng đăng nhập
+
+- Màn chọn lối vào `MUST NOT` chứa ô nhập email/mật khẩu hay mã của bất kỳ nhà cung cấp nào. Bấm lối vào ⇒ luồng mục 4:
+  Authorization Code + PKCE `S256`, `state` + `nonce`, qua **trình duyệt hệ thống** (Android Custom Tabs, iOS/macOS
+  `ASWebAuthenticationSession`, desktop trình duyệt mặc định + vòng lặp `127.0.0.1`, RFC 8252). `MUST NOT` WebView nhúng.
+  Mật khẩu chỉ gõ trên trang của IdP tsudev.com hoặc của Google/GitHub/Apple - chống trang giả mạo và đánh cắp mật khẩu.
+- Phạm vi xin đúng mục 3.1 / `PRODUCT_POLICY` 7.7 (`openid email profile`; GitHub `read:user user:email`).
+- Token cất trong kho bí mật hệ điều hành (mục 14.2), gắn khoá DPoP khi sản phẩm đã bật
+  ([`SECURITY_BASELINE.md`](SECURITY_BASELINE.md) mục 6); mã cài đặt chỉ gửi sau khi đăng nhập (mục 14.3).
+- **Trạng thái tài khoản do máy chủ quyết.** Sau đăng nhập và ở mỗi lần làm mới token, app đọc `status` (mục 9.2) từ
+  IdP. `suspended`/`restricted` ⇒ hiện huy hiệu + lý do + đường khiếu nại (mục 8.4) **trong mục Tài khoản**, áp hạn chế
+  theo `403` + mã lý do của máy chủ (mục 10); app `MUST NOT` tự suy luận vi phạm ở máy khách. Hạng C bị `suspended` mất
+  phần cộng thêm nhưng vẫn dùng chức năng lõi và **Xuất dữ liệu**.
+- Trước khi người dùng bấm một lối vào, app `MUST NOT` gửi bất kỳ gói nào (mục 14.1) - kể cả để biết có mạng hay không.
+
+#### 14.4.4. Thư viện chung
+
+| Nền tảng | Thành phần |
+| --- | --- |
+| Flutter | `tsudev_ui` `TsuAccountTile` (mục Tài khoản thụ động) + `TsuSignInSheet` (chỉ mở từ cú bấm); `TsuSignInReminder`/`SignInReminderPolicy` **ngừng dùng** - gỡ ở MAJOR kế tiếp của `tsudev_ui` |
+| Web | `@tsudev/ui` `<tsu-account-entry>`; `<tsu-signin-reminder>` ngừng dùng, không gắn vào trang nào |
+| .NET (WinUI/WPF), Tauri, C++ (MFC) | Mục Tài khoản trong Cài đặt theo token [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md); không hộp thoại nhắc |
+
+#### 14.4.5. Kiểm thử bắt buộc
+
+Ca 17 ở mục 16: chưa đăng nhập, có mạng, mở app ≥ 5 phiên và dùng hết tác vụ lõi (đồng hồ giả lập qua 30 ngày) ⇒ **0**
+bề mặt N1-N6 xuất hiện; phiên ngoại tuyến hết hạn ⇒ không hộp thoại, mục Tài khoản ghi "Phiên đã hết hạn"; bấm chức năng
+cần tài khoản ⇒ mở đúng một màn đăng nhập, đóng ⇒ quay về chỗ cũ; khoá cũ `tsu.signin_reminder.*` bị xoá sau nâng cấp;
+không lưu lượng mạng trước khi bấm lối vào (proxy hoặc mock HTTP); luồng trình duyệt hệ thống có PKCE + `state`; CLI
+không in dòng gợi ý đăng nhập.
+
+**Tuân thủ cửa hàng:** đăng nhập hoàn toàn tuỳ chọn và chỉ do người dùng mở, khớp App Store Review Guidelines 5.1.1(v)
+và chính sách Dữ liệu người dùng của Google Play; `STORE_SUBMISSION.md` không cần khai thêm.
 
 ---
 
@@ -726,6 +809,9 @@ danh sách đầy đủ.
     cookie `SameSite=Lax`; email `@privaterelay.appleid.com` không gộp tự động vào
     tài khoản có sẵn; thông báo `account-delete` gỡ liên kết; xoá tài khoản gọi
     `auth/revoke`.
+17. Không nhắc đăng nhập tự động (mục 14.4.5): đủ các ca liệt kê ở đó, kể cả
+    "0 bề mặt mời đăng nhập khi người dùng chưa bấm" và "không lưu lượng mạng
+    trước khi người dùng bấm lối vào".
 
 ---
 
@@ -745,6 +831,8 @@ danh sách đầy đủ.
 - [ ] Hạng C chạy đủ chức năng lõi ở chế độ khách, không gọi mạng ngầm.
 - [ ] Token ngoại tuyến nằm trong kho bí mật của hệ điều hành.
 - [ ] Mã cài đặt ngẫu nhiên 128 bit, không dùng định danh phần cứng (mục 14.3).
+- [ ] Mục 14.4: không bề mặt nào tự mời đăng nhập (N1-N6); có lối vào cố định thụ động trong Cài đặt › Tài khoản;
+  đăng nhập theo ngữ cảnh chỉ mở từ cú bấm; khoá `tsu.signin_reminder.*` cũ đã xoá; không gọi mạng trước khi bấm.
 - [ ] Đủ các ca kiểm thử ở mục 16 (ca 16 khi bật Apple).
 - [ ] Đường dẫn đúng mục 13.1.
 - [ ] Bố cục mục 13.2 (v3.3.0), ô đồng ý mục 13.4 không tích sẵn, lối vào bổ sung mục 3.0 lấy từ IdP.

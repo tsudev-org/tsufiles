@@ -180,124 +180,10 @@ public class WhatsNewTests
         Assert.Null(SlideDeck.TryParseVersion("next"));
     }
 
-    // ───────────────────────── When the slides are due ─────────────────────────
-
-    private static readonly SlideDeck[] Decks = [Deck("2.0.0"), Deck("2.1.0"), Deck("2.2.0")];
+    // ───────────────────────── The installer's switch ─────────────────────────
 
     [Fact]
-    public void A_fresh_install_shows_nothing_and_counts_its_version_as_seen()
-    {
-        var decision = WhatsNewService.Decide(null, firstRunCompleted: false, V2, Decks);
-        Assert.Null(decision.Show);
-        Assert.Equal(V2, decision.Remember);
-    }
-
-    [Fact]
-    public void The_installer_after_an_update_gets_the_slides_even_without_settings()
-    {
-        // The settings folder was deleted before updating: no first-run flag, but Setup says it was an update.
-        var decision = WhatsNewService.Decide(null, firstRunCompleted: false, V2, Decks, updated: true);
-        Assert.Equal(V2, decision.Show?.Version);
-        Assert.Equal(default, WhatsNewService.Decide("2.0.0", false, V2, Decks, updated: true));
-    }
-
-    [Fact]
-    public void An_update_from_before_the_slides_shows_this_versions_deck()
-    {
-        // Settings from 1.x have no WhatsNewSeenVersion, but the first run was long done.
-        var decision = WhatsNewService.Decide(null, firstRunCompleted: true, V2, Decks);
-        Assert.Equal(V2, decision.Show?.Version);
-        Assert.Null(decision.Remember); // remembered when the window shows, not before
-        Assert.Equal(V2, WhatsNewService.Decide("garbage", true, V2, Decks).Show?.Version);
-    }
-
-    [Fact]
-    public void Skipping_versions_shows_the_newest_deck_only()
-    {
-        Assert.Equal(new Version(2, 2, 0), WhatsNewService.Decide("2.0.0", true, new Version(2, 2, 1), Decks).Show?.Version);
-        Assert.Equal(new Version(2, 1, 0), WhatsNewService.Decide("2.0.0", true, new Version(2, 1, 5), Decks).Show?.Version);
-    }
-
-    [Fact]
-    public void An_update_without_slides_is_remembered_quietly()
-    {
-        var decision = WhatsNewService.Decide("2.2.0", true, new Version(2, 2, 1), Decks);
-        Assert.Null(decision.Show);
-        Assert.Equal(new Version(2, 2, 1), decision.Remember);
-    }
-
-    [Fact]
-    public void The_same_version_or_a_downgrade_shows_nothing_and_keeps_what_was_seen()
-    {
-        Assert.Equal(default, WhatsNewService.Decide("2.0.0", true, V2, Decks));
-        Assert.Equal(default, WhatsNewService.Decide("2.1.0", true, V2, Decks));
-    }
-
-    [AvaloniaFact]
-    public void Starting_in_the_background_waits_for_the_main_window()
-    {
-        TestServices.EnsureInitialized("en");
-        var (service, store, windows) = (AppHost.Get<WhatsNewService>(), AppHost.Get<UserDataStore>(), AppHost.Get<WindowService>());
-        var (seen, firstRun, version) = (store.Settings.WhatsNewSeenVersion, store.Settings.FirstRunCompleted, service.CurrentVersion);
-        try
-        {
-            service.CurrentVersion = V2;
-            store.Settings.FirstRunCompleted = true;
-            store.Settings.WhatsNewSeenVersion = null;
-
-            service.CheckAtStartup(background: true);
-            Pump();
-            Assert.Equal(V2, service.Pending?.Version);
-            Assert.Null(windows.WhatsNew);
-            Assert.Null(store.Settings.WhatsNewSeenVersion); // not seen yet: a quit now shows them next time
-
-            windows.ShowMain(); // the user opens Filee from the tray
-            Pump();
-            var window = Assert.IsType<WhatsNewWindow>(windows.WhatsNew);
-            Assert.True(window.IsVisible);
-            Assert.Null(service.Pending);
-            Assert.Equal("2.0.0", store.Settings.WhatsNewSeenVersion);
-            window.Close();
-
-            // Shown once: the next start has nothing to show.
-            service.CheckAtStartup(background: false);
-            Pump();
-            Assert.Null(service.Pending);
-            Assert.Null(windows.WhatsNew);
-        }
-        finally
-        {
-            windows.WhatsNew?.Close();
-            windows.Main?.Close();
-            (store.Settings.WhatsNewSeenVersion, store.Settings.FirstRunCompleted, service.CurrentVersion) = (seen, firstRun, version);
-        }
-    }
-
-    [AvaloniaFact]
-    public void A_fresh_install_is_marked_seen_without_a_window()
-    {
-        TestServices.EnsureInitialized("en");
-        var (service, store, windows) = (AppHost.Get<WhatsNewService>(), AppHost.Get<UserDataStore>(), AppHost.Get<WindowService>());
-        var (seen, firstRun, version) = (store.Settings.WhatsNewSeenVersion, store.Settings.FirstRunCompleted, service.CurrentVersion);
-        try
-        {
-            service.CurrentVersion = V2;
-            store.Settings.FirstRunCompleted = false;
-            store.Settings.WhatsNewSeenVersion = null;
-            service.CheckAtStartup(background: false);
-            Pump();
-            Assert.Null(windows.WhatsNew);
-            Assert.Null(service.Pending);
-            Assert.Equal("2.0.0", store.Settings.WhatsNewSeenVersion);
-        }
-        finally
-        {
-            (store.Settings.WhatsNewSeenVersion, store.Settings.FirstRunCompleted, service.CurrentVersion) = (seen, firstRun, version);
-        }
-    }
-
-    [Fact]
-    public void The_installer_can_ask_for_the_slides_after_an_update()
+    public void The_installer_switch_after_an_update_is_still_accepted()
     {
         var options = CommandLine.Parse(["--background", "--whats-new"]);
         Assert.True(options.Background);
@@ -305,17 +191,6 @@ public class WhatsNewTests
         Assert.False(CommandLine.Parse(["--background"]).WhatsNew);
         Assert.Null(options.UpdatedFrom);
         Assert.Equal("1.12.0", CommandLine.Parse(["--whats-new=1.12.0"]).UpdatedFrom);
-    }
-
-    [Fact]
-    public void The_version_updated_from_decides_over_the_remembered_one()
-    {
-        // 2.0.0's slides were seen, Filee went back to 1.12.0 and was updated again: they are new again.
-        Assert.Equal(V2, WhatsNewService.Decide("2.0.0", true, V2, Decks, updated: true, updatedFrom: "1.12.0").Show?.Version);
-        // Reinstalling the same version shows nothing.
-        Assert.Equal(default, WhatsNewService.Decide(null, true, V2, Decks, updated: true, updatedFrom: "2.0.0"));
-        // Unreadable: the remembered version decides.
-        Assert.Equal(default, WhatsNewService.Decide("2.0.0", true, V2, Decks, updated: true, updatedFrom: "next"));
     }
 
     // ───────────────────────── The window ─────────────────────────
@@ -526,7 +401,7 @@ public class WhatsNewTests
         TestServices.EnsureInitialized("en");
         var service = AppHost.Get<WhatsNewService>();
         var store = AppHost.Get<UserDataStore>();
-        var (version, seen) = (service.CurrentVersion, store.Settings.WhatsNewSeenVersion);
+        var version = service.CurrentVersion;
         try
         {
             service.CurrentVersion = new Version(2, 0, 3);
@@ -544,7 +419,6 @@ public class WhatsNewTests
             link.Command!.Execute(null);
             Pump();
             Assert.IsType<WhatsNewWindow>(AppHost.Get<WindowService>().WhatsNew);
-            Assert.Equal("2.0.3", store.Settings.WhatsNewSeenVersion);
             AppHost.Get<WindowService>().WhatsNew!.Close();
             window.Close();
 
@@ -555,7 +429,7 @@ public class WhatsNewTests
         }
         finally
         {
-            (service.CurrentVersion, store.Settings.WhatsNewSeenVersion) = (version, seen);
+            service.CurrentVersion = version;
         }
     }
 
