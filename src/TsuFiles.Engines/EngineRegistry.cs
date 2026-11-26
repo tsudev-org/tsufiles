@@ -24,7 +24,6 @@ using TsuFiles.Engines.Signed;
 using TsuFiles.Engines.Subtitles;
 using TsuFiles.Engines.Text;
 using TsuFiles.Engines.Vector;
-using TsuFiles.Engines.Wic;
 
 namespace TsuFiles.Engines;
 
@@ -47,7 +46,6 @@ public static class EngineRegistry
         new PdfSharpConverter(),
         new PdfiumConverter(),
         new RhwpConverter(),
-        new UnhwpConverter(),
         new MarkdownConverter(),
         new SpreadsheetConverter(),
         new OoxmlConverter(),
@@ -65,7 +63,6 @@ public static class EngineRegistry
         new P7mConverter(),
         new DataConverter(),
         new SubtitleConverter(),
-        new WicImageConverter(),
         new WhisperConverter(loggers?.CreateLogger<WhisperConverter>()),
         new ExifToolConverter(),
         new Upscale.UpscalerConverter(),
@@ -75,11 +72,8 @@ public static class EngineRegistry
         new ImageTo3DConverter(),
         new GeoConverter(),
         new EbookConverter(),
-        new PandocConverter(),
         new GhostscriptConverter(),
-        new VisionConverter(), // before Tesseract: a Mac's OCR step (Tesseract reads the languages Vision doesn't)
         new TesseractConverter(),
-        new CalibreConverter(),
         new LibreOfficeConverter(env, loggers?.CreateLogger<LibreOfficeConverter>()),
     ];
 

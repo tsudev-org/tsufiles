@@ -158,11 +158,11 @@ jobs:
           path: build/.cache/zig-x86_64-windows-0.16.0
           key: zig-0.16.0-x86_64-windows
 
-      # rhwp, Pandoc, 7-Zip and ExifTool are small; with them the HWP/HWPX, archive and metadata engine tests run too
+      # rhwp, 7-Zip and ExifTool are small; with them the HWP/HWPX, archive and metadata engine tests run too
       # (LibreOffice is skipped to save time).
-      - name: Fetch rhwp, Pandoc, 7-Zip and ExifTool for engine tests
+      - name: Fetch rhwp, 7-Zip and ExifTool for engine tests
         shell: pwsh
-        run: ./build/fetch-engines.ps1 -Only rhwp,pandoc,7zip,exiftool
+        run: ./build/fetch-engines.ps1 -Only rhwp,7zip,exiftool
 
       # The UI tests on their own first, as the release runs them (there they crashed with 0xC0000005): a crash
       # names the test that was running and leaves a dump in TestResults.
@@ -233,10 +233,10 @@ jobs:
       - name: Test
         run: dotnet test tests/TsuFiles.Engines.Tests -c Release --filter "FullyQualifiedName~MetadataTests"
 
-  # Windows on ARM64 (#236), built and tested natively: the Explorer menu DLL, Setup, 7-Zip, rhwp and Unhwp's library
-  # are ARM64 builds, the downloaded engines (Pandoc here) x64 ones under emulation. rhwp and Unhwp come from pinned
-  # builds of .github/workflows/windows-arm64-native.yml (build/fetch-engines.ps1). Until both are pinned, their tests
-  # skip and no package is built; once they are, the job also builds the win-arm64 Setup and portable zip to try out.
+  # Windows on ARM64 (#236), built and tested natively: the Explorer menu DLL, Setup, 7-Zip and rhwp are ARM64
+  # builds. rhwp comes from a pinned build of .github/workflows/windows-arm64-native.yml (build/fetch-engines.ps1).
+  # Until it is pinned, its tests skip and no package is built; once it is, the job also builds the win-arm64 Setup and
+  # portable zip to try out.
   build-arm64:
     name: build (win-arm64)
     needs: changes
@@ -270,19 +270,16 @@ jobs:
       - name: Fonts
         run: ./build/fetch-fonts.ps1
 
-      # The pinned rhwp and Unhwp builds when there are, as for the package; Unhwp's library goes next to the test
-      # programs through the build.
+      # The pinned rhwp build when there is one, as for the package.
       - name: Fetch engines for engine tests
         run: |
-          $only = @('pandoc', '7zip')
-          if ('${{ steps.pins.outputs.ready }}' -eq 'true') { $only += @('rhwp', 'unhwp') }
+          $only = @('7zip')
+          if ('${{ steps.pins.outputs.ready }}' -eq 'true') { $only += @('rhwp') }
           ./build/fetch-engines.ps1 -Runtime win-arm64 -Only $only
 
       - name: Build
         run: |
-          $native = @()
-          if ('${{ steps.pins.outputs.ready }}' -eq 'true') { $native = @("-p:UnhwpNativeLibrary=$((Resolve-Path engines/unhwp/unhwp.dll).Path)") }
-          dotnet build TsuFiles.slnx --no-restore -c Release @native
+          dotnet build TsuFiles.slnx --no-restore -c Release
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       # The x64 Zig toolchain the build job saves; it cross-compiles the ARM64 DLL under x64 emulation.

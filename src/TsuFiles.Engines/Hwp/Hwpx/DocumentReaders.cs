@@ -61,28 +61,6 @@ internal static class DocumentReaders
         ["txtz"] = ZippedText.ReadTxtz,
     };
 
-    /// <summary>
-    /// Formats read through Pandoc's JSON AST (PandocAstReader) when Pandoc is installed: format id → Pandoc reader.
-    /// A built-in reader for the same format wins.
-    /// </summary>
-    private static readonly Dictionary<string, string> ThroughPandoc = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ["odt"] = "odt",
-        ["rtf"] = "rtf",
-        ["html"] = "html",
-        ["rst"] = "rst",
-        ["tex"] = "latex",
-        ["org"] = "org",
-        ["adoc"] = "asciidoc",
-        ["typ"] = "typst",
-        ["mediawiki"] = "mediawiki",
-        ["dbk"] = "docbook",
-        ["ipynb"] = "ipynb",
-        ["textile"] = "textile",
-        ["man"] = "man",
-        ["opml"] = "opml",
-    };
-
     /// <summary>Formats read without any optional engine.</summary>
     public static IEnumerable<string> BuiltInFormats => BuiltIn.Keys;
 
@@ -91,15 +69,6 @@ internal static class DocumentReaders
     /// structure wins (HWP → HWPX → DOCX rather than HWP → PDF → DOCX), while PDF files themselves still convert.
     /// </summary>
     public const int PdfPenalty = 6;
-
-    /// <summary>Formats that need Pandoc (those without a built-in reader).</summary>
-    public static IEnumerable<string> PandocFormats => ThroughPandoc.Keys.Where(f => !BuiltIn.ContainsKey(f));
-
-    /// <summary>Every readable format; the Pandoc ones only when Pandoc is available.</summary>
-    public static IEnumerable<string> Formats(bool pandoc) => pandoc ? BuiltInFormats.Concat(PandocFormats) : BuiltInFormats;
-
-    /// <summary>True when <paramref name="format"/> can only be read with Pandoc.</summary>
-    public static bool NeedsPandoc(string format) => !BuiltIn.ContainsKey(format) && ThroughPandoc.ContainsKey(format);
 
     /// <summary>Reads <paramref name="path"/> (of format <paramref name="format"/>) into the document model.</summary>
     /// <param name="workDirectory">Scratch folder of the job: extracted pictures go into a new folder inside it.</param>
@@ -118,20 +87,7 @@ internal static class DocumentReaders
             return await Task.Run(() => PdfDocumentReader.ReadExact(path, media), cancellationToken);
         if (BuiltIn.TryGetValue(format, out var reader))
             return await Task.Run(() => reader(path, media), cancellationToken);
-        if (ThroughPandoc.TryGetValue(format, out var pandocReader))
-            return await ReadWithPandocAsync(path, pandocReader, workDirectory, media, cancellationToken);
         throw new NotSupportedException($"There is no document reader for {format.ToUpperInvariant()} files.");
-    }
-
-    // ───────────────────────── Pandoc ─────────────────────────
-
-    private static async Task<HDocument> ReadWithPandocAsync(string path, string pandocReader, string workDirectory, string media, CancellationToken cancellationToken)
-    {
-        var pandoc = PandocConverter.Locate() ?? throw new InvalidOperationException("Pandoc was not found.");
-        var input = Path.GetFullPath(path);
-        var ast = await PandocConverter.ReadAstAsync(pandoc, input, pandocReader, media, workDirectory, cancellationToken);
-        var inputFolder = Path.GetDirectoryName(input)!;
-        return PandocAstReader.Read(ast, target => PandocConverter.Picture(target, inputFolder, media));
     }
 
     // ───────────────────────── Plain text ─────────────────────────

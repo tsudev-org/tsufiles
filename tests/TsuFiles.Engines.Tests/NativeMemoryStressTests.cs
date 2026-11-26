@@ -32,14 +32,6 @@ public class NativeMemoryStressTests(EngineFixture fx) : IClassFixture<EngineFix
             (ModelBuilders.Save(ModelBuilders.Cube(), dir, "cube", "glb"), "png"), // software renderer → SKImage
             (EngineFixture.MakeImage(dir, "photo.png", MagickFormat.Png), "webp"),
         };
-        if (OperatingSystem.IsWindows())
-        {
-            var jxr = Path.Combine(dir, "photo.jxr");
-            JpegXrBuilder.WriteBgr(jxr, 96, 64, (x, y) => ((byte)x, (byte)y, 128)); // WIC CopyPixels into a pinned array
-            routes.Add((jxr, "png"));
-        }
-        if (fx.Catalog.StatusOf(fx.Converters.Single(c => c.Id == "unhwp")).IsAvailable)
-            routes.Add((await fx.MakeHwpxAsync(fx.NewFolder()), "md"));
 
         // Every worker goes through every route at least once, however slow the machine; then until the time is up.
         using var stop = new CancellationTokenSource(Duration);

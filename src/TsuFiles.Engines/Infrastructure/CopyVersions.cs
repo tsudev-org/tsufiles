@@ -48,8 +48,6 @@ public static partial class CopyVersions
         var match = id switch
         {
             "ffmpeg" => FfmpegVersion().Match(text),
-            "pandoc" => PandocVersion().Match(text),
-            "calibre" => CalibreVersion().Match(text),
             "libreoffice" => LibreOfficeVersion().Match(text),
             _ => LeadingVersion().Match(text),
         };
@@ -100,12 +98,6 @@ public static partial class CopyVersions
 
     [GeneratedRegex(@"ffmpeg version n?(\d+)\.(\d+)")]
     private static partial Regex FfmpegVersion();
-
-    [GeneratedRegex(@"^pandoc(?:\.exe)? (\d+)\.(\d+)", RegexOptions.Multiline)]
-    private static partial Regex PandocVersion();
-
-    [GeneratedRegex(@"calibre (\d+)\.(\d+)")]
-    private static partial Regex CalibreVersion();
 
     [GeneratedRegex(@"(?:MsiProductVersion=|LibreOffice\s+)(\d+)\.(\d+)")]
     private static partial Regex LibreOfficeVersion();

@@ -14,7 +14,7 @@ namespace TsuFiles.Engines.Tests;
 
 public class EbookTests(EngineFixture fx) : IClassFixture<EngineFixture>
 {
-    private static readonly string[] OptionalEngines = ["pandoc", "libreoffice", "calibre"];
+    private static readonly string[] OptionalEngines = ["libreoffice"];
 
     private RoutePlanner BuiltInPlanner(params string[] assumeInstalled) =>
         new ConverterCatalog(fx.Converters.Where(c => !OptionalEngines.Contains(c.Id))) { Priority = fx.Catalog.Priority }
@@ -38,8 +38,6 @@ public class EbookTests(EngineFixture fx) : IClassFixture<EngineFixture>
 
     private bool HasRhwp => fx.Catalog.StatusOf(fx.Converters.Single(c => c.Id == "rhwp")).IsAvailable;
 
-    private bool HasCalibre => fx.Catalog.StatusOf(fx.Converters.Single(c => c.Id == "calibre")).IsAvailable;
-
     private static int PdfPages(string pdf)
     {
         using var document = PdfReader.Open(pdf, PdfDocumentOpenMode.Import);
@@ -62,59 +60,8 @@ public class EbookTests(EngineFixture fx) : IClassFixture<EngineFixture>
         Assert.Equal(["hwpx-writer", "rhwp", "pdfium"], planner.Plan("mobi", "png")!.Steps.Select(s => s.Converter.Id));
         foreach (var (from, to) in new[] { ("mobi", "epub"), ("azw3", "epub"), ("fb2", "epub"), ("epub", "fb2"), ("md", "epub"), ("docx", "epub"), ("epub", "txt"), ("cbr", "pdf"), ("pdf", "cbz"), ("azw4", "pdf"), ("htmlz", "txtz") })
             Assert.Equal("ebook", Assert.Single(planner.Plan(from, to)!.Steps).Converter.Id);
-        Assert.Null(planner.Plan("epub", "mobi")); // needs calibre
+        Assert.Null(planner.Plan("epub", "mobi")); // Kindle output only came from calibre (removed, phiếu TG1 G2)
     }
-
-    [Fact]
-    public void Calibre_adds_kindle_output_and_rare_formats_but_never_wins_over_built_in_routes()
-    {
-        var planner = fx.Catalog.CreatePlanner(["calibre"]);
-
-        Assert.Equal("calibre", Assert.Single(planner.Plan("epub", "azw3")!.Steps).Converter.Id);
-        Assert.Equal(["ebook", "calibre"], planner.Plan("fb2", "mobi")!.Steps.Select(s => s.Converter.Id));
-        Assert.Equal(["calibre", "ebook"], planner.Plan("lit", "txt")!.Steps.Select(s => s.Converter.Id));
-        Assert.Equal("ebook", Assert.Single(planner.Plan("mobi", "epub")!.Steps).Converter.Id);
-        Assert.Equal("ebook", Assert.Single(planner.Plan("epub", "fb2")!.Steps).Converter.Id);
-    }
-
-    /// <summary>The engine order with calibre moved to <paramref name="index"/>.</summary>
-    private List<string> CalibreAt(int index)
-    {
-        var order = fx.Catalog.Priority.Where(id => id != "calibre").ToList();
-        order.Insert(index, "calibre");
-        return order;
-    }
-
-    [Fact]
-    public void Calibre_makes_e_book_pdfs_only_when_ranked_above_the_hwpx_writer()
-    {
-        string[] installed = ["calibre", "rhwp", "pandoc", "libreoffice"];
-        var writer = fx.Catalog.Priority.ToList().IndexOf("hwpx-writer");
-        RoutePlanner Planner(IReadOnlyList<string> priority) =>
-            new ConverterCatalog(fx.Converters) { Priority = priority }.CreatePlanner(installed);
-        var byDefault = fx.Catalog.CreatePlanner(installed);
-        var belowWriter = Planner(CalibreAt(writer + 1));
-        var aboveWriter = Planner(CalibreAt(writer));
-        var first = Planner(CalibreAt(0));
-
-        // Books the built-in engines read: the default stays HWPX writer → rhwp (#127 moved calibre to the top).
-        foreach (var from in CalibreConverter.PdfInputs.Except(CalibreConverter.Inputs))
-        {
-            Assert.Equal(["hwpx-writer", "rhwp"], byDefault.Plan(from, "pdf")!.Steps.Select(s => s.Converter.Id));
-            Assert.Equal(["hwpx-writer", "rhwp"], belowWriter.Plan(from, "pdf")!.Steps.Select(s => s.Converter.Id));
-            Assert.Equal("calibre", Assert.Single(aboveWriter.Plan(from, "pdf")!.Steps).Converter.Id);
-            Assert.Equal("calibre", Assert.Single(first.Plan(from, "pdf")!.Steps).Converter.Id);
-        }
-        Assert.Equal(["hwpx-writer", "rhwp", "pdfium"], byDefault.Plan("epub", "png")!.Steps.Select(s => s.Converter.Id));
-        Assert.Equal(["calibre", "pdfium"], first.Plan("epub", "png")!.Steps.Select(s => s.Converter.Id));
-
-        // Formats only calibre reads: one calibre run instead of calibre → EPUB → HWPX writer → rhwp.
-        Assert.Equal("calibre", Assert.Single(byDefault.Plan("lit", "pdf")!.Steps).Converter.Id);
-        // Other documents keep their engines.
-        Assert.DoesNotContain("calibre", first.Plan("docx", "pdf")!.Steps.Select(s => s.Converter.Id));
-    }
-
-    // ───────────────────────── EPUB ─────────────────────────
 
     [Fact]
     public void Book_chapters_only_include_images_from_the_unpacked_book()
@@ -543,67 +490,6 @@ public class EbookTests(EngineFixture fx) : IClassFixture<EngineFixture>
         var fromCbt = await ConvertAsync(EbookBuilders.Cbt(dir), "cbz");
         using var repacked = ZipFile.OpenRead(fromCbt);
         Assert.Equal(["001.png", "002.jpg", "003.png"], repacked.Entries.Select(e => e.FullName));
-    }
-
-    // ───────────────────────── Calibre ─────────────────────────
-
-    [Fact]
-    public async Task Calibre_writes_kindle_books_that_the_built_in_reader_reads_back()
-    {
-        Assert.SkipUnless(HasCalibre, "calibre not found (pwsh build/fetch-engines.ps1 -Only calibre)");
-        var epub = EbookBuilders.Epub(fx.NewFolder());
-
-        foreach (var format in new[] { "azw3", "mobi" })
-        {
-            var kindle = await ConvertAsync(epub, format);
-            Assert.True(new FileInfo(kindle).Length > 1000);
-
-            // AZW3 is KF8 (skeleton / fragment indexes), MOBI is MOBI 6 (+ KF8 in calibre's joint files).
-            var book = MobiReader.ReadBook(kindle, fx.NewFolder(), TestContext.Current.CancellationToken);
-            Assert.Equal("별빛 이야기", book.Metadata.Title);
-            Assert.Contains("김작가", book.Metadata.Authors);
-            var text = Hwp.Hwpx.PlainTextWriter.Write(book.Document);
-            foreach (var expected in new[] { "첫 번째 장", "밤하늘에 별이 반짝였다.", "두 번째 장", "주석 내용입니다.", "목록 둘" })
-                Assert.Contains(expected, text);
-            Assert.NotEmpty(Hwp.Hwpx.HDocumentWalker.Images(book.Document));
-            var inlines = book.Document.Sections.SelectMany(s => Hwp.Hwpx.HDocumentWalker.Inlines(s.Blocks)).ToList();
-            var link = inlines.OfType<Hwp.Hwpx.HLink>().FirstOrDefault(l => l.Target.StartsWith('#'));
-            Assert.NotNull(link);
-            Assert.Contains(inlines.OfType<Hwp.Hwpx.HBookmark>(), b => "#" + b.Name == link.Target);
-        }
-    }
-
-    [Fact]
-    public async Task Calibre_reads_and_writes_rare_formats()
-    {
-        Assert.SkipUnless(HasCalibre, "calibre not found (pwsh build/fetch-engines.ps1 -Only calibre)");
-        var epub = EbookBuilders.Epub(fx.NewFolder());
-
-        var lit = await ConvertAsync(epub, "lit");
-        var text = await File.ReadAllTextAsync(await ConvertAsync(lit, "txt"), TestContext.Current.CancellationToken); // calibre → EPUB → built-in → TXT
-
-        Assert.Contains("밤하늘에", text);
-        Assert.Contains("주석 내용입니다.", text);
-    }
-
-    [Fact]
-    public async Task Calibre_ranked_first_makes_a4_pdfs_of_e_books()
-    {
-        Assert.SkipUnless(HasCalibre, "calibre not found (pwsh build/fetch-engines.ps1 -Only calibre)");
-        var epub = EbookBuilders.Epub(fx.NewFolder());
-        var catalog = new ConverterCatalog(fx.Converters) { Priority = CalibreAt(0) };
-        await using var queue = new JobQueue(catalog);
-        var job = new ConversionJob([epub], new Preset { TargetFormat = "pdf" }, "pdf");
-
-        await queue.RunAsync(job);
-
-        Assert.True(job.State == JobState.Completed, string.Join("; ", job.Files.Select(f => $"{f.ErrorKey} {f.ErrorDetail}")));
-        using var pdf = UglyToad.PdfPig.PdfDocument.Open(job.Outputs.Single());
-        Assert.Contains("calibre", pdf.Information.Producer, StringComparison.OrdinalIgnoreCase);
-        var page = pdf.GetPage(pdf.NumberOfPages);
-        Assert.Equal(595, page.Width, 2.0);  // A4 in points (calibre: 594.96 × 840.96)
-        Assert.Equal(842, page.Height, 2.0);
-        Assert.Contains("밤하늘에", string.Concat(pdf.GetPages().Select(p => p.Text)));
     }
 }
 

@@ -137,7 +137,7 @@ public sealed class DonutSettings
 public sealed class AppSettings
 {
     /// <summary>Current schema version. Increase when the format changes and add a migration.</summary>
-    public const int CurrentSchemaVersion = 76;
+    public const int CurrentSchemaVersion = 77;
 
     public int SchemaVersion { get; set; } = CurrentSchemaVersion;
 
@@ -225,9 +225,9 @@ public sealed class AppSettings
     /// <summary>Engine ids in preferred order (see <see cref="Conversion.ConverterCatalog.Priority"/>).</summary>
     public List<string> EnginePriority { get; set; } =
     [
-        "magick", "pdfium", "pdfsharp", "rhwp", "unhwp", "markdown", "spreadsheet", "ooxml", "hwpx-writer", "docx-writer",
+        "magick", "pdfium", "pdfsharp", "rhwp", "markdown", "spreadsheet", "ooxml", "hwpx-writer", "docx-writer",
         "pdf-text", "pdf-slides", "email", "data", "vector", "icns", "font", "cad", "model3d", "geo", "archive", "ebook",
-        "subtitle", "wic", "ffmpeg", "pandoc", "ghostscript", "calibre", "libreoffice",
+        "subtitle", "ffmpeg", "ghostscript", "libreoffice",
     ];
 
     /// <summary>Set once the first-run welcome has been shown.</summary>
@@ -252,7 +252,7 @@ public sealed class AppSettings
     public BrowserDropSettings BrowserDrops { get; set; } = new();
 
     /// <summary>
-    /// Optional engines the user already has: package id ("ffmpeg", "calibre", …) → the program they picked. Used
+    /// Optional engines the user already has: package id ("ffmpeg", "libreoffice", …) → the program they picked. Used
     /// instead of TsuFiles's download (Settings → Engines).
     /// </summary>
     public Dictionary<string, string> EngineOwnCopies { get; set; } = [];

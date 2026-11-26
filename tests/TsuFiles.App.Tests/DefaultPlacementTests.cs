@@ -311,7 +311,6 @@ public class DefaultPlacementTests(ITestOutputHelper output)
         return $"OS={RuntimeInformation.OSDescription}; RID={RuntimeInformation.RuntimeIdentifier}; "
             + $"GITHUB_WORKFLOW={Ci("GITHUB_WORKFLOW")}; GITHUB_JOB={Ci("GITHUB_JOB")}; "
             + $"RUNNER_OS={Ci("RUNNER_OS")}; RUNNER_ARCH={Ci("RUNNER_ARCH")}; "
-            + $"Pandoc={catalog.StatusOf(catalog.All.Single(c => c.Id == "pandoc")).IsAvailable}; "
             + $"LibreOffice={catalog.StatusOf(libreOffice).IsAvailable}; "
             + $"H2Orestart={libreOffice.Edges.Any(e => e.From == "hwp")}; "
             + $"LibreOfficeForSlides={EngineEnvironment.LibreOfficeForSlides}; "

@@ -242,7 +242,7 @@ public sealed class TesseractConverter : IConverter
 
     /// <summary>
     /// The pages without text become recognized scans, the others are copied. A PDF whose pages all have text is
-    /// copied as it is, with a note. Also Apple Vision's way (<see cref="VisionConverter"/>).
+    /// copied as it is, with a note.
     /// </summary>
     /// <param name="parallel">How many pages are recognized at the same time.</param>
     /// <param name="recognize">
@@ -444,6 +444,15 @@ public sealed class TesseractConverter : IConverter
     /// </summary>
     private sealed record Enlarged(string Name, bool Declared, string Original, double Width, double Height);
 
+    /// <summary>The resolution a picture declares (dots per inch), else <see cref="Dpi"/>.</summary>
+    internal static double PictureDpi(IMagickImage image)
+    {
+        var density = image.Density;
+        if (density.X <= 1)
+            return Dpi;
+        return density.Units == DensityUnit.PixelsPerCentimeter ? density.X * 2.54 : density.X;
+    }
+
     /// <summary>
     /// Writes an enlarged copy of <paramref name="picture"/> (in <paramref name="scratch"/>) when its text is likely too
     /// small for Tesseract (<see cref="EnlargeFactor"/>), else null. A TIFF of several pages is read as it is.
@@ -457,7 +466,7 @@ public sealed class TesseractConverter : IConverter
                 return null;
             using var image = new MagickImage();
             image.Ping(path);
-            var declared = image.Density.X > 1 ? VisionConverter.Dpi(image) : (double?)null;
+            var declared = image.Density.X > 1 ? PictureDpi(image) : (double?)null;
             var factor = EnlargeFactor(image.Width, image.Height, declared);
             if (factor == 1)
                 return null;

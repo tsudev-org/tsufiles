@@ -9,7 +9,7 @@
 //    as images.
 //  * HTML (HtmlReader, AngleSharp), EPUB, MOBI / AZW3, FB2, HTMLZ and TXTZ (Ebooks) and HWPX (HwpxReader) are read
 //    directly.
-//  * ODT, RTF, reStructuredText and LaTeX are parsed by Pandoc (optional engine) into its JSON AST.
+//  * ODT and RTF have no built-in reader: LibreOffice converts them (to DOCX first when HWPX is the target).
 
 using TsuFiles.Core.Conversion;
 using TsuFiles.Engines.Infrastructure;
@@ -20,27 +20,18 @@ namespace TsuFiles.Engines.Hwp.Hwpx;
 /// <summary>Writes HWPX files with the built-in OWPML writer.</summary>
 public sealed class HwpxConverter : IConverter
 {
-    private bool? _pandoc;
-
     public string Id => "hwpx-writer";
     public string DisplayName => "HWPX writer (built-in)";
     public int MaxParallelism => 0;
 
-    public IReadOnlyList<ConversionEdge> Edges =>
-        DocumentReaders.Formats(_pandoc ?? PandocConverter.Locate() is not null)
+    public IReadOnlyList<ConversionEdge> Edges { get; } =
+        DocumentReaders.BuiltInFormats
             .Where(from => from != "hwpx") // HWPX is read only to write other formats (DOCX, HTML, EPUB, ...)
             .Select(from => new ConversionEdge(from, "hwpx", from == "pdf" ? 10 + DocumentReaders.PdfPenalty : 10)).ToList();
 
-    public EngineStatus GetStatus()
-    {
-        var pandoc = PandocConverter.Locate();
-        _pandoc = pandoc is not null;
-        var builtIn = string.Join(", ", DocumentReaders.BuiltInFormats.Select(f => f.ToUpperInvariant()));
-        var withPandoc = string.Join(", ", DocumentReaders.PandocFormats.Select(f => f.ToUpperInvariant()));
-        return EngineStatus.Available(pandoc is null
-            ? $"{builtIn} → HWPX. {withPandoc} need Pandoc."
-            : $"{builtIn}; {withPandoc} with Pandoc ({pandoc})", EngineVersions.BuiltIn);
-    }
+    public EngineStatus GetStatus() =>
+        EngineStatus.Available(string.Join(", ", DocumentReaders.BuiltInFormats.Select(f => f.ToUpperInvariant())) + " → HWPX",
+            EngineVersions.BuiltIn);
 
     public async Task<IReadOnlyList<string>> ConvertAsync(ConversionStep step, IProgress<double>? progress, CancellationToken cancellationToken)
     {

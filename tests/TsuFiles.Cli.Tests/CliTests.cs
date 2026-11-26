@@ -1132,12 +1132,12 @@ public sealed class CliTests : IDisposable
     [Fact]
     public async Task No_route_distinguishes_missing_packages_from_impossible_targets()
     {
-        var catalog = new ConverterCatalog([Package("pandoc", false, new ConversionEdge("md", "pptx"))]);
+        var catalog = new ConverterCatalog([Package("tesseract", false, new ConversionEdge("md", "pptx"))]);
         var (code, output, errors) = await RunWith(catalog, "convert", Input("md"), "--to", "pptx", "--json");
         Assert.Equal(1, code);
         OnlyEvents(errors);
         Assert.Equal("failed", Assert.Single(Events(errors), e => e.GetProperty("event").GetString() == "file").GetProperty("state").GetString());
-        Hints(FileResultOf(output), "pandoc");
+        Hints(FileResultOf(output), "tesseract");
         (code, output, _) = await RunWith(catalog, "convert", Input("txt"), "--to", "mp3", "--json");
         Assert.Equal(1, code);
         Hints(FileResultOf(output));
@@ -1149,9 +1149,9 @@ public sealed class CliTests : IDisposable
         var catalog = new ConverterCatalog([
             new ControlledConverter("built-in", true, [new("md", "html")]),
             new ControlledConverter("rhwp", false, [new("md", "pptx", 1), new("md", "png")]),
-            Package("pandoc", false, new ConversionEdge("md", "pptx", 30)),
+            Package("tesseract", false, new ConversionEdge("md", "pptx", 30)),
         ])
-        { Priority = ["rhwp", "pandoc", "built-in"] };
+        { Priority = ["rhwp", "tesseract", "built-in"] };
         var (_, output, _) = await RunWith(catalog, "formats", "md", "--json");
         var formats = Result(output);
         Assert.Equal(["html"], Strings(formats.GetProperty("targets")));
@@ -1167,7 +1167,7 @@ public sealed class CliTests : IDisposable
             if (hasHints)
             {
                 Assert.NotEmpty(Strings(hints));
-                Hints(file, "pandoc");
+                Hints(file, "tesseract");
             }
         }
     }
@@ -1175,38 +1175,38 @@ public sealed class CliTests : IDisposable
     [Fact]
     public async Task Multi_step_failure_lists_all_missing_packages_once()
     {
-        var pandoc = Package("pandoc", false, new("md", "html"), new("wav", "pptx"));
+        var tesseract = Package("tesseract", false, new("md", "html"), new("wav", "pptx"));
         var ffmpeg = Package("ffmpeg", false, new ConversionEdge("html", "wav"));
         var source = Input("md");
-        var (_, output, _) = await RunWith(new([pandoc, ffmpeg]), "convert", source, "--to", "pptx", "--json");
-        Hints(FileResultOf(output), "pandoc", "ffmpeg");
+        var (_, output, _) = await RunWith(new([tesseract, ffmpeg]), "convert", source, "--to", "pptx", "--json");
+        Hints(FileResultOf(output), "tesseract", "ffmpeg");
         ffmpeg.Available = true;
-        (_, output, _) = await RunWith(new([pandoc, ffmpeg]), "convert", source, "--to", "pptx", "--json");
-        Hints(FileResultOf(output), "pandoc");
+        (_, output, _) = await RunWith(new([tesseract, ffmpeg]), "convert", source, "--to", "pptx", "--json");
+        Hints(FileResultOf(output), "tesseract");
 
         var direct = Package("libreoffice", false, new ConversionEdge("md", "pptx", 40));
-        var catalog = new ConverterCatalog([pandoc, ffmpeg, direct]) { Priority = ["pandoc", "ffmpeg", "libreoffice"] };
+        var catalog = new ConverterCatalog([tesseract, ffmpeg, direct]) { Priority = ["tesseract", "ffmpeg", "libreoffice"] };
         (_, output, _) = await RunWith(catalog, "convert", source, "--to", "pptx", "--json");
-        Hints(FileResultOf(output), "pandoc");
+        Hints(FileResultOf(output), "tesseract");
         direct.Edges = [new("md", "pptx", 1)];
         (_, output, _) = await RunWith(catalog, "convert", source, "--to", "pptx", "--json");
         Hints(FileResultOf(output), "libreoffice");
 
-        var a = Package("pandoc", false, new ConversionEdge("md", "pptx"));
+        var a = Package("tesseract", false, new ConversionEdge("md", "pptx"));
         var b = Package("libreoffice", false, new ConversionEdge("md", "pptx"));
         catalog = new([a, b]) { Priority = [b.Id, a.Id] };
         (_, output, _) = await RunWith(catalog, "convert", source, "--to", "pptx", "--json");
         Hints(FileResultOf(output), "libreoffice");
         catalog.Priority = [a.Id, b.Id];
         (_, output, _) = await RunWith(catalog, "convert", source, "--to", "pptx", "--json");
-        Hints(FileResultOf(output), "pandoc");
+        Hints(FileResultOf(output), "tesseract");
     }
 
     [Fact]
     public async Task Engine_hints_exclude_unsupported_and_nonpackage_converters()
     {
         var source = Input("md");
-        foreach (var id in new[] { "archive", "rhwp", "wic", "vision", "7zip", "h2orestart", "jre", "vcruntime" })
+        foreach (var id in new[] { "archive", "rhwp", "7zip", "h2orestart", "jre", "vcruntime" })
         {
             var catalog = new ConverterCatalog([new ControlledConverter(id, false, [new("md", "pptx")])]);
             var (_, formats, _) = await RunWith(catalog, "formats", "md", "--json");
@@ -1214,7 +1214,7 @@ public sealed class CliTests : IDisposable
             var (_, output, _) = await RunWith(catalog, "convert", source, "--to", "pptx", "--json");
             Hints(FileResultOf(output));
         }
-        var unsupported = Package("pandoc", false, new ConversionEdge("md", "pptx"));
+        var unsupported = Package("tesseract", false, new ConversionEdge("md", "pptx"));
         unsupported.Reason = "engine.reason.unsupported_platform";
         var (_, listing, _) = await RunWith(new([unsupported]), "formats", "md", "--json");
         Assert.Empty(Strings(Result(listing).GetProperty("withEngines")));
@@ -1222,9 +1222,9 @@ public sealed class CliTests : IDisposable
         Hints(FileResultOf(failed));
 
         var bridge = new ControlledConverter("built-in", true, [new("md", "html")]);
-        var catalogWithBridge = new ConverterCatalog([bridge, Package("pandoc", false, new ConversionEdge("html", "pptx"))]);
+        var catalogWithBridge = new ConverterCatalog([bridge, Package("tesseract", false, new ConversionEdge("html", "pptx"))]);
         (_, failed, _) = await RunWith(catalogWithBridge, "convert", source, "--to", "pptx", "--json");
-        Hints(FileResultOf(failed), "pandoc");
+        Hints(FileResultOf(failed), "tesseract");
         // A cheaper missing non-package alternative must be filtered before choosing the route.
         await Optional_targets_and_failure_hints_agree();
     }
@@ -1233,7 +1233,7 @@ public sealed class CliTests : IDisposable
     public async Task Non_route_failures_do_not_suggest_packages()
     {
         var magick = new TsuFiles.Engines.Magick.MagickImageConverter();
-        var catalog = new ConverterCatalog([magick, Package("pandoc", false, new ConversionEdge("png", "jpg"))]);
+        var catalog = new ConverterCatalog([magick, Package("tesseract", false, new ConversionEdge("png", "jpg"))]);
         Assert.NotNull(catalog.CreatePlanner().Plan("png", "jpg"));
         var (_, output, _) = await RunWith(catalog, "convert", Input("png", "not a png"), "--to", "jpg", "--json");
         Assert.Equal("error.conversion_failed", FileResultOf(output).GetProperty("errorKey").GetString());
@@ -1355,7 +1355,7 @@ public sealed class CliTests : IDisposable
             preset.Id = "intermediate-" + target;
             AddPresets(preset);
             var edge = new ConversionEdge("jpg", target, Ocr: preset.Pdf.Ocr);
-            var package = preset.Pdf.Ocr ? "tesseract" : "pandoc";
+            var package = preset.Pdf.Ocr ? "tesseract" : "exiftool";
             catalog = new([Package(package, false, edge)]);
             var source = Input("jpg");
             var second = Path.Combine(_folder, "second.jpg");
@@ -1367,12 +1367,12 @@ public sealed class CliTests : IDisposable
         var imageJoiner = new ControlledConverter("joiner", true, []) { ReadsImages = false };
         var merge = new Preset { Id = "plain-merge", TargetFormat = "jpg", Image = { JoinIntoOne = true }, Pdf = { Ocr = true } };
         AddPresets(merge);
-        catalog = new([imageJoiner, Package("pandoc", false, new ConversionEdge("heic", "png")), Package("tesseract", false, new ConversionEdge("heic", "pdf", Ocr: true))]);
+        catalog = new([imageJoiner, Package("exiftool", false, new ConversionEdge("heic", "png")), Package("tesseract", false, new ConversionEdge("heic", "pdf", Ocr: true))]);
         (_, output, _) = await RunWith(catalog, "convert", Input("heic"), "--preset", merge.Id, "--json");
-        Hints(FileResultOf(output), "pandoc");
+        Hints(FileResultOf(output), "exiftool");
         // The image joiner cannot write the target. An ordinary package route is irrelevant.
         imageJoiner.ReadsImages = true;
-        catalog = new([imageJoiner, Package("pandoc", false, new ConversionEdge("heic", "jpg"))]);
+        catalog = new([imageJoiner, Package("exiftool", false, new ConversionEdge("heic", "jpg"))]);
         (_, output, _) = await RunWith(catalog, "convert", Input("heic"), "--preset", merge.Id, "--json");
         Hints(FileResultOf(output));
     }
