@@ -992,6 +992,23 @@ public sealed partial class JobQueue : IAsyncDisposable
             _log.LogInformation("Converting {File} was refused: {Reason}", file.SourcePath, ex.Message);
             return Fail(file, ex.ErrorKey, ex.Detail);
         }
+        catch (Exception ex) when (route.Steps.Select(st => st.Converter).OfType<IGivesWay>().FirstOrDefault() is IConverter givingWay && !ct.IsCancellationRequested)
+        {
+            // Office could not do it: the next best route (LibreOffice, the built-in engines) converts the file.
+            final?.Discard();
+            _log.LogWarning(ex, "{Engine} failed on {File}; trying the next best route", givingWay.Id, file.SourcePath);
+            file.Progress = floor;
+            var outputs = await RunFileAsync(job, file, index, planner.Without(givingWay), workDir, finalOutput, intermediate, ceiling, options);
+            if (file.State == FileState.Failed && file.ErrorKey == "error.no_route")
+            {
+                // No other route: the file failed for the reason the engine gave.
+                file.ErrorKey = "error.conversion_failed";
+                file.ErrorDetail = ex.Message;
+                file.FailedRoute = null;
+                Notify(job);
+            }
+            return outputs;
+        }
         catch (Exception ex)
         {
             final?.Discard();

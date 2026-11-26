@@ -34,6 +34,8 @@ en: Closing the window keeps TsuFiles running in the system tray; the Windows ta
 en: New installs follow the computer's language and light/dark mode; existing installs keep their choices
 vi: Màu Cú đêm theo bộ nhận diện chuẩn TsuDEV: tím logo cú #A970FF (Tối) / #7C3AED (Sáng), viền nút rõ hơn
 en: Night Owl colours follow the TsuDEV design standard: owl purple #A970FF (dark) / #7C3AED (light), clearer button borders
+vi: Windows có Microsoft Office: Word, Excel, PowerPoint sang PDF do chính Office xuất, bố cục, ngắt trang, vùng in giống hệt Office
+en: Windows with Microsoft Office: Word, Excel and PowerPoint files go to PDF through Office itself, with Office's exact layout, page breaks and print areas
 -->
 
 ### English summary
@@ -41,6 +43,7 @@ en: Night Owl colours follow the TsuDEV design standard: owl purple #A970FF (dar
 - **Share with your phone** ([ADR-0004](https://github.com/tsudev-org/tsufiles/blob/main/docs/adr/0004-chia-se-giua-thiet-bi-va-ios.md)): turn on **Share with phone** in the sidebar and scan the QR code. The phone's browser sends files to the computer and downloads the files you drop in - iPhone 8 (Safari 16) and newer, Android, other computers. Nothing to install on the phone. Each new device must be allowed on the computer; only local network addresses are accepted, links carry a random 128-bit session code, sharing turns itself off after 15 minutes idle. The connection is plain HTTP inside the local network: use it on trusted Wi-Fi only.
 - **Headless:** `tsufiles share [files...] -o <folder>` serves the same page from the command line and asks before each device connects.
 - **PDF to Word, exact layout (new default):** every page of the DOCX looks like the PDF. The page's drawing (table rules, lines, boxes, fills, pictures) is a 200 dpi picture behind the text, rendered from a copy of the PDF whose text is drawn invisibly; the words sit in borderless text boxes at their place on the paper with the PDF's font, size, colour, bold and italic, each word fitted to its width with letter spacing measured on the font Word uses. Signatures, seals and the stamped number of signed documents float in front. Checked against Microsoft Word on 18 real administrative PDFs (133 pages): the same page count everywhere and 99.8% of the ink in place (the flowing layout reached 82% and moved page breaks). **Preset > PDF to Word layout > Flowing text** (or `--word-layout flowing` on the command line) gives the previous paragraphs, easier to rewrite. Rotated and right-to-left text and glyphs without a Unicode character stay in the picture.
+- **Microsoft Office on Windows:** where Word, Excel or PowerPoint is installed, DOCX·DOC·RTF·ODT, XLSX·XLS·ODS and PPTX·PPT·ODP go to PDF (and old DOC·XLS·PPT to DOCX·XLSX·PPTX) through Office itself, so the PDF is exactly what Office prints: fonts, page breaks, print areas and fit-to-page. Checked on 9 Word and 8 Excel administrative files: page for page the same as Word's and Excel's own export (the built-in/LibreOffice route reached 92% on Word files and lost pages on Excel ones: 96 pages became 4). Macros never run, links to other files are not updated, files are opened read-only and a password-protected file stops instead of waiting on a hidden dialog. A workbook Office cannot finish within 5 minutes (one whose print area spans thousands of pages) or a file it cannot open goes on through LibreOffice or the built-in engines. Without Office nothing changes. (This reverses "TsuFiles never uses software installed on the system" for Office only.)
 - **PDF to DOCX** keeps signature and stamp annotations and turns side-by-side text blocks into borderless tables.
 - **Send with Lotus Share:** when Lotus Share is installed, each result card on Home has a share button that opens Lotus Share with the results ready to send. TsuFiles opens no extra network port for this.
 - **Tray:** closing the window now keeps TsuFiles running in the tray (change it in Settings). The GitHub and Donate buttons left the sidebar.
@@ -68,6 +71,13 @@ en: Night Owl colours follow the TsuDEV design standard: owl purple #A970FF (dar
   mực đúng chỗ (cách cũ đạt 82% và lệch ngắt trang). Cần sửa nhiều chữ thì chọn **Preset > Bố cục khi chuyển PDF
   sang Word > Văn bản liền mạch** (dòng lệnh: `--word-layout flowing`). Chữ xoay, chữ viết từ phải sang trái và ký
   tự không có mã Unicode được giữ trong ảnh nền.
+- **Microsoft Office trên Windows:** máy có Word, Excel hoặc PowerPoint thì DOCX·DOC·RTF·ODT, XLSX·XLS·ODS, PPTX·PPT·ODP
+  sang PDF (và DOC·XLS·PPT cũ sang DOCX·XLSX·PPTX) do chính Office xuất, nên PDF giống hệt bản Office in ra: phông chữ,
+  ngắt trang, vùng in, co vừa trang. Đối chiếu 9 tệp Word và 8 tệp Excel hành chính: trùng từng trang với bản Word,
+  Excel tự xuất (tuyến dựng sẵn/LibreOffice chỉ đạt 92% với Word và mất trang với Excel: 96 trang còn 4). Không bao giờ
+  chạy macro, không cập nhật liên kết tới tệp khác, mở chỉ đọc, tệp có mật khẩu dừng ngay thay vì chờ hộp thoại ẩn.
+  Bảng tính Office không xuất xong trong 5 phút (vùng in hàng nghìn trang) hoặc tệp Office không mở được thì tự chuyển
+  sang LibreOffice/bộ chuyển dựng sẵn. Máy không có Office thì không đổi gì.
 - **PDF sang DOCX** giữ lớp chú thích (chữ ký số, con dấu) và gộp các khối chữ đặt cạnh nhau thành bảng không viền.
 - **Gửi bằng Lotus Share:** máy đã cài [Lotus Share](https://lotus.tsudev.com) thì mỗi thẻ kết quả ở trang chủ có nút
   chia sẻ, mở Lotus Share với sẵn các tệp kết quả để gửi sang điện thoại hay máy tính khác. TsuFiles không mở thêm cổng
