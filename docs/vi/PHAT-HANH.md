@@ -35,7 +35,8 @@
 2. Mở PR vào `main`, chờ CI + workflow "Bảo mật" xanh, merge.
 3. Gắn nhãn và đẩy: `git tag v2.4.1-vn.1 && git push origin v2.4.1-vn.1` (khuôn `v<x.y.z>-vn.<n>` của
    `packaging/package.json`; mục CHANGELOG phải là `## 2.4.1-vn.1` - release.yml lấy ghi chú theo đúng tên thẻ).
-   Workflow `release.yml` build, test, đóng gói Windows/Linux/macOS và tạo **bản nháp** (draft) kèm các tệp
+   Workflow `release.yml` build, test, đóng gói Windows/Linux (macOS tạm dừng,
+   [ADR-0005](../adr/0005-tam-dung-phat-hanh-macos.md)) và tạo **bản nháp** (draft) kèm các tệp
    `*SHA256SUMS*.txt`. Bản Windows chưa ký Authenticode (SmartScreen sẽ cảnh báo lần đầu).
 4. Trên WSL, ký các tệp checksum và tải chữ ký lên bản nháp:
 

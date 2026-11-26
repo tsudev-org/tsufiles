@@ -40,4 +40,6 @@ Mã: `src/TsuFiles.Core/Updates/VersionGate.cs` (đọc, quyết định, tải)
 2. **Sau khi** bản phát hành đã công khai trên GitHub: sửa `phienBan`, `moiNhat` trong `website/public/phien-ban.json`,
    PR, gộp, chủ dự án deploy website. Deploy trước khi có bản phát hành sẽ chặn người dùng mà không có gì để tải.
 3. Nâng `toiThieu` (chặn bản cũ: lỗ hổng bảo mật, định dạng dữ liệu không còn tương thích) **cần chủ dự án duyệt**, ghi
-   lý do trong PR và `CHANGELOG.md`. Không bao giờ hạ `toiThieu` để "mở khóa": ứng dụng đã lưu mức cao nhất từng thấy.
+   lý do trong PR và `CHANGELOG.md`. Khi macOS còn tạm dừng
+   ([ADR-0005](../adr/0005-tam-dung-phat-hanh-macos.md)): nâng `toiThieu` trên 2 khóa bản macOS 2.4.1 mà không có bản
+   để cập nhật - chủ dự án phải duyệt riêng điểm này. Không bao giờ hạ `toiThieu` để "mở khóa": ứng dụng đã lưu mức cao nhất từng thấy.

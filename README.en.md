@@ -23,14 +23,17 @@ runs **on your computer**: no file is uploaded anywhere, and Microsoft Office is
 | System | Command |
 | --- | --- |
 | Windows (Scoop) | `scoop bucket add tsudev https://github.com/tsudev-org/scoop-bucket; scoop install tsudev/tsudev-files` |
-| macOS (Homebrew) | `brew install --cask tsudev-org/tap/tsudev-files` |
-| Debian, Ubuntu, Fedora, macOS | `curl -fsSL https://tsudev.com/install.sh \| sh -s -- tsudev-files` |
+| Debian, Ubuntu, Fedora | `curl -fsSL https://tsudev.com/install.sh \| sh -s -- tsudev-files` |
 
 The one-line installer only adds the signed TsuDEV repository (APT/DNF, key fingerprint
-`3883 10F4 7FA8 224D 76C0 A9C7 9745 B6AF 3EA3 3C74`) or the Homebrew tap and lets the package manager verify and install
-the package; read it first at <https://tsudev.com/install.sh>. Manual downloads (Windows Setup/Portable, Linux tar.gz,
-macOS dmg) are on [GitHub Releases](https://github.com/tsudev-org/tsufiles/releases/latest) with signed `SHA256SUMS`
+`3883 10F4 7FA8 224D 76C0 A9C7 9745 B6AF 3EA3 3C74`) and lets the package manager verify and install
+the package; read it first at <https://tsudev.com/install.sh>. Manual downloads (Windows Setup/Portable, Linux tar.gz)
+ are on [GitHub Releases](https://github.com/tsudev-org/tsufiles/releases/latest) with signed `SHA256SUMS`
 and build provenance: `gh attestation verify <file> -R tsudev-org/tsufiles`.
+
+**macOS is paused until Q1 2027** ([ADR-0005](docs/adr/0005-tam-dung-phat-hanh-macos.md)): the last macOS release is
+[2.4.1-vn.1](https://github.com/tsudev-org/tsufiles/releases/tag/v2.4.1-vn.1) and it gets no updates during the pause.
+Windows and Linux releases continue.
 
 ## Links
 

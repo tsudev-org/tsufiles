@@ -40,6 +40,8 @@ vi: Không tự bật cửa sổ "Có gì mới" sau khi cập nhật nữa (xem
 en: The "What's new" window no longer opens by itself after an update (find it in About); Settings has an Account section, with no sign-in prompts
 vi: Gọn nhẹ hơn: giao diện, bộ cài và dòng lệnh chỉ còn tiếng Việt và tiếng Anh; gói cài nhỏ hơn khoảng 35 MB
 en: Leaner: the app, the installer and the CLI now ship Vietnamese and English only; the package is about 35 MB smaller
+vi: macOS tạm dừng đến quý 1/2027: bản cuối cho macOS là 2.4.1; Windows và Linux phát hành bình thường
+en: macOS is paused until Q1 2027: 2.4.1 is the last macOS release; Windows and Linux releases continue
 vi: Bỏ các bộ xử lý trùng lặp (Pandoc, Calibre, Apple Vision, Unhwp): mỗi loại tệp chỉ một cách chuyển, kết quả như nhau trên mọi máy; nhận dạng chữ dùng Tesseract
 en: Duplicate engines are gone (Pandoc, calibre, Apple Vision, Unhwp): one way to convert each file type, the same result on every computer; text recognition uses Tesseract
 vi: PDF scan/ảnh chụp sang Word: chữ nhận dạng sửa được, nằm đúng chỗ trên trang, giữ đường kẻ, bảng, con dấu, chữ ký; nhận chữ đậm, nghiêng, màu chữ
@@ -48,6 +50,7 @@ en: Scanned PDF to Word: recognized text you can edit, in place on the page, wit
 
 ### English summary
 
+- **macOS is paused until Q1 2027** ([ADR-0005](https://github.com/tsudev-org/tsufiles/blob/main/docs/adr/0005-tam-dung-phat-hanh-macos.md)): this release has no `osx-*` files. The last macOS release is [2.4.1-vn.1](https://github.com/tsudev-org/tsufiles/releases/tag/v2.4.1-vn.1), which stays available; if it announces a newer version, there is nothing to install on a Mac yet. The Homebrew cask stays at 2.4.1. Windows and Linux are unaffected.
 - **Share with your phone** ([ADR-0004](https://github.com/tsudev-org/tsufiles/blob/main/docs/adr/0004-chia-se-giua-thiet-bi-va-ios.md)): turn on **Share with phone** in the sidebar and scan the QR code. The phone's browser sends files to the computer and downloads the files you drop in - iPhone 8 (Safari 16) and newer, Android, other computers. Nothing to install on the phone. Each new device must be allowed on the computer; only local network addresses are accepted, links carry a random 128-bit session code, sharing turns itself off after 15 minutes idle. The connection is plain HTTP inside the local network: use it on trusted Wi-Fi only.
 - **Headless:** `tsufiles share [files...] -o <folder>` serves the same page from the command line and asks before each device connects.
 - **PDF to Word, exact layout (new default):** every page of the DOCX looks like the PDF. The page's drawing (table rules, lines, boxes, fills, pictures) is a 200 dpi picture behind the text, rendered from a copy of the PDF whose text is drawn invisibly; the words sit in borderless text boxes at their place on the paper with the PDF's font, size, colour, bold and italic, each word fitted to its width with letter spacing measured on the font Word uses. Signatures, seals and the stamped number of signed documents float in front. Checked against Microsoft Word on 18 real administrative PDFs (133 pages): the same page count everywhere and 99.8% of the ink in place (the flowing layout reached 82% and moved page breaks). **Preset > PDF to Word layout > Flowing text** (or `--word-layout flowing` on the command line) gives the previous paragraphs, easier to rewrite. Rotated and right-to-left text and glyphs without a Unicode character stay in the picture.
@@ -62,6 +65,10 @@ en: Scanned PDF to Word: recognized text you can edit, in place on the page, wit
 
 ### Chi tiết (tiếng Việt)
 
+- **macOS tạm dừng đến quý 1/2027** ([ADR-0005](docs/adr/0005-tam-dung-phat-hanh-macos.md)): bản này không có tệp
+  `osx-*`. Bản cuối cho macOS là [2.4.1-vn.1](https://github.com/tsudev-org/tsufiles/releases/tag/v2.4.1-vn.1), vẫn tải
+  được; nếu bản đó báo có phiên bản mới thì trên Mac chưa có gì để cài. Cask Homebrew giữ ở 2.4.1. Windows và Linux
+  không đổi.
 - **Chia sẻ với điện thoại** ([ADR-0004](docs/adr/0004-chia-se-giua-thiet-bi-va-ios.md), hướng dẫn
   [CHIA-SE-DIEN-THOAI.md](docs/vi/CHIA-SE-DIEN-THOAI.md)): thanh bên trái > **Chia sẻ với điện thoại** > **Bật chia
   sẻ**, điện thoại quét mã QR. Trên trang web, điện thoại gửi ảnh/tệp lên máy tính (lưu vào `Tải xuống/TsuFiles`, đổi
