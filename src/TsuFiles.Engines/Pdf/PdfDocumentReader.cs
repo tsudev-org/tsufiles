@@ -155,7 +155,7 @@ internal sealed partial class PdfDocumentReader
     /// <paramref name="DrawnForward"/>: its page draws right-to-left text left to right in reading order (PageWord).
     /// </summary>
     private sealed record TextWord(string Text, double Left, double Right, double Top, double Bottom, double Baseline, double Size, HCharFormat Format, string? Link,
-        bool DrawnForward = false);
+        bool DrawnForward = false, bool Recognized = false);
 
     /// <summary>A text line (or the part of it in one column).</summary>
     private sealed class TextLine(List<TextWord> words, int row = 0)
@@ -412,7 +412,7 @@ internal sealed partial class PdfDocumentReader
             if (invisible)
                 format = format with { Font = null, Bold = false, Italic = false };
             words.Add(new TextWord(CleanText(word.Text), box.Left, box.Right, box.Top, box.Bottom,
-                lead.StartBaseLine.Y, Math.Max(1, size), format, link, word.DrawnForward));
+                lead.StartBaseLine.Y, Math.Max(1, size), format, link, word.DrawnForward, Recognized: invisible));
         }
         return words;
     }

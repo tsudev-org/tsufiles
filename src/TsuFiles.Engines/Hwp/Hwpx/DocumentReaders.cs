@@ -109,8 +109,11 @@ internal static class DocumentReaders
         bool ocrLayer = false, bool exactLayout = false)
     {
         var media = Path.Combine(workDirectory, $"media-{Guid.NewGuid():N}");
+        // A scan whose text was recognized: in the exact layout the words sit on the cleaned scan (ReadExact), else
+        // they become paragraphs and the scan is left out.
         if (ocrLayer && format == "pdf")
-            return await Task.Run(() => PdfDocumentReader.ReadWithOcrLayer(path, media), cancellationToken);
+            return await Task.Run(() => exactLayout ? PdfDocumentReader.ReadExact(path, media, ocrLayer: true) : PdfDocumentReader.ReadWithOcrLayer(path, media),
+                cancellationToken);
         if (exactLayout && format == "pdf")
             return await Task.Run(() => PdfDocumentReader.ReadExact(path, media), cancellationToken);
         if (BuiltIn.TryGetValue(format, out var reader))

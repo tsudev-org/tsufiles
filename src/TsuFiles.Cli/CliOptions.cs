@@ -18,6 +18,9 @@ internal sealed record CliOptions
     public int? Quality { get; set; }
     public string? Pages { get; set; }
     public PdfWordLayout? WordLayout { get; set; }
+
+    /// <summary>--ocr: recognize the text of scans in these Tesseract languages ("vie", "vie+eng").</summary>
+    public string? Ocr { get; set; }
     public ConflictPolicy? Conflict { get; set; }
     public bool Json { get; set; }
     public bool Quiet { get; set; }
@@ -124,6 +127,16 @@ internal sealed record CliOptions
                         };
                         if (options.WordLayout is null)
                             options.Error ??= CliLanguage.T("--word-layout phải là exact hoặc flowing.", "--word-layout must be exact or flowing.");
+                    }
+                    break;
+                case "--ocr":
+                    var ocr = Value();
+                    if (ocr is not null)
+                    {
+                        if (System.Text.RegularExpressions.Regex.IsMatch(ocr, @"^[a-z_]{3,10}(\+[a-z_]{3,10})*$"))
+                            options.Ocr = ocr;
+                        else
+                            options.Error ??= CliLanguage.T("--ocr phải là mã ngôn ngữ Tesseract, ví dụ vie hoặc vie+eng.", "--ocr must be Tesseract language codes, e.g. vie or vie+eng.");
                     }
                     break;
                 case "--overwrite":
