@@ -111,6 +111,24 @@ gh api repos/$R --jq '.security_and_analysis'   # secret scanning + push protect
 
 | Repo | Ngày | Cảnh báo trước → sau | PR | Ghi chú |
 | --- | --- | --- | --- | --- |
+| tsufiles | 26/11 | 4 → 4 (chỉ tư thế); CodeQL 0, Dependabot 0, secret 0 | #135 gộp (`f9793724`) + PR SEC3 (nhánh `ci/sec3-zizmor`) | chi tiết mục 4.1 |
+
+### 4.1. tsufiles (26/11/2026)
+
+- Cảnh báo còn mở, KHÔNG dismiss (tư thế repo): #13 BranchProtection, #20 CodeReview (👤 quyết định một người duyệt),
+  #19 Maintained (repo tạo 09/11/2026, chưa đủ 90 ngày), #18 Fuzzing (`fuzz.yml` có chạy nhưng Scorecard không nhận
+  công cụ fuzz .NET này).
+- Đo: secret scanning + push protection + Dependabot security updates đang bật; `gitleaks --log-opts=--all` 1733 commit
+  sạch; `npm audit --omit=dev` (website) 0; job CI "Lỗ hổng phụ thuộc NuGet" đạt; website có đủ HSTS/CSP/nosniff/
+  Referrer-Policy/frame-ancestors (`website/public/_headers`). App không gọi `/api/me/entitlements`, `/api/rp/*`,
+  `/api/xd/*`, userinfo (grep `src/`) nên `X-Tsu-App` chưa áp dụng.
+- Sửa: zizmor 4 high + 8 medium → 0 (tên thẻ đọc qua biến môi trường + kiểm khuôn phiên bản trong `release.yml`;
+  checkout `persist-credentials: false`; `label-pr.yml` ghi lý do bỏ qua dangerous-triggers); còn 2 help + 6 info.
+  actionlint 1.7.12 sạch. Cảnh báo trình dịch → 0. Gỡ ảnh QR gốc lọt vào gốc repo từ P5a (đã công khai, không viết
+  lại lịch sử).
+- PR còn mở: #42, #44 (👤: repo assets, khóa dự phòng).
+- Chưa làm được (👤): bộ phân loại chặn xóa 46 nhánh đã gộp trên origin và chặn bật "Automatically delete head
+  branches" - lệnh ở phiếu bàn giao `20261126-03` mục 2.
 
 ## 5. Prompt chuẩn cho phiên của từng repo
 
