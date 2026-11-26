@@ -218,10 +218,11 @@ public sealed class ProcessRunnerOutputTests : IDisposable
     {
         Assert.SkipUnless(OperatingSystem.IsWindows(), "cmd.exe.");
         // A steady file for longer than the probe needs, but the PDF is not complete: the script's own exit code counts.
+        // 7 s: a busy runner can delay the 500 ms polls by seconds (seen: 1 poll in a 3 s run).
         var script = Script("""
             @echo off
             >"%~dp0out\out.pdf" echo %%PDF-1.4
-            ping -n 4 127.0.0.1 >nul
+            ping -n 8 127.0.0.1 >nul
             exit /b 3
             """);
         var complete = LibreOfficeConverter.OutputComplete(Output);
