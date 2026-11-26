@@ -113,7 +113,11 @@ public static class OcrLanguages
         {
             var size = entry.Value.GetProperty("size").GetInt64();
             languages.Add(new OcrLanguage(entry.Name, entry.Value.GetProperty("culture").GetString()!, size));
-            components[entry.Name] = new EngineComponent(entry.Name, Version, string.Format(CultureInfo.InvariantCulture, url, entry.Name),
+            // A language may come from elsewhere (Vietnamese: tessdata_best, far more accurate than the fast model on
+            // scans of administrative documents); its own version makes an installed fast copy be replaced.
+            var own = entry.Value.TryGetProperty("url", out var ownUrl) ? ownUrl.GetString()! : url;
+            var version = entry.Value.TryGetProperty("version", out var ownVersion) ? ownVersion.GetString()! : Version;
+            components[entry.Name] = new EngineComponent(entry.Name, version, string.Format(CultureInfo.InvariantCulture, own, entry.Name),
                 entry.Value.GetProperty("sha256").GetString()!, size, "traineddata");
         }
         return (languages, components);

@@ -1,5 +1,5 @@
 {
-  "_comment": "Tesseract language data (tessdata_fast 4.1.0, Apache-2.0), downloaded on demand when an OCR preset needs a language: pinned URL + SHA-256 per file. culture names the language in the UI.",
+  "_comment": "Tesseract language data (tessdata_fast 4.1.0, Apache-2.0; Vietnamese from tessdata_best 4.1.0 - its own url/version), downloaded on demand when an OCR preset needs a language: pinned URL + SHA-256 per file. culture names the language in the UI.",
   "url": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/4.1.0/{0}.traineddata",
   "languages": {
     "eng": {
@@ -247,11 +247,7 @@
       "sha256": "294227CC2D1292B0ACB28D61D4115C88252B96D466CA90B417CF4CF0C67BF07C",
       "size": 1072600
     },
-    "vie": {
-      "culture": "vi",
-      "sha256": "79DF64CAF7BCFB2A27DF5042ECB6121E196EADA34DA774956995747636D5BFA1",
-      "size": 531275
-    },
+    "vie": { "culture": "vi", "url": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_best/4.1.0/{0}.traineddata", "version": "4.1.0-best", "sha256": "B6B49293D95D0B6DBD8780174627E82C75BE957B6F4ED9862155540D6B00BB45", "size": 12435550 },
     "ind": {
       "culture": "id",
       "sha256": "69786901DA87AB8766C1EA7FBB10B28F2110C14DA3F6C8F2735DF131FBA95D88",
