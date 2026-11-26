@@ -42,6 +42,8 @@ vi: Gọn nhẹ hơn: giao diện, bộ cài và dòng lệnh chỉ còn tiếng
 en: Leaner: the app, the installer and the CLI now ship Vietnamese and English only; the package is about 35 MB smaller
 vi: Nhận dạng chữ (OCR) mặc định đọc tiếng Việt; preset bạn tự đặt ngôn ngữ vẫn giữ nguyên
 en: Text recognition (OCR) reads Vietnamese by default; presets you set to another language keep it
+vi: Bỏ đọc tệp OFD (định dạng hóa đơn điện tử của Trung Quốc), không dùng ở Việt Nam
+en: OFD files (the Chinese e-invoice format) are no longer read
 vi: macOS tạm dừng đến quý 1/2027: bản cuối cho macOS là 2.4.1; Windows và Linux phát hành bình thường
 en: macOS is paused until Q1 2027: 2.4.1 is the last macOS release; Windows and Linux releases continue
 vi: Bỏ các bộ xử lý trùng lặp (Pandoc, Calibre, Apple Vision, Unhwp): mỗi loại tệp chỉ một cách chuyển, kết quả như nhau trên mọi máy; nhận dạng chữ dùng Tesseract

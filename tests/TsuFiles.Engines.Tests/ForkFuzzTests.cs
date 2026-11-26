@@ -16,7 +16,6 @@ using System.Text;
 using TsuFiles.Engines.Archives;
 using TsuFiles.Engines.Ebooks;
 using TsuFiles.Engines.Icns;
-using TsuFiles.Engines.Ofd;
 
 namespace TsuFiles.Engines.Tests;
 
@@ -77,36 +76,6 @@ public sealed class ForkFuzzTests : IDisposable
             foreach (var candidate in IcnsFile.Candidates(IcnsFile.Parse(data)))
                 _ = candidate.Decode?.Invoke();
         });
-    }
-
-    [Fact]
-    public void Ofd_reader_survives_mutated_parts()
-    {
-        // Đột biến NỘI DUNG từng phần XML bên trong một zip hợp lệ (đột biến cả tệp zip chỉ thử được bộ đọc zip).
-        var parts = OfdParts();
-        var rng = new Random(0x0FD);
-        var media = Directory.CreateDirectory(Path.Combine(_folder, "ofd-media")).FullName;
-        var seed = Path.Combine(_folder, "seed.ofd");
-        using (var zip = ZipFile.Open(seed, ZipArchiveMode.Create))
-            foreach (var (name, content) in parts)
-                using (var stream = zip.CreateEntry(name).Open()) stream.Write(content);
-        Run("OFD seed", File.ReadAllBytes(seed), () => OfdReader.Read(seed, media));
-        for (var i = 0; i < Iterations; i++)
-        {
-            var victim = parts.Keys.ElementAt(rng.Next(parts.Count));
-            var path = Path.Combine(_folder, $"ofd-{i}.ofd");
-            using (var zip = ZipFile.Open(path, ZipArchiveMode.Create))
-            {
-                foreach (var (name, content) in parts)
-                {
-                    var bytes = name == victim ? Mutate(content, rng) : content;
-                    using var stream = zip.CreateEntry(name).Open();
-                    stream.Write(bytes);
-                }
-            }
-            Run($"OFD #{i} ({victim})", File.ReadAllBytes(path), () => OfdReader.Read(path, media), seedMustPass: false);
-            File.Delete(path);
-        }
     }
 
     [Fact]
@@ -225,21 +194,5 @@ public sealed class ForkFuzzTests : IDisposable
             }
         }
         return [.. data];
-    }
-
-    private static Dictionary<string, byte[]> OfdParts()
-    {
-        const string ns = "xmlns:ofd=\"http://www.ofdspec.org/2016\"";
-        const string head = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-        var text = "<ofd:TextObject ID=\"7\" Boundary=\"10 10 60 5\" Font=\"3\" Size=\"3.175\"><ofd:TextCode X=\"0\" Y=\"3\" DeltaX=\"g 3 2\">tsudev ofd</ofd:TextCode></ofd:TextObject>";
-        var path = "<ofd:PathObject ID=\"8\" Boundary=\"0 0 50 50\" LineWidth=\"0.3\"><ofd:AbbreviatedData>M 0 0 L 10 10 B 1 2 3 4 5 6 C</ofd:AbbreviatedData></ofd:PathObject>";
-        return new Dictionary<string, byte[]>
-        {
-            ["OFD.xml"] = Encoding.UTF8.GetBytes($"{head}<ofd:OFD {ns} Version=\"1.1\"><ofd:DocBody><ofd:DocRoot>Doc_0/Document.xml</ofd:DocRoot></ofd:DocBody></ofd:OFD>"),
-            ["Doc_0/Document.xml"] = Encoding.UTF8.GetBytes($"{head}<ofd:Document {ns}><ofd:CommonData><ofd:PageArea><ofd:PhysicalBox>0 0 210 140</ofd:PhysicalBox></ofd:PageArea><ofd:PublicRes>PublicRes.xml</ofd:PublicRes><ofd:TemplatePage ID=\"2\" BaseLoc=\"Tpls/Tpl_0/Content.xml\"/></ofd:CommonData><ofd:Pages><ofd:Page ID=\"1\" BaseLoc=\"Pages/Page_0/Content.xml\"/></ofd:Pages></ofd:Document>"),
-            ["Doc_0/PublicRes.xml"] = Encoding.UTF8.GetBytes($"{head}<ofd:Res {ns} BaseLoc=\"Res\"><ofd:Fonts><ofd:Font ID=\"3\" FontName=\"Courier New\"/></ofd:Fonts></ofd:Res>"),
-            ["Doc_0/Tpls/Tpl_0/Content.xml"] = Encoding.UTF8.GetBytes($"{head}<ofd:Page {ns}><ofd:Content><ofd:Layer ID=\"1\">{path}</ofd:Layer></ofd:Content></ofd:Page>"),
-            ["Doc_0/Pages/Page_0/Content.xml"] = Encoding.UTF8.GetBytes($"{head}<ofd:Page {ns}><ofd:Template TemplateID=\"2\" ZOrder=\"Background\"/><ofd:Content><ofd:Layer ID=\"1\">{text}{path}</ofd:Layer></ofd:Content></ofd:Page>"),
-        };
     }
 }

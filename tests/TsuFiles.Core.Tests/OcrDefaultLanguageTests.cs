@@ -32,3 +32,21 @@ public class OcrDefaultLanguageTests
         Assert.Equal("deu+eng", Language("own-mixed"));
     }
 }
+
+public class OfdRemovedTests
+{
+    [Fact]
+    public void Donuts_forget_ofd_once()
+    {
+        var presets = BuiltInData.CreatePresets();
+        var profiles = BuiltInData.CreateProfiles();
+        profiles.Single(p => p.Id == "office").Extensions.Add("ofd");
+        profiles.Insert(0, new TsuFiles.Core.Profiles.ToolbarProfile { Id = "invoices", Name = "Invoices", Extensions = ["OFD", "pdf"] });
+
+        Assert.True(SettingsMigrations.ApplyToLibrary(78, presets, profiles));
+
+        Assert.DoesNotContain(profiles.SelectMany(p => p.Extensions), e => e.Equals("ofd", StringComparison.OrdinalIgnoreCase));
+        Assert.Equal(["pdf"], profiles[0].Extensions);
+        Assert.Null(TsuFiles.Core.Formats.FormatRegistry.FindByExtension("ofd"));
+    }
+}

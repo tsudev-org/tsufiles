@@ -767,10 +767,7 @@ internal static class SettingsMigrations
                 }
             }
         }
-        // v27: OFD documents (.ofd; read only: e-invoices, official documents) open from the office donut, unless a
-        //      donut of the user already takes them.
-        if (from < 27)
-            changed |= LearnExtensions(profiles, out _, ["ofd"]);
+        // v27 taught the office donut OFD (.ofd); v79 took the format out again.
         // v28: "One ZIP" on the archives donut after "Extract", to pack several archives into one. A donut
         //      the user filled up, or a library without the preset, stays as it is.
         if (from < 28)
@@ -1118,6 +1115,10 @@ internal static class SettingsMigrations
                 changed = true;
             }
         }
+        // v79 (TsuFiles, phiếu TG1 G3a): OFD (the Chinese fixed-layout format) is no longer read; donuts forget .ofd.
+        if (from < 79)
+            foreach (var profile in profiles)
+                changed |= profile.Extensions.RemoveAll(e => string.Equals(e, "ofd", StringComparison.OrdinalIgnoreCase)) > 0;
         return changed;
     }
 

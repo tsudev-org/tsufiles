@@ -100,7 +100,7 @@ public class FormatFieldsTests
         "icns", "apng", "mng", "qoi", "dds", "pcx", "cur", "xpm", "xbm", "wbmp", "pam", "pfm", "sgi", "ras", "miff",
         "dcm", "pcd", "exr", "hdr", "fits", "jxr", "xcf", "livp", "raw", "svg", "svgz", "eps", "ps", "ai", "emf",
         "wmf", "cdr", "cgm", "plt", "vsd", "dst", "odg", "fodg", "pdf", "docx", "docm", "dotx", "dotm", "doc", "dot",
-        "odt", "fodt", "ott", "rtf", "wps", "ofd", "wpd", "lwp", "abw", "pages", "sdw", "cwk", "mcw", "602", "psw",
+        "odt", "fodt", "ott", "rtf", "wps", "wpd", "lwp", "abw", "pages", "sdw", "cwk", "mcw", "602", "psw",
         "pub", "eml", "msg", "hwpx", "hwp", "xlsx", "xlsm", "xltx", "xls", "xlt", "ods", "ots", "fods", "csv", "tsv",
         "et", "numbers", "sdc", "pptx", "pptm", "potx", "potm", "ppsx", "ppt", "odp", "otp", "fodp", "key", "dps",
         "sda", "txt", "md", "html", "mhtml", "rst", "tex", "org", "adoc", "typ", "mediawiki", "dbk", "ipynb",
@@ -144,7 +144,7 @@ public class FormatFieldsTests
             new Dictionary<FormatGrade, int>
             {
                 [FormatGrade.Everyday] = 19,
-                [FormatGrade.General] = 95,
+                [FormatGrade.General] = 94,
                 [FormatGrade.Specialist] = 113,
                 [FormatGrade.Legacy] = 51,
             },
