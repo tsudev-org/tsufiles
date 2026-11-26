@@ -13,8 +13,8 @@ public class TsuFilesFontCollectionTests
 {
     private const string Key = "fonts:TsuFilesOnDemand";
 
-    private static readonly string[] Families =
-        ["Noto Sans", "Noto Sans Arabic", "Noto Sans Devanagari", "Noto Sans Thai", "Noto Sans JP", "Noto Sans KR", "Noto Sans SC"];
+    /// <summary>The embedded families: only Noto Sans since phiếu TG1 (Vietnamese and English UI).</summary>
+    private static readonly string[] Families = ["Noto Sans"];
 
     private static void RequireFonts()
     {
@@ -44,7 +44,6 @@ public class TsuFilesFontCollectionTests
     [InlineData("Noto Sans", "NotoSansKR-Regular.otf", false)]
     [InlineData("Noto Sans KR", "NotoSansKR-Bold.otf", true)]
     [InlineData("Noto Sans KR", "NotoSansJP-Bold.otf", false)]
-    [InlineData("Noto Sans Devanagari", "NotoSansDevanagari-Medium.ttf", true)]
     [InlineData("Segoe UI", "NotoSans-Regular.ttf", false)]
     public void A_font_file_belongs_to_its_family(string family, string file, bool expected) =>
         Assert.Equal(expected, TsuFilesFontCollection.IsFileOf(family, file));
@@ -58,11 +57,8 @@ public class TsuFilesFontCollectionTests
 
         Assert.True(fonts.TryGetGlyphTypeface("Noto Sans", FontStyle.Normal, FontWeight.Bold, FontStretch.Normal, out var bold));
         Assert.Equal(FontWeight.Bold, bold.Weight);
-        Assert.DoesNotContain(fonts, f => f.Name == "Noto Sans KR");
-
-        Assert.True(fonts.TryGetGlyphTypeface("Noto Sans KR", FontStyle.Normal, FontWeight.Normal, FontStretch.Normal, out var korean));
-        Assert.NotEqual((ushort)0, korean.CharacterToGlyphMap.GetGlyph('한'));
-        Assert.DoesNotContain(fonts, f => f.Name == "Noto Sans JP");
+        // The fonts of other scripts are no longer embedded (phiếu TG1): the system's are used.
+        Assert.False(fonts.TryGetGlyphTypeface("Noto Sans KR", FontStyle.Normal, FontWeight.Normal, FontStretch.Normal, out _));
 
         Assert.False(fonts.TryGetGlyphTypeface("Not a font", FontStyle.Normal, FontWeight.Normal, FontStretch.Normal, out _));
     }
@@ -73,45 +69,28 @@ public class TsuFilesFontCollectionTests
         RequireFonts();
         using var fonts = new TsuFilesFontCollection(Key);
         Assert.False(fonts.TryMatchCharacter('한', FontStyle.Normal, FontWeight.Normal, FontStretch.Normal, "Noto Sans", null, out _));
-        Assert.DoesNotContain(fonts, f => f.Name == "Noto Sans KR");
-        Assert.True(fonts.TryMatchCharacter('한', FontStyle.Normal, FontWeight.Normal, FontStretch.Normal, "Noto Sans KR", null, out _));
+        Assert.True(fonts.TryMatchCharacter('ữ', FontStyle.Normal, FontWeight.Normal, FontStretch.Normal, "Noto Sans", null, out _));
     }
 
     [AvaloniaTheory]
-    [InlineData("en", "Noto Sans KR", "Noto Sans JP", "Noto Sans SC")] // other languages keep Korean first
-    [InlineData("ko", "Noto Sans KR", "Noto Sans JP", "Noto Sans SC")]
-    [InlineData("ja", "Noto Sans JP", "Noto Sans KR", "Noto Sans SC")]
-    [InlineData("zh-CN", "Noto Sans SC", "Noto Sans JP", "Noto Sans KR")]
-    public void A_letter_Noto_Sans_lacks_reads_its_family_and_leaves_later_ones_unread(string language, string font, string unread1, string unread2)
+    [InlineData("vi")]
+    [InlineData("en")]
+    public void Vietnamese_letters_are_drawn_in_the_embedded_noto_sans(string language)
     {
         RequireFonts();
-        var fonts = NewCollection();
-
-        Assert.Equal("Noto Sans", Match(language, 'A'));
-        Assert.DoesNotContain(fonts, f => f.Name == font);
-
-        Assert.Equal(font, Match(language, '将'));
-        Assert.Contains(fonts, f => f.Name == font);
-        Assert.DoesNotContain(fonts, f => f.Name == unread1);
-        Assert.DoesNotContain(fonts, f => f.Name == unread2);
-
-        // The arrow between a format and what it becomes: Noto Sans has none, so the main window comes this far too.
-        Assert.False(fonts.TryMatchCharacter('→', FontStyle.Normal, FontWeight.Normal, FontStretch.Normal, "Noto Sans", null, out _));
-        Assert.Equal(font, Match(language, '→'));
-        Assert.DoesNotContain(fonts, f => f.Name == unread1);
+        NewCollection();
+        foreach (var letter in "AĐăâêôơưẠếữỡỹ")
+            Assert.Equal("Noto Sans", Match(language, letter));
     }
 
     [AvaloniaTheory]
     [InlineData("en")]
-    [InlineData("ko")]
-    [InlineData("ja")]
-    [InlineData("zh-CN")]
-    [InlineData("ar")]
+    [InlineData("vi")]
     public void A_letter_takes_the_same_font_whatever_was_read_before(string language)
     {
         RequireFonts();
         // The first letter a new collection sees is the hard case, so each letter gets a new one.
-        foreach (var letter in "A한あ将กनم→")
+        foreach (var letter in "Aữ한あ将→")
         {
             foreach (var weight in new[] { FontWeight.Normal, FontWeight.Bold })
             {

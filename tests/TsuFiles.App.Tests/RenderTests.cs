@@ -912,9 +912,8 @@ public class RenderTests
     }
 
     [AvaloniaTheory]
-    [InlineData("ko", "JPG 3개")]
-    [InlineData("ru", "3 × JPG")]
-    [InlineData("ar", "3 × JPG")]
+    [InlineData("vi", "3 × JPG")]
+    [InlineData("en", "3 × JPG")]
     public void Donut_toolbar_renders_for_images(string language, string title)
     {
         TestServices.EnsureInitialized(language);
