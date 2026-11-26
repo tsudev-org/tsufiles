@@ -1919,7 +1919,7 @@ format, and FFmpeg reads what the file holds, so a `.dat` with no video in it fa
 
 "Recognize text" (`PdfOptions.Ocr`, issue #288) in a preset for PDF, DOCX, TXT, Markdown or HWPX reads the text of
 scans and pictures with Tesseract (`Ocr/TesseractConverter.cs`), in the language the preset names
-(`PdfOptions.OcrLanguage`, a Tesseract code; English by default). The built-in "Searchable PDF" preset turns it on.
+(`PdfOptions.OcrLanguage`, a Tesseract code; Vietnamese by default). The built-in "Searchable PDF" preset turns it on.
 
 Text that mixes languages (issue #1123) has several codes in that one setting, the main language first, joined with
 `+` as Tesseract's `-l` takes them (`chi_sim+eng`). `OcrLanguages.Parse` is the only reader: a code not in the list is

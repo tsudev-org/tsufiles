@@ -51,12 +51,12 @@ public class OcrLanguageListTests
 
     [Theory]
     [InlineData("deu+klingon+deu", "deu")]
-    [InlineData("klingon", "eng")]
+    [InlineData("klingon", "vie")]
     [InlineData("../../evil+eng", "eng")]
-    [InlineData("+", "eng")]
-    [InlineData("", "eng")]
-    [InlineData(null, "eng")]
-    public void Only_listed_languages_count_each_once_and_with_none_english_is_read(string? setting, string read) =>
+    [InlineData("+", "vie")]
+    [InlineData("", "vie")]
+    [InlineData(null, "vie")]
+    public void Only_listed_languages_count_each_once_and_with_none_vietnamese_is_read(string? setting, string read) =>
         Assert.Equal([read], Codes(setting));
 
     [Fact]

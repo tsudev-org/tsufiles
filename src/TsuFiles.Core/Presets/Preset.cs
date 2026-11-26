@@ -1295,7 +1295,7 @@ public sealed class PdfOptions
     /// With <see cref="Ocr"/>: the language of the text as a Tesseract code (<c>eng</c>, <c>deu</c>, <c>chi_sim</c>); text
     /// that mixes languages has several, the main one first, joined with <c>+</c> as Tesseract takes them (<c>chi_sim+eng</c>).
     /// </summary>
-    public string OcrLanguage { get; set; } = "eng";
+    public string OcrLanguage { get; set; } = "vie";
 
     /// <summary>
     /// For PDF → DOCX: <see cref="PdfWordLayout.Exact"/> (the default) keeps every page as the PDF draws it (lines,

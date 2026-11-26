@@ -34,8 +34,8 @@ public sealed record OcrLanguage(string Code, string Culture, long Size)
 
 public static class OcrLanguages
 {
-    /// <summary>Read when a preset doesn't say (and the first language offered).</summary>
-    public const string Default = "eng";
+    /// <summary>Read when a preset doesn't say, and the first language the preset editor offers.</summary>
+    public const string Default = "vie";
 
     private const string Version = "4.1.0";
 

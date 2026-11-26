@@ -1106,6 +1106,18 @@ internal static class SettingsMigrations
                 changed = true;
             }
         }
+        // v78 (TsuFiles): text recognition reads Vietnamese unless a preset says otherwise. "eng" was the old default:
+        //      it becomes "vie" where nobody can have meant it (recognition off, or a built-in preset). The user's own
+        //      presets with recognition on keep their language.
+        if (from < 78)
+        {
+            var builtIn = BuiltInData.CreatePresets().Select(p => p.Id).ToHashSet();
+            foreach (var preset in presets.Where(p => p.Pdf.OcrLanguage == "eng" && (!p.Pdf.Ocr || builtIn.Contains(p.Id))))
+            {
+                preset.Pdf.OcrLanguage = "vie";
+                changed = true;
+            }
+        }
         return changed;
     }
 
