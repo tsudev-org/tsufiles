@@ -680,7 +680,7 @@ public partial class UserDataStoreTests
         var store = new UserDataStore(dir.Path);
         store.Load();
 
-        Assert.Equal(["magick", "markdown", "spreadsheet", "ooxml", "hwpx-writer", "docx-writer", "pdf-text", "pdf-slides", "email", "data", "vector", "icns", "font", "cad", "model3d", "geo", "archive", "ebook", "subtitle", "wic", "ffmpeg", "pandoc", "ghostscript", "calibre", "libreoffice"], store.Settings.EnginePriority);
+        Assert.Equal(["magick", "markdown", "spreadsheet", "ooxml", "hwpx-writer", "docx-writer", "pdf-text", "pdf-slides", "email", "data", "vector", "icns", "font", "cad", "model3d", "geo", "archive", "ebook", "subtitle", "wic", "ffmpeg", "ghostscript", "libreoffice"], store.Settings.EnginePriority);
         Assert.Equal(AppSettings.CurrentSchemaVersion, store.Settings.SchemaVersion);
     }
 
@@ -732,7 +732,7 @@ public partial class UserDataStoreTests
         var store = new UserDataStore(dir.Path);
         store.Load();
 
-        Assert.Equal(["magick", "markdown", "spreadsheet", "ooxml", "hwpx-writer", "docx-writer", "pdf-text", "pdf-slides", "email", "data", "vector", "icns", "font", "cad", "model3d", "geo", "archive", "ebook", "subtitle", "wic", "ffmpeg", "pandoc", "ghostscript", "calibre", "libreoffice"], store.Settings.EnginePriority);
+        Assert.Equal(["magick", "markdown", "spreadsheet", "ooxml", "hwpx-writer", "docx-writer", "pdf-text", "pdf-slides", "email", "data", "vector", "icns", "font", "cad", "model3d", "geo", "archive", "ebook", "subtitle", "wic", "ffmpeg", "ghostscript", "libreoffice"], store.Settings.EnginePriority);
         var ids = store.Profiles.Select(p => p.Id).ToList();
         Assert.Equal(ids.IndexOf("office") + 1, ids.IndexOf("spreadsheets"));
         Assert.Equal(ids.IndexOf("office") + 2, ids.IndexOf("presentations"));
@@ -907,8 +907,8 @@ public partial class UserDataStoreTests
 
         // ... and, from schema 15, the 3D model engine before Pandoc (no CAD or archive engine in this list), from
         // schema 18 the PDF slides engine there too (no PDF text engine), from schema 21 the WIC engine (no FFmpeg),
-        // from schema 25 the geospatial engine after the 3D models engine.
-        Assert.Equal(["magick", "email", "data", "vector", "model3d", "geo", "pdf-slides", "wic", "pandoc", "libreoffice"], store.Settings.EnginePriority);
+        // from schema 25 the geospatial engine after the 3D models engine. Schema 77 removes Pandoc.
+        Assert.Equal(["magick", "email", "data", "vector", "model3d", "geo", "pdf-slides", "wic", "libreoffice"], store.Settings.EnginePriority);
     }
 
     [Fact]
@@ -1192,7 +1192,7 @@ public partial class UserDataStoreTests
         var store = new UserDataStore(dir.Path);
         store.Load();
 
-        Assert.Equal(["magick", "cad", "model3d", "geo", "archive", "pandoc", "libreoffice"], store.Settings.EnginePriority);
+        Assert.Equal(["magick", "cad", "model3d", "geo", "archive", "libreoffice"], store.Settings.EnginePriority);
         Assert.Equal(AppSettings.CurrentSchemaVersion, store.Settings.SchemaVersion);
     }
 
@@ -1517,7 +1517,7 @@ public partial class UserDataStoreTests
         var store = new UserDataStore(dir.Path);
         store.Load();
 
-        Assert.Equal(["magick", "pdfium", "docx-writer", "pdf-text", "pdf-slides", "email", "geo", "wic", "pandoc", "libreoffice"], store.Settings.EnginePriority);
+        Assert.Equal(["magick", "pdfium", "docx-writer", "pdf-text", "pdf-slides", "email", "geo", "wic", "libreoffice"], store.Settings.EnginePriority);
         Assert.Equal(AppSettings.CurrentSchemaVersion, store.Settings.SchemaVersion);
     }
 
@@ -1532,7 +1532,28 @@ public partial class UserDataStoreTests
         store.Load();
 
         // Not near the top: the HWPX writer stays among the ranks that win ties (see EbookTests).
-        Assert.Equal(["magick", "pdfium", "hwpx-writer", "subtitle", "wic", "ffmpeg", "geo", "pandoc", "libreoffice"], store.Settings.EnginePriority);
+        Assert.Equal(["magick", "pdfium", "hwpx-writer", "subtitle", "wic", "ffmpeg", "geo", "libreoffice"], store.Settings.EnginePriority);
+        Assert.Equal(AppSettings.CurrentSchemaVersion, store.Settings.SchemaVersion);
+    }
+
+    [Fact]
+    public void Version_76_settings_lose_the_removed_engines_their_own_copies_and_notices()
+    {
+        using var dir = new TempDir();
+        File.WriteAllText(Path.Combine(dir.Path, "settings.json"),
+            """
+            { "schemaVersion": 76,
+              "enginePriority": ["magick", "rhwp", "unhwp", "markdown", "wic", "ffmpeg", "pandoc", "Calibre", "libreoffice"],
+              "engineOwnCopies": { "pandoc": "/opt/pandoc", "ffmpeg": "/opt/ffmpeg" },
+              "notifiedEngineVersions": { "calibre": "9.17", "ffmpeg": "8.0" } }
+            """);
+
+        var store = new UserDataStore(dir.Path);
+        store.Load();
+
+        Assert.Equal(["magick", "rhwp", "markdown", "wic", "ffmpeg", "libreoffice"], store.Settings.EnginePriority);
+        Assert.Equal(["ffmpeg"], store.Settings.EngineOwnCopies.Keys);
+        Assert.Equal(["ffmpeg"], store.Settings.NotifiedEngineVersions.Keys);
         Assert.Equal(AppSettings.CurrentSchemaVersion, store.Settings.SchemaVersion);
     }
 

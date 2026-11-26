@@ -33,20 +33,13 @@ public sealed class OwnCopyTests : IDisposable
     {
         var ffmpeg = Program(Path.Combine("ffmpeg", "bin", EngineEnvironment.ProgramName("ffmpeg.exe")));
         var ffprobe = Program(Path.Combine("ffmpeg", "bin", EngineEnvironment.ProgramName("ffprobe.exe")));
-        var pandoc = Program(Path.Combine("pandoc", EngineEnvironment.ProgramName("pandoc.exe")));
-        var calibre = Program(Path.Combine("Calibre2", EngineEnvironment.ProgramName("calibre.exe")));
-        var convert = Program(Path.Combine("Calibre2", EngineEnvironment.ProgramName("ebook-convert.exe")));
 
         EngineEnvironment.OwnCopies = new Dictionary<string, string>
         {
             ["ffmpeg"] = Path.Combine(_folder, "ffmpeg"), // the folder of an FFmpeg build: its bin\ is found
-            ["pandoc"] = pandoc,
-            ["calibre"] = calibre, // calibre.exe picked: ebook-convert.exe next to it is used
         };
 
         Assert.Equal((ffmpeg, ffprobe), FfmpegConverter.Locate());
-        Assert.Equal(pandoc, PandocConverter.Locate());
-        Assert.Equal(convert, CalibreConverter.Locate());
     }
 
     [Fact]
@@ -129,8 +122,6 @@ public sealed class SystemCopyTests : IDisposable
     [InlineData("ffmpeg", "ffmpeg version 7.1.1-full_build-www.gyan.dev Copyright (c) 2000-2025", "7.1")]
     [InlineData("ffmpeg", "ffmpeg version n8.0 Copyright (c) 2000-2025", "8.0")]
     [InlineData("ffmpeg", "ffmpeg version 2025-06-02-git-688f3944ce-full_build", null)]
-    [InlineData("pandoc", "pandoc.exe 3.6.4\nFeatures: +server +lua", "3.6")]
-    [InlineData("calibre", "ebook-convert.exe (calibre 8.5.0)\nCreated by: Kovid Goyal", "8.5")]
     [InlineData("ghostscript", "10.04.0\r\n", "10.4")]
     [InlineData("libreoffice", "[Version]\nAllLanguages=en-US\nMsiProductVersion=25.2.4.3\n", "25.2")]
     [InlineData("libreoffice", "LibreOffice 26.2.6.2 98d5f8\n", "26.2")]

@@ -219,10 +219,6 @@ public sealed class StallWatchTests
     public void The_stall_limit_reads_in_minutes_or_seconds(int seconds, string expected) =>
         Assert.Equal(expected, ProcessRunner.Describe(TimeSpan.FromSeconds(seconds)));
 
-    [Fact]
-    public void Calibre_stops_only_after_at_least_as_long_a_silence_as_its_former_fixed_limit() =>
-        Assert.True(CalibreConverter.StallTimeout >= TimeSpan.FromMinutes(10));
-
     private static string PowerShell =>
         Path.Combine(Environment.SystemDirectory, "WindowsPowerShell", "v1.0", "powershell.exe");
 }

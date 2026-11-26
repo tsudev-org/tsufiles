@@ -38,6 +38,8 @@ vi: Windows có Microsoft Office: Word, Excel, PowerPoint sang PDF do chính Off
 en: Windows with Microsoft Office: Word, Excel and PowerPoint files go to PDF through Office itself, with Office's exact layout, page breaks and print areas
 vi: Gọn nhẹ hơn: giao diện, bộ cài và dòng lệnh chỉ còn tiếng Việt và tiếng Anh; gói cài nhỏ hơn khoảng 35 MB
 en: Leaner: the app, the installer and the CLI now ship Vietnamese and English only; the package is about 35 MB smaller
+vi: Bỏ các bộ xử lý trùng lặp (Pandoc, Calibre, Apple Vision, Unhwp): mỗi loại tệp chỉ một cách chuyển, kết quả như nhau trên mọi máy; nhận dạng chữ dùng Tesseract
+en: Duplicate engines are gone (Pandoc, calibre, Apple Vision, Unhwp): one way to convert each file type, the same result on every computer; text recognition uses Tesseract
 vi: PDF scan/ảnh chụp sang Word: chữ nhận dạng sửa được, nằm đúng chỗ trên trang, giữ đường kẻ, bảng, con dấu, chữ ký; nhận chữ đậm, nghiêng, màu chữ
 en: Scanned PDF to Word: recognized text you can edit, in place on the page, with the scan's rules, tables, seals and signatures; bold, italic and text colour detected
 -->

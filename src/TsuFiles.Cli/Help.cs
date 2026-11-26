@@ -86,7 +86,7 @@ internal static class Help
           tsufiles convert *.png --to webp --quality 80 -o da-chuyen
           tsufiles convert D:\BanScan --recursive --preset to-pdf
           tsufiles watch D:\HopThuDen --to pdf --move-originals
-          tsufiles engines install pandoc
+          tsufiles engines install ffmpeg
 
         Preset và engine dùng chung với ứng dụng TsuFiles. Mã thoát: 0 không có lỗi (kể cả tệp bị bỏ qua),
         1 có tệp lỗi hoặc bị hủy, 2 sai tham số hoặc thiếu đầu vào, 3 không có gì để chuyển đổi.
@@ -100,7 +100,7 @@ internal static class Help
                    tsufiles engines install <engine> [--json] [--quiet]
                    tsufiles engines remove <engine> [--json] [--quiet]
 
-        Liệt kê các engine tùy chọn trong Cài đặt → Engine (LibreOffice, Pandoc, FFmpeg, …), hoặc cài/gỡ một engine
+        Liệt kê các engine tùy chọn trong Cài đặt → Engine (LibreOffice, FFmpeg, Tesseract, …), hoặc cài/gỡ một engine
         với cùng nguồn tải và cùng bước kiểm tra (SHA-256) như ứng dụng. 'remove' chỉ gỡ những gì TsuFiles đã tải;
         bản riêng của bạn và bản tìm thấy trên máy được giữ nguyên.
 
@@ -191,7 +191,7 @@ internal static class Help
           tsufiles convert *.png --to webp --quality 80 -o converted
           tsufiles convert D:\Scans --recursive --preset to-pdf
           tsufiles watch D:\Inbox --to pdf --move-originals
-          tsufiles engines install pandoc
+          tsufiles engines install ffmpeg
 
         Presets and engines are the ones in the TsuFiles app. Exit codes: 0 nothing failed (skipped
         files included), 1 some failed or were cancelled, 2 wrong arguments or a missing input, 3 nothing to
@@ -204,7 +204,7 @@ internal static class Help
                tsufiles engines install <engine> [--json] [--quiet]
                tsufiles engines remove <engine> [--json] [--quiet]
 
-        Lists the optional engines of Settings → Engines (LibreOffice, Pandoc, FFmpeg, …), or installs or removes
+        Lists the optional engines of Settings → Engines (LibreOffice, FFmpeg, Tesseract, …), or installs or removes
         one with the same download and checks as the app. 'remove' only removes what TsuFiles downloaded; your own copy
         and one found on this computer are left alone.
 

@@ -26,13 +26,9 @@ public static class EngineDownloads
         (OperatingSystem.IsWindows() ? "win" : OperatingSystem.IsMacOS() ? "osx" : OperatingSystem.IsLinux() ? "linux" : "unknown")
         + "-" + RuntimeInformation.ProcessArchitecture.ToString().ToLowerInvariant();
 
-    /// <summary>
-    /// The downloads for this computer. On a Mac older than a download's minimumMacOS (calibre 9 needs macOS 14) that
-    /// download is left out, so the package is offered like one TsuFiles has no download of.
-    /// </summary>
+    /// <summary>The downloads for this computer.</summary>
     public static IReadOnlyDictionary<string, EngineComponent> Components { get; } =
-        ComponentsForRuntime(DownloadRuntime(RuntimeIdentifier, OperatingSystem.IsWindows() ? Environment.OSVersion.Version.Build : 0),
-            OperatingSystem.IsMacOS() ? Environment.OSVersion.Version : null);
+        ComponentsForRuntime(DownloadRuntime(RuntimeIdentifier, OperatingSystem.IsWindows() ? Environment.OSVersion.Version.Build : 0));
 
     /// <summary>
     /// The downloads a Windows build runs: TsuFiles has no ARM64 builds of the engines it downloads, and Windows 11 on ARM64
@@ -48,11 +44,9 @@ public static class EngineDownloads
     public static IReadOnlyList<EnginePackage> Packages { get; } =
     [
         new("libreoffice", OperatingSystem.IsWindows() ? ["libreoffice", "h2orestart", "jre"] : ["libreoffice"], 1_265_000_000, ["libreoffice"]),
-        new("pandoc", ["pandoc"], 236_000_000, ["pandoc"]),
         // Ghostscript from conda-forge plus the Microsoft C++ runtime it was built against (copied next to it).
         new("ghostscript", OperatingSystem.IsWindows() ? ["ghostscript", "vcruntime"] : ["ghostscript"], 31_000_000, ["ghostscript"]),
         new("ffmpeg", ["ffmpeg"], 272_000_000, ["ffmpeg"]),
-        new("calibre", ["calibre"], 663_000_000, ["calibre"]),
         new("tesseract", ["tesseract"], 168_000_000, ["tesseract"]),
         new("upscayl-bin", OperatingSystem.IsWindows() && RuntimeInformation.ProcessArchitecture != Architecture.Arm64 ? ["upscayl-bin", "vcruntime", "vcomp14"] : OperatingSystem.IsWindows() ? [] : ["upscayl-bin"], 8_600_000, ["upscaler"]),
         .. (OperatingSystem.IsWindows() ? [new EnginePackage("whisper", ["whisper", "whisper-model"], 156_880_105, ["whisper"])] : Array.Empty<EnginePackage>()),
@@ -76,7 +70,6 @@ public static class EngineDownloads
                 "ghostscript" => "Install Ghostscript with Homebrew (brew install ghostscript), then check again or select its bin folder.",
                 "tesseract" => "Install Tesseract with Homebrew (brew install tesseract), then check again or select its bin folder.",
                 "exiftool" => "Install ExifTool with Homebrew (brew install exiftool), then check again or select its folder.",
-                "calibre" => "The calibre TsuFiles downloads needs macOS 14 or later. Install calibre 7.26 from calibre-ebook.com and select its .app folder.",
                 _ => $"No TsuFiles download is available for {RuntimeIdentifier}. Install {package.Id} for this Mac and select its program or .app folder.",
             };
         if (OperatingSystem.IsLinux())
@@ -96,14 +89,13 @@ public static class EngineDownloads
     /// <summary>
     /// Ticked by default in the installer and in the first-run choice. Large downloads are offered, not suggested:
     /// LibreOffice is only needed for older formats (DOC, XLS, PPT, OpenDocument), FFmpeg (~100 MB) only for video and
-    /// audio, calibre (~230 MB) only for rare e-book formats and Kindle output. Ghostscript and Tesseract are small but
+    /// audio. Ghostscript and Tesseract are small but
     /// only needed for EPS / PostScript and for scans.
     /// </summary>
     public static bool IsSuggested(EnginePackage package) =>
         CanDownload(package) && DownloadSize(package) < SuggestLimit && package.Id is not ("ghostscript" or "tesseract" or "upscayl-bin");
 
-    /// <param name="macOSVersion">The running macOS; downloads whose minimumMacOS is newer are left out. Null keeps all.</param>
-    public static IReadOnlyDictionary<string, EngineComponent> ComponentsForRuntime(string runtimeIdentifier, Version? macOSVersion = null)
+    public static IReadOnlyDictionary<string, EngineComponent> ComponentsForRuntime(string runtimeIdentifier)
     {
         using var stream = typeof(EngineDownloads).Assembly.GetManifestResourceStream("TsuFiles.Engines.engines.json")
                            ?? throw new InvalidOperationException("Embedded engines.json is missing.");
@@ -116,7 +108,7 @@ public static class EngineDownloads
             components = platform.GetProperty("components");
         else
             return new Dictionary<string, EngineComponent>();
-        return components.EnumerateObject().Where(p => RunsOn(p.Value, macOSVersion)).ToDictionary(
+        return components.EnumerateObject().ToDictionary(
             p => p.Name,
             p => new EngineComponent(
                 p.Name,
@@ -126,8 +118,4 @@ public static class EngineDownloads
                 p.Value.GetProperty("size").GetInt64(),
                 p.Value.GetProperty("kind").GetString()!));
     }
-
-    private static bool RunsOn(JsonElement component, Version? macOSVersion) =>
-        macOSVersion is null || !component.TryGetProperty("minimumMacOS", out var minimum)
-        || macOSVersion >= Version.Parse(minimum.GetString()!);
 }

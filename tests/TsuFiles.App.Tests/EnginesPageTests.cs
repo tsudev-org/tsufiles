@@ -47,14 +47,14 @@ public class EnginesPageTests
             Assert.StartsWith(loc["error.msi_link"], text);
             Assert.NotEqual("error.msi_link", loc["error.msi_link"]);
             Assert.EndsWith(@"(msiexec 1620, log: C:\Temp\filee-msiexec.log)", text);
-            Assert.Equal(loc["error.msi_busy"], EngineDownloadService.ErrorText(loc, TsuFiles.Engines.Infrastructure.EngineInstaller.MsiFailure("calibre", 1618, "log")));
+            Assert.Equal(loc["error.msi_busy"], EngineDownloadService.ErrorText(loc, TsuFiles.Engines.Infrastructure.EngineInstaller.MsiFailure("libreoffice", 1618, "log")));
         }
         finally
         {
             loc.SetLanguage("en");
         }
         Assert.Contains("exit code 1603", EngineDownloadService.ErrorText(loc, new AggregateException(
-            TsuFiles.Engines.Infrastructure.EngineInstaller.MsiFailure("calibre", 1603, "log"))));
+            TsuFiles.Engines.Infrastructure.EngineInstaller.MsiFailure("libreoffice", 1603, "log"))));
     }
 
     [AvaloniaFact]

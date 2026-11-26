@@ -9,9 +9,13 @@
 
 ## Hàng đợi task (làm từ trên xuống)
 
-- [ ] ⚡⚡⚡⚡⚡ TIẾP THEO: phiếu **`logs/handover/20261126-01_ban-giao-tinh-gon-ocr-office.md`** mục 2: gộp #131 -> #133
-      -> PR nhật ký; rồi kế hoạch tinh gọn **`logs/handover/20261126-TG1_ke-hoach-tinh-gon-tsufiles.md`** từ G2 (mỗi
-      giai đoạn một PR, một phiên).
+- [ ] ⚡⚡⚡⚡⚡ TIẾP THEO: phiếu **`logs/handover/20261126-02_ban-giao-gop-131-133-g2.md`** mục 2: gộp **#135** (TG1 G2)
+      khi CI xanh; rồi phiếu **SEC3** `logs/handover/20261126-SEC3_ra-soat-an-toan-bao-mat-va-lam-sach-ma-toan-he.md`
+      (rà soát bảo mật toàn hệ, mục 2.1-2.5); rồi TG1 từ G3a. 👤 26/11: ưu tiên **Windows 10/11 + Microsoft Office +
+      tệp scan** (OCR mặc định `vie`, đo PowerPoint qua Office).
+- [ ] ⚡⚡⚡⚡ Phiếu **LG4** `logs/handover/20261126-LG4_bo-nhac-dang-nhap-tu-dong-khong-lam-phien-toan-he.md` (cùng đợt
+      SEC3): đồng bộ `.standards` v8.0.0; rà cửa sổ ủng hộ/đánh giá/"có gì mới" tự bật, thông báo khay (PRODUCT_POLICY
+      3.8 "không làm phiền"); lối vào Tài khoản thụ động trong Cài đặt. KHÔNG dựng hộp thoại nhắc đăng nhập (LG3 đóng).
 - [ ] ⚡⚡⚡ TIẾP THEO: phiếu `logs/handover/20261125-02_ban-giao-std50-pr2-ui2-signpath.md` mục 2: UI2 phần B khi
       tsudev-standards có bảng màu Sáng dịu; PRO1/PRO2 + QR4 khi có thư viện `TsuSync`; SignPath nộp khi đạt >= 4/6
       (đo 25/11: 1/6). 👤: secret `VT_API_KEY` (GitHub Actions, không phải Render - phiếu mục 3), ĐỔI khóa VirusTotal.
@@ -76,6 +80,10 @@
 | --- | --- | --- |
 
 ## Đã hoàn thành (mới nhất trên cùng)
+
+- 26/11/2026 - #131 gộp (`64896b08`, G1 chỉ vi + en), #133 gộp (`2d239b01`, engine Microsoft Office; sửa test thứ tự
+  tuyến Office/LibreOffice), #134 gộp (`a28477c8`). #135 mở: G2 bỏ Pandoc, Calibre, WIC, Apple Vision, Unhwp (schema 77,
+  -4 672 dòng). Phiếu SEC3 nhận từ điều phối. Bàn giao `20261126-02`.
 
 - 26/11/2026 - #130 gộp (`8040fdc0`, PDF -> Word giữ bố cục); #132 gộp (`0aed94aa`): PDF scan -> Word chữ sửa được
   đúng chỗ (Word đo 92 trang scan thật: F1 0,932-0,995), OCR tiếng Việt tessdata_best, CLI `--ocr`. Mở #131 (G1 chỉ

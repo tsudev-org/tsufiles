@@ -538,7 +538,6 @@ public sealed class EngineInstallerTests : IDisposable
 
     [Theory]
     [InlineData("libreoffice", "LibreOffice.app", "soffice")]
-    [InlineData("calibre", "calibre.app", "ebook-convert")]
     public void A_Mac_application_bundle_requires_its_conversion_program(string id, string app, string program)
     {
         var folder = Path.Combine(_root, app, "Contents", "MacOS");

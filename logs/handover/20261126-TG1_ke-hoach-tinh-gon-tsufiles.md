@@ -36,7 +36,8 @@
 | Lõi - GIỮ | Ảnh (Magick), PDF (PDFsharp, PDFium, pdf-text/tables/slides), DOCX writer, OOXML, bảng tính dựng sẵn, Markdown dựng sẵn, nén/giải nén, Email, P7m (chữ ký số VN), dữ liệu (CSV/JSON/YAML/TOML), phụ đề, Metadata (ExifTool), LibreOffice (dự phòng văn phòng), FFmpeg (âm thanh/video), Tesseract (OCR), Chia sẻ điện thoại | Giữ | Nhu cầu văn phòng/hành chính VN |
 | Trùng lặp - BỎ | Pandoc (trùng Markdown + DOCX writer dựng sẵn, 236 MB) | Bỏ | Hai kết quả khác nhau cho cùng cặp |
 | Trùng lặp - BỎ | Calibre (trùng `ebook` dựng sẵn, 663 MB) | Bỏ (giữ EPUB dựng sẵn) | Engine nặng nhất sau LibreOffice |
-| Trùng lặp - BỎ | WIC (Windows, trùng Magick); Vision (macOS, trùng Tesseract) | Bỏ | Kết quả khác theo hệ điều hành |
+| Trùng lặp - GIỮ lại WIC | WIC (Windows): sửa 26/11 - KHÔNG trùng Magick, là bộ đọc JPEG XR duy nhất (ảnh chụp màn hình HDR) | Giữ | Đo ở CI #135 |
+| Trùng lặp - BỎ | Vision (macOS, trùng Tesseract) | Bỏ | Kết quả khác theo hệ điều hành |
 | Trùng lặp - BỎ | Unhwp (trùng rhwp) | Bỏ cùng nhóm HWP hoặc giữ rhwp | |
 | Chuyên biệt nước ngoài | HWP/HWPX (Hàn Quốc, 16k dòng + rhwp/unhwp), OFD (Trung Quốc) | **BỎ** (👤 duyệt 26/11) | Không phổ biến ở VN |
 | Địa chính / kỹ thuật | CAD (DXF/DWG), Bản đồ (Geo) | **GIỮ** (👤 26/11: chuyên viên địa chính UBND cần) | Mục tiêu: văn phòng/công sở, UBND, hệ thống chính trị VN |
@@ -51,8 +52,8 @@
 | GĐ | Nội dung | Cổng/kiểm chứng | Trạng thái |
 | :-: | --- | --- | --- |
 | G0 | Gộp #130 (PDF -> Word giữ bố cục) | CI xanh | ✅ #130 `8040fdc0` |
-| G1 | **Chỉ vi + en** (PR #131): xoá 20 `i18n/*.json`, `AppLanguages`, ngôn ngữ của Setup/CLI, font chữ không dùng, logic pt/zh; di trú cài đặt ngôn ngữ khác -> `auto` (vi nếu hệ thống tiếng Việt, còn lại en); bỏ `WhatsNew` kế thừa; sửa test + website/README | Build, test App/Setup/Cli lọc, `check_i18n_vi.py` | ⏳ #131 chờ CI |
-| G2 | Bỏ engine trùng lặp: Pandoc, Calibre, WIC, Vision, Unhwp; `EngineDownloads`, `engines.json`, `fetch-*.ps1`, preset/EnginePriority di trú | Test Engines/Core lọc theo vùng sửa | ⬜ |
+| G1 | **Chỉ vi + en** (PR #131): xoá 20 `i18n/*.json`, `AppLanguages`, ngôn ngữ của Setup/CLI, font chữ không dùng, logic pt/zh; di trú cài đặt ngôn ngữ khác -> `auto` (vi nếu hệ thống tiếng Việt, còn lại en); bỏ `WhatsNew` kế thừa; sửa test + website/README | Build, test App/Setup/Cli lọc, `check_i18n_vi.py` | ✅ #131 `64896b08` |
+| G2 | Bỏ engine trùng lặp: Pandoc, Calibre, Vision, Unhwp; `EngineDownloads`, `engines.json`, `fetch-*.ps1`, preset/EnginePriority di trú | Test Engines/Core lọc theo vùng sửa | ⏳ #135 |
 | G3a | Bỏ HWP/HWPX + OFD (rhwp, unhwp, hwpx-writer, `Hwp/`, `Ofd/`) | Như G2 | ⬜ |
 | G3b | Bỏ AI cục bộ (Whisper, Upscayl, Dịch) + Font, Ghostscript, ISO | Như G2 | ⬜ |
 | G4 | CI gọn: bỏ test/fixture của phần đã xoá, tách job theo vùng đổi (`changes`), tắt `win-arm64` tới khi có P1 | Đo thời gian CI trước/sau (mục tiêu <= 35 phút) | ⬜ |
@@ -69,3 +70,6 @@
 
 - 26/11/2026 - tsufiles-c9: mở phiếu, đo hiện trạng; 👤 duyệt mục 2. G0 xong (#130). G1 PR #131. Ngoài kế hoạch theo
   yêu cầu 👤: #132 PDF scan -> Word giữ bố cục (ĐÃ GỘP), #133 engine Microsoft Office. Bàn giao `20261126-01`.
+- 26/11/2026 - tsufiles-c10: #131 (G1) và #133 (Office) gộp. G2 PR #135 (schema 77). Định dạng markup chỉ Pandoc đọc giữ
+  trong danh mục, preset MOBI/AZW3 giữ (gỡ ở G3/G4 cùng ảnh chụp schema 58). 👤: ưu tiên Windows 10/11 + Microsoft Office
+  + tệp scan. Bàn giao `20261126-02`.

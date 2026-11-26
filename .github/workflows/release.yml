@@ -70,9 +70,9 @@ jobs:
         run: ./build/build-explorer-menu.ps1 -Version ${{ steps.version.outputs.value }}
 
       # Same engines as CI, so the release runs the same tests (they are not part of the installer).
-      - name: Fetch rhwp, Pandoc and 7-Zip for engine tests
+      - name: Fetch rhwp and 7-Zip for engine tests
         shell: pwsh
-        run: ./build/fetch-engines.ps1 -Only rhwp,pandoc,7zip
+        run: ./build/fetch-engines.ps1 -Only rhwp,7zip
 
       # Built first and tested like CI: the UI tests on their own with crash and hang blame (a crash names the
       # running test and leaves a dump in TestResults), then the rest.

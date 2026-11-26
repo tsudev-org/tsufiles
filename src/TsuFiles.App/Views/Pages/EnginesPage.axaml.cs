@@ -158,7 +158,7 @@ public partial class EnginesPage : UserControl
         var loc = AppHost.Get<ILocalizer>();
         var programs = TsuFiles.Engines.Infrastructure.EngineEnvironment.OwnCopyPrograms[package.Package.Id];
         string? path;
-        if (OperatingSystem.IsMacOS() && package.Package.Id is "libreoffice" or "calibre")
+        if (OperatingSystem.IsMacOS() && package.Package.Id == "libreoffice")
         {
             var folders = await window.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
             {

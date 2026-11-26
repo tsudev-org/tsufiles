@@ -5,7 +5,7 @@
 # Nguồn tải, phiên bản và SHA-256 lấy từ src/TsuFiles.Engines/Infrastructure/engines.json (cùng danh sách ứng dụng dùng
 # khi tải engine). Sai SHA-256 thì hủy, không giải nén. Giải nén từ chối đường dẫn tuyệt đối và "..".
 #
-# Cách dùng: tools/fetch-engines-linux.sh 7zip [pandoc rhwp ...]   (mặc định: 7zip)
+# Cách dùng: tools/fetch-engines-linux.sh 7zip [rhwp exiftool ...]   (mặc định: 7zip)
 set -euo pipefail
 die() { echo "LỖI: $*" >&2; exit 1; }
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

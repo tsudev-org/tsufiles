@@ -3,7 +3,7 @@
 //  * Every download is checked against the SHA-256 pinned in engines.json before anything is unpacked.
 //  * Unpacking happens in a staging folder that replaces the engine folder only when complete, so a failed or
 //    cancelled install never leaves a half-installed engine behind.
-//  * MSIs (LibreOffice, calibre) are unpacked with an administrative install (msiexec /a): files only, no registry
+//  * MSIs (LibreOffice) are unpacked with an administrative install (msiexec /a): files only, no registry
 //    entries, no admin rights. Parts headless LibreOffice never uses (help, gallery, most dictionaries) are removed.
 //  * conda-forge packages (Ghostscript, the Microsoft C++ runtime) are zip files holding zstd-compressed tarballs;
 //    only their Windows binaries (Library/bin) are unpacked, with a managed decompressor (no 7-Zip, no installer).
@@ -246,7 +246,7 @@ public sealed class EngineInstaller
 
     /// <summary>
     /// Deletes a folder tree, read-only files included: Directory.Delete stops at the first one, and the calibre MSI
-    /// marks every file read-only (#1092). A file held briefly (an antivirus scanning what was just unpacked) is waited out.
+    /// (downloaded by earlier versions) marks every file read-only (#1092). A file held briefly (an antivirus scanning what was just unpacked) is waited out.
     /// Links are never followed: of a link only the link goes, also when <paramref name="folder"/> itself is one, and what
     /// it leads to stays as it is.
     /// </summary>
@@ -549,7 +549,6 @@ public sealed class EngineInstaller
         var appName = id switch
         {
             "libreoffice" => "LibreOffice.app",
-            "calibre" => "calibre.app",
             _ => throw new NotSupportedException($"No application bundle is specified for {id}."),
         };
         // Keep the mount outside staging so failed unmounts cannot be removed by staging cleanup.
@@ -585,16 +584,10 @@ public sealed class EngineInstaller
     /// <summary>
     /// The folder to keep from an administratively installed MSI, which lays files out as they would be installed
     /// (PFiles64\...): LibreOffice's folder with program/ and share/ (trimmed, with its C++ runtime copied into
-    /// program/), calibre's folder with ebook-convert (it keeps its own C++ runtime in app/bin).
+    /// program/).
     /// </summary>
     private static string MsiProgramFolder(string id, string staging)
     {
-        if (id == "calibre")
-        {
-            var convert = Directory.EnumerateFiles(staging, "ebook-convert.exe", SearchOption.AllDirectories).FirstOrDefault()
-                          ?? throw new InvalidDataException("ebook-convert.exe not found in the calibre package.");
-            return Path.GetDirectoryName(convert)!;
-        }
         var soffice = Directory.EnumerateFiles(staging, "soffice.exe", SearchOption.AllDirectories).FirstOrDefault()
                       ?? throw new InvalidDataException("soffice.exe not found in the LibreOffice package.");
         var libreOffice = Path.GetDirectoryName(Path.GetDirectoryName(soffice)!)!; // folder with program/, share/

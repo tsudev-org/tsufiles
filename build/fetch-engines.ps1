@@ -11,13 +11,10 @@
                      + H2Orestart (GPL-3.0) unpacked into share/extensions for HWP/HWPX import
       jre/           Eclipse Temurin JRE 21 (GPLv2 + Classpath Exception), used by H2Orestart
       rhwp/          rhwp command line (MIT), HWP/HWPX -> PDF, with the Microsoft C++ runtime DLLs next to rhwp.exe
-      pandoc/        Pandoc (GPL-2.0-or-later, separate program), Markdown/HTML and MD/HTML/ODT/RTF -> HWPX
       7zip/          7-Zip console (7z.exe + 7z.dll, LGPL-2.1 + unRAR restriction, separate program), archives
       ghostscript/   Ghostscript (AGPL-3.0, separate program) from conda-forge, EPS/PS <-> PDF, with the Microsoft
                      C++ runtime DLLs (vcruntime/) copied next to gswin64c.exe
       ffmpeg/        FFmpeg (GPL-3.0 build, separate program), video and audio; bin/ffmpeg.exe + bin/ffprobe.exe
-      calibre/       calibre (GPL-3.0, separate program), extracted from the official MSI via an administrative
-                     install: ebook-convert for LIT, LRF, PDB, ... and MOBI / AZW3 output
       tesseract/     Tesseract OCR (Apache-2.0, separate program), UB Mannheim's Windows build unpacked from its
                      installer with 7-Zip (never run); the language data is downloaded by the app when needed
       exiftool/      ExifTool (Perl's licence, separate program), the Windows build: exiftool(-k).exe renamed
@@ -29,20 +26,19 @@
   The Microsoft C++ runtime (the "vcruntime" component: MSVCP140.dll, VCRUNTIME140.dll, ...) is copied next to the
   programs built with Visual C++ that do not ship it themselves (rhwp.exe, gswin64c.exe; LibreOffice's own copy goes
   into its program folder), so they also run on PCs without the Visual C++ Redistributable. -RuntimeTo copies it into
-  more folders (build-installer.ps1: next to Filee.exe, for unhwp.dll).
+  more folders (build-installer.ps1: next to TsuFiles.exe).
 
-  Windows on ARM64 (-Runtime win-arm64): rhwp and 7-Zip are ARM64 builds, and "unhwp" is Unhwp's ARM64 library
-  (unhwp\unhwp.dll; the build passes it to dotnet with -p:UnhwpNativeLibrary, see build-installer.ps1). rhwp and Unhwp
-  have no ARM64 release: .github/workflows/windows-arm64-native.yml builds them from the pinned sources
-  (build/build-native.py), the files are hosted on dl.filee.sh and pinned below ($arm64Pins). Both link the C runtime
-  statically, so nothing gets the Microsoft C++ runtime DLLs. Every other engine is the x64 download, which Windows 11
+  Windows on ARM64 (-Runtime win-arm64): rhwp and 7-Zip are ARM64 builds. rhwp has no ARM64 release:
+  .github/workflows/windows-arm64-native.yml builds it from the pinned source (build/build-native.py), the file is
+  hosted on dl.filee.sh and pinned below ($arm64Pins). It links the C runtime statically, so it gets no Microsoft C++
+  runtime DLLs. Every other engine is the x64 download, which Windows 11
   on ARM runs under emulation.
 
 .PARAMETER Destination
   Target "engines" folder. Default: <repo>/engines (picked up automatically by debug builds).
 
 .PARAMETER Only
-  Restrict to some engines, e.g. -Only rhwp,pandoc (LibreOffice is large: ~356 MB download).
+  Restrict to some engines, e.g. -Only rhwp,7zip (LibreOffice is large: ~356 MB download).
 
 .PARAMETER RuntimeTo
   More folders that get the Microsoft C++ runtime DLLs, e.g. the published app folder (win-x64 only).
@@ -57,7 +53,7 @@
   pwsh build/fetch-engines.ps1
   pwsh build/fetch-engines.ps1 -Only rhwp
   pwsh build/fetch-engines.ps1 -Destination publish/win-x64/engines
-  pwsh build/fetch-engines.ps1 -Runtime win-arm64 -Only rhwp,7zip,unhwp
+  pwsh build/fetch-engines.ps1 -Runtime win-arm64 -Only rhwp,7zip
 #>
 [CmdletBinding()]
 param(
@@ -79,20 +75,14 @@ foreach ($component in $manifest.components.PSObject.Properties) {
     $engines[$component.Name] = @{ Url = $component.Value.url; Sha256 = $component.Value.sha256 }
 }
 
-# The ARM64 builds for -Runtime win-arm64, each of the version the x64 build uses (engines.json; Unhwp:
-# Directory.Packages.props). rhwp and unhwp: run the "Windows ARM64 native" workflow (Actions tab), upload the files of
-# its artifact to the url below and copy sha256 from its SHA256SUMS.txt. A version update needs a new build: the
+# The ARM64 builds for -Runtime win-arm64, each of the version the x64 build uses (engines.json). rhwp: run the
+# "Windows ARM64 native" workflow (Actions tab), upload the file of its artifact to the url below and copy sha256 from its SHA256SUMS.txt. A version update needs a new build: the
 # workflow fails until build/build-native.py builds the new version, and this script until the pin is updated.
 $arm64Pins = [ordered]@{
     rhwp = @{
         Version = '0.8.7'
         Url = 'https://dl.filee.sh/engines/rhwp/0.8.7/rhwp-v0.8.7-windows-aarch64.zip'
         Sha256 = 'EAC4F747115AA061208FB20E2727E67C8A8AE6AAA60D74F139A9DD6BCBA83172'
-    }
-    unhwp = @{
-        Version = '0.13.0'
-        Url = 'https://dl.filee.sh/engines/unhwp/0.13.0/unhwp-0.13.0-win-arm64.dll'
-        Sha256 = '2D9760720F281E49B5D472437849E7C66704F8DF0330F378CE350D1561F16621'
     }
     # The official ARM64 installer, a 7z self-extracting archive; it is unpacked, never run.
     '7zip' = @{
@@ -106,8 +96,6 @@ if ($Runtime -eq 'win-arm64') {
     $x64Versions = @{
         rhwp = $manifest.components.rhwp.version
         '7zip' = $manifest.components.'7zip'.version
-        unhwp = ([xml](Get-Content (Join-Path $PSScriptRoot '..\Directory.Packages.props') -Raw)).Project.ItemGroup.PackageVersion |
-            Where-Object { $_.Include -eq 'Unhwp' } | ForEach-Object Version
     }
     $missing = @($arm64Pins.Keys | Where-Object { $arm64Pins[$_].Sha256 -notmatch '^[0-9a-fA-F]{64}$' })
     if ($MissingPins) {
@@ -124,7 +112,7 @@ elseif ($MissingPins) {
     throw '-MissingPins is for -Runtime win-arm64.'
 }
 if ($RuntimeTo -and $Runtime -ne 'win-x64') {
-    throw "-RuntimeTo is for win-x64: the $Runtime builds of rhwp and Unhwp link the C runtime statically."
+    throw "-RuntimeTo is for win-x64: the $Runtime build of rhwp links the C runtime statically."
 }
 
 $cache = Join-Path $PSScriptRoot '.cache'
@@ -225,16 +213,9 @@ function Optimize-LibreOffice([string]$root) {
 }
 
 $selected = if ($Only) { @($Only -split ',' | ForEach-Object { $_.Trim().ToLowerInvariant() } | Where-Object { $_ }) } else { @($engines.Keys) }
-# Unhwp's library is only downloaded for win-arm64, and only when asked for (the x64 one comes in its NuGet package).
-$valid = @($engines.Keys) + @(if ($Runtime -eq 'win-arm64') { 'unhwp' })
+$valid = @($engines.Keys)
 foreach ($name in $selected) {
     if ($name -notin $valid) { throw "Unknown engine '$name' for $Runtime. Valid: $($valid -join ', ')" }
-}
-
-if ('unhwp' -in $selected) {
-    $target = Join-Path $Destination 'unhwp'
-    Reset-Folder $target
-    Copy-Item (Get-Engine 'unhwp') (Join-Path $target 'unhwp.dll')
 }
 
 if ('rhwp' -in $selected) {
@@ -251,12 +232,6 @@ if ('rhwp' -in $selected) {
     if ($Runtime -eq 'win-x64') {
         Copy-VcRuntime (Join-Path $Destination 'rhwp')
     }
-}
-
-if ('pandoc' -in $selected) {
-    $zip = Get-Engine 'pandoc'
-    Expand-Flat $zip (Join-Path $Destination 'pandoc')
-    if (-not (Test-Path (Join-Path $Destination 'pandoc\pandoc.exe'))) { throw 'pandoc.exe not found in the archive.' }
 }
 
 if ('7zip' -in $selected) {
@@ -379,22 +354,6 @@ if ('exiftool' -in $selected) {
     Expand-Flat (Get-Engine 'exiftool') $target
     Move-Item -LiteralPath (Join-Path $target 'exiftool(-k).exe') -Destination (Join-Path $target 'exiftool.exe') -Force
     if (-not (Test-Path (Join-Path $target 'exiftool.exe'))) { throw 'exiftool.exe not found in the archive.' }
-}
-
-if ('calibre' -in $selected) {
-    $msi = Get-Engine 'calibre'
-    $tmp = Join-Path $cache 'calibre-admin'
-    Reset-Folder $tmp
-    Write-Host 'unpack calibre (administrative install, no system changes)'
-    $proc = Start-Process msiexec.exe -ArgumentList @('/a', "`"$msi`"", '/qn', "TARGETDIR=`"$tmp`"") -Wait -PassThru
-    if ($proc.ExitCode -ne 0) { throw "msiexec /a failed with exit code $($proc.ExitCode)." }
-
-    $convert = Get-ChildItem $tmp -Recurse -Filter 'ebook-convert.exe' | Select-Object -First 1
-    if (-not $convert) { throw 'ebook-convert.exe not found after extracting the MSI.' }
-    $target = Join-Path $Destination 'calibre'
-    Reset-Folder $target
-    Get-ChildItem $convert.DirectoryName -Force | Move-Item -Destination $target
-    Remove-Item $tmp -Recurse -Force
 }
 
 foreach ($folder in $RuntimeTo) {

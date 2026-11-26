@@ -1,6 +1,6 @@
 // Shared context for engines: where TsuFiles's own engine copies live and where engines keep their state.
 // Built-in engines never use software installed on the system (Microsoft Office, Hancom Office). The optional
-// engines (FFmpeg, calibre, Pandoc, Ghostscript, LibreOffice, Tesseract) are looked up in this order: a copy the user chose in
+// engines (FFmpeg, Ghostscript, LibreOffice, Tesseract) are looked up in this order: a copy the user chose in
 // Settings → Engines (OwnCopies), TsuFiles's own copy (installer or download, the tested version), then one already on
 // the PC (on the PATH or where its installer puts it), so nobody has to download a second FFmpeg they already have.
 
@@ -81,10 +81,8 @@ public sealed class EngineEnvironment(string dataDirectory)
     private static IReadOnlyDictionary<string, string[]> Programs(bool windows) => new Dictionary<string, string[]>
     {
         ["libreoffice"] = [windows ? "soffice.exe" : "soffice"],
-        ["pandoc"] = [windows ? "pandoc.exe" : "pandoc"],
         ["ghostscript"] = [windows ? "gswin64c.exe" : "gs"],
         ["ffmpeg"] = windows ? ["ffmpeg.exe", "ffprobe.exe"] : ["ffmpeg", "ffprobe"],
-        ["calibre"] = [windows ? "ebook-convert.exe" : "ebook-convert"],
         ["rhwp"] = [windows ? "rhwp.exe" : "rhwp"],
         ["7zip"] = [windows ? "7z.exe" : "7zz"],
         ["tesseract"] = [windows ? "tesseract.exe" : "tesseract"],
@@ -122,7 +120,7 @@ public sealed class EngineEnvironment(string dataDirectory)
         var start = File.Exists(path) ? Path.GetDirectoryName(path) : Directory.Exists(path) ? path : null;
         if (start is null)
             return null;
-        var app = id == "libreoffice" ? "LibreOffice.app" : id == "calibre" ? "calibre.app" : null;
+        var app = id == "libreoffice" ? "LibreOffice.app" : null;
         var candidates = new List<string> { start, Path.Combine(start, "bin"), Path.Combine(start, "program"), Path.Combine(start, "Contents", "MacOS") };
         if (app is not null)
             candidates.Add(Path.Combine(start, app, "Contents", "MacOS"));
@@ -144,7 +142,7 @@ public sealed class EngineEnvironment(string dataDirectory)
     /// <summary>
     /// The folder of a copy of package <paramref name="id"/> already on the PC: on the PATH (also the user's and the
     /// machine's PATH as saved, so a tool installed after TsuFiles started is found, e.g. Scoop's shims) or where its
-    /// installer puts it (LibreOffice, calibre, Ghostscript under Program Files). Cached until
+    /// installer puts it (LibreOffice, Ghostscript under Program Files). Cached until
     /// <see cref="ForgetSystemCopies"/>.
     /// </summary>
     public static string? SystemCopyFolder(string id) =>
@@ -222,8 +220,6 @@ public sealed class EngineEnvironment(string dataDirectory)
                 }
                 catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { }
             }
-            if (id == "calibre")
-                folders.AddRange(["/Applications/calibre.app", Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Applications", "calibre.app"), "/opt/calibre"]);
         }
         else if (id == "libreoffice")
             folders.AddRange(RegisteredFolders(LibreOfficeInstallPathKey));
@@ -236,9 +232,6 @@ public sealed class EngineEnvironment(string dataDirectory)
             {
                 case "libreoffice":
                     folders.Add(Path.Combine(root, "LibreOffice", "program"));
-                    break;
-                case "calibre":
-                    folders.Add(Path.Combine(root, "Calibre2"));
                     break;
                 case "tesseract":
                     folders.Add(Path.Combine(root, "Tesseract-OCR"));

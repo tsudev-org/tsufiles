@@ -126,9 +126,7 @@ public sealed class RhwpConverter : IConverter, ITextShapingCheck
         }
         catch (TimeoutException ex)
         {
-            // E-books reach rhwp through the HWPX writer; calibre makes their PDFs much faster when it is ranked above it.
-            throw new ConversionRefusedException(
-                CalibreConverter.Locate() is null ? "error.rhwp_timeout" : "error.rhwp_timeout_calibre", ex.Message);
+            throw new ConversionRefusedException("error.rhwp_timeout", ex.Message);
         }
 
         return Finish(step, temp, progress);

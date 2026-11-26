@@ -48,7 +48,6 @@ public static class EngineRegistry
         new PdfSharpConverter(),
         new PdfiumConverter(),
         new RhwpConverter(),
-        new UnhwpConverter(),
         new MarkdownConverter(),
         new SpreadsheetConverter(),
         new OoxmlConverter(),
@@ -76,11 +75,8 @@ public static class EngineRegistry
         new ImageTo3DConverter(),
         new GeoConverter(),
         new EbookConverter(),
-        new PandocConverter(),
         new GhostscriptConverter(),
-        new VisionConverter(), // before Tesseract: a Mac's OCR step (Tesseract reads the languages Vision doesn't)
         new TesseractConverter(),
-        new CalibreConverter(),
         new MicrosoftOfficeConverter(),
         new LibreOfficeConverter(env, loggers?.CreateLogger<LibreOfficeConverter>()),
     ];

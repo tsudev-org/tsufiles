@@ -606,7 +606,7 @@ public class PresetAvailabilityTests
         public readonly FakeConverter Built = new("test-built", new ConversionEdge[] { new("png", "jpg"), new("png", "png", Cost: 10) });
         public readonly FakeConverter Gated = new("ffmpeg", ("png", "mp4")) { Available = false };
         public readonly FakeConverter Motion = new("test-motion", new ConversionEdge[] { new("jpg", "mp4", MotionPhoto: true) });
-        public readonly FakeTransformer Turner = new("pandoc", [new("png", "png", Cost: 1)]) { Available = false };
+        public readonly FakeTransformer Turner = new("exiftool", [new("png", "png", Cost: 1)]) { Available = false };
         public readonly ConverterCatalog Catalog;
         public readonly PresetAvailability Availability;
         public readonly ILocalizer Loc;
@@ -623,7 +623,7 @@ public class PresetAvailabilityTests
             if (extra is not null)
                 converters.Add(extra);
             Catalog = new ConverterCatalog(converters);
-            Packages = EngineDownloads.Packages.Where(p => p.Id is "pandoc" or "ffmpeg")
+            Packages = EngineDownloads.Packages.Where(p => p.Id is "exiftool" or "ffmpeg")
                 .Select(p => new EnginePackageState(p, Loc) { Status = EnginePackageStatus.NotInstalled }).ToList();
             Availability = new PresetAvailability(Catalog, Loc, Packages);
             _store.Presets.AddRange(

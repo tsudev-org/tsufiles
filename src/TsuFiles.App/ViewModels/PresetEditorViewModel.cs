@@ -48,23 +48,13 @@ public sealed record Choice<T>(T Value, string Label, string? Detail = null) : I
     public override string ToString() => Label;
 }
 
-/// <summary>
-/// A language in the preset editor's OCR lists. Whether it needs a download depends on the other languages chosen
-/// (<see cref="ShowDownload"/>), so the lists keep one object per language and only its <see cref="Detail"/> changes.
-/// </summary>
+/// <summary>A language in the preset editor's OCR lists, with the size of Tesseract's data when it isn't downloaded yet.</summary>
 /// <param name="download">The size of its download, or null when its data is there already.</param>
-public sealed partial class OcrLanguageChoice(string value, string label, bool visionReads, string? download) : ObservableObject, IChoice
+public sealed class OcrLanguageChoice(string value, string label, string? download) : IChoice
 {
     public string Value => value;
     public string Label => label;
-
-    /// <summary>Apple Vision reads it on this computer.</summary>
-    public bool VisionReads => visionReads;
-
-    [ObservableProperty] private string? _detail;
-
-    /// <param name="tesseractReads">Tesseract reads the chosen languages, not Apple Vision: it needs the data of each.</param>
-    public void ShowDownload(bool tesseractReads) => Detail = tesseractReads || !visionReads ? download : null;
+    public string? Detail => download;
 
     public override string ToString() => Label;
 }
@@ -103,13 +93,6 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     private readonly ILocalizer _loc;
 
     public PresetEditorViewModel(Preset preset, ILocalizer loc, IReadOnlySet<string>? turnedOff = null, bool folderInput = false)
-        : this(preset, loc, turnedOff, null, folderInput)
-    {
-    }
-
-    /// <param name="visionReads">Which languages Apple Vision reads, for tests; by default what this computer's does.</param>
-    internal PresetEditorViewModel(Preset preset, ILocalizer loc, IReadOnlySet<string>? turnedOff, Func<string, bool>? visionReads,
-        bool folderInput = false)
     {
         _original = preset;
         _edit = preset.Clone();
@@ -137,12 +120,10 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         WordLayouts = Enum.GetValues<PdfWordLayout>().Select(v => new Choice<PdfWordLayout>(v, loc[$"presets.word_layout.{v}"])).ToList();
         CompressionLevels = Enum.GetValues<PdfCompression>().Select(v => new Choice<PdfCompression>(v, loc[$"presets.pdf_compression.{v}"])).ToList();
         // Each language under its own name; one not downloaded yet shows its size (it downloads with the first file).
-        // On a Mac, Apple Vision reads the common languages without a download (ShowOcrDownloads).
-        var vision = new VisionConverter();
-        OcrHint = loc[vision.GetStatus().IsAvailable ? "presets.ocr_hint_macos" : "presets.ocr_hint"];
+        OcrHint = loc["presets.ocr_hint"];
         OcrLanguageChoices = [.. OcrLanguages.All
             .OrderBy(l => l.Code != OcrLanguages.Default).ThenBy(l => l.NativeName, StringComparer.CurrentCulture)
-            .Select(l => new OcrLanguageChoice(l.Code, l.NativeName, (visionReads ?? vision.Reads)(l.Code),
+            .Select(l => new OcrLanguageChoice(l.Code, l.NativeName,
                 OcrLanguages.IsInstalled(l.Code) ? null : loc.Format("presets.ocr_language_size", $"{l.Size / 1_000_000.0:0.#} MB")))];
         // "Ask every time" (#521) is a bool of its own on the preset (OutputRule.AskEveryTime): its choice has no location.
         Locations = [.. Enum.GetValues<OutputLocation>().Select(v => new Choice<OutputLocation?>(v, loc[$"presets.location.{v}"])),
@@ -422,7 +403,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     [ObservableProperty] private int _upscaleScale = 4;
 
 
-    /// <summary>What "Recognize text" needs: Tesseract, or on a Mac Apple Vision (Tesseract only for other languages).</summary>
+    /// <summary>What "Recognize text" needs: Tesseract and the data of each language.</summary>
     public string OcrHint { get; }
 
     /// <summary>PDF → PDF: don't compress, or the level (pictures at 72, 150 or 300 dpi).</summary>
@@ -805,8 +786,6 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         RefreshOcrLanguagesToAdd();
     }
 
-    partial void OnOcrLanguageToAddChanged(OcrLanguageChoice? value) => ShowOcrDownloads();
-
     private void RefreshOcrLanguagesToAdd()
     {
         // In place, not cleared and filled again: a combo box drops its selection with its items, and a language picked
@@ -825,18 +804,6 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         if (OcrLanguageToAdd is { } picked && !available.Contains(picked))
             OcrLanguageToAdd = null;
         OnPropertyChanged(nameof(HasMoreOcrLanguages));
-        ShowOcrDownloads();
-    }
-
-    /// <summary>
-    /// One language Apple Vision doesn't read sends all the chosen ones to Tesseract, which needs the data of each
-    /// (VisionConverter): then the languages Vision reads show their download too. Off a Mac that is always so.
-    /// </summary>
-    private void ShowOcrDownloads()
-    {
-        var tesseractReads = !OcrLanguage.VisionReads || MoreOcrLanguages.Any(l => !l.VisionReads) || OcrLanguageToAdd is { VisionReads: false };
-        foreach (var language in OcrLanguageChoices)
-            language.ShowDownload(tesseractReads);
     }
 
     /// <summary>PDF → image: one tall image of all pages.</summary>

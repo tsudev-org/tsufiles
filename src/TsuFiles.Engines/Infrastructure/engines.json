@@ -1,5 +1,5 @@
 {
-  "_comment": "Downloadable conversion engines: pinned URL + SHA-256. Used by the app (Settings > Engines, first-run setup) and by build/fetch-engines.ps1. Bumping a version = change url, sha256 and size together. minimumMacOS: the oldest macOS a macOS download runs on; older Macs are not offered it.",
+  "_comment": "Downloadable conversion engines: pinned URL + SHA-256. Used by the app (Settings > Engines, first-run setup) and by build/fetch-engines.ps1. Bumping a version = change url, sha256 and size together.",
   "components": {
     "rhwp": {
       "version": "0.8.7",
@@ -14,13 +14,6 @@
       "sha256": "3FE4AB99FA15629C652944309A2B2BC6E41FC933FC6B63F5DF1EBCF3AEA68263",
       "size": 2008576,
       "kind": "msi"
-    },
-    "pandoc": {
-      "version": "3.13",
-      "url": "https://github.com/jgm/pandoc/releases/download/3.13/pandoc-3.13-windows-x86_64.zip",
-      "sha256": "23E1F2E978A3DF80DB8BF65C9C59534F41A23140480CFB4F783A882AB7DC6A4E",
-      "size": 42983200,
-      "kind": "zip"
     },
     "jre": {
       "version": "21.0.13",
@@ -70,13 +63,6 @@
       "sha256": "8D31E162F1616E37AAB3FA2DB991B97E1B8DBEB1C8465FD81A81BE16FF91B328",
       "size": 99899672,
       "kind": "zip"
-    },
-    "calibre": {
-      "version": "9.17.0",
-      "url": "https://download.calibre-ebook.com/9.17.0/calibre-64bit-9.17.0.msi",
-      "sha256": "A91EA9B26AF6CD057D8B193B86EDB66D1535F7C5CB0A106965FA74F8168A6BD5",
-      "size": 240201728,
-      "kind": "msi"
     },
     "tesseract": {
       "version": "5.4.0.20240606",
@@ -131,25 +117,11 @@
           "size": 1579976,
           "kind": "tar.xz"
         },
-        "pandoc": {
-          "version": "3.13",
-          "url": "https://github.com/jgm/pandoc/releases/download/3.13/pandoc-3.13-linux-amd64.tar.gz",
-          "sha256": "38AA33B325A2BC96A4C39409631212DB55702F564250BCDBEAD180B3BF646389",
-          "size": 36101020,
-          "kind": "tar.gz"
-        },
         "ffmpeg": {
           "version": "9.0.2",
           "url": "https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2026-09-30-13-08/ffmpeg-n9.0.2-17-g2a571b6068-linux64-gpl-9.0.tar.xz",
           "sha256": "68EE646831ADAAE2495618346F3BBA94FF207FF83BBD34D643E7004730D66269",
           "size": 151017172,
-          "kind": "tar.xz"
-        },
-        "calibre": {
-          "version": "9.17.0",
-          "url": "https://download.calibre-ebook.com/9.17.0/calibre-9.17.0-x86_64.txz",
-          "sha256": "953E4512A6482848CD803C88B6D942E6AFCA65DC3B67C7D1353AE048D616DE53",
-          "size": 201590724,
           "kind": "tar.xz"
         },
         "exiftool": {
@@ -184,25 +156,11 @@
           "size": 1317128,
           "kind": "tar.xz"
         },
-        "pandoc": {
-          "version": "3.13",
-          "url": "https://github.com/jgm/pandoc/releases/download/3.13/pandoc-3.13-linux-arm64.tar.gz",
-          "sha256": "21E1D4BA09BD0B334590D204580FD4F6629B21BE4AB6A32B26CC98982E9E0C68",
-          "size": 38662042,
-          "kind": "tar.gz"
-        },
         "ffmpeg": {
           "version": "9.0.2",
           "url": "https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2026-09-30-13-08/ffmpeg-n9.0.2-17-g2a571b6068-linuxarm64-gpl-9.0.tar.xz",
           "sha256": "91AFCD7695D4BBBB9E0057AA10BAAF9875EC4E1A97303F9059EC971336A2AB46",
           "size": 127445692,
-          "kind": "tar.xz"
-        },
-        "calibre": {
-          "version": "9.17.0",
-          "url": "https://download.calibre-ebook.com/9.17.0/calibre-9.17.0-arm64.txz",
-          "sha256": "3C72BB26196F8339CFB0914224D824CCBACCBB635F0DF9C3A55540AE316199BD",
-          "size": 188047576,
           "kind": "tar.xz"
         },
         "exiftool": {
@@ -229,21 +187,6 @@
           "sha256": "26AA75BC262BB10BF0805617B95569C3035C2C590A99F7DB55C7E9607B2685E0",
           "size": 1876264,
           "kind": "tar.xz"
-        },
-        "pandoc": {
-          "version": "3.13",
-          "url": "https://github.com/jgm/pandoc/releases/download/3.13/pandoc-3.13-x86_64-macOS.zip",
-          "sha256": "1823278715AA405AAF21B59CDE5DC789346AA8D4FC307467F9A9EE84162BEDC5",
-          "size": 26891866,
-          "kind": "zip"
-        },
-        "calibre": {
-          "version": "9.17.0",
-          "url": "https://download.calibre-ebook.com/9.17.0/calibre-9.17.0.dmg",
-          "sha256": "FDAB4BD1400996C381845B7A95026F96BD9F68BFEC68CF3D49AFD458B4717842",
-          "size": 357816630,
-          "kind": "dmg",
-          "minimumMacOS": "14.0"
         },
         "libreoffice": {
           "version": "26.2.6",
@@ -283,21 +226,6 @@
           "sha256": "26AA75BC262BB10BF0805617B95569C3035C2C590A99F7DB55C7E9607B2685E0",
           "size": 1876264,
           "kind": "tar.xz"
-        },
-        "pandoc": {
-          "version": "3.13",
-          "url": "https://github.com/jgm/pandoc/releases/download/3.13/pandoc-3.13-arm64-macOS.zip",
-          "sha256": "F436D18BEBBFB3DDD326597686DACAB9FAC5DC23BD060495020F35A28A43A7C3",
-          "size": 43148194,
-          "kind": "zip"
-        },
-        "calibre": {
-          "version": "9.17.0",
-          "url": "https://download.calibre-ebook.com/9.17.0/calibre-9.17.0.dmg",
-          "sha256": "FDAB4BD1400996C381845B7A95026F96BD9F68BFEC68CF3D49AFD458B4717842",
-          "size": 357816630,
-          "kind": "dmg",
-          "minimumMacOS": "14.0"
         },
         "libreoffice": {
           "version": "26.2.6",

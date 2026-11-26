@@ -16,8 +16,8 @@
 
 .PARAMETER Runtime
   win-x64 (default) or win-arm64. The ARM64 build (Filee-<version>-win-arm64-Setup.exe and -Portable.zip) has an ARM64
-  Setup, Explorer menu DLL, rhwp, 7-Zip and Unhwp library (fetch-engines.ps1 -Runtime win-arm64, which fails while
-  the ARM64 rhwp and Unhwp builds are not pinned yet). They link the C runtime statically: no Microsoft C++ runtime
+  Setup, Explorer menu DLL, rhwp and 7-Zip (fetch-engines.ps1 -Runtime win-arm64, which fails while the ARM64 rhwp
+  build is not pinned yet). They link the C runtime statically: no Microsoft C++ runtime
   DLLs are copied.
 
 .PARAMETER CertificateThumbprint
@@ -79,22 +79,15 @@ if ($CheckOnly) {
 elseif (-not $PublishDir) {
     $PublishDir = Join-Path $root "publish\$Runtime"
     Remove-Item $PublishDir -Recurse -Force -ErrorAction SilentlyContinue
-    # Unhwp's package has no win-arm64 library: the pinned ARM64 build goes next to TsuFiles.exe through the build.
-    $native = @()
-    if ($Runtime -eq 'win-arm64') {
-        $natives = Join-Path $cache 'win-arm64-native'
-        & (Join-Path $PSScriptRoot 'fetch-engines.ps1') -Runtime $Runtime -Only unhwp -Destination $natives
-        $native = @("-p:UnhwpNativeLibrary=$(Join-Path $natives 'unhwp\unhwp.dll')")
-    }
     Invoke-Checked 'dotnet publish' {
         dotnet publish (Join-Path $root 'src\TsuFiles.App\TsuFiles.App.csproj') -c Release -r $Runtime --self-contained `
-            "-p:Version=$Version" -p:PublishReadyToRun=true -p:TsuFilesRelease=true @native -o $PublishDir
+            "-p:Version=$Version" -p:PublishReadyToRun=true -p:TsuFilesRelease=true -o $PublishDir
     }
     # The command line, in the same folder so it shares the runtime and the engines (tsufiles-cli.exe). Its name can't
     # be tsufiles.exe next to TsuFiles.exe, so the "tsufiles" command is cli\tsufiles.cmd, which Setup can put on PATH.
     Invoke-Checked 'dotnet publish (cli)' {
         dotnet publish (Join-Path $root 'src\TsuFiles.Cli\TsuFiles.Cli.csproj') -c Release -r $Runtime --self-contained `
-            "-p:Version=$Version" -p:PublishReadyToRun=true -p:TsuFilesRelease=true @native -o $PublishDir
+            "-p:Version=$Version" -p:PublishReadyToRun=true -p:TsuFilesRelease=true -o $PublishDir
     }
     # Native debug symbols from NuGet packages (libSkiaSharp.pdb, libHarfBuzzSharp.pdb: ~105 MB) are useless to users.
     # TsuFiles.App's publish removes them, but publishing the command line into the same folder brings them back.
@@ -105,7 +98,7 @@ elseif (-not $PublishDir) {
     $architecture = $Runtime.Substring(4)
     & (Join-Path $PSScriptRoot 'build-explorer-menu.ps1') -Destination $PublishDir -Version $Version -Architecture $architecture
     # Only the small rhwp and 7-Zip are bundled; the app downloads the others when the user picks them. The Microsoft
-    # C++ runtime goes next to rhwp.exe and next to TsuFiles.exe (unhwp.dll imports VCRUNTIME140.dll), so neither needs
+    # C++ runtime goes next to rhwp.exe and next to TsuFiles.exe, so neither needs
     # the Visual C++ Redistributable (#248). The ARM64 builds need none.
     $runtimeTo = @{}
     if ($Runtime -eq 'win-x64') { $runtimeTo = @{ RuntimeTo = $PublishDir } }
@@ -114,9 +107,9 @@ elseif (-not $PublishDir) {
 $PublishDir = (Resolve-Path $PublishDir).Path
 if (-not (Test-Path (Join-Path $PublishDir 'TsuFiles.exe'))) { throw "TsuFiles.exe is missing in $PublishDir" }
 if (-not $CheckOnly) {
-    # Without them rhwp and unhwp fail on PCs without the Visual C++ Redistributable (#248). They go into the payload
+    # Without them rhwp fails on PCs without the Visual C++ Redistributable (#248). They go into the payload
     # and the portable zip; Setup checks again after unpacking (RuntimeCheck) on the user's PC.
-    $required = if ($Runtime -eq 'win-x64') { 'vcruntime140.dll', 'engines\rhwp\msvcp140.dll', 'engines\rhwp\vcruntime140.dll' } else { @('unhwp.dll') }
+    $required = if ($Runtime -eq 'win-x64') { 'vcruntime140.dll', 'engines\rhwp\msvcp140.dll', 'engines\rhwp\vcruntime140.dll' } else { @() }
     foreach ($dll in $required) {
         if (-not (Test-Path (Join-Path $PublishDir $dll))) { throw "$dll is missing in $PublishDir (see fetch-engines.ps1)" }
     }

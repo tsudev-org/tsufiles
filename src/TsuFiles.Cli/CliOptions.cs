@@ -190,7 +190,7 @@ internal sealed record CliOptions
             "watch" when options.Sort is not null => CliLanguage.T("--sort chỉ dùng được với 'tsufiles convert'.", "--sort only works with 'tsufiles convert'."),
             "engines" when options.Inputs.Count > 0 && options.Inputs[0].ToLowerInvariant() is not ("install" or "remove") =>
                 CliLanguage.T($"Lệnh engines không xác định '{options.Inputs[0]}'. Dùng 'tsufiles engines', 'tsufiles engines install <id>' hoặc 'tsufiles engines remove <id>'.", $"Unknown engines command '{options.Inputs[0]}'. Use 'tsufiles engines', 'tsufiles engines install <id>' or 'tsufiles engines remove <id>'."),
-            "engines" when options.Inputs.Count == 1 => CliLanguage.T($"Hãy chỉ định engine cần {options.Inputs[0].ToLowerInvariant()}, ví dụ 'tsufiles engines {options.Inputs[0].ToLowerInvariant()} pandoc'.", $"Give the engine to {options.Inputs[0].ToLowerInvariant()}, e.g. 'tsufiles engines {options.Inputs[0].ToLowerInvariant()} pandoc'."),
+            "engines" when options.Inputs.Count == 1 => CliLanguage.T($"Hãy chỉ định engine cần {options.Inputs[0].ToLowerInvariant()}, ví dụ 'tsufiles engines {options.Inputs[0].ToLowerInvariant()} ffmpeg'.", $"Give the engine to {options.Inputs[0].ToLowerInvariant()}, e.g. 'tsufiles engines {options.Inputs[0].ToLowerInvariant()} ffmpeg'."),
             "engines" when options.Inputs.Count > 2 => CliLanguage.T("Mỗi lần chỉ chỉ định một engine.", "Give one engine at a time."),
             _ => null,
         };

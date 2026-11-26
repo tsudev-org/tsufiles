@@ -21,8 +21,8 @@ public sealed class PortableEngineTests : IDisposable
         var components = EngineDownloads.ComponentsForRuntime(runtime);
         Assert.Contains("rhwp", components.Keys);
         Assert.Contains("7zip", components.Keys);
-        Assert.Contains("pandoc", components.Keys);
-        Assert.Contains("calibre", components.Keys);
+        Assert.DoesNotContain("pandoc", components.Keys); // removed (phiếu TG1 G2)
+        Assert.DoesNotContain("calibre", components.Keys);
         Assert.DoesNotContain("vcruntime", components.Keys);
         Assert.DoesNotContain("ghostscript", components.Keys);
         foreach (var component in components.Values)
@@ -35,20 +35,6 @@ public sealed class PortableEngineTests : IDisposable
         }
         var arch = runtime.EndsWith("arm64", StringComparison.Ordinal) ? "aarch64" : "x86_64";
         Assert.Contains(arch, components["rhwp"].Url);
-    }
-
-    [Theory]
-    [InlineData("osx-x64")]
-    [InlineData("osx-arm64")]
-    public void A_Mac_older_than_a_downloads_minimum_is_not_offered_it(string runtime)
-    {
-        // calibre 9 needs macOS 14; the other downloads run on macOS 13, Filee's minimum.
-        var ventura = EngineDownloads.ComponentsForRuntime(runtime, new Version(13, 6, 1));
-        Assert.DoesNotContain("calibre", ventura.Keys);
-        Assert.Contains("libreoffice", ventura.Keys);
-        Assert.Contains("pandoc", ventura.Keys);
-        Assert.Contains("calibre", EngineDownloads.ComponentsForRuntime(runtime, new Version(14, 0, 0)).Keys);
-        Assert.Equal(EngineDownloads.ComponentsForRuntime(runtime).Count, EngineDownloads.ComponentsForRuntime(runtime, new Version(26, 0)).Count);
     }
 
     [Fact]
@@ -69,8 +55,7 @@ public sealed class PortableEngineTests : IDisposable
 
     [Theory]
     [InlineData("libreoffice", "LibreOffice.app/Contents/MacOS", "soffice")]
-    [InlineData("calibre", "calibre.app/Contents/MacOS", "ebook-convert")]
-    [InlineData("pandoc", "bin", "pandoc")]
+    [InlineData("tesseract", "bin", "tesseract")]
     [InlineData("ghostscript", "bin", "gs")]
     public void Unix_programs_are_found_inside_archives_and_Mac_application_bundles(string id, string relative, string program)
     {
@@ -138,13 +123,13 @@ public sealed class PortableEngineTests : IDisposable
     {
         if (OperatingSystem.IsWindows())
             return;
-        var program = Path.Combine(_root, "pandoc");
+        var program = Path.Combine(_root, "rhwp");
         var readme = Path.Combine(_root, "README");
         File.WriteAllText(program, "binary");
         File.WriteAllText(readme, "data");
         File.SetUnixFileMode(program, UnixFileMode.UserRead | UnixFileMode.UserWrite);
         var dataMode = File.GetUnixFileMode(readme);
-        EngineInstaller.EnsureExecutablePrograms("pandoc", _root);
+        EngineInstaller.EnsureExecutablePrograms("rhwp", _root);
         Assert.True(File.GetUnixFileMode(program).HasFlag(UnixFileMode.UserExecute));
         Assert.Equal(dataMode, File.GetUnixFileMode(readme));
     }

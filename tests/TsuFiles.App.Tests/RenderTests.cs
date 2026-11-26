@@ -1470,10 +1470,7 @@ public class RenderTests
         Assert.True(vm.Ocr);
         Assert.Equal("eng", vm.OcrLanguage.Value);
         Assert.Equal("eng", vm.OcrLanguageChoices[0].Value); // English first, the others by their own names
-        // On a Mac Apple Vision reads the common languages, with nothing to download.
-        Assert.Equal(loc[OperatingSystem.IsMacOS() ? "presets.ocr_hint_macos" : "presets.ocr_hint"], vm.OcrHint);
-        if (OperatingSystem.IsMacOS())
-            Assert.Null(vm.OcrLanguageChoices.Single(l => l.Value == "deu").Detail);
+        Assert.Equal(loc["presets.ocr_hint"], vm.OcrHint);
 
         var window = new PresetEditorWindow { DataContext = vm, Height = 1400 };
         window.Show();
@@ -1560,52 +1557,21 @@ public class RenderTests
     }
 
     [AvaloniaFact]
-    public void Preset_editor_shows_the_download_of_a_language_vision_reads_when_tesseract_would_read_them_all()
+    public void Preset_editor_shows_the_download_of_each_ocr_language_not_downloaded_yet()
     {
         TestServices.EnsureInitialized("en");
         var loc = AppHost.Get<TsuFiles.Core.Localization.ILocalizer>();
         var preset = TsuFiles.Core.Presets.BuiltInData.CreatePresets().Single(p => p.Id == "searchable-pdf");
-        static bool VisionReads(string code) => code != "hin"; // a Mac, whatever this computer is
         string? Download(string code) => OcrLanguages.IsInstalled(code) ? null
             : loc.Format("presets.ocr_language_size", $"{OcrLanguages.Find(code)!.Size / 1_000_000.0:0.#} MB");
         var afrikaans = Download("afr");
         Assert.SkipWhen(afrikaans is null, "Afrikaans is downloaded on this computer");
 
-        // Only languages Vision reads: nothing to download for them, and the one it doesn't read shows its own.
         preset.Pdf.OcrLanguage = "afr+swa";
-        var vm = new PresetEditorViewModel(preset, loc, null, VisionReads);
-        Assert.Null(vm.OcrLanguage.Detail);
-        Assert.Null(vm.MoreOcrLanguages.Single().Detail);
+        var vm = new PresetEditorViewModel(preset, loc);
+        Assert.Equal(afrikaans, vm.OcrLanguage.Detail);
+        Assert.Equal(Download("swa"), vm.MoreOcrLanguages.Single().Detail);
         Assert.Equal(Download("hin"), vm.OcrLanguagesToAdd.Single(l => l.Value == "hin").Detail);
-
-        var window = new PresetEditorWindow { DataContext = vm, Height = 1400 };
-        window.Show();
-        Pump();
-        bool Shows(string? text) => window.GetVisualDescendants().OfType<TextBlock>().Any(t => t.IsEffectivelyVisible && t.Text == text);
-        Assert.False(Shows(afrikaans));
-
-        // Picked (it counts on saving) or added, it sends them all to Tesseract: the rows say so, while the window is open.
-        vm.OcrLanguageToAdd = vm.OcrLanguagesToAdd.Single(l => l.Value == "hin");
-        Pump();
-        Assert.Equal(afrikaans, vm.OcrLanguage.Detail);
-        Assert.True(Shows(afrikaans));
-        vm.AddOcrLanguageCommand.Execute(null);
-        Pump();
-        Assert.Equal(afrikaans, vm.OcrLanguage.Detail);
-        Assert.Equal(Download("swa"), vm.MoreOcrLanguages.Single(l => l.Value == "swa").Detail);
-
-        // Removed again, Vision reads them.
-        vm.RemoveOcrLanguageCommand.Execute(vm.MoreOcrLanguages.Single(l => l.Value == "hin"));
-        Pump();
-        Assert.Null(vm.OcrLanguage.Detail);
-        Assert.False(Shows(afrikaans));
-        window.Close();
-
-        // A preset saved with the mix shows them from the start, and off a Mac nothing changes.
-        preset.Pdf.OcrLanguage = "afr+hin";
-        Assert.Equal(afrikaans, new PresetEditorViewModel(preset, loc, null, VisionReads).OcrLanguage.Detail);
-        preset.Pdf.OcrLanguage = "afr";
-        Assert.Equal(afrikaans, new PresetEditorViewModel(preset, loc, null, _ => false).OcrLanguage.Detail);
     }
 
     [AvaloniaFact]

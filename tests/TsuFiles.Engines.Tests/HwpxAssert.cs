@@ -86,17 +86,9 @@ internal static class HwpxAssert
         return XDocument.Load(zip.GetEntry(entry)!.Open(), LoadOptions.PreserveWhitespace).Root!;
     }
 
-    /// <summary>
-    /// The text of an HWPX as an independent reader sees it: Unhwp where its native library exists, else (an ARM64 build without it)
-    /// the text of the section XML.
-    /// </summary>
+    /// <summary>The text of an HWPX: the text of its section XML, in section order.</summary>
     public static string ReadBackText(string hwpx)
     {
-        if (new TsuFiles.Engines.Hwp.UnhwpConverter().GetStatus().IsAvailable)
-        {
-            using var document = Unhwp.UnhwpDocument.ParseFile(hwpx);
-            return document.ToText();
-        }
         using var zip = ZipFile.OpenRead(hwpx);
         return string.Join("\n", zip.Entries.Where(e => e.FullName.StartsWith("Contents/section", StringComparison.Ordinal))
             .OrderBy(e => e.FullName, StringComparer.Ordinal)

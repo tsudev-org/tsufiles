@@ -3,7 +3,7 @@
 // FB2, HTMLZ or TXTZ; HTML, Markdown, TXT and DOCX become e-books too. Comics (CBZ / CBR / CB7 / CBT / CBC) become
 // PDF, fixed-layout EPUB or CBZ, PDF becomes CBZ, and AZW4 (Print Replica) gives back its PDF. EPUB ↔ KEPUB (Kobo)
 // adds or removes Kobo's sentence markup and keeps the rest of the book as it is.
-// Formats only calibre reads or writes (LIT, LRF, PDB, MOBI / AZW3 output, ...) are in CalibreConverter.
+// Formats only calibre read or wrote (LIT, LRF, PDB, MOBI / AZW3 output, ...) are no longer converted (phiếu TG1 G2).
 
 using System.Text;
 using TsuFiles.Core.Conversion;
@@ -43,7 +43,7 @@ public sealed class EbookConverter : IConverter
         new("epub", "kepub"),
         new("kepub", "epub"),
         .. DocumentReaders.SelectMany(from => EbookWriters.Select(to => new ConversionEdge(from, to))),
-        // HTML → TXT has no other built-in route; HTML → Markdown is a fallback for when Pandoc is not installed.
+        // HTML → TXT has no other built-in route; HTML → Markdown is the only route there.
         new("html", "txt"),
         new("html", "md", 14),
         .. Comics.SelectMany(from => new[] { new ConversionEdge(from, "pdf"), new ConversionEdge(from, "epub") }),

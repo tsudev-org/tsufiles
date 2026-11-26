@@ -602,6 +602,8 @@ public static class BuiltInData
 
         // E-books
         new() { Id = "to-epub", Name = "EPUB", TargetFormat = "epub" },
+        // MOBI / AZW3 (Kindle) were written by calibre, removed in phiếu TG1 G2: kept so libraries and their donuts load
+        // unchanged; they are on no default donut and show that no engine can do them.
         new() { Id = "to-mobi", Name = "MOBI", TargetFormat = "mobi" },
         new() { Id = "to-azw3", Name = "AZW3", TargetFormat = "azw3" },
         new() { Id = "to-kepub", Name = "KEPUB", TargetFormat = "kepub" },
@@ -743,7 +745,7 @@ public static class BuiltInData
                     ["to-html", "to-odt", "pdf-long-image", "zip-all"]),
                 "text" => (["to-pdf", "to-hwpx", "to-hwp", "to-docx", "to-html", "to-txt"],
                     ["translate", "to-md", "to-odt", "merge-pdf", "zip-all"]),
-                "ebooks" => (["to-pdf", "to-epub", "to-docx", "to-txt", "to-azw3", "to-kepub"], ["translate", "to-md", "zip-all"]),
+                "ebooks" => (["to-pdf", "to-epub", "to-docx", "to-txt", "to-fb2", "to-kepub"], ["translate", "to-md", "zip-all"]),
                 // Every frame as pictures stays behind a flip: a missed front slice must not create thousands of files.
                 "video" => (["to-mp4", "mp4-720", "to-mov", "to-gif", "to-mp3", "caption-video"],
                     ["tool-clip", "crop-video", "compress-video", "merge-videos", "remove-metadata", "mp4-av1", "extract-frames-png", "zip-all"]),

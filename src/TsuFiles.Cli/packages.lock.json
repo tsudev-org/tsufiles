@@ -177,7 +177,6 @@
           "System.Security.Cryptography.Pkcs": "[10.0.15, )",
           "Tomlyn": "[2.11.1, )",
           "TsuFiles.Core": "[2.4.1, )",
-          "Unhwp": "[0.13.0, )",
           "YamlDotNet": "[18.1.0, )"
         }
       },
@@ -363,12 +362,6 @@
         "requested": "[2.11.1, )",
         "resolved": "2.11.1",
         "contentHash": "ePC5kPidQngNoOi7jCDeRo5hbXS5uV3o4CAzz5QaxkDo1IhgM0QtGinuI03tqj8/Dl/FigRG4gRiatUsV3pcrA=="
-      },
-      "Unhwp": {
-        "type": "CentralTransitive",
-        "requested": "[0.13.0, )",
-        "resolved": "0.13.0",
-        "contentHash": "Otm148aDN1Kqp9VMoBINl2DBqdrhMqmTgSeHjtqd40ognaoSXGpwpoUv6ikl5pgWm+yBGyF7S4rhJMzUbfBo6A=="
       },
       "YamlDotNet": {
         "type": "CentralTransitive",
