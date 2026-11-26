@@ -9,12 +9,10 @@
 
 ## Hàng đợi task (làm từ trên xuống)
 
-- [ ] ⚡⚡⚡⚡⚡ TIẾP THEO: phiếu **`logs/handover/20261126-03_ban-giao-gop-135-sec3.md`** mục 3: LG4, rồi ưu tiên 👤
-      **Windows 10/11 + Microsoft Office + tệp scan** (OCR mặc định `vie`, đo PowerPoint qua Office), rồi TG1 từ G3a.
-      👤: lệnh dọn nhánh ở mục 2 của phiếu.
-- [ ] ⚡⚡⚡⚡ Phiếu **LG4** `logs/handover/20261126-LG4_bo-nhac-dang-nhap-tu-dong-khong-lam-phien-toan-he.md` (cùng đợt
-      SEC3): đồng bộ `.standards` v8.0.0; rà cửa sổ ủng hộ/đánh giá/"có gì mới" tự bật, thông báo khay (PRODUCT_POLICY
-      3.8 "không làm phiền"); lối vào Tài khoản thụ động trong Cài đặt. KHÔNG dựng hộp thoại nhắc đăng nhập (LG3 đóng).
+- [ ] 🔐 Phiếu **XK1 MỞ** `logs/handover/20261126-XK1_xoay-virustotal-api-key.md`: nhắc 👤 xoay `VT_API_KEY` đầu phiên.
+- [ ] ⚡⚡⚡⚡⚡ TIẾP THEO: phiếu **`logs/handover/20261126-04_ban-giao-lg4.md`** mục 3: gộp #139 + PR LG4 khi CI xanh, rồi
+      ưu tiên 👤 **Windows 10/11 + Microsoft Office + tệp scan** (OCR mặc định `vie`, đo PowerPoint qua Office), rồi TG1 G3a.
+- [x] LG4 tsufiles (26/11): `.standards` v8.2.0, "Có gì mới" không tự bật, gỡ thẻ xin gắn sao, mục Tài khoản thụ động.
 - [ ] ⚡⚡⚡ TIẾP THEO: phiếu `logs/handover/20261125-02_ban-giao-std50-pr2-ui2-signpath.md` mục 2: UI2 phần B khi
       tsudev-standards có bảng màu Sáng dịu; PRO1/PRO2 + QR4 khi có thư viện `TsuSync`; SignPath nộp khi đạt >= 4/6
       (đo 25/11: 1/6). 👤: secret `VT_API_KEY` (GitHub Actions, không phải Render - phiếu mục 3), ĐỔI khóa VirusTotal.

@@ -43,7 +43,8 @@
 | tsudev-standards | ✅ v8.0.0 | xem mục 4 |
 | tsudev-ui-flutter | ⬜ | |
 | tsudev | ⬜ | |
-| các app | ⬜ | |
+| tsufiles | ✅ PR (nhánh `feat/lg4-khong-lam-phien`) | phiếu `20261126-04`; Tài khoản thụ động chưa có nút Đăng nhập (chưa có luồng OIDC) |
+| các app khác | ⬜ | |
 
 ## 3. Điều kiện đóng
 
@@ -53,6 +54,7 @@ Mọi hàng mục 2 xong; kiểm thử ca 17 (AUTH 14.4.5) và mục 3.8 điểm
 ## 4. Kết quả xử lý
 
 - 26/11/2026 - projects-82: soạn chuẩn v8.0.0 (AUTH 14.4 v4.0.0, PRODUCT_POLICY 3.8 v3.0.0, AGENTS 7.2); LG3 đóng.
+- 26/11/2026 - agent-tsufiles: tsufiles xong (standards v8.2.0; bỏ "Có gì mới" tự bật, thẻ xin gắn sao; mục Tài khoản thụ động).
 
 ## 5. Prompt cho phiên repo
 
