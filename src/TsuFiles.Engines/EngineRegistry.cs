@@ -24,6 +24,7 @@ using TsuFiles.Engines.Signed;
 using TsuFiles.Engines.Subtitles;
 using TsuFiles.Engines.Text;
 using TsuFiles.Engines.Vector;
+using TsuFiles.Engines.Wic;
 
 namespace TsuFiles.Engines;
 
@@ -64,6 +65,7 @@ public static class EngineRegistry
         new P7mConverter(),
         new DataConverter(),
         new SubtitleConverter(),
+        new WicImageConverter(),
         new WhisperConverter(loggers?.CreateLogger<WhisperConverter>()),
         new ExifToolConverter(),
         new Upscale.UpscalerConverter(),

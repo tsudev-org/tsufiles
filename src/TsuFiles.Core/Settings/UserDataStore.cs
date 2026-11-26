@@ -474,8 +474,8 @@ internal static class SettingsMigrations
             settings.Language = "auto";
 
         // v77 (TsuFiles, phiếu TG1 G2): the engines that duplicated another one are gone: Pandoc (the built-in Markdown,
-        //      DOCX and HWPX writers), calibre (the built-in e-book engine), WIC (ImageMagick), Apple Vision (Tesseract)
-        //      and Unhwp (rhwp). Their ids leave the priority list, the user's own copies and the update notices.
+        //      DOCX and HWPX writers), calibre (the built-in e-book engine), Apple Vision (Tesseract) and Unhwp (rhwp).
+        //      WIC stays: no other engine reads JPEG XR. Their ids leave the priority list, the user's own copies and the update notices.
         if (settings.SchemaVersion < 77)
         {
             foreach (var id in RemovedEngines)
@@ -493,7 +493,7 @@ internal static class SettingsMigrations
     }
 
     /// <summary>Engine ids removed in schema 77 (phiếu TG1 G2).</summary>
-    internal static readonly string[] RemovedEngines = ["pandoc", "calibre", "wic", "vision", "unhwp"];
+    internal static readonly string[] RemovedEngines = ["pandoc", "calibre", "vision", "unhwp"];
 
     /// <summary>Upgrades presets and profiles written with settings schema <paramref name="from"/>.</summary>
     /// <returns>True when something was added.</returns>

@@ -97,8 +97,8 @@ public sealed class MagickImageConverter : IConverter, ITiffMerger, IImageTransf
         }, cancellationToken);
 
     /// <summary>
-    /// The rest of a conversion once the picture is read: the frames kept for the target, the preset's options, the
-    /// files.
+    /// The rest of a conversion once the picture is read (also for pictures another engine decoded, see
+    /// Wic/WicImageConverter): the frames kept for the target, the preset's options, the files.
     /// </summary>
     /// <param name="from">Format the frames were read from (animations and icons keep different frames).</param>
     /// <param name="locateFfmpeg">The FFmpeg for animated AVIF (<see cref="AvifSequenceWriter"/>); null for ImageMagick's writer.</param>

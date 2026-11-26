@@ -227,7 +227,7 @@ public sealed class AppSettings
     [
         "magick", "pdfium", "pdfsharp", "rhwp", "markdown", "spreadsheet", "ooxml", "hwpx-writer", "docx-writer",
         "pdf-text", "pdf-slides", "email", "data", "vector", "icns", "font", "cad", "model3d", "geo", "archive", "ebook",
-        "subtitle", "ffmpeg", "ghostscript", "libreoffice",
+        "subtitle", "wic", "ffmpeg", "ghostscript", "libreoffice",
     ];
 
     /// <summary>Set once the first-run welcome has been shown.</summary>
