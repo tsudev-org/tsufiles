@@ -53,6 +53,8 @@ jobs:
       NATIVE_OUT: ${{ github.workspace }}/build/.cache/linux-native/${{ matrix.rid }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
 
       # Fails when engines.json moved to another rhwp version while
       # build/build-native.py still builds the old source (also when the build below comes from the cache).
@@ -132,6 +134,8 @@ jobs:
         shell: pwsh
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
 
       - name: Download Linux native builds
         if: runner.os == 'Linux'
@@ -265,6 +269,8 @@ jobs:
         shell: pwsh
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
 
       - name: Linux desktop dependencies (Ubuntu 22.04)
         shell: bash

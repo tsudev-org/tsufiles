@@ -7,6 +7,7 @@ name: Label pull requests
 # must never check out or run the pull request's code: labeler reads .github/labeler.yml from the base branch and the
 # changed file names through the API, and the title is read from the event payload, never put into the script.
 on:
+  # zizmor: ignore[dangerous-triggers] - không checkout/chạy mã PR (xem chú thích ở trên).
   pull_request_target:
     types: [opened]
 
