@@ -60,7 +60,7 @@ internal sealed partial class PdfDocumentReader
 
             // Italic leans relative to the page's own print: a scan turned a little leans every line alike.
             static IEnumerable<int> Leaning(List<int> line, List<TextWord> words, Dictionary<int, (double Stroke, double Slant)> strokes) =>
-                line.Where(i => strokes.ContainsKey(i) && !words[i].Text.Any(c => c is '/' or '\\' or '-' or '–' or '—'));
+                line.Where(i => strokes.ContainsKey(i) && !words[i].Text.Any(c => c is '/' or '\\' or '-' or '\u2013' or '\u2014'));
             var pageSlants = lines.SelectMany(l => Leaning(l, words, strokes)).Select(i => strokes[i].Slant).Order().ToList();
             var upright = pageSlants.Count == 0 ? 1 : pageSlants[pageSlants.Count / 2];
 
