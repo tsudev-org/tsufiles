@@ -52,7 +52,7 @@ jobs:
         id: version
         shell: pwsh
         run: |
-          # TsuFiles: tên thẻ đọc qua biến môi trường (không chèn ${{ }} vào script) và phải đúng khuôn phiên bản,
+          # TsuFiles: tên thẻ đọc qua biến môi trường (không dùng biểu thức Actions trong script) và phải đúng khuôn phiên bản,
           # vì các bước sau ghép nó vào lệnh (zizmor template-injection).
           $version = $env:GITHUB_REF_NAME.TrimStart('v')
           if ($version -notmatch '^[0-9]+(\.[0-9]+){1,3}(-[0-9A-Za-z.]+)?$') { throw "Thẻ không đúng khuôn phiên bản: $env:GITHUB_REF_NAME" }
