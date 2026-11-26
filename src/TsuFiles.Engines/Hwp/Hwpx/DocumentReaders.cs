@@ -9,7 +9,6 @@ using TsuFiles.Engines.Email;
 using TsuFiles.Engines.Hwp.Hwpx.Docx;
 using TsuFiles.Engines.Hwp.Hwpx.Pptx;
 using TsuFiles.Engines.Infrastructure;
-using TsuFiles.Engines.Ofd;
 using TsuFiles.Engines.Office;
 using TsuFiles.Engines.Office.Sheets;
 using TsuFiles.Engines.Pdf;
@@ -45,7 +44,6 @@ internal static class DocumentReaders
         ["potm"] = PptxReader.Read,
         ["ppsx"] = PptxReader.Read,
         ["pdf"] = PdfDocumentReader.ReadLayout,
-        ["ofd"] = OfdReader.Read,
         // HWP comes here as HWPX, converted by rhwp first (the route planner adds that step).
         ["hwpx"] = HwpxReader.Read,
         ["html"] = HtmlReader.Read,

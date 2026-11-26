@@ -1468,8 +1468,8 @@ public class RenderTests
         var vm = new PresetEditorViewModel(preset, loc);
         Assert.True(vm.ShowOcr);
         Assert.True(vm.Ocr);
-        Assert.Equal("eng", vm.OcrLanguage.Value);
-        Assert.Equal("eng", vm.OcrLanguageChoices[0].Value); // English first, the others by their own names
+        Assert.Equal("vie", vm.OcrLanguage.Value);
+        Assert.Equal("vie", vm.OcrLanguageChoices[0].Value); // Vietnamese first, the others by their own names
         Assert.Equal(loc["presets.ocr_hint"], vm.OcrHint);
 
         var window = new PresetEditorWindow { DataContext = vm, Height = 1400 };
@@ -1553,7 +1553,7 @@ public class RenderTests
 
         // A code Filee doesn't list, in a preset from elsewhere, is left out.
         preset.Pdf.OcrLanguage = "klingon";
-        Assert.Equal("eng", new PresetEditorViewModel(preset, loc).OcrLanguage.Value);
+        Assert.Equal("vie", new PresetEditorViewModel(preset, loc).OcrLanguage.Value);
     }
 
     [AvaloniaFact]

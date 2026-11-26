@@ -16,8 +16,8 @@ TsuFiles chooses engines automatically. Settings → *Engines* shows their statu
 | Spreadsheets (ExcelDataReader for XLS) | built in (library) | **XLSX, XLS, ODS, CSV, TSV → XLSX, ODS, CSV, TSV** (one CSV / TSV per sheet) |
 | Office Open XML | built in | **DOCM / DOTX / DOTM ↔ DOCX, XLSM / XLTX ↔ XLSX, PPTM / POTX / POTM / PPSX ↔ PPTX** (macros removed for macro-free types) |
 | Fonts | built in | **TTF, OTF, WOFF, WOFF2, EOT ↔ each other**; **FON (NE monochrome FNT v2/v3, supported single-byte charsets) → TTF, OTF, WOFF, WOFF2, EOT only**; CFF (PostScript) outlines become TrueType for TTF and EOT |
-| **HWPX writer** | built in | **DOCX (+ DOCM/DOTX/DOTM), XLSX (+ XLSM/XLTX), XLS, ODS, CSV, TSV, PPTX (+ PPTM/POTX/POTM/PPSX), PDF, OFD, HTML, MHTML, EPUB, MOBI/AZW3, FB2, HWPX, TXT, Markdown → HWPX** (and with rhwp → PDF and images); ODT, RTF, reStructuredText, LaTeX → HWPX with Pandoc |
-| **DOCX writer** | built in | **HWPX (and HWP through rhwp), PDF, OFD, HTML, MHTML, EPUB, MOBI/AZW3, FB2, Markdown, TXT, XLSX, XLS, ODS, CSV, PPTX (+ variants) → DOCX** |
+| **HWPX writer** | built in | **DOCX (+ DOCM/DOTX/DOTM), XLSX (+ XLSM/XLTX), XLS, ODS, CSV, TSV, PPTX (+ PPTM/POTX/POTM/PPSX), PDF, HTML, MHTML, EPUB, MOBI/AZW3, FB2, HWPX, TXT, Markdown → HWPX** (and with rhwp → PDF and images); ODT, RTF, reStructuredText, LaTeX → HWPX with Pandoc |
+| **DOCX writer** | built in | **HWPX (and HWP through rhwp), PDF, HTML, MHTML, EPUB, MOBI/AZW3, FB2, Markdown, TXT, XLSX, XLS, ODS, CSV, PPTX (+ variants) → DOCX** |
 | PDF text | built in (PdfPig) | **PDF → TXT, Markdown** (reading order, also two columns; Markdown keeps headings, emphasis, links and the pictures; no OCR) |
 | PDF slides | built in (PDFium, PdfPig) | **PDF → PPTX**: a picture of each page on its own slide (looks like the PDF, not editable), the page's text in the speaker notes |
 | PDF tables | built in (PdfPig) | **PDF → XLSX, ODS, CSV** (#267): each table drawn with lines on its own sheet, numbers and dates as real values, merged cells and column widths kept |
@@ -51,7 +51,7 @@ so Arabic and Hebrew come out unjoined and in the wrong order, and Indic vowel s
 with dotted circles (#185 Gujarati, #202 Arabic). Its PDF edges are marked `Unshaped`, and rhwp tells
 (`ITextShapingCheck`) whether a source has such text: `Infrastructure/ComplexScripts.cs` scans the text parts of the
 file without reading it into the document model (DOCX `word/document.xml`, headers, footers and notes, PPTX slides,
-XLSX shared strings and sheets, HWPX sections, OFD pages and templates, EPUB chapters, or a text file with its HTML /
+XLSX shared strings and sheets, HWPX sections, EPUB chapters, or a text file with its HTML /
 RTF character references) for the Hebrew, Arabic, Syriac, Thaana, N'Ko, Indic, Sinhala, Thai, Lao, Tibetan, Myanmar,
 Khmer, Mongolian and other South / Southeast Asian blocks. For such a file `JobQueue` plans again without unshaped
 edges: DOCX, TXT, Markdown, HTML, XLSX, PPTX and HWPX → PDF (and → images through PDF) go through LibreOffice even
@@ -702,88 +702,6 @@ The preset option *Leave out pictures* (`DocumentOptions.LeaveOutPictures`, Docu
 writes the text only, read like PDF → TXT (the invisible OCR layer of scans included) and without a folder. The same
 option applies to every Markdown writer: e-books (`EbookConverter`), HWP / HWPX (`UnhwpConverter`) and Pandoc (a
 Lua filter drops the pictures, figures keep their captions).
-
-## OFD reader
-
-OFD (GB/T 33190-2016) is China's fixed-layout format: fully digitalized e-invoices (数电票), contracts and official
-documents. `Ofd/OfdReader*.cs` reads it into the document model with no external engine, so OFD → DOCX and HWPX are
-one step, → PDF two (rhwp), and TXT, Markdown, HTML, EPUB follow from there. OFD is read only (`Writable: false`) and
-sits on the office donut (settings schema 27 teaches existing donuts `.ofd`).
-
-- **Package** (`Ofd/OfdPackage.cs`): OFD.xml → the first document (Document.xml) → its pages, template pages and
-  resource files (PublicRes, DocumentRes, a page's PageRes, and the unnamed `Res.xml` WPS writes next to them).
-  Parts are looked up by name inside the ZIP and never written out under their own names; references are resolved
-  against the referring part (or the package root for "/…"), "." and ".." applied, and anything that leaves the
-  package, a URL or a drive path finds nothing. XML is read without DTDs; a part may unpack to 64 MB, a picture to
-  32 MB (larger ones are left out), the whole package to 1 GB; at most 100,000 parts, 10,000 pages, 2,000,000
-  drawing objects, page blocks nested 32 deep. DeltaX / DeltaY "g n d" repeats never yield more values than the
-  text has characters.
-- **Encryption**: a package with an `Encryptions.xml` (GM/T 0099) or encryption entries in OFD.xml is refused with a
-  clear message; nothing is decrypted. Parts that are not XML (encrypted or damaged) fail the same way.
-- **Text**: TextObjects with their Boundary, CTM (scale, also of the font size), Size in millimetres, TextCode X / Y
-  (missing ones continue where the previous code ended) and DeltaX advances; DeltaY alone moving the characters is
-  vertical text. A DeltaX list shorter than the text goes on with its last value while the characters are as wide
-  (a title with one advance for all its characters); a step back with DeltaX or down with DeltaY inside one TextCode
-  starts a new line, kept with a line break (the four lines of a VAT invoice's 密码区 cipher text are one TextCode).
-  Fonts from the resource files, with common Chinese names written in English (宋体 → SimSun, 黑体 → SimHei,
-  楷体 → KaiTi, 仿宋 → FangSong, 微软雅黑 → Microsoft YaHei, …) so Word and LibreOffice find them on any system; bold
-  from `Weight` ≥ 600 or the font, italic, colour from the object (FillColor element or attribute; RGB, grey, CMYK,
-  decimal or #hex channels), its DrawParam or the layer's DrawParam (tax invoices colour the template that way),
-  following `Relative` chains. Invisible objects (`Visible="false"`) are left out.
-- **Templates**: the template pages a page names are read first, so an invoice's labels (发票号码：, 名称：) and its
-  values come out together. In template content, single characters stacked in one column (购买方信息, 备注) or a
-  pair spread over a line (合　计) become one word, once the page's own text is there: a pair with a value between
-  (共 4 页 of a sales list) stays apart.
-- **Annotations** (Annots): the text and pictures of each annotation's appearance, placed from its boundary (a stamp
-  drawn as a picture, a note). Hidden annotations and their paths (highlights, underlines) are left out.
-- **Seals** (`OfdReader.Seals.cs`): an e-invoice's or a contract's seal is stored in its signature
-  (`Signs/Sign_n/SignedValue.dat`, GM/T 0031 SES_Signature). The seal picture in it is shown where the signature's
-  StampAnnot puts it, floating in front of the text. PNG, JPEG, GIF and BMP are kept; a seal that is a small OFD
-  package of its own (the red oval of 全国统一发票监制章 with its characters set round the edge) is drawn with
-  SkiaSharp at 12 pixels per mm on a transparent PNG: text per character with its CTM rotation, stroked and filled
-  paths (lines, Béziers, arcs) and pictures. The DER is walked with every length checked against what is left,
-  nesting and the element count capped; a SignedValue is read up to 4 MB, a seal package unpacks to 16 MB, at most
-  64 signatures with 16 stamps each. The signature is not verified: what shows is the picture the file carries.
-- **Layout** (`OfdReader.Layout.cs`): fragments on one baseline form a line, in reading order top to bottom and
-  left to right; a line that ran to the right edge from at least half the measure continues in the next one
-  (justified, first-line indent kept, no space between Chinese lines). Wide gaps (1.5 em) become tabs with left
-  tab stops where each part starts, so an invoice's item rows keep their columns; a line under such a row whose
-  parts start in its columns and hold no amounts is the wrapped end of its cells and follows after a line break in
-  the same paragraph. Centred and right-aligned lines, left indents and vertical distances (space before) follow
-  the page; page size per page (a new section when it changes), margins from what is drawn. Line distances are
-  exact where the largest text fits ("at least" grows each line to the font's own height in Word and LibreOffice,
-  ~1.4 em for KaiTi, and a full 210 × 140 mm invoice ran onto a second page); a one-line paragraph closer to the one
-  above than 1.2 sizes gets the distance between them. A block that starts above the end of the one before (the
-  invoice number beside the title) is pushed down, and the next gaps take that back, so the frame stays at its
-  place. A table gets its distance from the block above through a 1 pt paragraph, and is `Tight` in HWPX: no 5 mm
-  under it and no empty line in the paragraph that holds it. The first block's distance from the top margin is an
-  empty line of that height (rhwp draws no space before at the top of a page).
-- **Ruled tables** (`OfdReader.Tables.cs`): the approach of the PDF reader in millimetres. PathObjects
-  (AbbreviatedData M/S/L/Q/B/A/C, with Boundary, CTM, line width and stroke colour from the object or its
-  DrawParams) give stroked straight rules and thin filled rectangles; joined rules that meet form grids, and a grid
-  of at least 2 × 2 units with rectangular merged cells and text in two cells becomes a table with the page's
-  column widths and row heights, borders in the drawn colour and shading. Text goes into the cell of its first
-  character (widths without DeltaX are estimated) and is laid out like the page, with exact line spacing so the
-  rows keep their heights. The frame of an e-invoice becomes one table: buyer and seller blocks, the item list
-  (one cell with tabbed rows: the invoice draws no rules between item columns), totals and remarks. A cell with one
-  paragraph about as far from its top as from its bottom is centred; any other keeps its text's distance from the
-  top as the cell's top padding (space before a cell's first paragraph is not drawn by every renderer), and only
-  lines at about single spacing (1.6 sizes) are one paragraph. So the columns of a sales list (销货清单: rules only
-  between the columns, each column one cell with all its rows) keep their rows level, the 小计 at the bottom of 序号
-  beside its amount.
-- **Pictures**: ImageObjects (MultiMedia of type Image) with the box from their CTM. PNG, JPEG, GIF and BMP are
-  kept as they are (the format comes from the bytes, not the name), TIFF and JPEG 2000 are converted to PNG
-  (ImageMagick, at most 100 megapixels), anything else (JBIG2) is left out. A picture alone in its band of the page
-  becomes a paragraph; one beside or over text (a QR code next to the title, a seal on a table) floats at its place
-  on the paper, in front of the text.
-
-Not converted: signature checks (a seal shows whether or not its signature is valid), seal pictures in SVG,
-embedded fonts (the font name is kept), composite objects and other vector drawings (the ⊗ before an invoice's
-amount in words), attachments, more than the first document of a package, tables without rules (their text stays
-in tabbed rows), clipping. Two text blocks side by side without rules share their lines. Renderers place text
-differently inside an exact line (Word and LibreOffice at its foot, 한글 and rhwp at its head), so in the rhwp PDF
-text sits up to 0.2 sizes higher than on the page. LibreOffice adds cell borders to row heights: the DOCX of a
-full 140 mm invoice opened there puts its last line on a second page (rhwp's PDF keeps it on one).
 
 ## PDF → XLSX
 
@@ -1919,7 +1837,7 @@ format, and FFmpeg reads what the file holds, so a `.dat` with no video in it fa
 
 "Recognize text" (`PdfOptions.Ocr`, issue #288) in a preset for PDF, DOCX, TXT, Markdown or HWPX reads the text of
 scans and pictures with Tesseract (`Ocr/TesseractConverter.cs`), in the language the preset names
-(`PdfOptions.OcrLanguage`, a Tesseract code; English by default). The built-in "Searchable PDF" preset turns it on.
+(`PdfOptions.OcrLanguage`, a Tesseract code; Vietnamese by default). The built-in "Searchable PDF" preset turns it on.
 
 Text that mixes languages (issue #1123) has several codes in that one setting, the main language first, joined with
 `+` as Tesseract's `-l` takes them (`chi_sim+eng`). `OcrLanguages.Parse` is the only reader: a code not in the list is

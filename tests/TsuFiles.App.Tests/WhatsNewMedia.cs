@@ -228,7 +228,6 @@ public class WhatsNewMedia
         string[][] sets =
         [
             [@"C:\gis\roads.shp"],
-            [@"C:\invoices\invoice.ofd"],
             [@"C:\web\article.mhtml"],
             [@"C:\photos\scan.jxr"],
             [@"C:\models\chair.fbx"],
