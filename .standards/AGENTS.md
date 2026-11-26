@@ -1,4 +1,4 @@
-# AGENTS.md - Bộ quy ước dùng chung tsudev (v3.2.0)
+# AGENTS.md - Bộ quy ước dùng chung tsudev (v3.4.0)
 
 > **ĐÂY LÀ NGUỒN CHÂN LÝ.** Bộ quy ước được biên tập tại repo
 > `tsudev-org/tsudev-standards`. Repo con mang một BẢN SAO CHỈ-ĐỌC tại
@@ -57,7 +57,11 @@ chuyên đề. Bản đồ đầy đủ: [`docs/00-INDEX.md`](docs/00-INDEX.md).
 | Phiên bản, thẻ git, tên tệp, CHANGELOG | [`docs/VERSIONING.md`](docs/VERSIONING.md) |
 | Cài đặt bằng lệnh (winget, Scoop, APT/RPM, Homebrew) | [`docs/PACKAGING.md`](docs/PACKAGING.md) |
 | **Cài không bị chặn**: cửa hàng, ký mã, chống báo nhầm | [`docs/DISTRIBUTION_TRUST.md`](docs/DISTRIBUTION_TRUST.md) |
-| **Chính sách sản phẩm**: ngôn ngữ/giao diện theo hệ thống, KHÔNG quảng cáo, Pro + Ủng hộ, huy hiệu, iOS, website có hình/video, **lưu cục bộ - đồng bộ/sao lưu đám mây là Pro** | [`docs/PRODUCT_POLICY.md`](docs/PRODUCT_POLICY.md) |
+| **Apple (iOS, iPadOS, macOS)**: CI/CD từ Ubuntu, ký, TestFlight, bí mật `APPLE_*` | [`docs/APPLE_CICD.md`](docs/APPLE_CICD.md) |
+| **Chính sách sản phẩm**: ngôn ngữ/giao diện theo hệ thống, KHÔNG quảng cáo, Pro + Ủng hộ, huy hiệu, iOS, website có hình/video, **dữ liệu chỉ ở thiết bị - không đồng bộ đám mây** | [`docs/PRODUCT_POLICY.md`](docs/PRODUCT_POLICY.md) |
+| **Toàn vẹn ứng dụng**: máy chủ tự quyết, **bắt buộc cập nhật bản mới nhất (modal khoá)**, chứng thực app, làm rối mã PRIVATE | [`docs/APP_INTEGRITY.md`](docs/APP_INTEGRITY.md) |
+| **Trạm điều hành + cổng xác thực tập trung**: `console.` sau Cloudflare Access, `id.` cho đăng nhập, website công khai CHỈ ĐỌC, website sản phẩm không có trang quản trị riêng | [`docs/CONTROL_PLANE.md`](docs/CONTROL_PLANE.md) |
+| **Đồng bộ giữa thiết bị** qua Wi-Fi nội bộ/Bluetooth/QR (Tsu Link), không internet | [`docs/LOCAL_SYNC.md`](docs/LOCAL_SYNC.md) |
 | **Nộp duyệt** cửa hàng/antivirus: đề xuất phiên agent tự điền biểu mẫu | [`docs/STORE_SUBMISSION.md`](docs/STORE_SUBMISSION.md) |
 | **Kho tri thức agent (AKB)** ngoài repo: lỗi, mẹo, quyết định dùng chung mọi dự án - `akb start` / `akb search` | [`docs/KNOWLEDGE_BASE.md`](docs/KNOWLEDGE_BASE.md) |
 | Đồng bộ quy ước xuống repo con | [`docs/SYNC.md`](docs/SYNC.md) |
@@ -73,6 +77,10 @@ chuyên đề. Bản đồ đầy đủ: [`docs/00-INDEX.md`](docs/00-INDEX.md).
   đường dẫn.
 - Task lớn phải chia nhỏ; làm xong phần nào chốt phần đó vào log ngay, để mất
   phiên không mất công.
+- **Mô hình + Phase + ngữ cảnh** (từ `v8.1.0`): Sonnet thực thi, lên Opus khi việc khó
+  (`EnterPlanMode` hoặc subagent `model: "opus"`); một ngữ cảnh một Phase của
+  `docs/PLAN.md`, xong Phase thì đánh `[x]`, cập nhật STATE, commit rồi dừng chờ `/clear`.
+  Chi tiết: [`docs/AGENT_PROTOCOL.md`](docs/AGENT_PROTOCOL.md) mục 4.1-4.3.
 
 ## 3. Đội ngũ agent và chống giẫm chân
 
@@ -113,6 +121,10 @@ Chi tiết: [`docs/AGENT_PROTOCOL.md`](docs/AGENT_PROTOCOL.md).
 - Không tắt kiểm tra HTTPS/SSL, không hạ cấp thuật toán mã hóa, không mở cổng
   hay quyền rộng hơn mức task cần.
 - Không nới lỏng bảo mật để cho mã chạy được. Gặp bế tắc thì báo cáo, không tự quyết.
+- **Zero Secret Exposure** (từ `v8.2.0`): `MUST NOT` in giá trị bí mật ở bất kỳ đâu, `MUST NOT`
+  `cat`/`grep`/`cut`/`printenv`... trên tệp hay biến bí mật (kể cả ngoài dự án); chỉ xem tên khoá bằng
+  `noleak-inspect.py`. Tệp bí mật không theo `KEY=VALUE` = **HARD STOP, báo chủ dự án**. Chi tiết:
+  [`docs/SECURITY_BASELINE.md`](docs/SECURITY_BASELINE.md) mục 12.1.
 - **Tên repo GitHub cũ là bất khả xâm phạm.** Repo hệ tsudev nằm trong Organization
   `tsudev-org` (chuyển từ tài khoản `tsudev-tsudev` ngày 09/11/2026). `MUST NOT` tạo,
   fork hay đổi tên một repo thành tên repo cũ dưới `tsudev-tsudev` - GitHub bỏ chuyển
@@ -222,6 +234,11 @@ git grep -lP '\x{2014}' -- . | grep -v '^migrations/'
 - Mọi sản phẩm có tài khoản phải đủ ba lối vào (Google, GitHub, tài khoản tsudev)
   và cơ chế Xác minh tài khoản. Chi tiết:
   [`docs/AUTH_AND_ACCOUNT.md`](docs/AUTH_AND_ACCOUNT.md).
+- Mọi sản phẩm **không quảng cáo, không thông báo làm phiền**: `MUST NOT` tự hiện modal,
+  thông báo, biểu ngữ hay chấm đỏ mời đăng nhập (TsuDEV/Google/GitHub/Apple), mời Pro,
+  xin Ủng hộ hay xin đánh giá. Đăng nhập chỉ mở khi người dùng bấm (Cài đặt › Tài khoản
+  hoặc chức năng cần tài khoản). Chi tiết: [`docs/AUTH_AND_ACCOUNT.md`](docs/AUTH_AND_ACCOUNT.md)
+  mục 14.4, [`docs/PRODUCT_POLICY.md`](docs/PRODUCT_POLICY.md) mục 3.8.
 - Mọi sản phẩm phải đủ bộ logo/favicon/icon và siêu dữ liệu nối về `tsudev.com`.
   Chi tiết: [`docs/BRAND_ASSETS.md`](docs/BRAND_ASSETS.md) mục 12 và
   [`docs/ECOSYSTEM_IDENTITY.md`](docs/ECOSYSTEM_IDENTITY.md).

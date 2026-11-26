@@ -1,4 +1,4 @@
-# PHÂN PHỐI TIN CẬY - CÀI ĐẶT KHÔNG BỊ CHẶN (v1.2.0)
+# PHÂN PHỐI TIN CẬY - CÀI ĐẶT KHÔNG BỊ CHẶN (v1.4.0)
 
 > Mọi sản phẩm tsudev phát hành thành tệp cài `MUST` đến tay người dùng qua kênh mà hệ điều hành, trình duyệt và
 > phần mềm diệt virus đã tin, với chữ ký và nguồn gốc kiểm chứng được. Tài liệu này quy định kênh theo từng nền tảng
@@ -65,6 +65,8 @@ cho tới khi có Apple Developer Program:
 - Chuẩn bị sẵn để ngày có tài khoản chỉ cần nạp bí mật: workflow có bước `codesign --options runtime --timestamp` +
   `xcrun notarytool submit --wait` + `xcrun stapler staple`, bật **Hardened Runtime**, entitlements tối thiểu; bước đó
   tự bỏ qua khi thiếu bí mật `APPLE_*`.
+- Ngày có tài khoản (v1.3.0): ký Developer ID + công chứng theo [`APPLE_CICD.md`](APPLE_CICD.md) mục 8.5 (bí mật ở
+  environment `apple`, chứng chỉ Developer ID tạo bằng `scripts/apple/setup_apple_signing.sh csr-devid`/`import-devid`).
 
 ### 1.3. Android
 
@@ -94,6 +96,10 @@ theo [`PRODUCT_POLICY.md`](PRODUCT_POLICY.md) mục 2.1, để đầu 2027 chỉ
 - Soạn sẵn: nhãn quyền riêng tư App Store, tuyên bố mã hoá (export compliance), xếp hạng tuổi, ảnh màn hình.
 - Trong lúc chờ: chức năng nào làm được trên web `MAY` cung cấp dưới dạng PWA tại tsudev.com. KHÔNG dùng chứng chỉ
   doanh nghiệp, ad-hoc hay dịch vụ "ký IPA" bên thứ ba - vi phạm điều khoản Apple và bị thu hồi hàng loạt.
+- `MUST NOT` phát `.ipa` qua GitHub Release, nguồn AltStore/SideStore hay bất kỳ kênh ngoài App Store/TestFlight
+  (v1.3.0). `.ipa` không ký của CI chỉ là artifact ngắn hạn để chủ dự án tự ký cho máy của mình.
+- Ngày có tài khoản: dựng, ký, tải lên TestFlight theo [`APPLE_CICD.md`](APPLE_CICD.md) (workflow dùng chung
+  `tsudev-org/.github`, script `scripts/apple/setup_apple_signing.sh`, phiếu toàn hệ `20261125-AP2`).
 
 ### 1.5. Tải từ trình duyệt
 
@@ -118,7 +124,8 @@ theo [`PRODUCT_POLICY.md`](PRODUCT_POLICY.md) mục 2.1, để đầu 2027 chỉ
 
 **Phòng từ khi dựng:**
 
-- KHÔNG nén/làm rối tệp thực thi (UPX, packer, obfuscator). Python: tránh PyInstaller một tệp (`--onefile`) - giải nén
+- KHÔNG nén/đóng gói bảo vệ tệp thực thi (UPX, packer, protector). Làm rối mã CHỈ cho dự án PRIVATE, CHỈ bằng công
+  cụ và cấu hình ở [`APP_INTEGRITY.md`](APP_INTEGRITY.md) mục 5 (đã chọn để an toàn với antivirus) và qua cổng 5.4. Python: tránh PyInstaller một tệp (`--onefile`) - giải nén
   vào thư mục tạm là mẫu hành vi của mã độc; dùng `--onedir` trong bộ cài hoặc Nuitka; nếu buộc dùng PyInstaller thì
   dựng bootloader từ nguồn.
 - KHÔNG tải và chạy mã từ URL lúc chạy (ngoài updater theo mục 2.5), không tự thêm khởi động cùng Windows khi người
@@ -218,7 +225,8 @@ miền con `*.tsudev.com` một lần) - agent tạo bản ghi qua API Cloudflar
 - [ ] VirusTotal 0 engine gắn cờ (hoặc phiếu báo nhầm đã nộp và Release còn ở nháp).
 - [ ] Mọi kênh đã công bố (Store, Play, winget, Scoop, Homebrew, APT/RPM) nhận bản mới; `doi-chieu-kenh` 0 lệch.
 - [ ] Trang tải về nói đúng trạng thái ký của từng nền tảng - không hứa "không cảnh báo" ở nền tảng chưa đạt.
-- [ ] Không có tệp dùng packer/obfuscator; bộ cài không tải thêm mã không ký.
+- [ ] Không có tệp dùng packer/protector; làm rối mã (chỉ PRIVATE) đúng `APP_INTEGRITY.md` mục 5; bộ cài không tải
+  thêm mã không ký.
 
 ## 8. Tuân thủ pháp luật Việt Nam (checklist kỹ thuật - 👤 xác nhận văn bản)
 

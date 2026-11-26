@@ -1,8 +1,9 @@
-# QUY ƯỚC GIAO DIỆN TOÀN PROJECT (DESIGN SYSTEM) - v4.1.0
+# QUY ƯỚC GIAO DIỆN TOÀN PROJECT (DESIGN SYSTEM) - v4.2.0
 
 > Áp dụng cho MỌI website, tool, phần mềm desktop (Electron/C#/Python/C++), app trong hệ sinh thái.
-> Nguồn giá trị duy nhất: `tokens/design-tokens.json` (lớp nền chung) và `tokens/products/<id>.json` (lớp bản sắc).
-> `tokens/tokens.css` và `tokens/products.css` là bản **sinh tự động** từ JSON - KHÔNG sửa tay, sinh lại bằng
+> Nguồn giá trị duy nhất: `tokens/design-tokens.json` (lớp nền chung), `tokens/products/<id>.json` (lớp bản sắc) và
+> `tokens/pro-themes.json` (chủ đề Pro, mục 1.3).
+> `tokens/tokens.css`, `tokens/products.css`, `tokens/pro-themes.css` là bản **sinh tự động** từ JSON - KHÔNG sửa tay, sinh lại bằng
 > `node scripts/build-tokens.mjs`.
 > Cấm hard-code màu/cỡ chữ/radius trong source code - chỉ dùng token.
 > Quy tắc khả năng truy cập đầy đủ: [`ACCESSIBILITY.md`](ACCESSIBILITY.md).
@@ -16,6 +17,10 @@
 > tiết, font tiêu đề. Mục tiêu: người dùng nhìn là nhận ra đang ở sản phẩm nào, mà chất lượng (độ đọc, tiếp cận,
 > hành vi) vẫn đồng đều. Chế độ **Ấm** đã gỡ hẳn khỏi token; chỉ còn **Sáng / Tối / Hệ thống**, mặc định **Hệ thống**
 > (`PRODUCT_POLICY.md` mục 1). Giá trị đã lưu `warm` `MUST` được đọc thành `light`.
+>
+> **Từ v6.0.0 (25/11/2026, chủ dự án yêu cầu - nền trắng nhìn lâu mỏi mắt): nền Sáng "giấy" xám-xanh.** Nền trang
+> `#EEF1F5`, thẻ/bề mặt `#F8FAFC` (sáng hơn nền một bậc để thẻ nổi mà không cần bóng), viền và chữ phụ ngả slate cho
+> cùng tông với xanh logo. Không còn nền trắng tinh `#FFFFFF` nào trong bảng Sáng. Bảng Tối không đổi.
 
 ### 1.1. Lớp nền chung (`tokens/design-tokens.json`)
 
@@ -25,10 +30,10 @@ bản sắc ghi đè đúng các vai trò nhấn, KHÔNG đụng vai trò nền/
 
 | Vai trò | Sáng | Tối |
 |---|---|---|
-| Nền `bg-base` / `bg-surface` / `bg-subtle` / `bg-hover` | `#FAFAFA` / `#FFFFFF` / `#F4F4F5` / `#EBEBED` | `#0A0A0A` / `#0F1114` / `#15181D` / `#1C2027` |
-| Viền `border` / `border-strong` | `#E4E4E7` / `#D4D4D8` | `#22272F` / `#2C323C` |
-| Viền vùng tương tác `border-control` | `#71717A` | `#6E6E6E` |
-| Chữ `text-primary` / `text-secondary` / `text-muted` | `#0A0A0A` / `#3F3F46` / `#52525B` | `#EDEDED` / `#B4B4B4` / `#8F8F8F` |
+| Nền `bg-base` / `bg-surface` / `bg-subtle` / `bg-hover` | `#EEF1F5` / `#F8FAFC` / `#E9EDF2` / `#E6EAF0` | `#0A0A0A` / `#0F1114` / `#15181D` / `#1C2027` |
+| Viền `border` / `border-strong` | `#D5DBE3` / `#C3CBD6` | `#22272F` / `#2C323C` |
+| Viền vùng tương tác `border-control` | `#64748B` | `#6E6E6E` |
+| Chữ `text-primary` / `text-secondary` / `text-muted` | `#0A0A0A` / `#334155` / `#475569` | `#EDEDED` / `#B4B4B4` / `#8F8F8F` |
 | Trạng thái success / warning / danger / info | `#15803D` `#B45309` `#DC2626` `#0369A1` | `#4ADE80` `#FBBF24` `#F87171` `#38BDF8` |
 | Chữ trên nền trạng thái `on-status` | `#FFFFFF` | `#0A0A0A` |
 | **Vai trò nhấn** (lớp 1.2 ghi đè): `text-link`, `primary`, `primary-hover`, `primary-active`, `on-primary`, `focus-ring`, `accent`, `glow`, `icon-info`, `icon-nav` | xanh TsuDEV `#0868C4`... | xanh TsuDEV `#38BDF8`... |
@@ -90,17 +95,17 @@ chủ dự án đã chốt tay (TsuDEV - `ECOSYSTEM_IDENTITY.md` mục 4.2; TsuF
 
 | `data-product` | Sản phẩm | Hue | Nút chính Tối / Sáng | Bố cục | Bo góc | Hoạ tiết | Font tiêu đề |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `contact` | Tsu Contact | 350 | `#F182BA` / `#AD447C` | cong-cu | tron | the-xep | Nunito |
-| `compass` | La bàn | 47 | `#FF843F` / `#B14C03` | do-luong | tron | vong-dong-tam | Montserrat |
-| `swico` | Tsu Swico | 68 | `#E49324` / `#975D01` | cong-cu | sac | mach-in | Space Grotesk |
-| `trafficmonitor` | TsuDEV TrafficMonitor | 105 | `#B3A90F` / `#736C01` | trinh-dien | mem | duong-bieu-do | JetBrains Mono |
-| `sounddb` | Sound Db | 130 | `#7DB530` / `#4C7601` | do-luong | chuan | song-am | Space Grotesk |
+| `contact` | Tsu Contact | 350 | `#F182BA` / `#AB437B` | cong-cu | tron | the-xep | Nunito |
+| `compass` | La bàn | 47 | `#FF843F` / `#AE4C05` | do-luong | tron | vong-dong-tam | Montserrat |
+| `swico` | Tsu Swico | 68 | `#E49324` / `#955C04` | cong-cu | sac | mach-in | Space Grotesk |
+| `trafficmonitor` | Tsu Tramon | 105 | `#B3A90F` / `#716A04` | trinh-dien | mem | duong-bieu-do | JetBrains Mono |
+| `sounddb` | Sound Db | 130 | `#7DB530` / `#4B7403` | do-luong | chuan | song-am | Space Grotesk |
 | `qulythuchi` | Quly Thu Chi | 160 | `#39BA81` / `#05794F` | bang-dieu-khien | mem | cot-tang-truong | Be Vietnam Pro |
-| `disk` | TsuDisk | 183 | `#24B9A8` / `#08786C` | cong-cu | chuan | khoi-phan-vung | Montserrat |
+| `disk` | TsuDisk | 183 | `#24B9A8` / `#04776B` | cong-cu | chuan | khoi-phan-vung | Montserrat |
 | `cwico` | Tsu Cwico | 212 | `#0EB5CE` / `#087485` | trinh-dien | sac | luoi-quet | Be Vietnam Pro |
-| `tsudev` | TsuDEV (tsudev.com) | 233 | `#38BDF8` / `#0868C4` | cong | chuan | quang-sang | Inter |
+| `tsudev` | TsuDEV (tsudev.com) | 233 | `#38BDF8` / `#0868C4` | cong | chuan | quang-sang | Be Vietnam Pro |
 | `files` | TsuFiles | 293 | `#A970FF` / `#7C3AED` | cong-cu | mem | quy-dao | Lexend |
-| `lotus` | Lotus Share | 320 | `#E47DFB` / `#A23DB8` | trinh-dien | tron | canh-sen | Quicksand |
+| `lotus` | Lotus Share | 320 | `#E47DFB` / `#A03BB6` | trinh-dien | tron | canh-sen | Quicksand |
 
 Chọn sắc độ khi logo không tự quyết được (ghi trong `seed.note` của từng tệp): Tsu Contact (bạc hà trùng TsuDisk),
 TrafficMonitor (dùng chung logo cú TsuDEV), Tsu Swico (logo đơn sắc), La bàn (vòng xanh hoàng gia cách xanh TsuDEV 10°
@@ -124,7 +129,7 @@ vẫn theo `ECOSYSTEM_IDENTITY.md` mục 4 - bố cục chữ ký chỉ quyết 
 
 | Giá trị | Bố cục | Hợp với |
 | --- | --- | --- |
-| `cong` | Hero ngắn + lưới thẻ danh mục nhiều cột | Cổng tập hợp nhiều sản phẩm (tsudev.com) |
+| `cong` | Hero ngắn rồi tới thẳng sản phẩm; lưới thẻ danh mục nhiều cột ở đầu trang danh bạ (vd. `/apps`) hoặc ngay dưới hero | Cổng tập hợp nhiều sản phẩm (tsudev.com) |
 | `trinh-dien` | Hero hai cột (chữ trái, ảnh chụp app lớn tràn phải) + khối tính năng dạng bento | App cần cho xem giao diện trước khi tải |
 | `cong-cu` | Vùng thao tác chính (kéo thả, chọn tệp, nút chạy) ngay màn đầu, căn giữa; giới thiệu nằm dưới | Công cụ làm một việc |
 | `bang-dieu-khien` | Thanh bên trái cố định + vùng làm việc + thẻ số liệu trên cùng | App dữ liệu dùng hằng ngày |
@@ -151,6 +156,51 @@ Một hoạ tiết **tĩnh** (không chuyển động) ở nền hero và ảnh 
 lệch · `quy-dao` vòng quỹ đạo · `canh-sen` cánh sen nối điểm · `duong-bieu-do` đường biểu đồ lưu lượng ·
 `cot-tang-truong` cột tăng dần · `khoi-phan-vung` thanh chia phân vùng · `song-am` sóng âm · `vong-dong-tam` vòng
 đồng tâm · `cham-luoi` lưới chấm · `song-cheo` sọc chéo (hai giá trị cuối còn trống cho sản phẩm mới).
+
+### 1.3. Chủ đề Pro (`tokens/pro-themes.json`) - quyền lợi Q2
+
+Quyền lợi **Q2 "Giao diện Pro"** (`PRODUCT_POLICY.md` 3.7.1) dùng đúng bộ chủ đề này ở mọi app/website; repo con
+`MUST NOT` tự chế chủ đề. Chủ đề Pro là **lớp thứ ba**, phủ lên lớp nền + lớp bản sắc khi người dùng chọn:
+
+| `data-pro-theme` | Tên (vi / en) | Hue | Nút chính Tối / Sáng | Khung ảnh (Tối) | Tinh thần |
+| --- | --- | --- | --- | --- | --- |
+| `ho-phach` | Hổ phách / Amber | 80 | `#D79A01` / `#8B6202` | `#D79A01` → `#F28450` | Vàng ấm |
+| `cham-dem` | Chàm đêm / Midnight Indigo | 272 | `#8AA1FE` / `#4C5FCC` | `#8AA1FE` → `#C58DE6` | Chàm sâu |
+| `rung-thong` | Rừng thông / Pine | 150 | `#6CB57D` / `#2E7743` | `#6CB57D` → `#34B7B1` | Xanh trầm, dịu mắt |
+| `hoa-dao` | Hoa đào / Peach Blossom | 355 | `#EE83AF` / `#AA4673` | `#EE83AF` → `#CB8EE7` | Hồng ngày Tết |
+| `than-chi` | Than chì / Graphite | 255 | `#9AA7B9` / `#5E6A7A` | `#9AA7B9` → `#A7A2B7` | Gần đơn sắc |
+
+Mỗi chủ đề gồm 18 vai trò cho từng chế độ: 6 vai trò nền/viền **ngả sắc nhẹ** (giữ độ sáng OKLCH của lớp nền chung,
+thêm chroma `tint` theo `hue`), 10 vai trò nhấn như lớp bản sắc, và `pro-ring-start` / `pro-ring-end` (chuyển sắc của
+**khung ảnh đại diện**, ≥ 3:1 trên mọi nền ổn định - WCAG 1.4.11). Chữ, trạng thái (`success`/`warning`/`danger`/`info`)
+và lớp phủ giữ nguyên lớp nền chung để ý nghĩa màu không đổi.
+
+**Màu không chọn tay.** `node scripts/gen-pro-themes.mjs` sinh `colors` từ `hue`/`chroma`/`tint`/`ringShift`: vai trò
+nhấn dùng chính thuật toán dò WCAG của `gen-product-palette.mjs` nhưng đo trên **nền đã ngả sắc**; cả bảng được đo lại
+bằng đúng bộ ngưỡng của `check-contrast.mjs` (mục 1.1); trượt ⇒ tự giảm `tint` từng bước. Cổng kiểm (`--check`, chạy
+trong `check-standards.sh`): khớp bản sinh, đạt WCAG, primary cách `danger` ≥ 15°, hai chủ đề có màu cách nhau ≥ 20°.
+
+Quy tắc dùng:
+
+- **Chỉ thêm lựa chọn.** Mặc định luôn là bảng của sản phẩm; Sáng/Tối/Hệ thống, cỡ chữ, **tương phản cao**, giảm chuyển
+  động vẫn miễn phí và **tương phản cao thắng chủ đề Pro** (CSS nằm trong `@media not (prefers-contrast: more)`; app
+  gốc `MUST` bỏ chủ đề Pro khi bật tương phản cao của hệ điều hành hoặc của app).
+- Chỉ áp khi JWS quyền lợi có Pro (Q2 kiểm trên máy - bản fork tự bật được, chấp nhận theo `PRODUCT_POLICY` 3.7.6).
+  Hết hạn Pro ⇒ quay về bảng sản phẩm **không** mất dữ liệu, không hộp thoại chen ngang; lựa chọn được nhớ để dùng lại.
+- Bộ chọn nằm ở **Cài đặt → Giao diện**, hiện mẫu màu thật của cả hai chế độ; người chưa có Pro thấy bộ chọn ở trạng
+  thái xem trước + một liên kết "Tìm hiểu TsuDEV Pro" (đúng lối vào mục 3.7.3 của `PRODUCT_POLICY`), không khoá mờ cả màn.
+- Chủ đề Pro không đổi `layout`/`shape`/`motif`/font của sản phẩm, không đổi logo. Khối liên kết hệ sinh thái giữ
+  nhận diện TsuDEV (mục 1.2.1).
+- **Biểu tượng app thay thế** (phần còn lại của Q2): mỗi app chỉ dùng biểu tượng vẽ từ logo của chính nó trên nền màu
+  `primary` của chủ đề (Tối), theo `BRAND_ASSETS.md`; nền tảng không hỗ trợ ⇒ bỏ, không giả lập.
+- Thêm/đổi chủ đề: PR vào repo này (sửa nguồn trong JSON → `gen-pro-themes.mjs` → `build-tokens.mjs`), là MINOR; xoá
+  hoặc đổi `id` một chủ đề là MAJOR (người dùng đã chọn sẽ mất lựa chọn - app `MUST` quay về mặc định nếu gặp id lạ).
+
+#### 1.3.1. Cách dùng
+
+- Web: nạp `tokens.css` → `products.css` → `pro-themes.css`; đặt `<html data-pro-theme="<id>">` khi người dùng chọn và
+  có Pro; bỏ thuộc tính để về mặc định.
+- Flutter: `tsudev_ui` (`TsuProTheme`) sinh từ `pro-themes.json`; desktop khác: parse JSON, gộp đè sau lớp bản sắc (mục 7).
 
 ## 2. Bo góc & viền (Radius)
 
@@ -182,6 +232,13 @@ Viền luôn **phẳng 1px solid** màu `border` (viền được focus/hover d�
 - Thang cỡ chữ: 12 / 13 / 14 / 15 / 16 / 18(H4) / 20(H3) / 24(H2) / 30(H1).
 - Weight: 400 body, 500 label/menu, 600 heading & button, 700 chỉ dùng nhấn mạnh số liệu. Không dùng weight 300 (mảnh, khó đọc tiếng Việt có dấu).
 - Không dùng ALL CAPS cho tiếng Việt có dấu ở đoạn dài; chỉ cho nhãn ngắn ≤ 2 từ với letter-spacing `0.04em`.
+- **Nạp font trên web (v6.0.0, bài học tsudev.com 25/11/2026)**: font tự host `MUST` có subset `vietnamese`; 2-4 tệp
+  woff2 của màn đầu (nét thường + đậm, subset `latin` + `vietnamese`) `SHOULD` được `<link rel="preload" as="font"
+  crossorigin>`; `@font-face` dự phòng `SHOULD` có `size-adjust`/`ascent-override`/`descent-override` ĐO THẬT theo
+  từng nhóm độ đậm (Be Vietnam Pro so với Arial: 105,4% nét 400-500, 102,4% nét 600-700; ascent 94,9%/97,7%, descent
+  25,6%/26,4%). Thiếu các bước này thì mọi dòng chữ đổi bề rộng khi font thật tới - trang "nhúng" mỗi lần tải. Nạp
+  càng ít họ font càng ít lần đổi font. Font tiêu đề sản phẩm có chữ hoa hai dấu (Ầ Ặ Ữ Ể) `SHOULD` được thử trước:
+  Be Vietnam Pro dựng tổ hợp dấu đúng vị trí; Plus Jakarta Sans chạm dấu.
 
 **Định dạng ngày giờ (bắt buộc toàn hệ thống):**
 - Ngày: `DD/MM/YYYY` hiển thị dạng **số**, ví dụ `01/02/2027`. **Tuyệt đối không** in ra giao diện chuỗi chữ kiểu `dd/mm/yyyy`.
@@ -208,6 +265,16 @@ Viền luôn **phẳng 1px solid** màu `border` (viền được focus/hover d�
 - **Modal**: overlay token `overlay`, hộp `bg-surface` radius-lg shadow-lg; header 20px/600, nút hành động căn phải chân modal (Primary ngoài cùng bên phải), đóng bằng ESC + nút ×.
 - **Progress bar**: cao 6px, nền `bg-subtle`, phần chạy `primary`, radius-sm.
 - **Badge status**: chữ 12px/500, padding `2px 8px`, radius-sm, nền màu trạng thái nhạt 12% + chữ màu trạng thái đậm.
+
+**Màn đầu & thẻ (v6.0.0):**
+- Khối màn đầu (hero, header, thẻ thấy được lúc tải) `MUST NOT` bắt đầu ở `opacity: 0` hay ngoài vị trí (fade-in,
+  slide-in): khung hình đầu phải có nội dung. Hiệu ứng hiện dần chỉ cho khối dưới màn đầu, và mã bật trạng thái ẩn
+  `MUST` đo + đánh dấu khối đang trong khung nhìn TRƯỚC khi bật ẩn.
+- Thẻ `SHOULD NOT` mang dải viền màu trên đầu; màu sản phẩm/thể loại hiện ở viền khi rê hoặc ở ô biểu tượng.
+- Nền thẻ theo thể loại `SHOULD` là nền phẳng pha ≤ 5% sắc nhấn + hoạ tiết hình học tĩnh thuần CSS (lưới chấm, giấy kẻ,
+  sọc, bàn cờ...) mờ dần về phía chữ, thay cho quầng chuyển sắc loang.
+- Biểu tượng trong thẻ tương tác `MAY` có chuyển động đúng nghĩa khi rê/focus (chỉ `transform`/`opacity`), `MUST` tắt
+  dưới `prefers-reduced-motion`.
 
 **Data Display:**
 - **Table**: container radius-lg viền `border`; header nền `bg-subtle` chữ 600, phân cách hàng bằng viền dưới 1px `border`, hover hàng `bg-hover`, số căn phải, ngày hiển thị `DD/MM/YYYY`.
@@ -237,7 +304,7 @@ Chuỗi version trong code/manifest = `26.11.1701` (đồng bộ với tên file
 
 | Nền tảng | Cách dùng |
 |---|---|
-| Web (React/Vue/HTML) | Import `tokens/tokens.css` rồi `tokens/products.css`, dùng `var(--primary)`… Đặt `data-theme` + `data-product` trên `<html>` và `data-platform="web"` trên `<body>`. Tiêu đề dùng `var(--font-display)`, nút dùng `var(--radius-control)` |
+| Web (React/Vue/HTML) | Import `tokens/tokens.css` rồi `tokens/products.css` (rồi `tokens/pro-themes.css` nếu có Q2), dùng `var(--primary)`… Đặt `data-theme` + `data-product` trên `<html>` và `data-platform="web"` trên `<body>`. Tiêu đề dùng `var(--font-display)`, nút dùng `var(--radius-control)` |
 | Electron | Như Web, `data-platform="desktop"` |
 | C# (WPF/WinForms) | Parse `design-tokens.json`, gộp đè `products/<id>.json` → nạp vào ResourceDictionary/Theme class |
 | Python (PyQt/Tkinter) | Parse hai JSON (nền + sản phẩm) → sinh QSS/style dict |
@@ -247,13 +314,15 @@ Quy trình đổi giao diện:
 
 1. **Chỉ sửa `tokens/design-tokens.json`** (lớp nền) hoặc `tokens/products/<id>.json` (lớp bản sắc: sửa `hue`/`chroma`
    rồi chạy `node scripts/gen-product-palette.mjs <id>`, không sửa tay `colors`).
-2. Chạy `node scripts/build-tokens.mjs` để sinh lại `tokens/tokens.css` và `tokens/products.css`.
-3. Chạy `node scripts/check-contrast.mjs` và `node scripts/check-products.mjs` - phải đạt toàn bộ.
+2. Chạy `node scripts/build-tokens.mjs` để sinh lại `tokens/tokens.css`, `tokens/products.css` và `tokens/pro-themes.css`
+   (đổi chủ đề Pro: chạy `node scripts/gen-pro-themes.mjs` trước).
+3. Chạy `node scripts/check-contrast.mjs`, `node scripts/check-products.mjs` và `node scripts/gen-pro-themes.mjs --check`
+   - phải đạt toàn bộ.
 4. Chạy `./scripts/make-manifest.sh` rồi `./scripts/check-standards.sh`.
 5. Tăng phiên bản theo [`VERSIONING.md`](VERSIONING.md) mục 1 - **đổi giá trị một token
    màu ở lớp nền luôn là thay đổi phá vỡ (MAJOR)**, kể cả khi chỉ để sửa lỗi. Thêm sản phẩm mới là MINOR; đổi
    màu của MỘT sản phẩm là MINOR kèm phiếu sang đúng repo đó.
 6. Repo con chạy `./scripts/sync-standards.sh` và tự cập nhật ở lần build kế tiếp.
 
-`MUST NOT` sửa tay `tokens.css` / `products.css`. Mọi thay đổi ở đó sẽ bị lần sinh sau ghi đè, và cổng
+`MUST NOT` sửa tay `tokens.css` / `products.css` / `pro-themes.css`. Mọi thay đổi ở đó sẽ bị lần sinh sau ghi đè, và cổng
 kiểm sẽ báo lệch.

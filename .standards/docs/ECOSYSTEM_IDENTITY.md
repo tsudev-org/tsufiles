@@ -1,4 +1,4 @@
-# NHẬN DIỆN HỆ SINH THÁI TSUDEV (v4.0.0)
+# NHẬN DIỆN HỆ SINH THÁI TSUDEV (v4.1.0)
 
 > `https://tsudev.com` là nhà chung của mọi dịch vụ, sản phẩm và công cụ trong hệ
 > sinh thái. Tài liệu này quy định mọi project **tự khai mình thuộc về đâu** như
@@ -35,14 +35,17 @@ mọi trang giới thiệu, mọi bản mô tả repo:
 | **Nhà cung cấp danh tính** | Một tài khoản dùng chung cho mọi sản phẩm, theo [`AUTH_AND_ACCOUNT.md`](AUTH_AND_ACCOUNT.md) mục 2 |
 | **Nguồn nhận diện** | Nơi công bố logo, bảng màu, và bản mô tả chính thức của thương hiệu |
 
+Từ v4.1.0 (bộ quy ước v7.2.0) ba vai này chia thành ba vùng tên miền theo [`CONTROL_PLANE.md`](CONTROL_PLANE.md):
+`tsudev.com` (công khai, chỉ đọc), `id.tsudev.com` (cổng xác thực - issuer OIDC vẫn là `https://tsudev.com/oidc`),
+`console.tsudev.com` (trạm điều hành sau Cloudflare Access). Website sản phẩm `MUST NOT` có trang quản trị riêng.
+
 Mô tả chuẩn, dùng nguyên văn khi cần một câu giới thiệu:
 
-> **TsuDEV** là hệ sinh thái sản phẩm và công cụ phần mềm tại
-> [tsudev.com](https://tsudev.com).
+> **TsuDEV** là hệ sinh thái ứng dụng, tiện ích và công cụ số đa nền tảng.
 
 Bản dài, dùng cho trang giới thiệu và mô tả kho mã:
 
-> **TsuDEV** là hệ sinh thái sản phẩm và công cụ phần mềm tại
+> **TsuDEV** là hệ sinh thái ứng dụng, tiện ích và công cụ số đa nền tảng tại
 > [tsudev.com](https://tsudev.com). Mọi sản phẩm trong hệ sinh thái dùng chung một
 > tài khoản, một bộ quy ước kỹ thuật, và một bộ nhận diện.
 
@@ -179,7 +182,7 @@ sẻ localStorage, nhưng cùng khóa và cùng hành vi giữ trải nghiệm n
   không đọc được ⇒ `system` (từ v3.8.0 - mặc định theo hệ thống, `PRODUCT_POLICY.md` mục 1; trước đó là `dark`).
 - Áp **trước khi vẽ** bằng script đồng bộ trong `<head>`, đặt **sau** `<meta name="theme-color">` và **trước**
   stylesheet; script đặt `data-theme="light|dark"` lên `<html>` và đổi `content` của meta theme-color (Tối
-  `#0a0a0a`, Sáng `#fafafa`). `system` hỏi `matchMedia('(prefers-color-scheme: dark)')` và nghe sự kiện `change`.
+  `#0a0a0a`, Sáng `#eef1f5`). `system` hỏi `matchMedia('(prefers-color-scheme: dark)')` và nghe sự kiện `change`.
 - CSS `MUST NOT` treo bảng màu vào `@media (prefers-color-scheme)` - chỉ JavaScript được hỏi hệ điều hành. Không
   có JavaScript thì trang ở Tối (giá trị mặc định trong HTML) và bộ chọn ẩn.
 - Giao diện: nhóm 3 nút biểu tượng (mặt trời / mặt trăng / màn hình) bo tròn, `role="radiogroup"`
@@ -212,14 +215,14 @@ sửa `.standards/`. Mọi cặp chữ/nền đạt WCAG AA. Nguồn đang chạ
 
 | Vai trò (token) | Tối (mặc định) | Sáng |
 | --- | --- | --- |
-| `bg-base` / `bg-surface` / `bg-subtle` / `bg-hover` | `#0A0A0A` / `#0F1114` / `#15181D` / `#1C2027` | `#FAFAFA` / `#FFFFFF` / `#F4F4F5` / `#EBEBED` |
-| `border` / `border-strong` / `border-control` | `#22272F` / `#2C323C` / `#6E6E6E` | `#E4E4E7` / `#D4D4D8` / `#71717A` |
-| `text-primary` / `text-secondary` / `text-muted` | `#EDEDED` / `#B4B4B4` / `#8F8F8F` | `#0A0A0A` / `#3F3F46` / `#52525B` |
+| `bg-base` / `bg-surface` / `bg-subtle` / `bg-hover` | `#0A0A0A` / `#0F1114` / `#15181D` / `#1C2027` | `#EEF1F5` / `#F8FAFC` / `#E9EDF2` / `#E6EAF0` |
+| `border` / `border-strong` / `border-control` | `#22272F` / `#2C323C` / `#6E6E6E` | `#D5DBE3` / `#C3CBD6` / `#64748B` |
+| `text-primary` / `text-secondary` / `text-muted` | `#EDEDED` / `#B4B4B4` / `#8F8F8F` | `#0A0A0A` / `#334155` / `#475569` |
 | `text-link` | `#7DD3FC` | `#0757A3` |
 | `primary` / `primary-hover` / `primary-active` | `#38BDF8` / `#7DD3FC` / `#0EA5E9` | `#0868C4` / `#0757A3` / `#064785` |
 | `on-primary` | `#0A0A0A` (mực đen) | `#FFFFFF` |
 | `focus-ring` | `#38BDF8` | `#0868C4` |
-| nhấn phụ `accent` / quầng `glow` | `#3B9EFF` / `rgba(56,189,248,0.14)` | `#0E7490` / `rgba(8,104,196,0.10)` |
+| nhấn phụ `accent` / quầng `glow` | `#3B9EFF` / `rgba(56,189,248,0.14)` | `#0D6E89` / `rgba(8,104,196,0.10)` |
 | icon nhóm "thông tin" `icon-info` (gồm biểu tượng nền tảng) / điều hướng `icon-nav` | `#60A5FA` / `#7DD3FC` | `#0369A1` / `#0757A3` |
 
 Ở chế độ Tối chữ trên nút xanh là **mực đen**: xanh lơ không đạt 4.5:1 dưới chữ trắng. Viền nút phụ và ô nhập là `border-control` (3:1), không phải `border-strong`.
