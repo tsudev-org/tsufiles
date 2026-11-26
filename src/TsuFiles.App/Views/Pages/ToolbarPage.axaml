@@ -248,7 +248,7 @@
         <!-- 1. Profiles -->
         <StackPanel Spacing="8">
           <TextBlock Classes="label" Text="{DynamicResource toolbar.step_profile}" />
-          <TextBox Classes="search clearButton" Text="{Binding ProfileSearch}" Watermark="{DynamicResource common.search}">
+          <TextBox Classes="search clearButton" Text="{Binding ProfileSearch}" PlaceholderText="{DynamicResource common.search}">
             <TextBox.InnerLeftContent>
               <PathIcon Width="14" Height="14" Margin="10,0,0,0" Data="{StaticResource Icon.Search}" Foreground="{DynamicResource TextSecondaryBrush}" />
             </TextBox.InnerLeftContent>
@@ -484,7 +484,7 @@
                     Command="{Binding NewFolderCopyCommand}" Content="{DynamicResource presets.copy_to_folder}"
                     ToolTip.Tip="{DynamicResource presets.copy_hint}" />
           </WrapPanel>
-          <TextBox x:Name="PaletteSearchBox" Classes="search clearButton" Text="{Binding PaletteSearch}" Watermark="{DynamicResource common.search}">
+          <TextBox x:Name="PaletteSearchBox" Classes="search clearButton" Text="{Binding PaletteSearch}" PlaceholderText="{DynamicResource common.search}">
             <TextBox.InnerLeftContent>
               <PathIcon Width="14" Height="14" Margin="10,0,0,0" Data="{StaticResource Icon.Search}" Foreground="{DynamicResource TextSecondaryBrush}" />
             </TextBox.InnerLeftContent>
