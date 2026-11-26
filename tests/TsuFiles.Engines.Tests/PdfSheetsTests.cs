@@ -106,7 +106,7 @@ public class PdfSheetsTests(EngineFixture fx) : IClassFixture<EngineFixture>
     /// <summary>The middle of the one letter <paramref name="value"/> on a sheet (turned text is no word), from its top left.</summary>
     private static XPoint Letter(UglyToad.PdfPig.Content.Page page, string value)
     {
-        var box = Assert.Single(page.Letters, l => l.Value == value).GlyphRectangle;
+        var box = Assert.Single(page.Letters, l => l.Value == value).BoundingBox;
         return new XPoint((box.Left + box.Right) / 2, page.Height - (box.Top + box.Bottom) / 2);
     }
 

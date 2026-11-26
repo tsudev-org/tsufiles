@@ -53,7 +53,7 @@
 | :-: | --- | --- | --- |
 | G0 | Gộp #130 (PDF -> Word giữ bố cục) | CI xanh | ✅ #130 `8040fdc0` |
 | G1 | **Chỉ vi + en** (PR #131): xoá 20 `i18n/*.json`, `AppLanguages`, ngôn ngữ của Setup/CLI, font chữ không dùng, logic pt/zh; di trú cài đặt ngôn ngữ khác -> `auto` (vi nếu hệ thống tiếng Việt, còn lại en); bỏ `WhatsNew` kế thừa; sửa test + website/README | Build, test App/Setup/Cli lọc, `check_i18n_vi.py` | ✅ #131 `64896b08` |
-| G2 | Bỏ engine trùng lặp: Pandoc, Calibre, Vision, Unhwp; `EngineDownloads`, `engines.json`, `fetch-*.ps1`, preset/EnginePriority di trú | Test Engines/Core lọc theo vùng sửa | ⏳ #135 |
+| G2 | Bỏ engine trùng lặp: Pandoc, Calibre, Vision, Unhwp; `EngineDownloads`, `engines.json`, `fetch-*.ps1`, preset/EnginePriority di trú | Test Engines/Core lọc theo vùng sửa | ✅ #135 (giữ WIC) |
 | G3a | Bỏ HWP/HWPX + OFD (rhwp, unhwp, hwpx-writer, `Hwp/`, `Ofd/`) | Như G2 | ⬜ |
 | G3b | Bỏ AI cục bộ (Whisper, Upscayl, Dịch) + Font, Ghostscript, ISO | Như G2 | ⬜ |
 | G4 | CI gọn: bỏ test/fixture của phần đã xoá, tách job theo vùng đổi (`changes`), tắt `win-arm64` tới khi có P1 | Đo thời gian CI trước/sau (mục tiêu <= 35 phút) | ⬜ |

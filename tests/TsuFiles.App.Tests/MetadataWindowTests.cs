@@ -1089,13 +1089,13 @@ public sealed class MetadataWindowTests : IDisposable
         Assert.Same(shown, vm.Thumbnail);
         Assert.True(shown.PixelSize.Width > 0);
         using var copy = new MemoryStream();
-        shown.Save(copy);
+        shown.Save(copy, new Avalonia.Media.Imaging.PngBitmapEncoderOptions());
 
         vm.Dispose();
         var again = new MetadataViewModel([path], tool, AppHost.Get<ILocalizer>(), AppHost.Get<UserDataStore>(), exifTool.Engines, (_, _) => { });
         Wait(() => !again.IsBusy && again.Thumbnail is not null);
         using var saved = new MemoryStream();
-        again.Thumbnail!.Save(saved);
+        again.Thumbnail!.Save(saved, new Avalonia.Media.Imaging.PngBitmapEncoderOptions());
         Assert.True(saved.Length > 0);
         again.Dispose();
     }

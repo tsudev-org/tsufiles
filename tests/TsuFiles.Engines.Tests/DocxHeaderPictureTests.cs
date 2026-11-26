@@ -75,7 +75,7 @@ public class DocxHeaderPictureTests(EngineFixture fx) : IClassFixture<EngineFixt
         using var document = PdfDocument.Open(await PdfAsync(P(FloatingPicture())));
 
         var page = document.GetPage(1);
-        var bounds = Assert.Single(page.GetImages()).Bounds;
+        var bounds = Assert.Single(page.GetImages()).BoundingBox;
         Assert.InRange(bounds.Left, 71, 73);
         Assert.InRange(page.Height - bounds.Top, 15, 17);
     }
