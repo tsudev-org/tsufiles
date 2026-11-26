@@ -22,8 +22,9 @@
    Viết lại bằng ngôn ngữ khác không làm app nhẹ hơn mà mất 82k dòng đã kiểm thử; tối ưu bằng cắt bỏ + trimming.
 2. **Mỗi cặp định dạng chỉ MỘT đường chuyển chính** (engine dựng sẵn ưu tiên, LibreOffice là dự phòng duy nhất cho
    văn phòng). Bỏ engine thứ hai làm cùng việc vì gây kết quả khác nhau tuỳ máy và tăng ma trận test.
-3. **Không dùng phần mềm cài sẵn trên máy** (giữ quyết định settings v5 - đã bỏ tự động hoá Word). ⇒ Đề xuất "engine
-   Microsoft Office" ở phiếu `20261125-03` mục 2.2 **HUỶ**; DOCX/XLSX -> PDF cải thiện trong LibreOffice/bộ in XLSX dựng sẵn.
+3. **Microsoft Office được dùng khi máy Windows có Office** (👤 duyệt 26/11/2026, đảo quyết định settings v5 riêng
+   cho Office): DOCX/XLSX/PPTX -> PDF qua chính Office (PR #133), Office lỗi/quá hạn thì nhường tuyến cũ (`IGivesWay`).
+   Ngoài Office vẫn không dùng phần mềm cài sẵn.
 4. Tương thích ngược: không đổi khóa JSON đầu ra CLI, không đổi tên tệp phát hành/updater; preset/cài đặt đã lưu trỏ
    tới engine/định dạng bị bỏ ⇒ di trú cài đặt (schema mới) + thông báo rõ thay vì lỗi.
 5. Mỗi giai đoạn một PR, một phiên agent; cổng: build + test lọc + `dotnet format` + `check_i18n_vi.py`.
@@ -49,8 +50,8 @@
 
 | GĐ | Nội dung | Cổng/kiểm chứng | Trạng thái |
 | :-: | --- | --- | --- |
-| G0 | Gộp #130 (PDF -> Word giữ bố cục); huỷ đề xuất engine Microsoft Office | CI xanh (trừ win-arm64 đã biết) | ⏳ |
-| G1 | **Chỉ vi + en**: xoá 20 `i18n/*.json`, `AppLanguages`, ngôn ngữ của Setup/CLI, font chữ không dùng, logic pt/zh; di trú cài đặt ngôn ngữ khác -> `auto` (vi nếu hệ thống tiếng Việt, còn lại en); bỏ `WhatsNew` kế thừa; sửa test + website/README | Build, test App/Setup/Cli lọc, `check_i18n_vi.py` | ⬜ |
+| G0 | Gộp #130 (PDF -> Word giữ bố cục) | CI xanh | ✅ #130 `8040fdc0` |
+| G1 | **Chỉ vi + en** (PR #131): xoá 20 `i18n/*.json`, `AppLanguages`, ngôn ngữ của Setup/CLI, font chữ không dùng, logic pt/zh; di trú cài đặt ngôn ngữ khác -> `auto` (vi nếu hệ thống tiếng Việt, còn lại en); bỏ `WhatsNew` kế thừa; sửa test + website/README | Build, test App/Setup/Cli lọc, `check_i18n_vi.py` | ⏳ #131 chờ CI |
 | G2 | Bỏ engine trùng lặp: Pandoc, Calibre, WIC, Vision, Unhwp; `EngineDownloads`, `engines.json`, `fetch-*.ps1`, preset/EnginePriority di trú | Test Engines/Core lọc theo vùng sửa | ⬜ |
 | G3a | Bỏ HWP/HWPX + OFD (rhwp, unhwp, hwpx-writer, `Hwp/`, `Ofd/`) | Như G2 | ⬜ |
 | G3b | Bỏ AI cục bộ (Whisper, Upscayl, Dịch) + Font, Ghostscript, ISO | Như G2 | ⬜ |
@@ -66,4 +67,5 @@
 
 ## 5. Kết quả xử lý
 
-- 26/11/2026 - tsufiles-c9: mở phiếu, đo hiện trạng.
+- 26/11/2026 - tsufiles-c9: mở phiếu, đo hiện trạng; 👤 duyệt mục 2. G0 xong (#130). G1 PR #131. Ngoài kế hoạch theo
+  yêu cầu 👤: #132 PDF scan -> Word giữ bố cục (ĐÃ GỘP), #133 engine Microsoft Office. Bàn giao `20261126-01`.

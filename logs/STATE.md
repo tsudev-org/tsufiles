@@ -9,12 +9,9 @@
 
 ## Hàng đợi task (làm từ trên xuống)
 
-- [ ] ⚡⚡⚡⚡⚡ TIẾP THEO: phiếu **`logs/handover/20261126-TG1_ke-hoach-tinh-gon-tsufiles.md`** (kế hoạch tinh gọn theo
-      yêu cầu chủ dự án 26/11: chỉ vi + en, bỏ engine trùng lặp, bỏ HWP/OFD, AI cục bộ, Font/Ghostscript/ISO; GIỮ CAD +
-      Bản đồ cho địa chính). Làm theo bảng giai đoạn G0-G6 mục 3, mỗi giai đoạn một PR.
-- [ ] ⚡⚡⚡⚡ Phiếu `logs/handover/20261125-03_ban-giao-pdf-docx-bo-cuc-chinh-xac.md`: #130 (G0 của TG1) gộp khi CI
-      xanh. Đề xuất engine Microsoft Office **HUỶ** (TG1 mục 1.3: không dùng phần mềm cài sẵn, quyết định settings v5);
-      DOCX/XLSX -> PDF cải thiện trong LibreOffice + bộ in XLSX dựng sẵn.
+- [ ] ⚡⚡⚡⚡⚡ TIẾP THEO: phiếu **`logs/handover/20261126-01_ban-giao-tinh-gon-ocr-office.md`** mục 2: gộp #131 -> #133
+      -> PR nhật ký; rồi kế hoạch tinh gọn **`logs/handover/20261126-TG1_ke-hoach-tinh-gon-tsufiles.md`** từ G2 (mỗi
+      giai đoạn một PR, một phiên).
 - [ ] ⚡⚡⚡ TIẾP THEO: phiếu `logs/handover/20261125-02_ban-giao-std50-pr2-ui2-signpath.md` mục 2: UI2 phần B khi
       tsudev-standards có bảng màu Sáng dịu; PRO1/PRO2 + QR4 khi có thư viện `TsuSync`; SignPath nộp khi đạt >= 4/6
       (đo 25/11: 1/6). 👤: secret `VT_API_KEY` (GitHub Actions, không phải Render - phiếu mục 3), ĐỔI khóa VirusTotal.
@@ -79,6 +76,11 @@
 | --- | --- | --- |
 
 ## Đã hoàn thành (mới nhất trên cùng)
+
+- 26/11/2026 - #130 gộp (`8040fdc0`, PDF -> Word giữ bố cục); #132 gộp (`0aed94aa`): PDF scan -> Word chữ sửa được
+  đúng chỗ (Word đo 92 trang scan thật: F1 0,932-0,995), OCR tiếng Việt tessdata_best, CLI `--ocr`. Mở #131 (G1 chỉ
+  vi + en), #133 (engine Microsoft Office: 9 DOCX + 8 XLSX trùng 100% bản Word/Excel). Kế hoạch tinh gọn TG1. Bàn giao
+  `20261126-01`.
 
 - 25/11/2026 - #126 gộp (`391c97e9`): STD50 PR 2 (trang chủ `cong-cu`, hoạ tiết `quy-dao`, og-image) - phiếu STD50
   ĐÓNG; UI2 phần A (tràn ngang /ban-quyen/ 360, trình chép theme.js, font dự phòng đo thật). #127 gộp (`305347a2`):
