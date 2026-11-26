@@ -16,6 +16,8 @@
 - [x] MAC0 (27/11): tạm dừng CHỈ macOS đến Q1/2027 ([ADR-0005](../docs/adr/0005-tam-dung-phat-hanh-macos.md)); CI/release
       chỉ còn Windows + Linux. ADR tinh gọn của TG1 G6 đánh số 0006.
 - [x] LG4 tsufiles (26/11): `.standards` v8.2.0, "Có gì mới" không tự bật, gỡ thẻ xin gắn sao, mục Tài khoản thụ động.
+- [ ] ⚡⚡⚡ INT1 đợt 2: cổng phiên bản theo bản kê chung + modal khoá (CHỜ phiếu toàn hệ `20261127-CN1` mục 3.3 tách
+      nền tảng, nếu không sẽ khoá macOS 2.4.1).
 - [ ] ⚡⚡⚡ TIẾP THEO: phiếu `logs/handover/20261125-02_ban-giao-std50-pr2-ui2-signpath.md` mục 2: UI2 phần B khi
       tsudev-standards có bảng màu Sáng dịu; PRO1/PRO2 + QR4 khi có thư viện `TsuSync`; SignPath nộp khi đạt >= 4/6
       (đo 25/11: 1/6). 👤: secret `VT_API_KEY` (GitHub Actions, không phải Render - phiếu mục 3), ĐỔI khóa VirusTotal.
