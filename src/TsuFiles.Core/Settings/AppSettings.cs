@@ -137,12 +137,12 @@ public sealed class DonutSettings
 public sealed class AppSettings
 {
     /// <summary>Current schema version. Increase when the format changes and add a migration.</summary>
-    public const int CurrentSchemaVersion = 75;
+    public const int CurrentSchemaVersion = 76;
 
     public int SchemaVersion { get; set; } = CurrentSchemaVersion;
 
     /// <summary>
-    /// <c>"auto"</c>, <c>"en"</c>, <c>"ko"</c> or <c>"zh-CN"</c>. TsuFiles: bản cài mới nhận <see cref="ForkDefaults.DefaultLanguage"/>
+    /// <c>"auto"</c>, <c>"vi"</c> or <c>"en"</c> (other languages are no longer shipped: settings v76). TsuFiles: bản cài mới nhận <see cref="ForkDefaults.DefaultLanguage"/>
     /// ("auto") ở UserDataStore.Load; giá trị của lớp giữ tiếng Việt cho settings.json thiếu trường này (máy đã cài).
     /// </summary>
     public string Language { get; set; } = ForkDefaults.LegacyLanguage;

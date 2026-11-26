@@ -14,8 +14,8 @@ using Avalonia.Platform;
 namespace TsuFiles.App;
 
 /// <summary>
-/// Embedded Noto fonts: <c>fonts:TsuFiles#Noto Sans</c>, <c>#Noto Sans JP</c>, <c>#Noto Sans KR</c>,
-/// <c>#Noto Sans SC</c>, <c>#Noto Sans Devanagari</c>, <c>#Noto Sans Arabic</c>, <c>#Noto Sans Thai</c>.
+/// Embedded Noto fonts: <c>fonts:TsuFiles#Noto Sans</c> only since phiếu TG1 (Vietnamese and English UI); the
+/// lazy reading below still applies to any family added to Assets/Fonts.
 /// <para>
 /// A letter is only matched in the family asked for, so the order of SoftPalette's font chain decides (#1095). Avalonia's
 /// own collection, asked for Noto Sans about a Han character, answers with the first family of its own that has it,

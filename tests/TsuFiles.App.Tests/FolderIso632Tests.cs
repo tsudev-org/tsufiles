@@ -42,10 +42,7 @@ public class FolderIso632Tests
 
     [AvaloniaTheory]
     [InlineData("en")]
-    [InlineData("de")]
-    [InlineData("pt-PT")]
-    [InlineData("pt-BR")]
-    [InlineData("zh-CN")]
+    [InlineData("vi")]
     public void Iso_refusals_show_the_selected_language_with_separate_diagnostic_details(string language)
     {
         TestServices.EnsureInitialized(language);

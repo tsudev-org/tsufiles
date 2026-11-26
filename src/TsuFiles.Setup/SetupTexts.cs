@@ -66,43 +66,12 @@ public sealed class SetupTexts
     }
 
     /// <summary>
-    /// A language code for <paramref name="setting"/>: one of <see cref="Languages"/> ("zh-CN", Inno Setup's "zhcn",
-    /// "ko-KR" …) or, for "auto" and anything unknown, Windows' display language, falling back to English.
+    /// A language code for <paramref name="setting"/>: "vi" or "en" ("vi-VN" → vi), or, for "auto", Windows' display
+    /// language. Any other language (a /LANG=ko of an older script) falls back to English.
     /// </summary>
-    public static string Resolve(string? setting, Func<string> uiLanguage)
-    {
-        if (!string.IsNullOrWhiteSpace(setting) && !setting.Equals("auto", StringComparison.OrdinalIgnoreCase))
-        {
-            if (Match(setting) is { } code)
-                return code;
-        }
-        return Match(uiLanguage()) ?? "en";
-    }
-
-    private static string? Match(string name)
-    {
-        var normalized = name.Trim().Replace('_', '-');
-        if (normalized.Equals("zhcn", StringComparison.OrdinalIgnoreCase))
-            normalized = "zh-CN";
-        foreach (var (code, _) in Languages)
-        {
-            if (normalized.Equals(code, StringComparison.OrdinalIgnoreCase))
-                return code;
-        }
-        if (TsuFiles.App.Services.AppLanguages.PortugueseVariant(normalized) is { } portuguese)
-            return portuguese;
-        // "zh-Hant-HK" / "zh-HK" → zh-TW; the primary-language fallback below gives the other Chinese names zh-CN.
-        if (TsuFiles.App.Services.AppLanguages.IsTraditionalChinese(normalized))
-            return "zh-TW";
-        // "ko-KR" → ko, "zh-Hans-CN" → zh-CN, "es-MX" → es.
-        var primary = normalized.Split('-')[0];
-        foreach (var (code, _) in Languages)
-        {
-            if (code.Split('-')[0].Equals(primary, StringComparison.OrdinalIgnoreCase))
-                return code;
-        }
-        return null;
-    }
+    public static string Resolve(string? setting, Func<string> uiLanguage) =>
+        TsuFiles.App.Services.AppLanguages.Match(
+            string.IsNullOrWhiteSpace(setting) || setting.Equals("auto", StringComparison.OrdinalIgnoreCase) ? uiLanguage() : setting);
 
     private static string NativeMethodsUiLanguage() =>
         OperatingSystem.IsWindows() ? Platform.NativeMethods.UiLanguage() : CultureInfo.InstalledUICulture.Name;

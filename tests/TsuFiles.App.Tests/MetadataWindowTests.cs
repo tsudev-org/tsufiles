@@ -248,11 +248,11 @@ public sealed class MetadataWindowTests : IDisposable
         Assert.Contains(window.GetVisualDescendants().OfType<TextBlock>(), text => text.IsEffectivelyVisible && text.Text == vm.LocationNotice);
 
         var languages = AppHost.Get<LocalizationService>();
-        languages.SetLanguage("ko");
+        languages.SetLanguage("vi");
         try
         {
             Assert.Equal(loc.Format("metadata.location_kept", "City"), vm.LocationNotice);
-            Assert.Contains("위치 지우기", vm.LocationNotice, StringComparison.Ordinal);
+            Assert.Contains("Xóa vị trí", vm.LocationNotice, StringComparison.Ordinal);
             RenderTests.Pump();
             Assert.Contains(window.GetVisualDescendants().OfType<TextBlock>(), text => text.IsEffectivelyVisible && text.Text == vm.LocationNotice);
         }
@@ -456,10 +456,10 @@ public sealed class MetadataWindowTests : IDisposable
             RenderTests.Pump();
             Assert.IsType<TextBox>(Focused(window));
 
-            languages.SetLanguage("de");
+            languages.SetLanguage("vi");
             RenderTests.Pump();
 
-            Assert.Equal("Ort", vm.Groups[0].Title);
+            Assert.Equal("Vị trí", vm.Groups[0].Title);
             Assert.DoesNotContain(vm.Groups.SelectMany(g => g.Rows), r => r is { IsAdded: true, Value.Length: 0, IsEditing: false });
         }
         finally
@@ -1393,11 +1393,11 @@ public sealed class MetadataWindowTests : IDisposable
         try
         {
             Row(vm, "IFD0:Make").RemoveCommand.Execute(null);
-            languages.SetLanguage("de");
+            languages.SetLanguage("vi");
             RenderTests.Pump();
             var loc = AppHost.Get<ILocalizer>();
             Assert.Equal(loc["metadata.group.location"], vm.Groups[0].Title);
-            Assert.Equal("Ort", vm.Groups[0].Title);
+            Assert.Equal("Vị trí", vm.Groups[0].Title);
             Assert.Equal(loc["metadata.save_next"], vm.SaveText);
             Assert.Equal(loc["metadata.changes_one"], vm.ChangesText);
             Assert.Contains(loc.Format("metadata.fields", 15), vm.Details, StringComparison.Ordinal);
@@ -1405,7 +1405,7 @@ public sealed class MetadataWindowTests : IDisposable
             var undo = window.GetVisualDescendants().OfType<Button>().First(b => b.IsEffectivelyVisible && b.DataContext is MetadataRowViewModel { Field.Key: "IFD0:Make" }
                                                                               && b.Command == Row(vm, "IFD0:Make").UndoCommand);
             Assert.Equal(loc.Format("metadata.undo_named", "Make"), Avalonia.Automation.AutomationProperties.GetName(undo));
-            Assert.Equal("Make wiederherstellen", Avalonia.Automation.AutomationProperties.GetName(undo));
+            Assert.Equal("Khôi phục Make", Avalonia.Automation.AutomationProperties.GetName(undo));
             Assert.Equal(loc.Format("crop.page_counter", 1, 2), vm.CounterText);
             // An edit isn't lost with it.
             Assert.True(Row(vm, "IFD0:Make").IsRemoved);

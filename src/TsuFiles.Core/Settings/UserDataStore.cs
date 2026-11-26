@@ -468,6 +468,11 @@ internal static class SettingsMigrations
         if (settings.SchemaVersion < 75 && settings.CloseAction == CloseAction.Ask)
             settings.CloseAction = CloseAction.Tray;
 
+        // v76 (TsuFiles, phiếu TG1): only Vietnamese and English ship. A language earlier versions shipped ("ko",
+        //      "zh-CN", …) becomes "auto": Vietnamese on a Vietnamese system, English elsewhere.
+        if (settings.SchemaVersion < 76 && settings.Language is not ("auto" or "vi" or "en"))
+            settings.Language = "auto";
+
         if (settings.Triggers.Count == 0)
             settings.Triggers = TriggerGesture.Defaults();
 
