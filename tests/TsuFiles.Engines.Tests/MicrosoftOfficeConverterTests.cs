@@ -39,8 +39,10 @@ public class MicrosoftOfficeConverterTests(EngineFixture fx) : IClassFixture<Eng
     {
         Assert.SkipUnless(OperatingSystem.IsWindows(), "Microsoft Office runs on Windows only.");
         var office = new MicrosoftOfficeConverter(_ => true);
-        // Every engine at the bottom of the list (the most a priority adds), LibreOffice included as if installed.
-        var planner = new RoutePlanner(fx.Converters.Where(c => c.Id != office.Id).Append(office), _ => 9);
+        // Every engine at the bottom of the list (the most a priority adds), LibreOffice included as if installed. Office
+        // keeps its place in EngineRegistry (before LibreOffice), which settles a tie such as PPTX → PDF, where
+        // LibreOffice is preferred for slides (cost 0 too).
+        var planner = new RoutePlanner(fx.Converters.Select(c => c.Id == office.Id ? office : c), _ => 9);
 
         foreach (var (from, to) in new[] { ("docx", "pdf"), ("xlsx", "pdf"), ("pptx", "pdf"), ("doc", "docx") })
             Assert.Equal("msoffice", Assert.Single(planner.Plan(from, to)!.Steps).Converter.Id);
