@@ -58,6 +58,12 @@ public sealed class RoutePlanner
             .ToDictionary(g => g.Key, g => g.ToList());
     }
 
+    private RoutePlanner(Dictionary<string, List<(IConverter Converter, ConversionEdge Edge, int Cost)>> edgesFrom) => _edgesFrom = edgesFrom;
+
+    /// <summary>The same planner without <paramref name="converter"/> (the next best routes when it failed, see <see cref="IGivesWay"/>).</summary>
+    public RoutePlanner Without(IConverter converter) =>
+        new(_edgesFrom.ToDictionary(p => p.Key, p => p.Value.Where(e => e.Converter != converter).ToList()));
+
     /// <summary>Returns the cheapest route, or <c>null</c> if the conversion is impossible.</summary>
     /// <param name="frames">
     /// Save every frame of a video (<see cref="Presets.Preset.SavesFramesOf"/>): the route is one
