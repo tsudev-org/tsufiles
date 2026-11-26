@@ -10,7 +10,7 @@
 ## Hàng đợi task (làm từ trên xuống)
 
 - [ ] 🔐 Phiếu **XK1 MỞ** `logs/handover/20261126-XK1_xoay-virustotal-api-key.md`: nhắc 👤 xoay `VT_API_KEY` đầu phiên.
-- [ ] ⚡⚡⚡⚡⚡ TIẾP THEO: phiếu **`logs/handover/20261126-04_ban-giao-lg4.md`** mục 3: gộp #139 + PR LG4 khi CI xanh, rồi
+- [ ] ⚡⚡⚡⚡⚡ TIẾP THEO: phiếu **`logs/handover/20261126-04_ban-giao-lg4.md`** mục 3 (prompt phiên kế ở mục 5): gộp #139 + PR LG4 khi CI xanh, rồi
       Phase **MAC0** (dưới), rồi ưu tiên 👤 **Windows 10/11 + Microsoft Office + tệp scan** (OCR mặc định `vie`, đo PowerPoint qua Office), rồi TG1 G3a.
 - [ ] ⚡⚡⚡⚡⚡ **Phase MAC0 - Tạm dừng macOS đến Q1/2027** (chủ dự án chốt 26/11/2026, làm NGAY sau khi gộp #140, TRƯỚC
       Phase Windows + Office + scan). Phạm vi: CHỈ macOS; **Linux vẫn build + phát hành song song Windows**. Lập phương án
