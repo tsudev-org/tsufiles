@@ -44,6 +44,8 @@ vi: Nhận dạng chữ (OCR) mặc định đọc tiếng Việt; preset bạn 
 en: Text recognition (OCR) reads Vietnamese by default; presets you set to another language keep it
 vi: Bỏ đọc tệp OFD (định dạng hóa đơn điện tử của Trung Quốc), không dùng ở Việt Nam
 en: OFD files (the Chinese e-invoice format) are no longer read
+vi: Bỏ các công cụ AI cục bộ (phụ đề Whisper, phóng ảnh Upscayl, dịch tài liệu qua Ollama): chậm, cần phần mềm và mô hình ngoài
+en: The local AI tools are gone (Whisper captions, Upscayl upscaling, Ollama translation): slow, and they needed outside software and models
 vi: macOS tạm dừng đến quý 1/2027: bản cuối cho macOS là 2.4.1; Windows và Linux phát hành bình thường
 en: macOS is paused until Q1 2027: 2.4.1 is the last macOS release; Windows and Linux releases continue
 vi: Bỏ các bộ xử lý trùng lặp (Pandoc, Calibre, Apple Vision, Unhwp): mỗi loại tệp chỉ một cách chuyển, kết quả như nhau trên mọi máy; nhận dạng chữ dùng Tesseract
@@ -66,6 +68,7 @@ en: Scanned PDF to Word: recognized text you can edit, in place on the page, wit
 - **Tray:** closing the window now keeps TsuFiles running in the tray (change it in Settings). The GitHub and Donate buttons left the sidebar.
 - **Language and theme follow the system:** a new install starts in the operating system's language (English when TsuFiles has no translation for it) and in the Night Owl style following the system's light or dark mode. Existing installs keep their language and theme. The CLI and the Linux/macOS install scripts speak Vietnamese on a Vietnamese system and English otherwise; `TSUFILES_LANG=vi` or `en` still chooses.
 - **Vietnamese and English only** (plan TG1): the other 20 UI languages and the fonts embedded for them (Arabic, Indic, Thai, Japanese, Korean, Chinese; about 35 MB) are gone. An install set to one of them opens in Vietnamese on a Vietnamese system and English otherwise; file names in other scripts still show through the system's fonts.
+- **Local AI tools removed** (plan TG1): Whisper captions, the Upscayl upscaler and document translation through Ollama are gone, with their presets, donut slices, engine downloads and the Manage Ollama window. They needed outside software and models, were slow and gave results that differed from one PC to another. Presets you made yourself stay in the library and now convert without the AI step; TsuFiles no longer talks to a local Ollama server.
 - **Design standard v5:** the Night Owl palette is read at build time from the TsuDEV design tokens (owl purple #A970FF / #7C3AED, shared surfaces, 3:1 button borders); files.tsudev.com uses the same tokens, the Lexend heading font and the soft corner set, follows the system light/dark mode on first visit and has a new [/security](https://files.tsudev.com/security/) page with third-party-verifiable evidence (SSL Labs, Observatory, Scorecard, Best Practices, VirusTotal).
 
 ### Chi tiết (tiếng Việt)
@@ -120,6 +123,10 @@ en: Scanned PDF to Word: recognized text you can edit, in place on the page, wit
 - **Chỉ tiếng Việt và tiếng Anh** (phiếu TG1): bỏ 20 ngôn ngữ giao diện khác cùng font nhúng cho chúng (Ả Rập, Ấn,
   Thái, Nhật, Hàn, Trung; khoảng 35 MB). Máy đang đặt một ngôn ngữ đã bỏ sẽ mở bằng tiếng Việt nếu hệ điều hành dùng
   tiếng Việt, còn lại tiếng Anh; tên tệp chữ khác vẫn hiện bằng font của hệ điều hành.
+- **Bỏ công cụ AI cục bộ** (phiếu TG1): phụ đề Whisper, phóng ảnh Upscayl và dịch tài liệu qua Ollama không còn, cùng
+  preset, lát donut, gói engine tải thêm và cửa sổ Quản lý Ollama. Chúng cần phần mềm và mô hình ngoài, chậm và cho kết
+  quả khác nhau giữa các máy. Preset bạn tự tạo vẫn giữ trong thư viện và chuyển đổi không qua bước AI; TsuFiles không
+  còn kết nối máy chủ Ollama cục bộ.
 - **Bộ nhận diện chuẩn v5** (tsudev-standards v5.4.0, phiếu STD50): màu Cú đêm đọc lúc build từ token chuẩn
   (`.standards/tokens/`): tím logo cú `#A970FF` (Tối) / `#7C3AED` (Sáng), nền và chữ theo lớp nền chung, viền nút đạt
   3:1. Website files.tsudev.com dùng cùng token, font tiêu đề Lexend, bộ bo góc "mềm", lần đầu theo chế độ sáng/tối của

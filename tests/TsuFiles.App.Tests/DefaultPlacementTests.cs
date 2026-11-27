@@ -224,8 +224,6 @@ public class DefaultPlacementTests(ITestOutputHelper output)
             jobs.Add(nameof(Preset.ExtractsMotionOf));
         if (MediaOptions.LivePhotoTargets(preset.Media.LivePhoto).Contains(preset.TargetFormat))
             jobs.Add(nameof(Preset.MakesLivePhotoOf));
-        if (preset.Media.Caption && preset.TargetFormat == "srt")
-            jobs.Add(nameof(Preset.CaptionsVideo));
         if (preset.Pdf.Ocr && PdfOptions.OcrTargets.Contains(preset.TargetFormat))
             jobs.Add(nameof(Preset.RecognizesTextOf));
         if (preset.JoinsIntoOneMedia)
@@ -248,7 +246,6 @@ public class DefaultPlacementTests(ITestOutputHelper output)
             nameof(Preset.SavesFramesOf) => preset.SavesFramesOf(input.Id),
             nameof(Preset.ExtractsMotionOf) => preset.ExtractsMotionOf(input.Id),
             nameof(Preset.MakesLivePhotoOf) => preset.MakesLivePhotoOf(input.Id),
-            nameof(Preset.CaptionsVideo) => preset.CaptionsVideo(input.Id),
             nameof(Preset.RecognizesTextOf) => preset.RecognizesTextOf(input.Id),
             // Availability already checks the source categories for the two joins.
             nameof(Preset.JoinsIntoOneMedia) => preset.JoinsIntoOneMedia,
@@ -298,7 +295,7 @@ public class DefaultPlacementTests(ITestOutputHelper output)
     {
         var edges = catalog.All.SelectMany(c => c.Edges.Select(e =>
             string.Join("|", c.Id, e.From, e.To, e.Cost.ToString(CultureInfo.InvariantCulture),
-                e.FrameSequence, e.MotionPhoto, e.LivePhoto, e.Ocr, e.Caption,
+                e.FrameSequence, e.MotionPhoto, e.LivePhoto, e.Ocr,
                 e.ImageSourcesOnly, e.NotForImageSources, e.Unshaped, e.DirectOnly))).Order(StringComparer.Ordinal);
         var graph = string.Join("\n", edges) + "\nPriority=" + string.Join("|", catalog.Priority);
         return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(graph)));

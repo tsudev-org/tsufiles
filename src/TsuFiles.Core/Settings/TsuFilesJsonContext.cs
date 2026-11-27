@@ -17,7 +17,6 @@ namespace TsuFiles.Core.Settings;
 [JsonSerializable(typeof(AppSettings))]
 [JsonSerializable(typeof(ThemeStyle))]
 [JsonSerializable(typeof(List<Preset>))]
-[JsonSerializable(typeof(TranslateOptions))]
 [JsonSerializable(typeof(List<ToolbarProfile>))]
 [JsonSerializable(typeof(PresetBundle))]
 [JsonSerializable(typeof(List<HistoryEntry>))]

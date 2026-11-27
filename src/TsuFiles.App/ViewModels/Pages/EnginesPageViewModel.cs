@@ -19,7 +19,6 @@ public sealed partial class EngineItemViewModel(IConverter converter, EngineStat
     [ObservableProperty] private bool _isDragging;
 
     public IConverter Converter { get; } = converter;
-    public bool IsTranslator => Converter.Id == "translator";
     /// <summary>Localized descriptive name, retaining the engine's technical name for unregistered engines.</summary>
     public string Name
     {
@@ -172,7 +171,6 @@ public sealed partial class EnginesPageViewModel : ObservableObject, IDisposable
         var minimumSpin = Task.Delay(Motion.Enabled ? MinimumRecheckTime : TimeSpan.Zero);
         EngineEnvironment.ForgetSystemCopies(); // a tool installed meanwhile is found
         _downloads.RefreshStatus();
-        _ = Task.Run(TsuFiles.Engines.Translation.TranslatorConverter.PerformCheck);
         _catalog.Refresh();
         _ = _catalog.CheckInBackgroundAsync();
         await minimumSpin;

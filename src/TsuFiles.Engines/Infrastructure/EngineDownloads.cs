@@ -48,8 +48,6 @@ public static class EngineDownloads
         new("ghostscript", OperatingSystem.IsWindows() ? ["ghostscript", "vcruntime"] : ["ghostscript"], 31_000_000, ["ghostscript"]),
         new("ffmpeg", ["ffmpeg"], 272_000_000, ["ffmpeg"]),
         new("tesseract", ["tesseract"], 168_000_000, ["tesseract"]),
-        new("upscayl-bin", OperatingSystem.IsWindows() && RuntimeInformation.ProcessArchitecture != Architecture.Arm64 ? ["upscayl-bin", "vcruntime", "vcomp14"] : OperatingSystem.IsWindows() ? [] : ["upscayl-bin"], 8_600_000, ["upscaler"]),
-        .. (OperatingSystem.IsWindows() ? [new EnginePackage("whisper", ["whisper", "whisper-model"], 156_880_105, ["whisper"])] : Array.Empty<EnginePackage>()),
         // The Metadata tool reads with it and its conversions write with it (TsuFiles.Engines.Metadata).
         new("exiftool", ["exiftool"], 30_000_000, ["exiftool"]),
     ];
@@ -93,7 +91,7 @@ public static class EngineDownloads
     /// only needed for EPS / PostScript and for scans.
     /// </summary>
     public static bool IsSuggested(EnginePackage package) =>
-        CanDownload(package) && DownloadSize(package) < SuggestLimit && package.Id is not ("ghostscript" or "tesseract" or "upscayl-bin");
+        CanDownload(package) && DownloadSize(package) < SuggestLimit && package.Id is not ("ghostscript" or "tesseract");
 
     public static IReadOnlyDictionary<string, EngineComponent> ComponentsForRuntime(string runtimeIdentifier)
     {

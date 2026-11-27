@@ -101,7 +101,7 @@ public partial class BackFaceTests
         Assert.Equal(["to-pdf", "to-hwpx", "to-hwp", "to-docx", "to-odt", "to-txt", "to-html", "to-epub", "to-png", "merge-pdf"],
             Schema58("office").PresetIds);
         Assert.Equal(["to-pdf", "merge-pdf", "zip-all", "to-png", "to-txt"], Schema58("mixed").PresetIds);
-        Assert.Equal(["to-mp4", "mp4-720", "mp4-hevc", "to-webm", "to-mov", "to-gif", "to-mp3", "extract-subtitles", "caption-video", "to-mkv", "to-avi"],
+        Assert.Equal(["to-mp4", "mp4-720", "mp4-hevc", "to-webm", "to-mov", "to-gif", "to-mp3", "extract-subtitles", "to-mkv", "to-avi"],
             Schema58("video").PresetIds);
     }
 
@@ -243,7 +243,7 @@ public partial class BackFaceTests
         Assert.Equal(["to-png", "to-jpg", "to-webp", "to-gif", "to-pdf", "trace-svg", "trace-line-art"], Profile(back, "images").PresetIds);
         Assert.Equal(["tool-crop", "rotate", "remove-background", "trim-transparent", "merge-images", "compress-image", "half-size",
             "tool-image-edit", "remove-metadata", "zip-all"], Profile(back, "images").BackPresetIds);
-        Assert.Equal(["to-mp4", "mp4-720", "mp4-hevc", "to-mov", "to-gif", "to-mp3", "extract-subtitles", "caption-video"],
+        Assert.Equal(["to-mp4", "mp4-720", "mp4-hevc", "to-mov", "to-gif", "to-mp3", "extract-subtitles"],
             Profile(back, "video").PresetIds);
         Assert.Equal(["tool-clip", "crop-video", "compress-video", "merge-videos", "remove-metadata", "mp4-av1", "extract-frames-png",
             "live-photo-iphone", "motion-photo-android", "extract-audio", "zip-all"], Profile(back, "video").BackPresetIds);

@@ -503,7 +503,7 @@ public class WhatsNewTests
         try
         {
             var slides = window.SlideShow;
-            Assert.Equal(6, slides.Slides.Count);
+            Assert.Equal(5, slides.Slides.Count);
             var heights = new HashSet<double>();
             for (var i = 0; i < slides.Slides.Count; i++)
             {

@@ -126,12 +126,6 @@ public sealed class Preset
     /// <summary>Options used when a DWG or DXF is written or drawn.</summary>
     public CadOptions Cad { get; set; } = new();
 
-    /// <summary>Options used for offline AI translation.</summary>
-    public TranslateOptions Translate { get; set; } = new();
-
-    /// <summary>Options used for local AI image upscaling.</summary>
-    public UpscaleOptions Upscale { get; set; } = new();
-
     /// <summary>
     /// "Metadata": the fields its window changes, on the conversion it starts (<see cref="MetadataTool"/>); null for
     /// every other preset. Only an engine that writes metadata and nothing else applies it
@@ -177,16 +171,6 @@ public sealed class Preset
         && Formats.FormatRegistry.FindById(TargetFormat) is { Category: Formats.FormatCategory.Archive } archive
         && archive.Id != Formats.FormatRegistry.Folder && archive.Id != "iso";
 
-    /// <summary>Formats the translator can directly read from (documents, e-books, text and SRT / WebVTT subtitles).</summary>
-    public static readonly string[] TranslatorSourceFormats =
-    [
-        "docx", "hwpx", "epub", "kepub", "mobi", "azw3", "azw", "prc", "fb2", "htmlz", "txtz", "md", "txt", "html", "srt", "vtt"
-    ];
-
-    /// <summary>True if converting a document, e-book, text file or subtitle using local AI translation.</summary>
-    public bool TranslatesDocument(string sourceFormat) =>
-        Translate.Enabled && TranslatorSourceFormats.Contains(sourceFormat.ToLowerInvariant());
-
     /// <summary>
     /// True if converting a <paramref name="sourceFormat"/> file saves every frame as a picture
     /// (<see cref="MediaOptions.SaveEveryFrame"/>): the file is a video and the target one of
@@ -217,13 +201,6 @@ public sealed class Preset
     public bool MakesLivePhotoOf(string sourceFormat) =>
         MediaOptions.LivePhotoTargets(Media.LivePhoto).Contains(TargetFormat)
         && Formats.FormatRegistry.FindById(sourceFormat)?.Category == Formats.FormatCategory.Video;
-
-    /// <summary>
-    /// True if converting a <paramref name="sourceFormat"/> file transcribes speech into captions
-    /// (<see cref="MediaOptions.Caption"/>): the file is a video or audio.
-    /// </summary>
-    public bool CaptionsVideo(string sourceFormat) =>
-        Media.Caption && TargetFormat == "srt" && Formats.FormatRegistry.FindById(sourceFormat)?.Category is Formats.FormatCategory.Video or Formats.FormatCategory.Audio;
 
 
 
@@ -299,14 +276,9 @@ public sealed class Preset
     public const string MetadataTool = "metadata";
 
     /// <summary>
-    /// <see cref="Tool"/> of "Upscale" (settings schema 73): enhance image quality and resolution using local AI models.
-    /// </summary>
-    public const string UpscaleTool = "upscale";
-
-    /// <summary>
     /// <see cref="PresetKind.Tool"/>: which window it opens, <see cref="CropTool"/> (or null, as saved before there
     /// were other tools), <see cref="ClipTool"/>, <see cref="ImageEditTool"/>, <see cref="HideTool"/>,
-    /// <see cref="AnnotateTool"/>, <see cref="BackgroundTool"/>, <see cref="MetadataTool"/> or <see cref="UpscaleTool"/>.
+    /// <see cref="AnnotateTool"/>, <see cref="BackgroundTool"/> or <see cref="MetadataTool"/>.
     /// A tool this version doesn't know (from a newer TsuFiles) opens nothing. Ignored for other kinds.
     /// </summary>
     public string? Tool { get; set; }
@@ -337,10 +309,6 @@ public sealed class Preset
     /// <summary>True for "Metadata".</summary>
     [JsonIgnore]
     public bool IsMetadataTool => IsTool && Tool == MetadataTool;
-
-    /// <summary>True for "Upscale".</summary>
-    [JsonIgnore]
-    public bool IsUpscaleTool => IsTool && Tool == UpscaleTool;
 
     /// <summary>
     /// True if converting a <paramref name="sourceFormat"/> file cuts a clip of it (<see cref="MediaOptions.Clip"/>,
@@ -398,8 +366,6 @@ public sealed class Preset
         Archive = Archive.Clone(),
         Trace = Trace.Clone(),
         Cad = Cad.Clone(),
-        Translate = Translate.Clone(),
-        Upscale = Upscale.Clone(),
         Metadata = Metadata?.Clone(),
         Output = Output.Clone(),
         Kind = Kind,
@@ -1419,17 +1385,6 @@ public sealed class MediaOptions
     public bool ExtractMotionPhoto { get; set; }
 
     /// <summary>
-    /// Transcribes speech using Whisper AI to an SRT subtitle file.
-    /// </summary>
-    public bool Caption { get; set; }
-
-    /// <summary>
-    /// Spoken language code for transcription (e.g. "auto", "en", "hi", "es", "fr", "de", "ja", "zh").
-    /// Passed to whisper.cpp (-l). Defaults to "auto".
-    /// </summary>
-    public string SpokenLanguage { get; set; } = "auto";
-
-    /// <summary>
     /// Video → JPG (or HEIC for an iPhone): a Live / Motion Photo of a short clip instead of one still frame. Only for
     /// video sources and a target in <see cref="LivePhotoTargets"/> (<see cref="Preset.MakesLivePhotoOf"/>).
     /// </summary>
@@ -1721,25 +1676,4 @@ public sealed class CadOptions
     public CadColors Colors { get; set; }
 
     public CadOptions Clone() => (CadOptions)MemberwiseClone();
-}
-
-/// <summary>Options for offline AI document translation.</summary>
-public sealed class TranslateOptions
-{
-    public bool Enabled { get; set; }
-    public string TargetLanguage { get; set; } = "en";
-    public string SourceLanguage { get; set; } = "auto";
-    public string? Model { get; set; }
-
-    public TranslateOptions Clone() => (TranslateOptions)MemberwiseClone();
-}
-
-/// <summary>Options for local AI image upscaling (Real-ESRGAN / NCNN).</summary>
-public sealed class UpscaleOptions
-{
-    public bool Enabled { get; set; }
-    public string? Model { get; set; }
-    public int Scale { get; set; } = 4;
-
-    public UpscaleOptions Clone() => (UpscaleOptions)MemberwiseClone();
 }

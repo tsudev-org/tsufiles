@@ -87,12 +87,6 @@ public partial class App : Application
         // every engine's check (FFmpeg -version, folder searches) on the UI thread and freezes it meanwhile.
         var catalog = AppHost.Get<ConverterCatalog>();
         _ = catalog.CheckInBackgroundAsync();
-        TsuFiles.Engines.Translation.TranslatorConverter.StatusChanged += () =>
-            Dispatcher.UIThread.Post(() =>
-            {
-                catalog.Refresh();
-                _ = catalog.CheckInBackgroundAsync();
-            });
 
         // Global gestures → donut toolbar
         var triggers = AppHost.Get<TriggerService>();
@@ -195,7 +189,6 @@ public partial class App : Application
             AppHost.Get<TrayService>().Dispose();
             AppHost.Get<WatchFolderService>().DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(5));
             AppHost.Get<PhoneShareService>().DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(5));
-            TsuFiles.App.ViewModels.OllamaModelManagerViewModel.StopFileeStartedServer();
         };
 
         HandleCommandLine(Program.Options, firstLaunch: true);

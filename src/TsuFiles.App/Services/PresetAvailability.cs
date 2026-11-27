@@ -152,10 +152,6 @@ public sealed class PresetAvailability
             return formats.Any(f => HideService.CanOpen(f.Id))
                 ? new(PresetUse.Usable, null)
                 : new(PresetUse.Unusable, _loc["error.images_only"]);
-        if (preset.IsUpscaleTool)
-            return formats.Any(f => UpscaleTool.CanUpscale(f.Id))
-                ? new(PresetUse.Usable, null)
-                : new(PresetUse.Unusable, _loc["error.images_only"]);
 
         if (preset.IsTool)
         {
@@ -231,43 +227,8 @@ public sealed class PresetAvailability
                 : new(PresetUse.Unusable, _loc["error.no_route"]);
         }
 
-        // "Caption": Whisper transcribes speech in video and audio into SRT subtitles.
-        if (formats.Any(f => preset.CaptionsVideo(f.Id)))
-        {
-            if (!OperatingSystem.IsWindows())
-                return new(PresetUse.Unusable, _loc["engine.reason.unsupported_platform"]);
-
-            var mediaFiles = formats.Where(f => f.Category is FormatCategory.Video or FormatCategory.Audio).ToList();
-            if (mediaFiles.Count == 0)
-                return new(PresetUse.Unusable, _loc["error.unsupported_source"]);
-            bool CanCaption(RoutePlanner planner) => mediaFiles.Any(f => planner.CanConvert(f.Id, preset.TargetFormat, caption: true));
-            if (CanCaption(installedPlanner()))
-                return new(PresetUse.Usable, null);
-            return packageEnabling(CanCaption) is { } needed
-                ? new(PresetUse.NeedsPackage, _loc.Format("engine.reason.needs_package", needed.Name))
-                : new(PresetUse.Unusable, _loc["error.no_route"]);
-        }
-
         // "Merge videos" / "Merge audio" / "Video from images": FFmpeg joins the files, so a route into the target (or,
         // for pictures, into PNG and from PNG into a video) says whether it is installed.
-        // "Translate": Ollama / Translator translates documents and e-books.
-        if (preset.Translate.Enabled)
-        {
-            var docFiles = formats.Where(f => preset.TranslatesDocument(f.Id)).ToList();
-            if (docFiles.Count == 0)
-                return new(PresetUse.Unusable, _loc["error.unsupported_source"]);
-            bool CanTranslate(RoutePlanner planner) => docFiles.Any(f =>
-            {
-                var target = TargetFor(f);
-                return planner.CanConvert(f.Id, target, translate: true);
-            });
-            if (CanTranslate(installedPlanner()))
-                return new(PresetUse.Usable, null);
-            return packageEnabling(CanTranslate) is { } needed
-                ? new(PresetUse.NeedsPackage, _loc.Format("engine.reason.needs_package", needed.Name))
-                : new(PresetUse.Unusable, _loc["error.no_route"]);
-        }
-
         if (preset.JoinsIntoOneMedia)
         {
             var target = preset.TargetFormat;
@@ -297,11 +258,10 @@ public sealed class PresetAvailability
             var motion = preset.ExtractsMotionOf(f.Id);
             var live = preset.MakesLivePhotoOf(f.Id);
             var ocr = preset.RecognizesTextOf(f.Id);
-            var translate = preset.TranslatesDocument(f.Id);
             if (!turns)
-                return planner.CanConvert(f.Id, target, frames, motionPhoto: motion, livePhoto: live, ocr: ocr, translate: translate);
+                return planner.CanConvert(f.Id, target, frames, motionPhoto: motion, livePhoto: live, ocr: ocr);
             // Rotate / flip: a route only counts when an engine on it turns images (not a PDF or a video copied).
-            if (planner.Plan(f.Id, target, frames, motionPhoto: motion, livePhoto: live, ocr: ocr, translate: translate) is not { } route)
+            if (planner.Plan(f.Id, target, frames, motionPhoto: motion, livePhoto: live, ocr: ocr) is not { } route)
                 return false;
             if (route.FirstTransformStep() >= 0)
                 return true;

@@ -36,10 +36,7 @@ TsuFiles chooses engines automatically. Settings → *Engines* shows their statu
 | Pandoc | **optional download** (~42 MB, 240 MB on disk) | Markdown ↔ DOCX/ODT/RTF, DOCX/ODT/HTML/RTF → Markdown, HTML ↔ DOCX/ODT, markup languages (reStructuredText, LaTeX, Org, AsciiDoc, Typst, MediaWiki, DocBook, Jupyter, Textile, man, OPML) ↔ Markdown/HTML/DOCX/ODT and each other (and → RTF, EPUB, TXT), Markdown and markup → PPTX slides |
 | Ghostscript | **optional download** (~20 MB, 31 MB on disk) | EPS/PS → PDF, PDF → EPS/PS, PostScript-based AI → PDF (images through PDF and PDFium); smaller PDFs when a preset asks for it; renders CMYK PDF/AI pages for CMYK JPG/TIFF |
 | Tesseract | **optional download** (~50 MB, 160 MB on disk; each language 0.4–10 MB when first used) | **text recognition (OCR)**: scans and pictures → searchable PDF, and their text into DOCX, TXT, Markdown and HWPX ("Recognize text" in the preset, see below) |
-| Apple Vision | part of macOS (Mac only) | **text recognition (OCR) on a Mac**, the same step as Tesseract without a download; Tesseract reads the languages Vision doesn't (see "Apple Vision on macOS") |
 | FFmpeg | **optional download** (~100 MB, 272 MB on disk) | **all video and audio**: video ↔ video (H.264, HEVC, AV1), video → animated GIF / APNG, a still frame or every frame, audio and subtitle extraction, audio ↔ audio (also APE, WavPack, TTA, DSD, DTS, ALAC, …), GIF, APNG and photos → MP4/WEBM/MOV, Live / Motion Photos → their video, a clip of a video → an iPhone Live Photo or Android Motion Photo (experimental), images → HEIC, clips or audio files joined into one, pictures → a slideshow MP4, copies without metadata (see "Media tools") |
-| Calibre | **optional download** (~216 MB, 660 MB on disk) | rare e-book formats: LIT, LRF, CHM, PDB, PML, RB, SNB, TCR, OEB → EPUB; EPUB → MOBI, AZW3, LIT, LRF, PDB, PML, RB, SNB, TCR; e-books → PDF (ranked above the HWPX writer, see below) |
-| Whisper | **optional download** (Windows only; ~157 MB with model, ~160 MB on disk) | **Speech-to-text transcription**: video and audio → SRT subtitles in ~100 languages using OpenAI Whisper (whisper.cpp); runs locally and offline; needs FFmpeg |
 | ExifTool | **optional download** (~11 MB on Windows, ~8 MB elsewhere; 30 MB on disk) | **the Metadata tool**: reads every metadata field of pictures, PDFs, video and sound, and writes changes into a copy in the file's own format without re-encoding it (JPG, PNG, TIFF, WEBP, HEIC, AVIF, JPEG XL, GIF, PSD, camera RAW, PDF, MP4, MOV, M4A, 3GP, …; not MP3, FLAC, WAV, MKV, AVI or BMP, which it shows read-only). Without it the Metadata tool shows nothing and offers it |
 
 DOCX, XLSX, XLS, ODS and PPTX → PDF need neither Microsoft Office nor LibreOffice: they are read in-process, written as HWPX
@@ -1867,77 +1864,3 @@ languages in the text" says to add only what the text has.
 - The language data is copied into the job's folder and passed with `--tessdata-dir`, so a system Tesseract reads
   only TsuFiles's pinned files; `-c tessedit_create_pdf=1` replaces the `pdf` config file that lives in Tesseract's own
   tessdata folder.
-
-### Apple Vision on macOS
-
-On a Mac the same step runs with Apple Vision (`Ocr/VisionConverter.cs`, `VNRecognizeTextRequest` at the accurate
-level and the newest revision the Mac has), part of macOS, so nothing is downloaded. It has the same OCR edges as
-Tesseract and is registered before it, so the route planner takes it; on Windows and Linux it is unavailable
-("Not available on this platform").
-
-- The preset's languages (Tesseract codes) are mapped to Vision's identifiers (`VisionLanguages`) and asked for in their
-  order. English is added when it wasn't chosen and goes last unless it is the main language; if Vision refuses the
-  combination it reads with one language fewer, down to the main language alone. Which languages Vision reads comes
-  from the Mac itself (`supportedRecognitionLanguagesAndReturnError:`, more with newer macOS versions); a language it
-  doesn't read (Hindi, Nepali, Greek, …) goes to Tesseract when that is installed, together with the preset's other
-  languages, and is refused otherwise with "Apple Vision can't read this language. Install Tesseract …" and its name.
-  The preset editor shows no download size for the languages Vision reads, unless such a language among the chosen ones
-  sends them all to Tesseract, and its hint names Apple Vision.
-- PDFs go page by page exactly like Tesseract's (`TesseractConverter.RecognizePdfAsync`, at most two pages at a time).
-  A JPEG picture goes into the PDF as it is, other pictures (and a JPEG that EXIF turns) as an upright PNG; every page
-  of a TIFF becomes a page. The page size comes from the picture's resolution, 300 dpi when it has none.
-- Each page is the picture with the recognized words as invisible text (`OcrPdfWriter`, render mode 3): one font
-  size per line (its height), the baseline at the line's bottom, each word stretched (`Tz`) to where the next one
-  starts with its space, so search, selection and copying follow the picture. Vision gives a box per word
-  (`boundingBoxForRange:error:`); without one the words are spread over the line by their length.
-- The text is set in a TrueType font with only empty glyphs, built in code (`GlyphlessFont`): every UTF-16 unit is
-  one character code (`Identity-H`), shown as glyph 1, and the `ToUnicode` map gives it back unchanged, so any
-  script works without a font in the file. `PdfDocumentReader` and `PagesWithText` read the layer like Tesseract's.
-- Vision is called through the Objective-C runtime (`Ocr/AppleVision.cs`), without a bridging library. A `CGRect`
-  result needs `objc_msgSend_stret` on Intel Macs; objects made with `alloc`/`init` are released, the rest go with an
-  autorelease pool per page. A cancelled job cancels the running request.
-- Tests: `VisionLanguageTests`, `OcrTextLayerTests` and `VisionConverterTests` (a stand-in recognizer) run everywhere;
-  `AppleVisionTests` read real pictures on macOS (CI's Apple silicon and Intel jobs).
-
-## Whisper
-
-TsuFiles transcribes speech in video and audio files into SRT subtitle files using OpenAI Whisper (`whisper.cpp`).
-Transcription runs entirely locally and offline on your computer; no audio or data is sent to external servers.
-
-- **Platform**: Windows only (x64). On macOS and Linux, the Whisper package is not offered and the engine reports
-  `engine.reason.unsupported_platform` ("Not available on this platform").
-- **Download size**: ~157 MB total (~9 MB for `whisper-cli.exe` and ~148 MB for the default `ggml-base.bin` model; ~160 MB on disk).
-  Downloads are pinned by SHA-256 in `engines.json`. Users can also place larger Whisper models (such as `ggml-small.bin`
-  or `ggml-large-v3-turbo.bin`) into the engine directory or point to a custom installation in Settings → *Engines*.
-- **FFmpeg requirement**: Whisper operates on 16 kHz mono 16-bit WAV audio. Extracting audio from arbitrary video and audio
-  formats requires FFmpeg. FFmpeg must be installed (via Settings → *Engines*, bundled, or found on `PATH`).
-- **Languages**: Whisper supports auto-detection (`auto`) as well as specific language codes (`-l <code>`, e.g. `hi` for
-  Hindi, `en` for English, `es` for Spanish, `fr` for French, `ja` for Japanese, `zh` for Chinese).
-
-## Document & Book Translator (Offline AI)
-
-TsuFiles translates documents, books, and text files locally using a local Ollama instance over loopback (`http://127.0.0.1:11434`). Translation runs entirely on the user's computer: no text or document data is ever uploaded or sent to third-party web services.
-
-- **Offline privacy**: Adheres strictly to TsuFiles's offline promise: "TsuFiles converts files on your own computer and never uploads them." Translation exclusively uses local Ollama over loopback (`127.0.0.1:11434`). Cloud-forwarded models (`*-cloud` or models reporting remote endpoints) are refused with a security block to ensure privacy. No external web services or network calls outside loopback are ever made.
-- **Where it lives**:
-  - Available as the **Translate** preset in Settings → *Presets*, where the target language (e.g. English, Spanish, Hindi, French, German, Chinese, Japanese, etc.) is configured as the single source of truth.
-  - Sits cleanly on the back face (`BackPresetIds`) of document and text profiles for fresh installs, keeping front faces clean and untouched (#806 compliance).
-  - Manageable from the Engines page via **Manage Ollama**, providing status, local model selection, pulling offline models, and starting/stopping the local Ollama server.
-- **Supported formats and layout preservation**:
-  - **Documents & E-books**: DOCX, HWPX, EPUB, KEPUB, FB2, HTMLZ, TXTZ, MD, TXT, and HTML are translated in place, preserving document structure, headings, bold/italic runs, tables, lists, images, and notes.
-  - **Kindle e-books**: MOBI, AZW, AZW3, and PRC formats are translated via EPUB, and can then be routed to any supported target format.
-  - **PDF target**: When a document is translated with PDF as the target format, the route planner translates the document model first and then routes the translated document through TsuFiles's standard document-to-PDF export pipeline.
-
-## Image Quality Models (Offline AI Upscaler)
-
-TsuFiles upscales and restores images locally using an offline AI super-resolution engine based on Vulkan/NCNN (`upscayl-bin` / `upscayl-ncnn`) and curated open-source neural network models (`upscayl/custom-models`). All processing runs 100% offline on your computer; no image data is ever uploaded or sent to external servers.
-
-- **Offline privacy & local execution**: Like all TsuFiles features, image upscaling processes every pixel locally on your machine via direct Vulkan GPU acceleration. No network connection is used during upscaling. Requires a Vulkan-compatible graphics device.
-- **Models catalog**: Curated selection of high-quality image models for photos, digital art, illustration, and restoration:
-  - Fast & lightweight models (integrated and entry-level GPUs): `4xLSDIRCompactC3`, `RealESRGAN_General_x4_v3`, `RealESRGAN_General_WDN_x4_v3`.
-  - Detailed & high-fidelity models (recommended for dedicated GPUs): `4x_NMKD-Siax_200k`, `4x_NMKD-Superscale-SP_178000_G`, `4xLSDIR`, `4xLSDIRplusC`, `4xNomos8kSC`, `4xHFA2k`.
-- **Where it lives**:
-  - **Palette**: The **Upscale** preset opens the interactive Upscale dialog to select models, scale factors (2× to 4×), preview output resolution, and upscale directly.
-  - **Settings → Presets**: The "Upscale Image" tool preset can be configured with preferred default models and scale factors.
-  - **Settings → Engines**: "Upscayl (AI image upscaler)" engine package provides the local `upscayl-bin` binary, with models downloaded on demand with live progress and uninstall support in the Upscale dialog.
-- **Supported formats**: PNG, JPG, WEBP, ICO, AVIF, BMP, and TIFF.

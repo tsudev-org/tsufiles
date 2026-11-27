@@ -114,7 +114,6 @@ public class WhatsNewMedia
             Write(folder, "crop_video.webp", CropVideo);
             Write(folder, "sheets.webp", Sheets);
             Write(folder, "fields.webp", Fields);
-            Write(folder, "translate.webp", Translate);
             Write(folder, "more.webp", AndMore);
         }
         finally
@@ -1158,130 +1157,6 @@ public class WhatsNewMedia
             images.PresetIds = front;
             foreach (var preset in added)
                 store.Presets.Remove(preset);
-        }
-        return clip;
-    }
-
-    /// <summary>
-    /// Captions and translation with a local AI: a video dropped on the "Caption" slice, its SRT written
-    /// cue by cue, then the same cues translated with their timings kept. Whisper and Ollama can't run here, so the
-    /// cues are written out; the cards use the app's own styles (card, h2, caption).
-    /// </summary>
-    private static Clip Translate()
-    {
-        var clip = new Clip { Quality = 80 };
-        (string Time, string English, string Korean)[] cues =
-        [
-            ("00:00:01,200 --> 00:00:03,800", "Welcome back to the workshop.", "워크숍에 다시 오신 걸 환영해요."),
-            ("00:00:04,100 --> 00:00:07,000", "Today we turn old photos into prints.", "오늘은 오래된 사진을 인쇄해 볼게요."),
-            ("00:00:07,400 --> 00:00:10,200", "Let's start with the scanner.", "먼저 스캐너부터 시작해요."),
-        ];
-        var loc = AppHost.Get<ILocalizer>();
-        var blocks = new List<(Control Block, bool Translated)>();
-        Control Card(string name, bool translated)
-        {
-            var list = new StackPanel { Spacing = 12, Margin = new Avalonia.Thickness(0, 12, 0, 0) };
-            for (var i = 0; i < cues.Length; i++)
-            {
-                var block = new StackPanel { Spacing = 1 };
-                block.Children.Add(new TextBlock { Classes = { "caption" }, Text = $"{i + 1}" });
-                block.Children.Add(new TextBlock { Classes = { "caption" }, Text = cues[i].Time });
-                block.Children.Add(new TextBlock { FontSize = 16, TextWrapping = Avalonia.Media.TextWrapping.Wrap, Text = translated ? cues[i].Korean : cues[i].English });
-                list.Children.Add(block);
-                blocks.Add((block, translated));
-            }
-            return new Border
-            {
-                Classes = { "card" },
-                Padding = new Avalonia.Thickness(20, 16),
-                Width = 316,
-                Child = new StackPanel { Children = { new TextBlock { Classes = { "h2" }, Text = name }, list } },
-            };
-        }
-        var arrow = new StackPanel
-        {
-            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
-            Margin = new Avalonia.Thickness(14, 0),
-            Spacing = 6,
-            Children =
-            {
-                new Border
-                {
-                    Background = (Avalonia.Media.IBrush)Avalonia.Application.Current!.FindResource("AccentBrush")!,
-                    CornerRadius = new Avalonia.CornerRadius(12),
-                    Padding = new Avalonia.Thickness(10, 4),
-                    Child = new TextBlock { Text = loc["preset.translate"], Foreground = Avalonia.Media.Brushes.White, FontWeight = Avalonia.Media.FontWeight.SemiBold },
-                },
-                new TextBlock { Text = "→", FontSize = 26, HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center },
-            },
-        };
-        var window = new Window
-        {
-            Width = CanvasWidth,
-            Height = CanvasHeight,
-            Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse(Page)),
-            Content = new StackPanel
-            {
-                Orientation = Avalonia.Layout.Orientation.Horizontal,
-                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
-                Children = { Card("interview.srt", false), arrow, Card("interview_ko.srt", true) },
-            },
-        };
-        try
-        {
-            window.Show();
-            Pump();
-            // Frame 0 (reduced motion), and the frame the clip comes back to: both files written.
-            clip.Add(Capture(window), 1400);
-
-            // As someone with Whisper installed sees it.
-            using (var drag = new DonutDrag(clip, [@"C:\Videos\interview.mp4"], vm => vm.Items = vm.Items.Select(Enabled).ToList()))
-            {
-                var caption = drag.Index("caption-video");
-                drag.Open(drag.Slice(caption, 0.6));
-                drag.Scene.Hold(0.8);
-                Assert.Equal(new DonutHit(DonutHitKind.Segment, caption), drag.Hit);
-                drag.Drop(0.8, 0.5);
-            }
-
-            // The captions come in cue by cue, then their translation; the arrow shows between them.
-            void Show(Func<int, bool, double> shown)
-            {
-                for (var i = 0; i < blocks.Count; i++)
-                {
-                    var amount = shown(i % cues.Length, blocks[i].Translated);
-                    blocks[i].Block.Opacity = amount;
-                    blocks[i].Block.RenderTransform = new Avalonia.Media.TranslateTransform(0, 8 * (1 - amount));
-                }
-                Pump();
-            }
-            double Ease(double t) => Scene.EaseInOut(Math.Clamp(t, 0, 1));
-            arrow.Opacity = 0;
-            Show((_, _) => 0);
-            clip.Add(Capture(window), 300);
-            for (var f = 1; f <= 24; f++)
-            {
-                Show((cue, translated) => translated ? 0 : Ease(f / 6.0 - cue * 1.2));
-                clip.Add(Capture(window), 50);
-            }
-            clip.Hold(300);
-            for (var f = 1; f <= 6; f++)
-            {
-                arrow.Opacity = f / 6.0;
-                Pump();
-                clip.Add(Capture(window), 50);
-            }
-            for (var f = 1; f <= 24; f++)
-            {
-                Show((cue, translated) => translated ? Ease(f / 6.0 - cue * 1.2) : 1);
-                clip.Add(Capture(window), 50);
-            }
-            clip.Hold(2000);
-        }
-        finally
-        {
-            window.Close();
         }
         return clip;
     }

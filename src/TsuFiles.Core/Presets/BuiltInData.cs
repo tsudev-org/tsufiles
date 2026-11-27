@@ -53,14 +53,6 @@ public static class BuiltInData
         .. TrimPresets(),
         new()
         {
-            Id = "translate",
-            NameKey = "preset.translate",
-            TargetFormat = SameAsSource,
-            Translate = new TranslateOptions { Enabled = true, TargetLanguage = "en" },
-            Output = { FileNamePattern = "{name}_translated" },
-        },
-        new()
-        {
             Id = "tool-crop", NameKey = "preset.crop", TargetFormat = SameAsSource,
             Kind = PresetKind.Tool, Output = { FileNamePattern = "{name}_cropped" },
         },
@@ -69,7 +61,6 @@ public static class BuiltInData
         .. AnnotatePresets(),
         .. BackgroundPresets(),
         .. MetadataPresets(),
-        .. UpscalePresets(),
         new()
         {
             Id = "tool-sheet-studio", NameKey = "preset.sheet_studio", TargetFormat = "pdf",
@@ -355,22 +346,6 @@ public static class BuiltInData
         },
     ];
 
-    /// <summary>Id of the built-in "Upscale" tool (settings schema 73): in the palette, on no donut.</summary>
-    public const string UpscaleId = "tool-upscale";
-
-    /// <summary>
-    /// "Upscale Quality" (settings schema 73): upscale images using local AI models (Real-ESRGAN / NCNN).
-    /// In the palette only: the picture donuts are full.
-    /// </summary>
-    public static List<Preset> UpscalePresets() =>
-    [
-        new()
-        {
-            Id = UpscaleId, NameKey = "preset.upscale", TargetFormat = SameAsSource,
-            Kind = PresetKind.Tool, Tool = Preset.UpscaleTool, Output = { FileNamePattern = "{name}_upscaled" },
-        },
-    ];
-
     /// <summary>
     /// "Trim transparent borders" (issue #332, added in settings schema 33): a copy cropped to the visible pixels, in the
     /// same format. On the images donut's back face after "Remove background".
@@ -530,12 +505,6 @@ public static class BuiltInData
 
         // Subtitles; on the video donut, SRT takes the first text subtitle track out of the video.
         new() { Id = "extract-subtitles", NameKey = "preset.extract_subtitles", TargetFormat = "srt" },
-        // AI Captions: transcribes speech in video and audio to SRT subtitles using Whisper AI.
-        new()
-        {
-            Id = "caption-video", NameKey = "preset.caption_video", TargetFormat = "srt",
-            Media = { Caption = true },
-        },
         new() { Id = "to-srt", Name = "SRT", TargetFormat = "srt" },
         new() { Id = "to-vtt", Name = "WebVTT", TargetFormat = "vtt" },
         new() { Id = "to-ass", Name = "ASS", TargetFormat = "ass" },
@@ -736,7 +705,7 @@ public static class BuiltInData
                 "pdf" => (["to-png", "to-jpg", "to-docx", "pdf-slides", "to-txt", "to-hwpx", "to-hwp"],
                     ["pdf-edit", "pdf-split", "merge-pdf", "compress-pdf", "remove-metadata", "to-tiff", "to-html", "zip-all"]),
                 "office" => (["to-pdf", "to-hwpx", "to-hwp", "to-docx", "to-txt", "to-png", "merge-pdf"],
-                    ["translate", "to-md", "pdf-long-image", "zip-all"]),
+                    ["to-md", "pdf-long-image", "zip-all"]),
                 "spreadsheets" => (["to-pdf", "to-xlsx", "to-csv", "to-hwpx", "to-hwp", "merge-pdf"],
                     ["tool-sheet-studio", "to-docx", "to-vcf", "to-ics", "zip-all"]),
                 "presentations" => (["to-pdf", "to-png", "to-jpg", "to-pptx", "to-hwpx", "to-hwp", "merge-pdf"],
@@ -744,12 +713,12 @@ public static class BuiltInData
                 "hwp" => (["to-pdf", "to-docx", "to-hwpx", "to-hwp", "to-png", "to-txt", "merge-pdf"],
                     ["to-html", "to-odt", "pdf-long-image", "zip-all"]),
                 "text" => (["to-pdf", "to-hwpx", "to-hwp", "to-docx", "to-html", "to-txt"],
-                    ["translate", "to-md", "to-odt", "merge-pdf", "zip-all"]),
-                "ebooks" => (["to-pdf", "to-epub", "to-docx", "to-txt", "to-fb2", "to-kepub"], ["translate", "to-md", "zip-all"]),
+                    ["to-md", "to-odt", "merge-pdf", "zip-all"]),
+                "ebooks" => (["to-pdf", "to-epub", "to-docx", "to-txt", "to-fb2", "to-kepub"], ["to-md", "zip-all"]),
                 // Every frame as pictures stays behind a flip: a missed front slice must not create thousands of files.
-                "video" => (["to-mp4", "mp4-720", "to-mov", "to-gif", "to-mp3", "caption-video"],
+                "video" => (["to-mp4", "mp4-720", "to-mov", "to-gif", "to-mp3", "extract-subtitles"],
                     ["tool-clip", "crop-video", "compress-video", "merge-videos", "remove-metadata", "mp4-av1", "extract-frames-png", "zip-all"]),
-                "audio" => (["to-mp3", "mp3-128", "to-m4a", "to-wav", "caption-video"],
+                "audio" => (["to-mp3", "mp3-128", "to-m4a", "to-wav", "to-flac"],
                     ["compress-audio", "merge-audio", "remove-metadata", "to-alac", "zip-all"]),
                 "subtitles" => (["to-srt", "to-vtt"], ["zip-all"]),
                 "vector" => (["to-png", "to-pdf", "to-svg", "to-jpg", "to-webp"], ["to-tiff", "to-ico", "to-icns", "to-dxf", "zip-all"]),
@@ -807,7 +776,7 @@ public static class BuiltInData
             Id = "office", NameKey = "profile.office",
             Extensions = ExtensionsOf(FormatCategory.Document),
             PresetIds = ["to-pdf", "to-hwpx", "to-hwp", "to-docx", "to-odt", "to-txt", "to-html", "to-epub", "to-png", "merge-pdf"],
-            BackPresetIds = ["translate", "to-md", "to-rtf", "to-jpg", "pdf-long-image", "to-azw3", "to-kepub", "zip-all"],
+            BackPresetIds = ["to-md", "to-rtf", "to-jpg", "pdf-long-image", "to-azw3", "to-kepub", "zip-all"],
         },
         SpreadsheetProfile(),
         PresentationProfile(),
@@ -869,7 +838,7 @@ public static class BuiltInData
         NameKey = "profile.text",
         Extensions = ExtensionsOf(FormatCategory.Text),
         PresetIds = ["to-pdf", "to-hwpx", "to-hwp", "to-docx", "to-html", "to-txt", "to-epub"],
-        BackPresetIds = ["translate", "to-md", "to-odt", "to-rtf", "to-kepub", "merge-pdf", "zip-all"],
+        BackPresetIds = ["to-md", "to-odt", "to-rtf", "to-kepub", "merge-pdf", "zip-all"],
     };
 
     /// <summary>Donuts of the categories added in settings schema 6, in the order they follow "text".</summary>
@@ -880,13 +849,13 @@ public static class BuiltInData
             Id = "ebooks", NameKey = "profile.ebooks",
             Extensions = ExtensionsOf(FormatCategory.Ebook),
             PresetIds = ["to-pdf", "to-epub", "to-docx", "to-txt", "to-azw3", "to-mobi", "to-kepub", "to-hwpx", "to-hwp", "to-html"],
-            BackPresetIds = ["translate", "to-fb2", "to-md", "to-rtf", "to-odt", "merge-pdf", "zip-all"],
+            BackPresetIds = ["to-fb2", "to-md", "to-rtf", "to-odt", "merge-pdf", "zip-all"],
         },
         new()
         {
             Id = "video", NameKey = "profile.video",
             Extensions = ExtensionsOf(FormatCategory.Video),
-            PresetIds = ["to-mp4", "mp4-720", "mp4-hevc", "to-webm", "to-mov", "to-gif", "to-mp3", "extract-subtitles", "caption-video", "to-mkv", "to-avi"],
+            PresetIds = ["to-mp4", "mp4-720", "mp4-hevc", "to-webm", "to-mov", "to-gif", "to-mp3", "extract-subtitles", "to-mkv", "to-avi"],
             // Every frame as pictures is on no front (a long video gives thousands of files): behind a flip, a drop that
             // misses its slice doesn't start it. Live / Motion Photos of a clip are there too, and "Cut a clip" first
             // (in place of FLAC, which stays in the library).
@@ -897,7 +866,7 @@ public static class BuiltInData
         {
             Id = "audio", NameKey = "profile.audio",
             Extensions = ExtensionsOf(FormatCategory.Audio),
-            PresetIds = ["to-mp3", "mp3-128", "to-m4a", "to-wav", "to-flac", "to-ogg", "to-opus", "to-aac", "caption-video"],
+            PresetIds = ["to-mp3", "mp3-128", "to-m4a", "to-wav", "to-flac", "to-ogg", "to-opus", "to-aac"],
             BackPresetIds = ["to-alac", "compress-audio", "merge-audio", "remove-metadata", "zip-all"],
         },
         new()

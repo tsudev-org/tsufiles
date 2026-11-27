@@ -805,13 +805,6 @@ public sealed partial class JobQueue : IAsyncDisposable
         var frames = finalOutput && runWith.SavesFramesOf(from.Id);
         var motionPhoto = finalOutput && runWith.ExtractsMotionOf(from.Id);
         var livePhoto = finalOutput && runWith.MakesLivePhotoOf(from.Id);
-        var caption = finalOutput && runWith.CaptionsVideo(from.Id);
-        var translate = finalOutput && runWith.Translate.Enabled;
-        if (translate && !runWith.TranslatesDocument(from.Id))
-            return Fail(file, "error.no_route", $"{from.Id} → {target}", new RouteRequest(from.Id, target, Translate: true));
-        var upscale = finalOutput && runWith.Upscale.Enabled;
-        if (upscale && !UpscaleTool.CanUpscale(from.Id))
-            return Fail(file, "error.no_route", $"{from.Id} → {target}", new RouteRequest(from.Id, target, Upscale: true));
         // "Recognize text": Tesseract writes a searchable PDF first, read on into DOCX, TXT, … from there. Also for the
         // PDFs that are merged into one.
         var ocr = (finalOutput || target == "pdf") && runWith.RecognizesTextOf(from.Id);
@@ -819,14 +812,11 @@ public sealed partial class JobQueue : IAsyncDisposable
         // An envelope has no such edge: opening it for the file inside would drop the changes without a word.
         var metadata = finalOutput && runWith.EditsMetadata;
         var route = opener is null || metadata
-            ? planner.Plan(source.Id, target, frames, motionPhoto: motionPhoto, livePhoto: livePhoto, ocr: ocr, caption: caption, translate: translate,
-                metadata: metadata, upscale: upscale)
-            : planner.PlanThrough(source.Id, from.Id, target, frames, motionPhoto: motionPhoto, livePhoto: livePhoto, ocr: ocr, caption: caption, translate: translate,
-                upscale: upscale);
+            ? planner.Plan(source.Id, target, frames, motionPhoto: motionPhoto, livePhoto: livePhoto, ocr: ocr, metadata: metadata)
+            : planner.PlanThrough(source.Id, from.Id, target, frames, motionPhoto: motionPhoto, livePhoto: livePhoto, ocr: ocr);
         if (route is null)
             return Fail(file, "error.no_route", $"{from.Id} → {target}",
-                new RouteRequest(from.Id, target, Frames: frames, MotionPhoto: motionPhoto, LivePhoto: livePhoto, Ocr: ocr, Translate: translate, Metadata: metadata,
-                    Upscale: upscale));
+                new RouteRequest(from.Id, target, Frames: frames, MotionPhoto: motionPhoto, LivePhoto: livePhoto, Ocr: ocr, Metadata: metadata));
 
         // A step that draws text without shaping (rhwp) would break Arabic, Hebrew, Indic or Thai text: such a file
         // takes a route without it (LibreOffice), or is refused with the reason rather than written broken. One
@@ -922,7 +912,7 @@ public sealed partial class JobQueue : IAsyncDisposable
                                 file.MissingFonts = file.MissingFonts.Concat(fonts)
                                     .Distinct(StringComparer.OrdinalIgnoreCase).ToList();
                                 Notify(job);
-                            }, file.SourcePath, Caption: step.Caption, Translate: step.Translate);
+                            }, file.SourcePath);
                         outputs.AddRange(await step.Converter.ConvertAsync(stepInfo, progress, ct));
                     }
                     finally

@@ -12,8 +12,6 @@ using TsuFiles.Core.Localization;
 using TsuFiles.Core.Presets;
 using TsuFiles.Core.Settings;
 using TsuFiles.Engines.Ocr;
-using TsuFiles.Engines.Translation;
-using TsuFiles.Engines.Upscale;
 
 namespace TsuFiles.App.ViewModels;
 
@@ -164,13 +162,6 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         // A speed set outside the editor (a hand-edited preset file) is offered too, instead of being lost.
         AnimationSpeeds = [.. ImageOptions.AnimationSpeeds.Append(_edit.Image.PlaybackSpeed).Distinct().Order()
             .Select(s => new Choice<double>(s, s == 1 ? loc["presets.animation_speed.original"] : SpeedLabel(s)))];
-        SpokenLanguageChoices =
-        [
-            new Choice<string>(WhisperLanguages.Auto, loc["presets.spoken_language.auto"]),
-            .. WhisperLanguages.All
-                .OrderBy(l => l.DisplayName, StringComparer.CurrentCulture)
-                .Select(l => new Choice<string>(l.Code, l.DisplayName))
-        ];
 
         _name = string.IsNullOrWhiteSpace(_edit.Name) ? loc.DisplayName(_edit) : _edit.Name;
         if (FormatRegistry.FindById(_edit.TargetFormat) is { Writable: true } hidden
@@ -223,35 +214,6 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         _videoCodecValue = _edit.Media.VideoCodec;
         _audioCodecValue = _edit.Media.AudioCodec;
         _hardwareEncoding = _edit.Media.HardwareEncoding;
-        _caption = _edit.Media.Caption;
-        _spokenLanguage = SpokenLanguageChoices.FirstOrDefault(l => string.Equals(l.Value, _edit.Media.SpokenLanguage, StringComparison.OrdinalIgnoreCase))
-            ?? SpokenLanguageChoices[0];
-        TranslationLanguageChoices =
-        [
-            new Choice<string>("en", "English"),
-            new Choice<string>("es", "Español"),
-            new Choice<string>("fr", "Français"),
-            new Choice<string>("de", "Deutsch"),
-            new Choice<string>("zh", "中文"),
-            new Choice<string>("hi", "हिन्दी"),
-            new Choice<string>("ja", "日本語"),
-            new Choice<string>("ko", "한국어"),
-            new Choice<string>("ru", "Русский"),
-            new Choice<string>("pt", "Português"),
-            new Choice<string>("ar", "العربية"),
-            new Choice<string>("it", "Italiano"),
-            new Choice<string>("nl", "Nederlands"),
-            new Choice<string>("pl", "Polski"),
-            new Choice<string>("tr", "Türkçe"),
-            new Choice<string>("ne", "नेपाली"),
-            new Choice<string>("th", "ไทย"),
-            new Choice<string>("id", "Bahasa Indonesia")
-        ];
-        _targetLanguage = TranslationLanguageChoices.FirstOrDefault(l => string.Equals(l.Value, _edit.Translate.TargetLanguage, StringComparison.OrdinalIgnoreCase))
-            ?? TranslationLanguageChoices[0];
-        _upscaleScale = _edit.Upscale.Scale > 0 ? _edit.Upscale.Scale : 4;
-        _selectedUpscaleModel = UpscaleModels.FirstOrDefault(m => string.Equals(m.Id, _edit.Upscale.Model, StringComparison.OrdinalIgnoreCase))
-            ?? UpscaleModels.FirstOrDefault();
         _archiveLevel = ArchiveLevels.First(l => l.Value == _edit.Archive.Level);
         _combineIntoOne = _edit.Archive.CombineIntoOne;
         _saveEveryFrame = _edit.Media.SaveEveryFrame;
@@ -352,57 +314,6 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     /// <summary>The languages not chosen yet, for the "add a language" list.</summary>
     public ObservableCollection<OcrLanguageChoice> OcrLanguagesToAdd { get; } = [];
 
-    /// <summary>The spoken languages Whisper recognizes (MediaOptions.SpokenLanguage), Auto first.</summary>
-    public IReadOnlyList<Choice<string>> SpokenLanguageChoices { get; }
-
-    public IReadOnlyList<Choice<string>> TranslationLanguageChoices { get; }
-
-    [ObservableProperty] private Choice<string> _targetLanguage;
-
-    public bool ShowTranslate => _original.Id == "translate" || _edit.Translate.Enabled;
-
-    [ObservableProperty] private string _testTranslationResult = "";
-    [ObservableProperty] private bool _isTestingTranslation;
-    [ObservableProperty] private bool _testTranslationHasError;
-
-    [RelayCommand]
-    public async Task TestTranslationAsync()
-    {
-        if (IsTestingTranslation) return;
-        IsTestingTranslation = true;
-        TestTranslationHasError = false;
-        TestTranslationResult = _loc["engines.ollama.connecting"];
-
-        try
-        {
-            var targetLang = TargetLanguage?.Value ?? "es";
-            var preferred = AppHost.Get<UserDataStore>()?.Settings.PreferredOllamaModel;
-            var model = !string.IsNullOrWhiteSpace(_edit.Translate.Model) ? _edit.Translate.Model
-                : !string.IsNullOrWhiteSpace(preferred) ? preferred
-                : await TranslationService.GetPreferredLocalOllamaModelAsync();
-            var service = new TranslationService(new TranslateOptions { TargetLanguage = targetLang, Model = model });
-            var sample = "Hello, world!";
-            var translated = await service.TranslateTextAsync(sample, targetLang);
-            TestTranslationResult = $"\"{sample}\" → \"{translated}\"  ({model ?? "local model"})";
-            TestTranslationHasError = false;
-        }
-        catch (Exception ex)
-        {
-            TestTranslationResult = $"{_loc["engines.ollama.error"]} {ex.Message}";
-            TestTranslationHasError = true;
-        }
-        finally
-        {
-            IsTestingTranslation = false;
-        }
-    }
-
-    public bool ShowUpscale => _original.IsUpscaleTool || _edit.Upscale.Enabled;
-    public IReadOnlyList<UpscaleModel> UpscaleModels { get; } = TsuFiles.Engines.Upscale.UpscaleModels.All;
-    [ObservableProperty] private UpscaleModel? _selectedUpscaleModel;
-    [ObservableProperty] private int _upscaleScale = 4;
-
-
     /// <summary>What "Recognize text" needs: Tesseract and the data of each language.</summary>
     public string OcrHint { get; }
 
@@ -448,7 +359,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         nameof(ShowAskPages), nameof(ShowAskPagesHint),
         nameof(ShowPdfCompression), nameof(ShowPdfCompressionOptions), nameof(ShowSheets), nameof(ShowOcr), nameof(ShowWordLayout), nameof(ShowPageSize), nameof(ShowPdfTablesNote),
         nameof(ShowMedia), nameof(ShowMediaQuality), nameof(ShowMaxHeight), nameof(ShowVideoMaxSize), nameof(ShowAudioBitrate), nameof(ShowRemoveAudio),
-        nameof(ShowAudioChannels), nameof(ShowWav), nameof(VideoCodecs), nameof(VideoCodecChoice), nameof(ShowVideoCodec), nameof(ShowHardwareEncoding), nameof(ShowCaption),
+        nameof(ShowAudioChannels), nameof(ShowWav), nameof(VideoCodecs), nameof(VideoCodecChoice), nameof(ShowVideoCodec), nameof(ShowHardwareEncoding),
         nameof(AudioCodecs), nameof(AudioCodecChoice), nameof(ShowAudioCodec),
         nameof(ShowArchive), nameof(ShowArchiveOptions), nameof(ShowExtractNote),
         nameof(ShowSaveEveryFrame), nameof(ShowAnimationSpeed), nameof(ShowTrace), nameof(ShowCad), nameof(ShowCadColors), nameof(ShowExtractMotionPhoto), nameof(ShowSlideshow),
@@ -866,10 +777,6 @@ public sealed partial class PresetEditorViewModel : ObservableObject
 
     /// <summary>Encode H.264 / HEVC / AV1 on the graphics chip when one works (MediaOptions.HardwareEncoding).</summary>
     [ObservableProperty] private bool _hardwareEncoding;
-    /// <summary>Burn subtitles from speech recognized by Whisper AI (MediaOptions.Caption).</summary>
-    [ObservableProperty] private bool _caption;
-    /// <summary>Language spoken in the audio for Whisper transcription (MediaOptions.SpokenLanguage).</summary>
-    [ObservableProperty] private Choice<string> _spokenLanguage;
     [ObservableProperty] private Choice<ArchiveLevel> _archiveLevel;
     [ObservableProperty] private bool _combineIntoOne;
     [ObservableProperty] private bool _saveEveryFrame;
@@ -1034,7 +941,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     public bool ShowDocument => TargetId == "pdf";
     /// <summary>Markdown can't hold pictures: they go into a folder next to it, or are left out.</summary>
     public bool ShowLeaveOutPictures => TargetId == "md";
-    public bool ShowMedia => ShowCropFrame || ShowMediaQuality || ShowMaxHeight || ShowRemoveAudio || ShowAudioChannels || ShowVideoCodec || ShowAudioCodec || ShowCaption;
+    public bool ShowMedia => ShowCropFrame || ShowMediaQuality || ShowMaxHeight || ShowRemoveAudio || ShowAudioChannels || ShowVideoCodec || ShowAudioCodec;
     /// <summary>Mono / stereo for every audio target but AMR, which is mono by definition.</summary>
     public bool ShowAudioChannels => TargetIsAudio && TargetId != "amr";
     /// <summary>Sample rate and sample format: the PCM of WAV and W64 takes any.</summary>
@@ -1043,8 +950,6 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     public bool ShowVideoCodec => TargetIsVideo && VideoCodecs.Count > 1;
     /// <summary>Hardware encoding applies to H.264, HEVC and AV1 only (not VP9, MPEG-2, …).</summary>
     public bool ShowHardwareEncoding => TargetIsVideo && MediaCodecs.TakesHardwareEncoding(TargetId, _videoCodecValue);
-    /// <summary>Generate Whisper AI subtitles for speech.</summary>
-    public bool ShowCaption => TargetId == "srt";
     /// <summary>M4A / M4B can hold Apple Lossless besides AAC.</summary>
     public bool ShowAudioCodec => AudioCodecs.Count > 1;
     public bool ShowMediaQuality => TargetIsLossyMedia;
@@ -1255,8 +1160,6 @@ public sealed partial class PresetEditorViewModel : ObservableObject
             : MediaCodecs.Effective(TargetId, _videoCodecValue);
         media.AudioCodec = MediaCodecs.Effective(TargetId, _audioCodecValue);
         media.HardwareEncoding = HardwareEncoding;
-        media.Caption = ShowCaption && Caption;
-        media.SpokenLanguage = SpokenLanguage.Value;
         // Only where the option is shown: a box ticked for PNG and left behind by another target saves nothing.
         media.SaveEveryFrame = ShowSaveEveryFrame && SaveEveryFrame;
         media.FrameInterval = media.SaveEveryFrame ? Math.Clamp(FrameInterval, 1, 1000) : 1;
@@ -1281,14 +1184,6 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         // black and white chosen for PDF and left behind by a DWG target.
         _original.Cad.Version = ShowCad ? CadVersion.Value : default;
         _original.Cad.Colors = ShowCadColors ? CadColors.Value : default;
-        _original.Translate.TargetLanguage = TargetLanguage.Value;
-        _original.Translate.Enabled = ShowTranslate;
-        if (ShowUpscale)
-        {
-            _original.Upscale.Enabled = true;
-            _original.Upscale.Model = SelectedUpscaleModel?.Id;
-            _original.Upscale.Scale = UpscaleScale;
-        }
 
         var output = _original.Output;
         // Asking keeps the location it had: a TsuFiles that can't ask (or one from before it) saves there.

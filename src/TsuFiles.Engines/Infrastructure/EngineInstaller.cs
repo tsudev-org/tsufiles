@@ -459,22 +459,6 @@ public sealed class EngineInstaller
                     File.Copy(file, Path.Combine(staging, component.Id + ".traineddata"));
                     Replace(component.Id, staging);
                     break;
-                case "ncnn-param":
-                case "ncnn-bin":
-                    var ncnnTarget = FolderOf(component.Id);
-                    Directory.CreateDirectory(ncnnTarget);
-                    var ncnnFile = Path.GetFileName(new Uri(component.Url).LocalPath);
-                    File.Copy(file, Path.Combine(ncnnTarget, ncnnFile), overwrite: true);
-                    File.WriteAllText(Path.Combine(ncnnTarget, "." + component.Id), component.Sha256);
-                    return;
-                case "model":
-                case "bin":
-                    // Standalone AI model file (e.g. Whisper ggml-base.bin): copied directly into its component folder.
-                    Directory.CreateDirectory(staging);
-                    var modelFileName = Path.GetFileName(new Uri(component.Url).LocalPath);
-                    File.Copy(file, Path.Combine(staging, modelFileName));
-                    Replace(component.Id, staging);
-                    break;
                 case "nsis":
                     var sevenZip = Archives.SevenZip.Locate()
                                    ?? throw new InvalidOperationException($"{component.Id} needs TsuFiles's 7-Zip, which is missing.");
@@ -790,14 +774,7 @@ public sealed class EngineInstaller
     /// <summary>Folder of a component; the LibreOffice extension lives inside LibreOffice.</summary>
     private string FolderOf(string id) => _components.TryGetValue(id, out var component) && component.Kind == "oxt"
         ? Path.Combine(_root, "libreoffice", "share", "extensions", ExtensionFolder(id))
-        : _components.TryGetValue(id, out var c) && c.Kind is "ncnn-param" or "ncnn-bin"
-            ? Path.Combine(_root, NcnnModelFolder(id))
-            : Path.Combine(_root, id);
-
-    private static string NcnnModelFolder(string id) =>
-        id.EndsWith("-param", StringComparison.Ordinal) ? id[..^6]
-        : id.EndsWith("-bin", StringComparison.Ordinal) ? id[..^4]
-        : id;
+        : Path.Combine(_root, id);
 
     private static string ExtensionFolder(string id) => id switch
     {
@@ -808,11 +785,6 @@ public sealed class EngineInstaller
     /// <summary>Hash of the installed version, or null when not installed.</summary>
     private string? Marker(string id)
     {
-        if (_components.TryGetValue(id, out var component) && component.Kind is "ncnn-param" or "ncnn-bin")
-        {
-            var componentMarker = Path.Combine(FolderOf(id), "." + id);
-            return File.Exists(componentMarker) ? File.ReadAllText(componentMarker).Trim() : null;
-        }
         var marker = Path.Combine(FolderOf(id), MarkerName);
         return File.Exists(marker) ? File.ReadAllText(marker).Trim() : null;
     }

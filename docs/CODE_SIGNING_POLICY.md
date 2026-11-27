@@ -50,7 +50,6 @@ account. The program connects to other networked systems only in these cases:
   carries (IP address, user agent).
 - **Optional engines**: downloaded from their official sources only when the user installs one.
 - **Share with phone / LAN send**: off by default; started by the user, local network only.
-- **Local AI** (optional): talks to Ollama at `127.0.0.1` on the same computer, only if the user turns it on.
 
 With the update check turned off, the program does not transfer any information to other networked systems unless
 specifically requested by the user. Privacy policy: [tsudev.com/privacy](https://tsudev.com/privacy). Security
