@@ -243,10 +243,10 @@ public class HideToolTests
     [Fact]
     public async Task The_parts_are_covered_once_by_the_first_engine_that_applies_image_options()
     {
-        // EPS → PNG (Ghostscript) → JPG (ImageMagick): covered in the first step, the second gets the picture covered.
+        // CDR → PNG (LibreOffice) → JPG (ImageMagick): covered in the first step, the second gets the picture covered.
         using var dir = new TempDir();
-        var art = dir.File("art.eps");
-        var reader = new AreaRecorder("ghostscript", transforms: true, new ConversionEdge("eps", "png"));
+        var art = dir.File("art.cdr");
+        var reader = new AreaRecorder("libreoffice", transforms: true, new ConversionEdge("cdr", "png"));
         var writer = new AreaRecorder("magick", transforms: true, new ConversionEdge("png", "jpg"));
         await using var queue = new JobQueue(new ConverterCatalog([reader, writer]));
 

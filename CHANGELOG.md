@@ -46,6 +46,8 @@ vi: Bỏ đọc tệp OFD (định dạng hóa đơn điện tử của Trung Qu
 en: OFD files (the Chinese e-invoice format) are no longer read
 vi: Bỏ các công cụ AI cục bộ (phụ đề Whisper, phóng ảnh Upscayl, dịch tài liệu qua Ollama): chậm, cần phần mềm và mô hình ngoài
 en: The local AI tools are gone (Whisper captions, Upscayl upscaling, Ollama translation): slow, and they needed outside software and models
+vi: Bỏ chuyển phông chữ (TTF, OTF, WOFF, EOT, FON), EPS/PS qua Ghostscript và tạo ảnh đĩa ISO; ISO vẫn mở và giải nén được
+en: Font conversion (TTF, OTF, WOFF, EOT, FON), EPS/PS through Ghostscript and making ISO images are gone; ISO images still open and extract
 vi: macOS tạm dừng đến quý 1/2027: bản cuối cho macOS là 2.4.1; Windows và Linux phát hành bình thường
 en: macOS is paused until Q1 2027: 2.4.1 is the last macOS release; Windows and Linux releases continue
 vi: Bỏ các bộ xử lý trùng lặp (Pandoc, Calibre, Apple Vision, Unhwp): mỗi loại tệp chỉ một cách chuyển, kết quả như nhau trên mọi máy; nhận dạng chữ dùng Tesseract
@@ -127,6 +129,10 @@ en: Scanned PDF to Word: recognized text you can edit, in place on the page, wit
   preset, lát donut, gói engine tải thêm và cửa sổ Quản lý Ollama. Chúng cần phần mềm và mô hình ngoài, chậm và cho kết
   quả khác nhau giữa các máy. Preset bạn tự tạo vẫn giữ trong thư viện và chuyển đổi không qua bước AI; TsuFiles không
   còn kết nối máy chủ Ollama cục bộ.
+- **Bỏ phông chữ, Ghostscript và tạo ảnh ISO** (phiếu TG1): không còn chuyển TTF, OTF, WOFF, WOFF2, EOT, FON; không
+  còn đọc/ghi EPS, PS (Ghostscript); không còn tạo ảnh đĩa ISO từ thư mục hay tệp nén (donut Thư mục và Phông chữ dựng
+  sẵn biến mất). ISO vẫn mở và giải nén bằng 7-Zip. Tệp Illustrator lưu kèm PDF vẫn chuyển được, tệp `.ai` thuần
+  PostScript báo lỗi rõ ràng. Nén PDF chỉ dùng bộ nén có sẵn; trang CMYK ra ảnh RGB. Kéo thư mục vào vẫn nén thành ZIP.
 - **Bộ nhận diện chuẩn v5** (tsudev-standards v5.4.0, phiếu STD50): màu Cú đêm đọc lúc build từ token chuẩn
   (`.standards/tokens/`): tím logo cú `#A970FF` (Tối) / `#7C3AED` (Sáng), nền và chữ theo lớp nền chung, viền nút đạt
   3:1. Website files.tsudev.com dùng cùng token, font tiêu đề Lexend, bộ bo góc "mềm", lần đầu theo chế độ sáng/tối của

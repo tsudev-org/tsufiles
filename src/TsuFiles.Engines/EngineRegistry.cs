@@ -7,7 +7,6 @@ using TsuFiles.Engines.Cad;
 using TsuFiles.Engines.Data;
 using TsuFiles.Engines.Ebooks;
 using TsuFiles.Engines.Email;
-using TsuFiles.Engines.Fonts;
 using TsuFiles.Engines.Geo;
 using TsuFiles.Engines.Hwp;
 using TsuFiles.Engines.Hwp.Hwpx;
@@ -44,7 +43,6 @@ public static class EngineRegistry
     public static IReadOnlyList<IConverter> CreateAll(EngineEnvironment env, ILoggerFactory? loggers = null) =>
     [
         new MagickImageConverter(),
-        new FolderIsoConverter(),
         new PdfSharpConverter(),
         new PdfiumConverter(),
         new RhwpConverter(),
@@ -55,7 +53,6 @@ public static class EngineRegistry
         new ArchiveConverter(),
         new VectorConverter(),
         new IcnsConverter(),
-        new FontConverter(),
         new DocxWriterConverter(),
         new PdfTextConverter(),
         new PdfSlidesConverter(),
@@ -72,7 +69,6 @@ public static class EngineRegistry
         new ImageTo3DConverter(),
         new GeoConverter(),
         new EbookConverter(),
-        new GhostscriptConverter(),
         new TesseractConverter(),
         new MicrosoftOfficeConverter(),
         new LibreOfficeConverter(env, loggers?.CreateLogger<LibreOfficeConverter>()),

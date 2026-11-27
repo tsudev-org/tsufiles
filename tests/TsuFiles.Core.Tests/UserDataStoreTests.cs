@@ -15,7 +15,7 @@ public partial class UserDataStoreTests
         using var dir = new TempDir();
         var store = new UserDataStore(dir.Path);
         store.Load();
-        string[] expected = ["cad", "font", "model3d", "geo", "game", "design", "science", "writing", "video-pro", "audio-pro", "legacy"];
+        string[] expected = ["cad", "model3d", "geo", "game", "design", "science", "writing", "video-pro", "audio-pro", "legacy"];
         Assert.Equal(expected, store.Settings.TurnedOffFields);
         Assert.Equal(FormatFields.All.Where(f => f.CanTurnOff && !f.OnByDefault).Select(f => f.Id), store.Settings.TurnedOffFields);
         Assert.DoesNotContain("developer", store.Settings.TurnedOffFields);
@@ -55,7 +55,7 @@ public partial class UserDataStoreTests
         using var dir = new TempDir();
         var store = new UserDataStore(dir.Path);
         store.Load();
-        string[] slots = ["to-jpg", "to-woff2"];
+        string[] slots = ["to-jpg", "to-glb"];
         store.Profiles.Single(p => p.Id == "images").PresetIds = [.. slots];
         store.Presets.Add(new Preset { Id = "test-field-custom", TargetFormat = "png" });
         store.SaveLibrary();
@@ -105,8 +105,8 @@ public partial class UserDataStoreTests
         using var dir = new TempDir();
         var store = new UserDataStore(dir.Path);
         store.Load();
-        Assert.Contains("font", store.Settings.TurnedOffFields);
-        string[] slots = ["to-png", "to-woff2"];
+        Assert.Contains("model3d", store.Settings.TurnedOffFields);
+        string[] slots = ["to-png", "to-glb"];
         store.Profiles.Single(p => p.Id == "images").PresetIds = [.. slots];
         store.SaveSettings();
         store.SaveLibrary();
@@ -680,7 +680,7 @@ public partial class UserDataStoreTests
         var store = new UserDataStore(dir.Path);
         store.Load();
 
-        Assert.Equal(["magick", "markdown", "spreadsheet", "ooxml", "hwpx-writer", "docx-writer", "pdf-text", "pdf-slides", "email", "data", "vector", "icns", "font", "cad", "model3d", "geo", "archive", "ebook", "subtitle", "wic", "ffmpeg", "ghostscript", "libreoffice"], store.Settings.EnginePriority);
+        Assert.Equal(["magick", "markdown", "spreadsheet", "ooxml", "hwpx-writer", "docx-writer", "pdf-text", "pdf-slides", "email", "data", "vector", "icns", "cad", "model3d", "geo", "archive", "ebook", "subtitle", "wic", "ffmpeg", "libreoffice"], store.Settings.EnginePriority);
         Assert.Equal(AppSettings.CurrentSchemaVersion, store.Settings.SchemaVersion);
     }
 
@@ -732,7 +732,7 @@ public partial class UserDataStoreTests
         var store = new UserDataStore(dir.Path);
         store.Load();
 
-        Assert.Equal(["magick", "markdown", "spreadsheet", "ooxml", "hwpx-writer", "docx-writer", "pdf-text", "pdf-slides", "email", "data", "vector", "icns", "font", "cad", "model3d", "geo", "archive", "ebook", "subtitle", "wic", "ffmpeg", "ghostscript", "libreoffice"], store.Settings.EnginePriority);
+        Assert.Equal(["magick", "markdown", "spreadsheet", "ooxml", "hwpx-writer", "docx-writer", "pdf-text", "pdf-slides", "email", "data", "vector", "icns", "cad", "model3d", "geo", "archive", "ebook", "subtitle", "wic", "ffmpeg", "libreoffice"], store.Settings.EnginePriority);
         var ids = store.Profiles.Select(p => p.Id).ToList();
         Assert.Equal(ids.IndexOf("office") + 1, ids.IndexOf("spreadsheets"));
         Assert.Equal(ids.IndexOf("office") + 2, ids.IndexOf("presentations"));
@@ -760,7 +760,7 @@ public partial class UserDataStoreTests
 
         var ids = profiles.Select(p => p.Id).ToList();
         Assert.Equal(ids.IndexOf("text") + 1, ids.IndexOf("ebooks"));
-        Assert.Equal(ids.IndexOf("fonts") + 1, ids.IndexOf("data")); // schema 14
+        Assert.Equal(ids.IndexOf("cad") + 1, ids.IndexOf("data")); // schema 14, after fonts (gone with schema 81)
         Assert.Equal(ids.IndexOf("data") + 1, ids.IndexOf("models")); // schema 15
         Assert.Equal(ids.IndexOf("models") + 1, ids.IndexOf("geo")); // schema 25
         Assert.Equal(ids.IndexOf("mixed") - 1, ids.IndexOf("geo"));
@@ -879,7 +879,8 @@ public partial class UserDataStoreTests
 
         Assert.All(BuiltInData.DataPresets(), d => Assert.Contains(presets, p => p.Id == d.Id));
         var ids = profiles.Select(p => p.Id).ToList();
-        Assert.Equal(ids.IndexOf("fonts") + 1, ids.IndexOf("data"));
+        // After fonts; with the fonts donut gone (schema 81), before the mixed-files one.
+        Assert.Equal(ids.IndexOf("mixed") - 1, ids.IndexOf("data"));
         var data = profiles.Single(p => p.Id == "data");
         Assert.Contains("json", data.Extensions);
         Assert.Contains("yaml", data.Extensions);
@@ -1632,7 +1633,7 @@ public partial class UserDataStoreTests
         Assert.True(SettingsMigrations.ApplyToLibrary(17, presets, profiles));
 
         var compress = presets.Single(p => p.Id == "compress-pdf");
-        Assert.Equal(("pdf", PdfCompression.Ebook, false), (compress.TargetFormat, compress.Pdf.Compression, compress.Pdf.CompressWithGhostscript));
+        Assert.Equal(("pdf", PdfCompression.Ebook), (compress.TargetFormat, compress.Pdf.Compression));
         Assert.Equal("pdf-split", presets[presets.IndexOf(compress) - 1].Id); // where a new library has it
         Assert.DoesNotContain(profiles, p => p.PresetIds.Contains("compress-pdf"));
         Assert.Equal(BuiltInData.ProfilesSchema58().Single(p => p.Id == "pdf").PresetIds, profiles.Single(p => p.Id == "pdf").PresetIds);
@@ -1731,13 +1732,12 @@ public partial class UserDataStoreTests
         store.Load();
         var preset = store.Presets.Single(p => p.Id == "compress-pdf");
         preset.Pdf.Compression = PdfCompression.Print;
-        preset.Pdf.CompressWithGhostscript = true;
         store.SaveLibrary();
 
         var reloaded = new UserDataStore(dir.Path);
         reloaded.Load();
         var pdf = reloaded.Presets.Single(p => p.Id == "compress-pdf").Pdf;
-        Assert.Equal((PdfCompression.Print, true), (pdf.Compression, pdf.CompressWithGhostscript));
+        Assert.Equal(PdfCompression.Print, pdf.Compression);
 
         var path = Path.Combine(dir.Path, "presets.json");
         File.WriteAllText(path, File.ReadAllText(path).Replace("\"compression\": \"Print\"", "\"compression\": \"Extreme\""));

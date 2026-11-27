@@ -122,7 +122,7 @@ public sealed class SystemCopyTests : IDisposable
     [InlineData("ffmpeg", "ffmpeg version 7.1.1-full_build-www.gyan.dev Copyright (c) 2000-2025", "7.1")]
     [InlineData("ffmpeg", "ffmpeg version n8.0 Copyright (c) 2000-2025", "8.0")]
     [InlineData("ffmpeg", "ffmpeg version 2025-06-02-git-688f3944ce-full_build", null)]
-    [InlineData("ghostscript", "10.04.0\r\n", "10.4")]
+    [InlineData("tesseract", "10.04.0\r\n", "10.4")]
     [InlineData("libreoffice", "[Version]\nAllLanguages=en-US\nMsiProductVersion=25.2.4.3\n", "25.2")]
     [InlineData("libreoffice", "LibreOffice 26.2.6.2 98d5f8\n", "26.2")]
     // LibreOffice 26.8's version.ini has no MsiProductVersion; Installed adds soffice.exe's product version to it.

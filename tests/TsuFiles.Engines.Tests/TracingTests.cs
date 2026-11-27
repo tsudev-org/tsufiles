@@ -396,7 +396,6 @@ public class TracingTests(EngineFixture fx) : IClassFixture<EngineFixture>
         Assert.Equal(["svg", "dxf", "dwg"], planner.Plan(from, "dwg")!.Steps.Select(s => s.To));
         // Everything else keeps the image engines' routes.
         Assert.Equal("pdfsharp", Assert.Single(planner.Plan(from, "pdf")!.Steps).Converter.Id);
-        Assert.DoesNotContain(planner.Plan(from, "eps")?.Steps ?? [], s => s.To == "svg");
     }
 
     [Fact]
@@ -410,8 +409,6 @@ public class TracingTests(EngineFixture fx) : IClassFixture<EngineFixture>
 
     [Theory]
     [InlineData("pdf")]
-    [InlineData("eps")]
-    [InlineData("ps")]
     [InlineData("ai")]
     [InlineData("emf")]
     [InlineData("wmf")]
@@ -423,7 +420,7 @@ public class TracingTests(EngineFixture fx) : IClassFixture<EngineFixture>
         // With every optional engine as if installed, and with the built-in ones only: a vector route (LibreOffice for
         // PDF, EMF, CDR) is fine, tracing a rendering is not.
         var everyEngine = fx.Catalog.CreatePlanner(fx.Converters.Select(c => c.Id).ToArray());
-        var builtIn = new RoutePlanner(fx.Converters.Where(c => c.Id is not ("libreoffice" or "ghostscript" or "pandoc" or "calibre" or "ffmpeg")));
+        var builtIn = new RoutePlanner(fx.Converters.Where(c => c.Id is not ("libreoffice" or "ffmpeg")));
         foreach (var planner in new[] { everyEngine, builtIn })
         {
             foreach (var to in new[] { "svg", "svgz", "dxf", "dwg" })

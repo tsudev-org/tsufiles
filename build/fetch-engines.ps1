@@ -12,8 +12,6 @@
       jre/           Eclipse Temurin JRE 21 (GPLv2 + Classpath Exception), used by H2Orestart
       rhwp/          rhwp command line (MIT), HWP/HWPX -> PDF, with the Microsoft C++ runtime DLLs next to rhwp.exe
       7zip/          7-Zip console (7z.exe + 7z.dll, LGPL-2.1 + unRAR restriction, separate program), archives
-      ghostscript/   Ghostscript (AGPL-3.0, separate program) from conda-forge, EPS/PS <-> PDF, with the Microsoft
-                     C++ runtime DLLs (vcruntime/) copied next to gswin64c.exe
       ffmpeg/        FFmpeg (GPL-3.0 build, separate program), video and audio; bin/ffmpeg.exe + bin/ffprobe.exe
       tesseract/     Tesseract OCR (Apache-2.0, separate program), UB Mannheim's Windows build unpacked from its
                      installer with 7-Zip (never run); the language data is downloaded by the app when needed
@@ -24,7 +22,7 @@
   shared with the app). Downloads are cached in build/.cache.
 
   The Microsoft C++ runtime (the "vcruntime" component: MSVCP140.dll, VCRUNTIME140.dll, ...) is copied next to the
-  programs built with Visual C++ that do not ship it themselves (rhwp.exe, gswin64c.exe; LibreOffice's own copy goes
+  programs built with Visual C++ that do not ship it themselves (rhwp.exe; LibreOffice's own copy goes
   into its program folder), so they also run on PCs without the Visual C++ Redistributable. -RuntimeTo copies it into
   more folders (build-installer.ps1: next to TsuFiles.exe).
 
@@ -179,7 +177,7 @@ function Expand-Conda([string]$conda, [string]$target) {
 
 # Copies the Microsoft C++ runtime DLLs (the "vcruntime" component, unpacked once per run into build/.cache) into
 # $target, next to a program built with Visual C++: Windows looks for its DLLs in the program's folder first, so it
-# runs on PCs without the Visual C++ Redistributable. Same as EngineInstaller does for Ghostscript.
+# runs on PCs without the Visual C++ Redistributable. Same as EngineInstaller does for downloaded engines.
 $script:vcRuntime = $null
 function Copy-VcRuntime([string]$target) {
     if (-not $script:vcRuntime) {
@@ -322,16 +320,8 @@ if ('h2orestart' -in $selected) {
     }
 }
 
-if ('vcruntime' -in $selected -or 'ghostscript' -in $selected) {
+if ('vcruntime' -in $selected) {
     Expand-Conda (Get-Engine 'vcruntime') (Join-Path $Destination 'vcruntime')
-}
-
-if ('ghostscript' -in $selected) {
-    $target = Join-Path $Destination 'ghostscript'
-    Expand-Conda (Get-Engine 'ghostscript') $target
-    if (-not (Test-Path (Join-Path $target 'gswin64c.exe'))) { throw 'gswin64c.exe not found in the Ghostscript package.' }
-    # App-local Microsoft C++ runtime next to gswin64c.exe, as EngineInstaller does.
-    Copy-VcRuntime $target
 }
 
 if ('tesseract' -in $selected) {

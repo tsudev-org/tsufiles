@@ -44,8 +44,6 @@ public static class EngineDownloads
     public static IReadOnlyList<EnginePackage> Packages { get; } =
     [
         new("libreoffice", OperatingSystem.IsWindows() ? ["libreoffice", "h2orestart", "jre"] : ["libreoffice"], 1_265_000_000, ["libreoffice"]),
-        // Ghostscript from conda-forge plus the Microsoft C++ runtime it was built against (copied next to it).
-        new("ghostscript", OperatingSystem.IsWindows() ? ["ghostscript", "vcruntime"] : ["ghostscript"], 31_000_000, ["ghostscript"]),
         new("ffmpeg", ["ffmpeg"], 272_000_000, ["ffmpeg"]),
         new("tesseract", ["tesseract"], 168_000_000, ["tesseract"]),
         // The Metadata tool reads with it and its conversions write with it (TsuFiles.Engines.Metadata).
@@ -65,7 +63,6 @@ public static class EngineDownloads
             return package.Id switch
             {
                 "ffmpeg" => "Install FFmpeg with Homebrew (brew install ffmpeg), then check again or select its bin folder.",
-                "ghostscript" => "Install Ghostscript with Homebrew (brew install ghostscript), then check again or select its bin folder.",
                 "tesseract" => "Install Tesseract with Homebrew (brew install tesseract), then check again or select its bin folder.",
                 "exiftool" => "Install ExifTool with Homebrew (brew install exiftool), then check again or select its folder.",
                 _ => $"No TsuFiles download is available for {RuntimeIdentifier}. Install {package.Id} for this Mac and select its program or .app folder.",
@@ -74,7 +71,6 @@ public static class EngineDownloads
             return package.Id switch
             {
                 "libreoffice" => "Install LibreOffice using your distribution's package manager (Ubuntu/Debian: sudo apt install libreoffice), then check again. HWP import through LibreOffice also needs Java and the H2Orestart extension.",
-                "ghostscript" => "Install Ghostscript using your distribution's package manager (Ubuntu/Debian: sudo apt install ghostscript), then check again.",
                 "tesseract" => "Install Tesseract using your distribution's package manager (Ubuntu/Debian: sudo apt install tesseract-ocr), then check again.",
                 _ => $"No TsuFiles download is available for {RuntimeIdentifier}. Install {package.Id} using your distribution's package manager and select its program folder.",
             };
@@ -87,11 +83,10 @@ public static class EngineDownloads
     /// <summary>
     /// Ticked by default in the installer and in the first-run choice. Large downloads are offered, not suggested:
     /// LibreOffice is only needed for older formats (DOC, XLS, PPT, OpenDocument), FFmpeg (~100 MB) only for video and
-    /// audio. Ghostscript and Tesseract are small but
-    /// only needed for EPS / PostScript and for scans.
+    /// audio. Tesseract is small but only needed for scans.
     /// </summary>
     public static bool IsSuggested(EnginePackage package) =>
-        CanDownload(package) && DownloadSize(package) < SuggestLimit && package.Id is not ("ghostscript" or "tesseract");
+        CanDownload(package) && DownloadSize(package) < SuggestLimit && package.Id is not "tesseract";
 
     public static IReadOnlyDictionary<string, EngineComponent> ComponentsForRuntime(string runtimeIdentifier)
     {

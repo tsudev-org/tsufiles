@@ -53,7 +53,7 @@ public partial class BackFaceTests
             Assert.Empty(back.Intersect(profile.PresetIds));
         }
         // Archives and the small folder-to-ISO donut have no second face.
-        Assert.Equal(["archives", "folders"], BuiltInData.CreateProfiles().Where(p => p.BackPresetIds!.Count == 0).Select(p => p.Id));
+        Assert.Equal(["archives"], BuiltInData.CreateProfiles().Where(p => p.BackPresetIds!.Count == 0).Select(p => p.Id));
     }
 
     [Fact]
@@ -197,9 +197,10 @@ public partial class BackFaceTests
         var back = NewStore(dir);
 
         // A new library: its fronts are still the new ones, so its new back faces return (the PDF back keeps split and
-        // merge, the images back half size and the image editor). Presentations, CAD and mixed have the same front in
-        // both layouts and text the front of a Filee 1.0.1 library after schema 7: these four get the schema 58 ones.
-        string[] schema58Backs = ["presentations", "cad", "mixed", "text"];
+        // merge, the images back half size and the image editor). Presentations, CAD, mixed and vector (since EPS left
+        // with schema 81) have the same front in both layouts and text the front of a Filee 1.0.1 library after schema 7:
+        // these five get the schema 58 ones.
+        string[] schema58Backs = ["presentations", "cad", "mixed", "vector", "text"];
         Assert.Equal(BuiltInData.CreateProfiles().Select(p => p.Id), back.Profiles.Select(p => p.Id));
         foreach (var expected in BuiltInData.CreateProfiles())
         {

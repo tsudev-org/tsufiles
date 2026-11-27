@@ -95,7 +95,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         _original = preset;
         _edit = preset.Clone();
         _loc = loc;
-        FolderInput = folderInput || preset.TargetFormat == "iso";
+        FolderInput = folderInput;
 
         // ~150 formats in registry order, which groups them by category; the category is shown next to each name
         // and typing the first letters of a name jumps to it.
@@ -103,7 +103,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         [
             .. FolderInput ? Array.Empty<Choice<string>>() : [new Choice<string>(BuiltInData.SameAsSource, loc["presets.same_as_source"])],
             .. FormatRegistry.Known
-                .Where(f => f.Writable && (!FolderInput || BuiltInData.SupportsFolderTarget(f.Id)) && (turnedOff is null || FormatFields.IsShown(f.Id, turnedOff)))
+                .Where(f => f.Writable && (!FolderInput || f is { Category: FormatCategory.Archive } && f.Id != FormatRegistry.Folder) && (turnedOff is null || FormatFields.IsShown(f.Id, turnedOff)))
                 .Select(f => new Choice<string>(
                     f.Id,
                     f.Id == FormatRegistry.Folder ? loc["presets.target_folder"] : f.DisplayName,
@@ -172,7 +172,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
             _hiddenTargetNote = loc.Format("presets.target_hidden", hidden.DisplayName);
         }
         else
-            _target = Targets.FirstOrDefault(t => t.Value == _edit.TargetFormat) ?? Targets.First(t => t.Value == (FolderInput ? "iso" : BuiltInData.SameAsSource));
+            _target = Targets.FirstOrDefault(t => t.Value == _edit.TargetFormat) ?? Targets.First(t => t.Value == (FolderInput ? "zip" : BuiltInData.SameAsSource));
         _resize = ResizeModes.First(r => r.Value == (_edit.Image.CustomSize is not null ? ResizeMode.Custom
             : _edit.Image.ClampedMinShortEdge is not null ? ResizeMode.MinShortEdge
             : _edit.Image.Resize));
@@ -181,7 +181,6 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         _pageSize = PageSizes.First(p => p.Value == _edit.Pdf.PageSize);
         _wordLayout = WordLayouts.FirstOrDefault(l => l.Value == _edit.Pdf.WordLayout) ?? WordLayouts[0];
         _compressionLevel = CompressionLevels.FirstOrDefault(c => c.Value == _edit.Pdf.Compression) ?? CompressionLevels[0];
-        _compressWithGhostscript = _edit.Pdf.CompressWithGhostscript;
         _watermark = _edit.Pdf.Watermark;
         _pageNumbers = _edit.Pdf.PageNumbers;
         _pdfPassword = _edit.Pdf.Password;
@@ -215,7 +214,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         _audioCodecValue = _edit.Media.AudioCodec;
         _hardwareEncoding = _edit.Media.HardwareEncoding;
         _archiveLevel = ArchiveLevels.First(l => l.Value == _edit.Archive.Level);
-        _combineIntoOne = _edit.Archive.CombineIntoOne;
+        _combineIntoOne = FolderInput || _edit.Archive.CombineIntoOne;
         _saveEveryFrame = _edit.Media.SaveEveryFrame;
         _extractMotionPhoto = _edit.Media.ExtractMotionPhoto;
         _livePhotoValue = _edit.Media.LivePhoto;
@@ -635,7 +634,6 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     [ObservableProperty, NotifyPropertyChangedFor(nameof(ShowPdfCompressionOptions))]
     private Choice<PdfCompression> _compressionLevel;
 
-    [ObservableProperty] private bool _compressWithGhostscript;
 
     /// <summary>A PDF target's finishing: watermark text, page numbers, a password to open it (PdfOptions).</summary>
     [ObservableProperty] private string _watermark;
@@ -904,8 +902,8 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     /// <summary>FITS → any other picture is stretched; a colour camera's raw frame can be debayered or kept mono.</summary>
     public bool ShowFitsDebayer => !IsTool && TargetCategory == FormatCategory.Image && TargetId != "tiff";
     public bool ShowIco => TargetId == "ico";
-    /// <summary>PDF options (also used when a PDF source becomes images) mean nothing for media, archive, font, subtitle, data, e-mail, 3D and geospatial targets.</summary>
-    public bool ShowPdf => !IsTool && !IsLivePhoto && TargetCategory is not (FormatCategory.Video or FormatCategory.Audio or FormatCategory.Archive or FormatCategory.Font
+    /// <summary>PDF options (also used when a PDF source becomes images) mean nothing for media, archive, subtitle, data, e-mail, 3D and geospatial targets.</summary>
+    public bool ShowPdf => !IsTool && !IsLivePhoto && TargetCategory is not (FormatCategory.Video or FormatCategory.Audio or FormatCategory.Archive
         or FormatCategory.Subtitle or FormatCategory.Data or FormatCategory.Model3D or FormatCategory.Geo) && TargetId != "eml";
     /// <summary>"Save as ZIP" is offered for geospatial targets, whose results are several files (a Shapefile) or travel zipped.</summary>
     public bool ShowZipResult => TargetCategory == FormatCategory.Geo;
@@ -922,7 +920,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     public bool ShowAskPages => ShowPdf && !(TargetId == "pdf" && Merge);
     public bool ShowAskPagesHint => ShowAskPages && AskPageRange;
 
-    /// <summary>Compression is for PDF → PDF; Ghostscript and metadata only matter while it is on.</summary>
+    /// <summary>Compression is for PDF → PDF; metadata only matters while it is on.</summary>
     public bool ShowPdfCompression => TargetId == "pdf" && !Recognizes;
 
     /// <summary>XLSX: what a PDF becomes (its ruled tables, PdfTablesConverter).</summary>
@@ -966,7 +964,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     public bool ShowAudioBitrate => TargetIsLossyMedia;
     public bool ShowRemoveAudio => TargetIsVideo;
     /// <summary>ISO creation has no archive compression settings.</summary>
-    public bool ShowArchive => TargetCategory == FormatCategory.Archive && TargetId != "iso";
+    public bool ShowArchive => TargetCategory == FormatCategory.Archive;
     public bool ShowArchiveOptions => ShowArchive && TargetId != FormatRegistry.Folder;
     /// <summary>"Extract" has nothing to set; a line says what it does instead.</summary>
     public bool ShowExtractNote => TargetId == FormatRegistry.Folder;
@@ -1091,7 +1089,6 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         pdf.TrimPageMargins = TrimPageMargins;
         pdf.SplitTallImage = SplitTallImage;
         pdf.Compression = CompressionLevel.Value;
-        pdf.CompressWithGhostscript = CompressWithGhostscript;
         if (ShowSheets)
         {
             pdf.PagesPerSheet = PagesPerSheet.Value;
@@ -1118,7 +1115,6 @@ public sealed partial class PresetEditorViewModel : ObservableObject
             // Hidden while text is recognized, so nothing is kept behind it that the PDF wouldn't do (Recognizes).
             pdf.SplitPages = false;
             pdf.Compression = PdfCompression.None;
-            pdf.CompressWithGhostscript = false;
             pdf.PageSize = PdfPageSize.FitImage;
             pdf.MarginMm = 0;
         }
@@ -1176,7 +1172,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         media.LivePhotoLength = Seconds(LivePhotoLength, 3, MediaOptions.MinLivePhotoLength, MediaOptions.MaxLivePhotoLength);
         media.LivePhotoCover = Seconds(LivePhotoCover, 1.5, 0, MediaOptions.MaxLivePhotoLength);
         _original.Archive.Level = ArchiveLevel.Value;
-        _original.Archive.CombineIntoOne = TargetId != "iso" && CombineIntoOne;
+        _original.Archive.CombineIntoOne = CombineIntoOne;
         _original.Trace.Mode = TraceMode.Value;
         _original.Trace.Colors = Math.Clamp(TraceColors, TracingOptions.MinColors, TracingOptions.MaxColors);
         _original.Trace.Detail = Math.Clamp(TraceDetail, 0, 100);

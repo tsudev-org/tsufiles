@@ -169,7 +169,7 @@ public sealed class Preset
     public bool PacksIntoOneArchive =>
         Archive.CombineIntoOne
         && Formats.FormatRegistry.FindById(TargetFormat) is { Category: Formats.FormatCategory.Archive } archive
-        && archive.Id != Formats.FormatRegistry.Folder && archive.Id != "iso";
+        && archive.Writable && archive.Id != Formats.FormatRegistry.Folder;
 
     /// <summary>
     /// True if converting a <paramref name="sourceFormat"/> file saves every frame as a picture
@@ -1218,12 +1218,6 @@ public sealed class PdfOptions
     /// links, bookmarks and form fields stay as they are.
     /// </summary>
     public bool RemoveMetadata { get; set; }
-
-    /// <summary>
-    /// With <see cref="Compression"/>: also let Ghostscript rewrite the PDF when it is installed, and keep whichever
-    /// result is smaller. Off by default: it rewrites the whole file (fonts, structure), not only the pictures.
-    /// </summary>
-    public bool CompressWithGhostscript { get; set; }
 
     /// <summary>Text written large and faint across every page of a PDF ("DRAFT", "CONFIDENTIAL"); empty for none.</summary>
     public string Watermark { get; set; } = "";

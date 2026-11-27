@@ -300,9 +300,9 @@ public class JobQueueTests
     {
         using var dir = new TempDir();
         var pdf = dir.File("doc.pdf");
-        var eps = dir.File("art.eps");
+        var eps = dir.File("art.cdr");
         var turner = new FakeTurner("magick", new ConversionEdge("png", "jpg"));
-        var renderer = new FakeTurner("ghostscript", new ConversionEdge("eps", "png"));
+        var renderer = new FakeTurner("libreoffice", new ConversionEdge("cdr", "png"));
         await using var queue = new JobQueue(new ConverterCatalog(
             [new FakeConverter("pdfsharp", new ConversionEdge("pdf", "pdf")), turner, renderer]));
 

@@ -82,8 +82,7 @@ public partial class LocalizationTests
             "format.category.Image",
             "format.category.Document",
             "format.category.Geo",
-            "format.category.Archive",
-            "format.category.Font"
+            "format.category.Archive"
         ];
 
         foreach (var language in LocalizationService.Languages)

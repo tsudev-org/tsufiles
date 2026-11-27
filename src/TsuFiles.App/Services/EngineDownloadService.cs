@@ -48,7 +48,7 @@ public sealed partial class EnginePackageState : ObservableObject
         : _loc["engines.package.system_required"];
 
     /// <summary>
-    /// How to get an engine TsuFiles doesn't download on this system (FFmpeg and Ghostscript from Homebrew on macOS,
+    /// How to get an engine TsuFiles doesn't download on this system (FFmpeg from Homebrew on macOS,
     /// the distribution's packages on Linux), in the app's language; null when TsuFiles can download it.
     /// </summary>
     public string? InstallGuidance

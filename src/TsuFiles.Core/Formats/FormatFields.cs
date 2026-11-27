@@ -35,7 +35,7 @@ public sealed record FormatField(string Id, bool CanTurnOff, bool OnByDefault);
 /// <summary>Fields and grades of every format, and whether a format is shown with some fields turned off.</summary>
 public static class FormatFields
 {
-    private static readonly HashSet<string> TurnOffCategories = new(["cad", "model3d", "geo", "font"], StringComparer.OrdinalIgnoreCase);
+    private static readonly HashSet<string> TurnOffCategories = new(["cad", "model3d", "geo"], StringComparer.OrdinalIgnoreCase);
 
     /// <summary>Every field: one per category (named after it), then the fields that aren't categories.</summary>
     public static IReadOnlyList<FormatField> All { get; } =
@@ -75,13 +75,13 @@ public static class FormatFields
         (FormatGrade.Specialist,
         [
             "jp2", "psd", "psb", "ppm", "icns", "qoi", "dds", "cur", "xpm", "xbm", "pam", "pfm", "miff", "dcm",
-            "exr", "hdr", "fits", "xcf", "kra", "raw", "eps", "ps", "ai", "cdr", "cgm", "plt", "dst", "fodg", "fodt",
+            "exr", "hdr", "fits", "xcf", "kra", "raw", "ai", "cdr", "cgm", "plt", "dst", "fodg", "fodt",
             "fods", "fodp", "rst", "tex", "org", "adoc", "typ", "mediawiki", "dbk", "ipynb", "textile", "man",
             "jsonl", "yaml", "toml", "har", "htmlz", "txtz", "chm", "dv", "mxf", "cavs", "usm", "m4s", "dav", "bik",
             "h265", "h264", "ac3", "caf", "mp2", "dss", "wv", "tta", "w64", "eac3", "ape", "tak", "dsf", "dff",
             "dts", "tar", "tgz", "tbz2", "txz", "tar7z", "tlz", "gz", "bz2", "xz", "lz", "lzma", "jar", "mcpack", "mcaddon",
             "mcworld", "mctemplate", "mrpack", "cab",
-            "cpio", "deb", "rpm", "dwg", "ttf", "otf", "woff", "woff2", "ass", "ssa", "ttml", "scc", "glb", "gltf",
+            "cpio", "deb", "rpm", "dwg", "ass", "ssa", "ttml", "scc", "glb", "gltf",
             "stl", "obj", "3mf", "ply", "fbx", "geojson", "kml", "kmz", "gpx", "shp", "fit"
         ]),
         (FormatGrade.Legacy,
@@ -89,7 +89,7 @@ public static class FormatFields
             "mng", "pcx", "wbmp", "sgi", "ras", "pcd", "wmf", "dot", "wpd", "lwp", "sdw", "cwk", "mcw", "602", "psw",
             "xlt", "sdc", "sda", "mobi", "azw", "azw4", "prc", "lit", "lrf", "pdb", "pml", "rb", "snb", "tcr", "oeb",
             "flv", "3gp", "3g2", "vob", "mod", "rm", "swf", "wtv", "flc", "amr", "au", "voc", "mpc", "spx", "tz", "z",
-            "lha", "arj", "eot", "fon", "sub"
+            "lha", "arj", "sub"
         ]),
     ]);
 
@@ -97,7 +97,7 @@ public static class FormatFields
     private static readonly Dictionary<string, FormatField[]> Overlaps = BuildOverlaps(
     [
         // Layout, print, photo post-production, signs and embroidery.
-        (["psd", "psb", "exr", "hdr", "xcf", "kra", "raw", "eps", "ps", "ai", "cdr", "plt", "dst"], ["design"]),
+        (["psd", "psb", "exr", "hdr", "xcf", "kra", "raw", "ai", "cdr", "plt", "dst"], ["design"]),
         // Game textures and cutscenes, Minecraft packs and modpacks.
         (["dds", "usm", "bik", "mcpack", "mcaddon", "mcworld", "mctemplate", "mrpack"], ["game"]),
         // Medical imaging and astronomy.
@@ -141,8 +141,6 @@ public static class FormatFields
         (["flc"], ["legacy", "game"]),
         // Musepack.
         (["mpc"], ["legacy", "audio-pro"]),
-        // EOT gave way to WOFF, FON to TrueType.
-        (["eot", "fon"], ["legacy", "font"]),
         // Alpha-channel image sequences in video and motion graphics, as well as game textures.
         (["tga"], ["image", "game"]),
         // Vector tools make it for laser cutting, plotters and CNC, not only CAD.

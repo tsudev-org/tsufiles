@@ -10,12 +10,11 @@ TsuFiles chooses engines automatically. Settings → *Engines* shows their statu
 | Vector graphics | built in (Svg.Skia, SkiaSharp, ACadSharp) | **SVG/SVGZ → PDF (vector) and images**, SVG ↔ SVGZ, **SVG → DXF** (→ DWG with the CAD engine), **raster images → SVG (tracing)**, PDF-compatible AI → PDF, **HP-GL / HP-GL/2 plot files (PLT) → SVG**, PDF and images (pen moves, packed PE polylines, arcs and filled polygons; text labels are not drawn), **Tajima DST embroidery → SVG** (stitches as lines, a palette colour per thread; → PNG, JPG, PDF from there) |
 | ICNS | built in | images → ICNS (16–1024 px), ICNS → images |
 | PDFsharp | built in (library) | images → PDF (CMYK pictures stay CMYK), merge, split, page ranges, page organising, lossless rotate and crop-box edits, pages per sheet (N-up), spreadsheet print-studio assembly, **compression** (smaller PDFs, see below), PDFs without their metadata |
-| PDFium | built in (library) | PDF → images (multi-page TIFF/GIF supported); CMYK pages → CMYK JPG/TIFF through Ghostscript when it is installed |
+| PDFium | built in (library) | PDF → images (multi-page TIFF/GIF supported) |
 | Unhwp | built in (library) | HWP/HWPX → TXT, Markdown, HTML (pictures in a `<name>_files` folder next to the Markdown, embedded in the HTML) |
 | Text & Markdown (Markdig) | built in (library) | **Markdown → HTML, TXT**; **TXT, LOG, PY, PAC, BAT, CMD, COMMAND, LUA, CSS, PS1, SQL, AHK, INI, RSC, C, H, CPP, CC, CXX, HPP, HH, HXX, CS, DART, HQL, DBML, JAVA → UTF-8 TXT**, preserving source text without running scripts (and → PDF / DOCX through the HWPX writer, rhwp or LibreOffice) |
 | Spreadsheets (ExcelDataReader for XLS) | built in (library) | **XLSX, XLS, ODS, CSV, TSV → XLSX, ODS, CSV, TSV** (one CSV / TSV per sheet) |
 | Office Open XML | built in | **DOCM / DOTX / DOTM ↔ DOCX, XLSM / XLTX ↔ XLSX, PPTM / POTX / POTM / PPSX ↔ PPTX** (macros removed for macro-free types) |
-| Fonts | built in | **TTF, OTF, WOFF, WOFF2, EOT ↔ each other**; **FON (NE monochrome FNT v2/v3, supported single-byte charsets) → TTF, OTF, WOFF, WOFF2, EOT only**; CFF (PostScript) outlines become TrueType for TTF and EOT |
 | **HWPX writer** | built in | **DOCX (+ DOCM/DOTX/DOTM), XLSX (+ XLSM/XLTX), XLS, ODS, CSV, TSV, PPTX (+ PPTM/POTX/POTM/PPSX), PDF, HTML, MHTML, EPUB, MOBI/AZW3, FB2, HWPX, TXT, Markdown → HWPX** (and with rhwp → PDF and images); ODT, RTF, reStructuredText, LaTeX → HWPX with Pandoc |
 | **DOCX writer** | built in | **HWPX (and HWP through rhwp), PDF, HTML, MHTML, EPUB, MOBI/AZW3, FB2, Markdown, TXT, XLSX, XLS, ODS, CSV, PPTX (+ variants) → DOCX** |
 | PDF text | built in (PdfPig) | **PDF → TXT, Markdown** (reading order, also two columns; Markdown keeps headings, emphasis, links and the pictures; no OCR) |
@@ -34,7 +33,6 @@ TsuFiles chooses engines automatically. Settings → *Engines* shows their statu
 | Archives (7-Zip) | bundled with the installer (`engines/7zip`, ~2.5 MB) + built-in readers | ZIP (including ANSYS Workbench WBPZ), 7Z, RAR, TAR (+ GZ/BZ2/XZ/Z/7Z/LZ), CAB, ISO, DMG, split (.001), Minecraft and Modrinth packs, … **→ folder, ZIP, 7Z, TAR, TAR.GZ/BZ2/XZ, the packs**; ALZ, EGG, lzip read in-process; "Compress into one archive" for any files |
 | LibreOffice + H2Orestart + Java | **optional download** (~420 MB, 1.3 GB on disk) | older and rare formats only: DOC, XLS, PPT, RTF and OpenDocument → PDF and to each other, output as DOCX/ODT/ODS/ODP; HWP/HWPX → DOCX/ODT; read-only formats (see below) → PDF and their kind's editable formats; FODT, OpenDocument templates (OTT, OTS, OTP) and XLT out; SVG → EMF/WMF/ODG, a PDF page → SVG |
 | Pandoc | **optional download** (~42 MB, 240 MB on disk) | Markdown ↔ DOCX/ODT/RTF, DOCX/ODT/HTML/RTF → Markdown, HTML ↔ DOCX/ODT, markup languages (reStructuredText, LaTeX, Org, AsciiDoc, Typst, MediaWiki, DocBook, Jupyter, Textile, man, OPML) ↔ Markdown/HTML/DOCX/ODT and each other (and → RTF, EPUB, TXT), Markdown and markup → PPTX slides |
-| Ghostscript | **optional download** (~20 MB, 31 MB on disk) | EPS/PS → PDF, PDF → EPS/PS, PostScript-based AI → PDF (images through PDF and PDFium); smaller PDFs when a preset asks for it; renders CMYK PDF/AI pages for CMYK JPG/TIFF |
 | Tesseract | **optional download** (~50 MB, 160 MB on disk; each language 0.4–10 MB when first used) | **text recognition (OCR)**: scans and pictures → searchable PDF, and their text into DOCX, TXT, Markdown and HWPX ("Recognize text" in the preset, see below) |
 | FFmpeg | **optional download** (~100 MB, 272 MB on disk) | **all video and audio**: video ↔ video (H.264, HEVC, AV1), video → animated GIF / APNG, a still frame or every frame, audio and subtitle extraction, audio ↔ audio (also APE, WavPack, TTA, DSD, DTS, ALAC, …), GIF, APNG and photos → MP4/WEBM/MOV, Live / Motion Photos → their video, a clip of a video → an iPhone Live Photo or Android Motion Photo (experimental), images → HEIC, clips or audio files joined into one, pictures → a slideshow MP4, copies without metadata (see "Media tools") |
 | ExifTool | **optional download** (~11 MB on Windows, ~8 MB elsewhere; 30 MB on disk) | **the Metadata tool**: reads every metadata field of pictures, PDFs, video and sound, and writes changes into a copy in the file's own format without re-encoding it (JPG, PNG, TIFF, WEBP, HEIC, AVIF, JPEG XL, GIF, PSD, camera RAW, PDF, MP4, MOV, M4A, 3GP, …; not MP3, FLAC, WAV, MKV, AVI or BMP, which it shows read-only). Without it the Metadata tool shows nothing and offers it |
@@ -75,10 +73,10 @@ the same on every PC. An external engine is looked for in this order:
 1. a copy the user picked in Settings → *Engines*;
 2. TsuFiles's own copy (bundled or downloaded);
 3. a copy already on the computer: on `PATH`, in Homebrew's and the usual Unix folders, or where the LibreOffice,
-   calibre, Ghostscript and Tesseract installers put it. Settings → *Engines* shows it as "Found on this PC", with a note when
+   calibre and Tesseract installers put it. Settings → *Engines* shows it as "Found on this PC", with a note when
    its version is older than the one TsuFiles downloads.
 
-Where TsuFiles has no download of an engine (FFmpeg, Ghostscript and Tesseract on macOS, LibreOffice, Ghostscript and
+Where TsuFiles has no download of an engine (FFmpeg and Tesseract on macOS, LibreOffice and
 Tesseract on Linux),
 step 3 is how it is found. Microsoft Office
 and Hancom Office are never used, even when installed. Running from source, the repository's `engines/` folder
@@ -101,10 +99,6 @@ they can be installed or removed later in Settings → *Engines*. A conversion t
   no registry entries, no admin rights. LibreOffice's help, gallery and most dictionaries are removed afterwards
   (~500 MB). msiexec gets the real paths of the package, the target and its log: the Windows Installer service won't
   follow a junction a user made (error 1620 or 1622, #527), as when `AppData\Local` was moved to another drive.
-- Ghostscript comes from conda-forge (Artifex publishes only an NSIS installer): a `.conda` package is a zip with a
-  zstd tarball, of which only `Library/bin` is unpacked (SharpCompress; `fetch-engines.ps1` uses Windows' `tar.exe`).
-  Its fonts and resources are compiled into `gsdll64.dll`. The Microsoft C++ runtime it was built against
-  (`vcruntime` component) is copied next to `gswin64c.exe`, so it runs on PCs without the VC++ Redistributable.
 - Tesseract is UB Mannheim's Windows build (the one Tesseract's documentation points to), published only as an NSIS
   installer. It is never run: TsuFiles's own 7-Zip unpacks it (`nsis` kind), and the training programs, manuals,
   installer files and bundled language data are removed (`TrimTesseract`, ~80 MB). The languages come from
@@ -124,7 +118,6 @@ the runtime next to every program that needs it and does not ship it (`Infrastru
 |---|---|
 | `engines/rhwp/rhwp.exe` (bundled) | `vcruntime` component copied next to it by `fetch-engines.ps1` (#248) |
 | `unhwp.dll` (NuGet, loaded into TsuFiles.exe and tsufiles-cli.exe) | `vcruntime` component copied next to `TsuFiles.exe` (`build-installer.ps1` → `fetch-engines.ps1 -RuntimeTo`) |
-| Ghostscript (download) | `vcruntime` component copied next to `gswin64c.exe` (`EngineInstaller`, `fetch-engines.ps1`) |
 | LibreOffice (download) | its own copy, which the administrative install leaves in `System64`, copied into `program/` (`EngineInstaller`, `fetch-engines.ps1`; `LibreOfficeConverter` also repairs a copy installed by an earlier TsuFiles) |
 | calibre, Java (downloads) | ship their own next to their programs (`app/bin`, `bin`) |
 | 7-Zip, FFmpeg (GyanD), Tesseract (UB Mannheim, MinGW), Pandoc, PDFium, SkiaSharp / HarfBuzz, Magick.Native, the Explorer menu DLL, .NET | import neither (static runtime or MinGW / GHC builds) |
@@ -339,22 +332,8 @@ in it also builds the package (artifact `windows-arm64-package`).
 - **ICNS** files are written with every size iconutil makes (16–1024 px, PNG), the picture centred on a transparent
   square; reading takes the largest image (PNG, JPEG 2000 or the old RLE + mask entries).
 - **Illustrator** files saved with "Create PDF compatible file" (the default since Illustrator 9) are PDFs and need
-  nothing extra; PostScript-based ones need Ghostscript.
-- **CMYK pages** (#1027). PDFium renders RGB only, so a print file (a CMYK PDF, or an Illustrator file through its
-  PDF) → JPG or TIFF is rendered by Ghostscript instead when it is installed: `tiff32nc` (8-bit CMYK) at the preset's
-  render DPI, cut to the crop box, anti-aliased, then written like PDFium's pages (quality, resize, `_p{n}` names,
-  multi-page TIFF, long images, size limits). `Pdf/PdfCmykContent.cs` decides per document with PdfPig, from the
-  first 20 selected pages: DeviceCMYK colours (`k` / `K`, also inside forms), four-channel ICC colour spaces,
-  Separation / DeviceN (spot colours), CMYK pictures and gradients. DeviceCMYK values come out as the document gives
-  them (Ghostscript's default CMYK profile is both their source and the output). When the PDF has an output intent
-  with a CMYK profile (PDF/X), Ghostscript renders into that profile and the picture carries it; otherwise the picture
-  is untagged CMYK, which keeps the numbers and leaves the profile to the print shop (Ghostscript's own default
-  profile is removed). RGB documents, a grayscale preset, other targets (PNG, WebP, …), a PDF PdfPig can't read and
-  PCs without Ghostscript keep PDFium's RGB rendering. When a CMYK file comes out in RGB only because Ghostscript is
-  missing or failed on it, the result says so (`notice.cmyk_needs_ghostscript`, `notice.cmyk_render_failed`): print
-  work shouldn't change colour unseen.
-- EPS and PS → PNG go straight through Ghostscript's `pngalpha` device, so the background stays transparent;
-  JPG, WebP, … and AI reach images through PDF (Ghostscript → PDFium), and SVG reaches EPS through PDF.
+  nothing extra; PostScript-based ones are refused with a message (`error.ai_postscript`).
+- **CMYK pages** (#1027): PDFium renders RGB only, so a CMYK PDF or Illustrator file becomes an RGB picture.
 
 ## Tracing (raster images → SVG)
 
@@ -549,53 +528,6 @@ render it. PDFsharp combines the resulting PDFs. The live preview follows this e
 PDFium/PDFtoImage for lazy thumbnails and the selected large page; the ordinary donut's PDF can differ because its
 built-in XLSX route reads the workbook into TsuFiles's document model.
 
-## Fonts
-
-Fonts are converted in-process (`TsuFiles.Engines/Fonts`); zlib and Brotli come with .NET. The input format is
-recognised by content, so a mislabelled file still converts. FON is the exception: it is chosen by its `.fon`
-extension, and the file must then have an NE header with FNT resources.
-
-- **WOFF 1.0**: every table zlib-compressed (stored as-is when that isn't smaller). Lossless both ways.
-- **WOFF2**: one Brotli stream at the highest quality with the glyf/loca transform and, where it applies, the hmtx
-  transform, so files come out the size of Google's reference encoder's. Reading handles both transforms, the
-  overlap bitmap, untransformed tables and the first font of a WOFF2 collection. Like other encoders, TsuFiles drops
-  the DSIG signature and sets bit 11 of head.flags. Brotli is slow on big fonts (about 10 s per MB, so about a
-  minute for a 4.6 MB CJK font); the job shows progress and can be cancelled.
-- **EOT**: written as version 0x00020001 (names and OS/2 fields in the header, no MicroType Express compression, no
-  XOR obfuscation, no URL restriction). Uncompressed EOT files are read (XOR-obfuscated ones too); MTX-compressed
-  ones fail with a clear message.
-- **TTF → OTF** keeps the TrueType outlines: TrueType-flavoured OpenType is valid OpenType and what systems and
-  browsers expect; cubic outlines would gain nothing.
-- **OTF with CFF outlines → TTF** (and → EOT, because Internet Explorer renders only TrueType outlines in EOT)
-  converts the glyphs: Type 2 charstrings with subroutines, flex, seac accents and CID-keyed fonts are drawn, curves
-  are approximated with quadratic splines within 1/1000 em (the approach of fontTools' cu2qu) and contours are
-  reversed to TrueType's direction. glyf, loca, maxp 1.0 and post (format 2 with the CFF glyph names, format 3 for
-  CID fonts) are built; head, hhea, hmtx and, from VORG, vmtx are updated; CFF, VORG and DSIG are dropped; every
-  other table (cmap, name, OS/2, GSUB, GPOS, kern, ...) is kept. PostScript hints are not converted: the font gets a
-  gasp table (smoothing at every size) and a prep that switches on dropout control instead.
-- **FON → TTF, OTF, WOFF, WOFF2, EOT** (input only): TsuFiles reads the monochrome FNT v2/v3 bitmap resources of an NE
-  executable and turns each lit pixel into a straight, grid-aligned TrueType outline. The result retains the
-  original pixel shape, per-glyph advance, ascent and baseline; there is no smoothing or curve tracing. A FON with a
-  single font resource produces `Name.ttf` (or the corresponding OTF/WOFF/WOFF2/EOT extension). Several resources
-  produce one file per strike, such as `Name-13px.ttf`, `Name-13px-Bold.ttf`, `Name-13px-2.ttf` and
-  `Name-14px.ttf`; the font family names distinguish heights, group different styles at the same height, and number
-  only repeated styles at the same height. Existing output files follow the usual Skip, Rename and Overwrite
-  policies independently for each strike. Invalid resources fail the whole input before output files are allocated.
-  Character mapping uses the Windows single-byte code page indicated by the resource charset, not the computer's
-  locale. Undefined bytes (including those that Windows decodes to Private Use code points in the Greek, Hebrew,
-  Baltic and Thai code pages), non-round-tripping bytes and Unicode control characters retain their glyphs and
-  spacing but receive no text mapping; charset hints cannot recover the meaning of custom glyphs. PE resources, vector or
-  externally stored bitmaps, color FNT, standalone `.fnt` files and double-byte or unrecognized charsets are not
-  supported. FON cannot be an output format.
-- Not supported: CFF2 (variable) outlines to TTF or EOT (to WOFF, WOFF2 and OTF they convert), writing font
-  collections, and WOFF/WOFF2 extended metadata (dropped).
-
-`tests/TsuFiles.Engines.Tests/FontTests.cs` checks every conversion with small OFL fonts in
-`tests/TsuFiles.Engines.Tests/Fonts` (see `OFL.txt` there): round trips keep every table byte for byte, a WOFF2 made
-by Google's encoder decodes to the source font, and converted CFF glyphs are compared with the originals in Skia.
-`tests/TsuFiles.Engines.Tests/FonTests.cs` builds synthetic FON samples in code (`FonBuilder`) and compares every
-rendered glyph with its source bitmap.
-
 ## DOCX writer
 
 The counterpart of the HWPX writer: `Hwp/Hwpx/Docx/DocxWriter*.cs` writes WordprocessingML by hand from the same
@@ -762,7 +694,7 @@ PDFsharp and Magick.NET; nothing has to be installed.
 
 - **Pictures**: `Pdf/PdfPictureUses.cs` follows the content streams of the pages, of the forms they draw and of
   annotation appearances (`q`/`Q`/`cm`/`Do`) to find the largest size each picture is drawn at. A picture drawn at more
-  than 1.5 × the level's resolution is scaled down to it (as Ghostscript does); a picture whose drawing can't be
+  than 1.5 × the level's resolution is scaled down to it (as common PDF optimisers do); a picture whose drawing can't be
   followed is taken as large as the page holds it, so it is never scaled down too far. Photos are saved as JPEG at the
   level's quality, pictures with up to 256 colours (charts, screenshots, logos) losslessly (Flate with PNG
   prediction). A JPEG that keeps its size is encoded again only when that saves at least 10 %. A picture is replaced
@@ -782,12 +714,6 @@ PDFsharp and Magick.NET; nothing has to be installed.
 - **Never bigger**: when nothing gets smaller (a PDF of text only, one compressed before), the PDF is written as it was
   and the toast (and `tsufiles convert`) says that it couldn't be made smaller. Password-protected PDFs fail with the same
   message as the other PDF conversions.
-- **Ghostscript** (optional, *Also try Ghostscript* in the preset): when it is installed, the PDF is also run through
-  `pdfwrite` with `-dPDFSETTINGS=/screen`, `/ebook` or `/printer` (the same 72, 150 and 300 dpi) and
-  `-dCompatibilityLevel=1.6`, and the smallest of the two results is kept; when Ghostscript fails, the built-in result
-  stands. It is off by default: Ghostscript rewrites the whole file (fonts are subset again, structure and form fields
-  may change), so it is the user's choice. It also writes object streams, which PDFsharp can't, and its JPEGs are
-  somewhat smaller at the Balanced level.
 - **Not done**: object streams (PDFsharp writes none), font subsetting or removal of unused glyphs, converting
   colour to gray, flattening transparency or form fields, recompressing JBIG2/CCITT scans.
 
@@ -839,7 +765,7 @@ in the preset library only). Video and audio need FFmpeg.
 
 A preset that writes PDF can finish every PDF it makes (`PdfOptions.Watermark`, `PageNumbers`, `Password`;
 `Pdf/PdfFinishing.cs`, PDFsharp only). `JobQueue` runs it (`IPdfFinisher`) on each PDF a file became, whichever engine
-wrote it (PDFsharp, rhwp, LibreOffice, Ghostscript …), and once on a merged PDF, so its pages are numbered through.
+wrote it (PDFsharp, rhwp, LibreOffice …), and once on a merged PDF, so its pages are numbered through.
 
 - **Watermark**: the text in light grey (22 % opacity), bold, along the page's diagonal over the content, at 70 % of
   the diagonal and at most a quarter of the short side high.
@@ -1378,7 +1304,7 @@ per MB of unpacked `Contents/section*.xml` (an HWP counts three times its file s
 60 minutes, after which a rhwp that hangs is stopped. The progress estimate assumes 15 minutes per MB. Cancelling
 stops rhwp at once. A time-out fails with "rhwp couldn't finish this long document in time" (with calibre installed,
 it suggests ranking calibre above the HWPX writer for e-books). The other engines keep fixed limits: LibreOffice 3
-minutes, Ghostscript 5, Pandoc 2 and calibre 10 (it made the 640-page novel's PDF in a minute).
+minutes, Pandoc 2 and calibre 10 (it made the 640-page novel's PDF in a minute).
 
 ## Archives
 
@@ -1439,29 +1365,6 @@ bundled with the installer), never a 7-Zip installed on the PC. It runs as a sep
 - Tests (`ArchiveTests.cs`) build ALZ, EGG and lzip files in code (`ArchiveBuilders.cs`, with bzip2 and LZMA streams
   written by 7-Zip) and skip the 7-Zip parts when `engines/7zip` is missing.
 
-## ISO images
-
-A dropped folder opens a small **Folders** donut with **ISO image**. Each selected folder creates a separate ISO,
-with its contents at the disc root. The ISO preset is available in Settings > Toolbar for users to add to the
-Archives donut; it is not on that donut by default. Supported archives can also be converted to ISO: TsuFiles
-safely extracts them into its temporary work folder, then writes their contents into the image.
-Password-protected archives fail with a clear message.
-
-CLI: `tsufiles convert "path/to/folder" --to iso` or `tsufiles convert "backup.zip" --to iso`.
-DiscUtils.Iso9660 writes ISO 9660 with Joliet in-process, preserving Unicode BMP names and empty directories.
-There are no filesystem or compression options. ISO writing needs no external program; archive reading uses
-the existing extraction engine. Images are data discs, not bootable clones. UDF is not included.
-
-Individual names must fit 62 UTF-16 characters, leaving room for DiscUtils' version suffix; relative disc paths
-must fit 240 characters. Control characters, semicolons, backslashes, `*`, `:`, `?` and supplementary Unicode
-characters are rejected clearly. Individual files must be smaller than 4 GiB. Drive roots and symbolic links/junctions
-are refused. Timestamps are clamped to 1900-2155 in the image;
-source timestamps are unchanged. On Windows, a marked input file transfers Mark of the Web to the image.
-
-File contents are streamed, progress reports bytes written, and cancellation is checked during enumeration and
-streaming. A previous destination inside the source is excluded. A new image replaces its destination only after
-all expected bytes have been written; failures and cancellation preserve any previous image.
-
 ## LibreOffice
 
 - Each parallel worker gets its own profile under `%APPDATA%\TsuFiles\libreoffice-profiles` (LibreOffice silently
@@ -1500,8 +1403,7 @@ all expected bytes have been written; failures and cancellation preserve any pre
   by the built-in spreadsheet engine like XLS.
 - SVG opens in Draw only for EMF, WMF and ODG; the vector engine keeps SVG → PDF and images. PDF opens in Draw
   (`draw_pdf_import`) only for SVG and ODG: Draw's SVG export draws every page of a PDF on top of each other, so TsuFiles
-  first copies the first page of the preset's page range into a PDF of its own (PDFsharp). EPS and PS reach SVG
-  through Ghostscript's PDF; Draw would only show their preview picture.
+  first copies the first page of the preset's page range into a PDF of its own (PDFsharp).
 - Checked with LibreOffice 26.2.6 (`LibreOfficeFormatTests`): FODT, FODS, FODP, FODG, T602 and SVG inputs, the
   template and FODT outputs, XLT read back by the spreadsheet engine, EMF / WMF headers and the one-page PDF → SVG.
   ClarisWorks, MacWrite and Pocket Word are binary formats without sample files in the repository: only their

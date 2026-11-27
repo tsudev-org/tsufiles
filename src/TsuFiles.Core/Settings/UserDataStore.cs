@@ -497,6 +497,19 @@ internal static class SettingsMigrations
             }
         }
 
+        // v81 (TsuFiles, phiếu TG1 G3b): fonts, Ghostscript (EPS / PostScript) and writing ISO images are gone; the
+        //      Fonts field went with its format category.
+        if (settings.SchemaVersion < 81)
+        {
+            foreach (var id in RemovedFontGsIsoEngines)
+            {
+                settings.EnginePriority.RemoveAll(e => string.Equals(e, id, StringComparison.OrdinalIgnoreCase));
+                settings.EngineOwnCopies.Remove(id);
+                settings.NotifiedEngineVersions.Remove(id);
+            }
+            settings.TurnedOffFields.RemoveAll(f => string.Equals(f, "font", StringComparison.OrdinalIgnoreCase));
+        }
+
         if (settings.Triggers.Count == 0)
             settings.Triggers = TriggerGesture.Defaults();
 
@@ -508,6 +521,9 @@ internal static class SettingsMigrations
 
     /// <summary>Engine ids removed in schema 80 (phiếu TG1 G3b).</summary>
     internal static readonly string[] RemovedLocalAiEngines = ["whisper", "upscaler", "translator"];
+
+    /// <summary>Engine ids removed in schema 81 (phiếu TG1 G3b).</summary>
+    internal static readonly string[] RemovedFontGsIsoEngines = ["font", "ghostscript", "iso"];
 
     /// <summary>Upgrades presets and profiles written with settings schema <paramref name="from"/>.</summary>
     /// <returns>True when something was added.</returns>
@@ -1081,27 +1097,7 @@ internal static class SettingsMigrations
             changed = true;
         }
         // v73 brought the Upscale tool (Upscayl); v80 took it out again.
-        // v74: folder inputs have their own small ISO donut; existing archive donuts remain untouched. (Schema 74 may
-        //      be renumbered if another change takes it first.)
-        if (from < 74)
-        {
-            var hadIsoPreset = presets.Any(p => p.Id == "to-iso");
-            if (presets.All(p => p.Id != "to-iso"))
-            {
-                var at = presets.FindIndex(p => p.Id == "zip-all");
-                presets.Insert(at >= 0 ? at : presets.Count, BuiltInData.CreatePresets().Single(p => p.Id == "to-iso"));
-                changed = true;
-            }
-            // A library already containing our ISO preset may have deliberately removed its Folders donut.
-            if (!hadIsoPreset && profiles.All(p => p.Id != "folders"))
-            {
-                var at = profiles.FindIndex(p => p.Id == "archives");
-                if (at >= 0) at++;
-                else { at = profiles.FindIndex(p => p.IsFallback); if (at < 0) at = profiles.Count; }
-                profiles.Insert(at, BuiltInData.CreateProfiles().Single(p => p.Id == "folders"));
-                changed = true;
-            }
-        }
+        // v74 brought the Folders donut with its ISO image preset; v81 took them out again.
         // v78 (TsuFiles): text recognition reads Vietnamese unless a preset says otherwise. "eng" was the old default:
         //      it becomes "vie" where nobody can have meant it (recognition off, or a built-in preset). The user's own
         //      presets with recognition on keep their language.
@@ -1129,11 +1125,28 @@ internal static class SettingsMigrations
                 changed |= profile.BackPresetIds?.RemoveAll(LocalAiPresets.Contains) > 0;
             }
         }
+        // v81 (TsuFiles, phiếu TG1 G3b): the built-in font, EPS and ISO image presets leave the library and every donut.
+        //      The built-in Fonts and Folders donuts go when nothing of the user's own is left on them; the user's own
+        //      presets for these formats stay and say that no engine converts them.
+        if (from < 81)
+        {
+            changed |= presets.RemoveAll(p => FontGsIsoPresets.Contains(p.Id)) > 0;
+            foreach (var profile in profiles)
+            {
+                changed |= profile.PresetIds.RemoveAll(FontGsIsoPresets.Contains) > 0;
+                changed |= profile.BackPresetIds?.RemoveAll(FontGsIsoPresets.Contains) > 0;
+            }
+            changed |= profiles.RemoveAll(p => p.Id is "fonts" or "folders"
+                && p.PresetIds.All(id => id == "zip-all") && (p.BackPresetIds ?? []).All(id => id == "zip-all")) > 0;
+        }
         return changed;
     }
 
     /// <summary>Built-in presets of the local AI tools removed in schema 80 (phiếu TG1 G3b).</summary>
     internal static readonly HashSet<string> LocalAiPresets = ["caption-video", "translate", "tool-upscale"];
+
+    /// <summary>Built-in font, EPS and ISO image presets removed in schema 81 (phiếu TG1 G3b).</summary>
+    internal static readonly HashSet<string> FontGsIsoPresets = ["to-ttf", "to-otf", "to-woff", "to-woff2", "to-eot", "to-eps", "to-iso"];
 
     private static bool AddPdfSheets(List<Preset> presets)
     {

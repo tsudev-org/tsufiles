@@ -1,5 +1,5 @@
 // Builds PDFs from images, splits / extracts PDF pages, merges PDFs, makes PDFs smaller (PDFsharp, MIT; the
-// compression itself is in PdfCompressor, with Ghostscript as an optional second try) and removes their metadata.
+// compression itself is in PdfCompressor) and removes their metadata.
 // It also finishes every PDF a job writes with a watermark, page numbers or a password (PdfFinishing).
 
 using System.Runtime.ExceptionServices;
@@ -11,7 +11,6 @@ using TsuFiles.Core.Conversion;
 using TsuFiles.Core.Presets;
 using TsuFiles.Engines.Infrastructure;
 using TsuFiles.Engines.Magick;
-using TsuFiles.Engines.Vector;
 
 namespace TsuFiles.Engines.Pdf;
 
@@ -42,7 +41,7 @@ public sealed class PdfSharpConverter : IConverter, IPdfMerger, IPdfFinisher, II
         : step.Preset.Pdf is { Compression: PdfCompression.None, RemoveMetadata: true, SplitPages: false, PageRange: "" }
             ? Task.Run(() => WithoutMetadata(step, progress, cancellationToken), cancellationToken)
         : step.Preset.Pdf.Compression == PdfCompression.None ? Task.Run(() => SplitOrExtract(step, progress, cancellationToken), cancellationToken)
-        : Task.Run(() => CompressAsync(step, progress, cancellationToken), cancellationToken);
+        : Task.Run(() => Compress(step, progress, cancellationToken), cancellationToken);
 
     /// <summary>Watermark, page numbers and password (PdfFinishing).</summary>
     public Task FinishAsync(string path, PdfOptions options, CancellationToken cancellationToken) =>
@@ -243,11 +242,10 @@ public sealed class PdfSharpConverter : IConverter, IPdfMerger, IPdfFinisher, II
     /// <summary>
     /// PDF → a smaller PDF (<see cref="PdfOptions.Compression"/>), also with a page range or one file per page: the whole
     /// file keeps everything (bookmarks, form fields, links, metadata) and is compressed as it is; selected pages are
-    /// copied into new PDFs first, as without compression. Each result is the smallest of the built-in compression and,
-    /// when the preset asks for it and it is installed, Ghostscript's; when neither is smaller than the pages as they
-    /// were, those are written unchanged and the file gets a notice.
+    /// copied into new PDFs first, as without compression. When the compressed result is not smaller than the pages as
+    /// they were, those are written unchanged and the file gets a notice.
     /// </summary>
-    private static async Task<IReadOnlyList<string>> CompressAsync(ConversionStep step, IProgress<double>? progress, CancellationToken ct)
+    private static IReadOnlyList<string> Compress(ConversionStep step, IProgress<double>? progress, CancellationToken ct)
     {
         var options = step.Preset.Pdf;
         var scratch = Path.Combine(step.WorkDirectory, "compress-" + Guid.NewGuid().ToString("N")[..8]);
@@ -293,7 +291,6 @@ public sealed class PdfSharpConverter : IConverter, IPdfMerger, IPdfFinisher, II
             }
         }
 
-        var gs = options.CompressWithGhostscript ? GhostscriptConverter.Locate() : null;
         var written = new List<string>();
         var anySmaller = false;
         for (var i = 0; i < parts.Count; i++)
@@ -302,7 +299,7 @@ public sealed class PdfSharpConverter : IConverter, IPdfMerger, IPdfFinisher, II
             var output = step.Output.Allocate("pdf", parts[i].Suffix);
             if (output is null)
                 continue;
-            anySmaller |= await CompressFileAsync(parts[i].Plain, output, step.Preset, gs, scratch, ct);
+            anySmaller |= CompressFile(parts[i].Plain, output, step.Preset, scratch, ct);
             written.Add(output);
             progress?.Report((i + 1.0) / parts.Count);
         }
@@ -311,49 +308,21 @@ public sealed class PdfSharpConverter : IConverter, IPdfMerger, IPdfFinisher, II
         return written;
     }
 
-    /// <summary>Writes the smallest of <paramref name="plain"/> and its compressed versions to <paramref name="output"/>.</summary>
-    /// <returns>True when a compressed version was smaller.</returns>
-    private static async Task<bool> CompressFileAsync(string plain, string output, Preset preset, string? gs, string scratch, CancellationToken ct)
+    /// <summary>Writes the smaller of <paramref name="plain"/> and its compressed version to <paramref name="output"/>.</summary>
+    /// <returns>True when the compressed version was smaller.</returns>
+    private static bool CompressFile(string plain, string output, Preset preset, string scratch, CancellationToken ct)
     {
-        var level = preset.Pdf.Compression;
-        var candidates = new List<string>();
-        Exception? failure = null;
-        var builtIn = Path.Combine(scratch, Guid.NewGuid().ToString("N")[..8] + "-filee.pdf");
-        try
+        var compressed = Path.Combine(scratch, Guid.NewGuid().ToString("N")[..8] + "-tsufiles.pdf");
+        using (var document = OpenForChanges(plain, ct))
         {
-            using var document = OpenForChanges(plain, ct);
-            PdfCompressor.Compress(document, level, preset.Image.KeepMetadata, ct);
-            document.Save(builtIn);
-            candidates.Add(builtIn);
-        }
-        catch (Exception ex) when (gs is not null && ex is not OperationCanceledException)
-        {
-            failure = ex; // Ghostscript may still manage
-        }
-
-        if (gs is not null)
-        {
-            var rewritten = Path.Combine(scratch, Guid.NewGuid().ToString("N")[..8] + "-gs.pdf");
-            try
-            {
-                await GhostscriptConverter.CompressPdfAsync(gs, plain, rewritten, level, scratch, ct);
-                candidates.Add(rewritten);
-            }
-            catch (Exception ex) when (ex is not OperationCanceledException && candidates.Count > 0)
-            {
-                // The built-in result stands.
-            }
-            catch (Exception) when (failure is not null)
-            {
-                throw failure;
-            }
+            PdfCompressor.Compress(document, preset.Pdf.Compression, preset.Image.KeepMetadata, ct);
+            document.Save(compressed);
         }
 
         var original = new FileInfo(plain).Length;
-        var best = candidates.Select(path => new FileInfo(path)).MinBy(file => file.Length);
-        if (best is not null && best.Length < original)
+        if (new FileInfo(compressed).Length < original)
         {
-            CopyWritable(best.FullName, output);
+            CopyWritable(compressed, output);
             return true;
         }
         CopyWritable(plain, output);

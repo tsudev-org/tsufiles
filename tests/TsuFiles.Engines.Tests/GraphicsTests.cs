@@ -1,5 +1,5 @@
 // Images and vector graphics: the extra raster formats (JPEG XL, JPEG 2000, PSD, TGA, PPM, XCF, camera RAW,
-// EMF/WMF), SVG → PDF/PNG, SVGZ, ICNS, Illustrator files and Ghostscript (EPS/PS, skipped when not installed).
+// EMF/WMF), SVG → PDF/PNG, SVGZ, ICNS and Illustrator files.
 
 using System.IO.Compression;
 using System.Text;
@@ -17,8 +17,6 @@ namespace TsuFiles.Engines.Tests;
 
 public class GraphicsTests(EngineFixture fx) : IClassFixture<EngineFixture>
 {
-    private static bool GhostscriptInstalled => GhostscriptConverter.Locate() is not null;
-
     private static void AssertDone(ConversionJob job)
     {
         var errors = string.Join("; ", job.Files.Where(f => f.State == FileState.Failed).Select(f => $"{f.ErrorKey} {f.ErrorDetail}"));
@@ -626,7 +624,7 @@ public class GraphicsTests(EngineFixture fx) : IClassFixture<EngineFixture>
     }
 
     [Fact]
-    public async Task PostScript_illustrator_files_need_ghostscript()
+    public async Task PostScript_illustrator_files_are_refused_with_a_reason()
     {
         var dir = fx.NewFolder();
         var ai = Write(dir, "old.ai", GraphicsBuilders.Eps);
@@ -635,88 +633,11 @@ public class GraphicsTests(EngineFixture fx) : IClassFixture<EngineFixture>
         var job = await fx.ConvertAsync([ai, garbage], new Preset { TargetFormat = "pdf" });
 
         var old = job.Files.Single(f => f.SourcePath == ai);
-        if (GhostscriptInstalled)
-        {
-            Assert.Equal(FileState.Done, old.State);
-        }
-        else
-        {
-            Assert.Equal(FileState.Failed, old.State);
-            Assert.Contains("Ghostscript", old.ErrorDetail);
-        }
+        Assert.Equal(FileState.Failed, old.State);
+        Assert.Equal("error.ai_postscript", old.ErrorKey);
         var bad = job.Files.Single(f => f.SourcePath == garbage);
         Assert.Equal(FileState.Failed, bad.State);
         Assert.Contains("not an Adobe Illustrator", bad.ErrorDetail);
-    }
-
-    // ───────────────────────── Ghostscript ─────────────────────────
-
-    [Fact]
-    public async Task Eps_converts_to_pdf_cropped_and_to_png()
-    {
-        Assert.SkipUnless(GhostscriptInstalled, "Ghostscript is not installed (pwsh build/fetch-engines.ps1 -Only ghostscript).");
-        var dir = Path.Combine(fx.NewFolder(), "한글 폴더");
-        Directory.CreateDirectory(dir);
-        var eps = Write(dir, "그림 1.eps", GraphicsBuilders.Eps);
-
-        var pdf = await fx.ConvertAsync([eps], new Preset { TargetFormat = "pdf" });
-        var png = await fx.ConvertAsync([eps], new Preset { TargetFormat = "png", Pdf = { RenderDpi = 144 } });
-
-        AssertDone(pdf);
-        AssertDone(png);
-        using (var document = PdfReader.Open(pdf.Outputs.Single(), PdfDocumentOpenMode.Import))
-        {
-            Assert.Equal(200, document.Pages[0].Width.Point, 1);
-            Assert.Equal(100, document.Pages[0].Height.Point, 1);
-        }
-        using var image = new MagickImage(png.Outputs.Single());
-        Assert.Equal((400u, 200u), (image.Width, image.Height));
-        var triangle = Pixel(image, 360, 170);
-        Assert.True(triangle.B > 150 && triangle.R < 100, triangle.ToString());
-        // Where the drawing leaves the page empty, the PNG stays transparent (#39), not white.
-        Assert.True(image.HasAlpha);
-        Assert.Equal(0, Pixel(image, 2, 2).A);
-    }
-
-    [Fact]
-    public async Task Pdf_converts_to_eps_per_page_and_to_postscript()
-    {
-        Assert.SkipUnless(GhostscriptInstalled, "Ghostscript is not installed (pwsh build/fetch-engines.ps1 -Only ghostscript).");
-        var dir = fx.NewFolder();
-        var pdf = (await fx.ConvertAsync([EngineFixture.MakeMultiPageTiff(dir, 3)], new Preset { TargetFormat = "pdf" })).Outputs.Single();
-
-        var eps = await fx.ConvertAsync([pdf], new Preset { TargetFormat = "eps", Pdf = { PageRange = "2-3" } });
-        var ps = await fx.ConvertAsync([pdf], new Preset { TargetFormat = "ps" });
-
-        AssertDone(eps);
-        AssertDone(ps);
-        Assert.Equal(["pages_p2.eps", "pages_p3.eps"], eps.Outputs.Select(Path.GetFileName).Order(StringComparer.Ordinal));
-        Assert.All(eps.Outputs, o => Assert.StartsWith("%!PS-Adobe-3.0 EPSF-3.0", File.ReadAllText(o)));
-        var postScript = File.ReadAllText(ps.Outputs.Single());
-        Assert.StartsWith("%!PS-Adobe-3.0", postScript);
-        Assert.Equal(3, postScript.Split("%%Page:").Length - 1);
-    }
-
-    [Fact]
-    public async Task Svg_converts_to_eps_through_pdf()
-    {
-        Assert.SkipUnless(GhostscriptInstalled, "Ghostscript is not installed (pwsh build/fetch-engines.ps1 -Only ghostscript).");
-        var dir = fx.NewFolder();
-        var svg = Write(dir, "logo.svg", GraphicsBuilders.Svg);
-
-        var job = await fx.ConvertAsync([svg], new Preset { TargetFormat = "eps" });
-
-        AssertDone(job);
-        var eps = File.ReadAllText(job.Outputs.Single());
-        Assert.StartsWith("%!PS-Adobe-3.0 EPSF-3.0", eps);
-        // eps2write crops to the drawn content, which lies inside the 300 × 150 pt page.
-        var box = System.Text.RegularExpressions.Regex.Match(eps, @"%%BoundingBox: (\d+) (\d+) (\d+) (\d+)");
-        Assert.True(box.Success, "no bounding box");
-        var (left, bottom, right, top) = (int.Parse(box.Groups[1].Value), int.Parse(box.Groups[2].Value), int.Parse(box.Groups[3].Value), int.Parse(box.Groups[4].Value));
-        Assert.InRange(left, 0, 30);
-        Assert.InRange(bottom, 0, 40);
-        Assert.InRange(right, 250, 300);
-        Assert.InRange(top, 120, 150);
     }
 
     // ───────────────────────── Routes ─────────────────────────
@@ -725,8 +646,6 @@ public class GraphicsTests(EngineFixture fx) : IClassFixture<EngineFixture>
     [InlineData("svg", "png", "vector")]
     [InlineData("svg", "pdf", "vector")]
     [InlineData("ai", "png", "vector,pdfium")]
-    [InlineData("eps", "png", "ghostscript")] // straight to PNG: keeps transparency (#39)
-    [InlineData("svg", "eps", "vector,ghostscript")]
     [InlineData("raw", "jpg", "magick")]
     [InlineData("xcf", "psd", "magick")]
     [InlineData("png", "icns", "icns")]
@@ -735,7 +654,7 @@ public class GraphicsTests(EngineFixture fx) : IClassFixture<EngineFixture>
     [InlineData("psd", "pdf", "pdfsharp")]
     public void Graphics_routes_use_the_expected_engines(string from, string to, string engines)
     {
-        var route = fx.Catalog.CreatePlanner(["ghostscript"]).Plan(from, to);
+        var route = fx.Catalog.CreatePlanner().Plan(from, to);
 
         Assert.NotNull(route);
         Assert.Equal(engines, string.Join(',', route.Steps.Select(s => s.Converter.Id)));

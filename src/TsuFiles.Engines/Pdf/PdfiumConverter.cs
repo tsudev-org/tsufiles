@@ -1,6 +1,6 @@
 // Renders PDF pages to raster images with PDFium (via PDFtoImage, MIT / PDFium BSD-3): one image per page, one
-// multi-page TIFF or GIF, or (PdfOptions.CombinePages) the pages stacked into one tall image. PDFium renders RGB: a
-// document drawn in CMYK (a print file, issue #1027) is rendered by Ghostscript instead when the target holds CMYK.
+// multi-page TIFF or GIF, or (PdfOptions.CombinePages) the pages stacked into one tall image. PDFium renders RGB,
+// also for a document drawn in CMYK (Ghostscript's CMYK rendering left with TG1 G3b).
 
 using ImageMagick;
 using PDFtoImage;
@@ -9,7 +9,6 @@ using TsuFiles.Core.Conversion;
 using TsuFiles.Core.Presets;
 using TsuFiles.Engines.Infrastructure;
 using TsuFiles.Engines.Magick;
-using TsuFiles.Engines.Vector;
 
 // PDFtoImage marks its API for the platforms PDFium ships for (Windows, macOS, Linux, mobile).
 // TsuFiles only targets desktop platforms that are all covered.
@@ -21,15 +20,6 @@ namespace TsuFiles.Engines.Pdf;
 public sealed class PdfiumConverter : IConverter, IImageTransformer
 {
     private static readonly HashSet<string> MultiPageTargets = ["tiff", "gif", "apng", "mng"];
-
-    /// <summary>
-    /// Targets that store CMYK pictures, the ones a print shop takes. Pages drawn in CMYK (<see cref="PdfCmykContent"/>)
-    /// are rendered in CMYK for them when Ghostscript is installed; a grayscale preset keeps PDFium's rendering.
-    /// </summary>
-    private static readonly HashSet<string> CmykTargets = ["jpg", "tiff"];
-
-    /// <summary>Where Ghostscript is, or null; a test sets it to see a PC without it.</summary>
-    internal static Func<string?> FindGhostscript { get; set; } = GhostscriptConverter.Locate;
 
     /// <summary>A tall image beyond this many pixels is scaled down (a 300-page PDF at 300 dpi would need gigabytes).</summary>
     internal const long MaxStackedPixels = 200_000_000;
@@ -55,35 +45,6 @@ public sealed class PdfiumConverter : IConverter, IImageTransformer
             var pageCount = Conversion.GetPageCount(pdf, null);
             var pages = PageRange.Parse(step.Preset.Pdf.PageRange, pageCount);
             var dpi = Math.Clamp(step.Preset.Pdf.RenderDpi, 36, 1200);
-
-            if (CmykTargets.Contains(step.To) && !step.Preset.Image.Grayscale
-                && PdfCmykContent.Inspect(step.InputPath, pages) is { UsesCmyk: true } cmyk)
-            {
-                // A print file that comes out in RGB says so, with the reason: print work shouldn't change colour unseen.
-                if (FindGhostscript() is not { } gs)
-                {
-                    step.Notice?.Invoke("notice.cmyk_needs_ghostscript");
-                }
-                else
-                {
-                    IReadOnlyList<string> files = [];
-                    try
-                    {
-                        files = await GhostscriptConverter.RenderCmykAsync(gs, step.InputPath, pages.Count < pageCount ? pages : null, dpi,
-                            cmyk.OutputProfile, step.WorkDirectory, cancellationToken, progress is null ? null : new SubProgress(progress, 0, 0.6));
-                    }
-                    catch (InvalidOperationException)
-                    {
-                        // Ghostscript fails on some files PDFium renders: those come out in RGB, as before.
-                    }
-                    if (files.Count == pages.Count)
-                    {
-                        var frames = files.Select(file => ReadCmyk(file, dpi, cmyk.OutputProfile));
-                        return Encode(step, pages, dpi, frames, progress is null ? null : new SubProgress(progress, 0.6, 0.4), cancellationToken);
-                    }
-                    step.Notice?.Invoke("notice.cmyk_render_failed");
-                }
-            }
 
             var options = new RenderOptions(Dpi: dpi, WithAnnotations: true, WithFormFill: true, BackgroundColor: SKColors.White);
             var rendered = Conversion.ToImages(pdf, pages, null, options).Select(bitmap => ToMagick(bitmap, dpi));
@@ -253,21 +214,6 @@ public sealed class PdfiumConverter : IConverter, IImageTransformer
         page.ResetPage();
     }
 
-    /// <summary>
-    /// One page Ghostscript rendered. Its TIFF carries Ghostscript's default CMYK profile, which isn't the document's:
-    /// the picture carries the output intent's profile or none (untagged CMYK keeps its numbers, and the print shop
-    /// applies its own).
-    /// </summary>
-    private static MagickImage ReadCmyk(string file, int dpi, byte[]? profile)
-    {
-        var image = new MagickImage(file);
-        image.RemoveProfile("icc");
-        if (profile is not null)
-            image.SetProfile(new ColorProfile(profile));
-        image.Density = new Density(dpi, dpi, DensityUnit.PixelsPerInch);
-        return image;
-    }
-
     private static MagickImage ToMagick(SKBitmap bitmap, int dpi)
     {
         using (bitmap)
@@ -277,10 +223,5 @@ public sealed class PdfiumConverter : IConverter, IImageTransformer
             image.Density = new Density(dpi, dpi, DensityUnit.PixelsPerInch);
             return image;
         }
-    }
-
-    private sealed class SubProgress(IProgress<double> parent, double start, double length) : IProgress<double>
-    {
-        public void Report(double value) => parent.Report(start + length * value);
     }
 }

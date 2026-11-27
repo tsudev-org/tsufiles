@@ -22,9 +22,9 @@
             │ Built in: Magick (images, RAW) · PdfSharp · Pdfium · PdfPig · Svg.Skia · ICNS      │
             │ HwpxWriter + DocxWriter over DocumentReaders (DOCX, XLSX, XLS, ODS, PPTX,          │
             │   PDF, HTML, EPUB, MOBI, FB2, HWPX, Markdown) · Spreadsheets · OOXML variants      │
-            │   · E-mail · Signed files · Data · E-books · CAD · Fonts · Subtitles · 3D models   │
+            │   · E-mail · Signed files · Data · E-books · CAD · Subtitles · 3D models           │
             │ Bundled: rhwp (HWP→PDF, HWP↔HWPX) · 7-Zip (archives) · Unhwp · Markdig             │
-            │ Optional: FFmpeg · LibreOffice + H2Orestart · calibre · Ghostscript · Pandoc       │
+            │ Optional: FFmpeg · LibreOffice + H2Orestart · Tesseract                            │
             └────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
