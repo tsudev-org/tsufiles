@@ -137,18 +137,6 @@ public partial class EnginesPage : UserControl
             await new LibreOfficeOptionsWindow { DataContext = vm }.ShowDialog(window);
     }
 
-    private async void OnManageOllama(object? sender, RoutedEventArgs e)
-    {
-        if (TopLevel.GetTopLevel(this) is not Window window)
-            return;
-        var dlg = new OllamaModelManagerWindow();
-        await dlg.ShowDialog(window);
-        await Task.Run(TsuFiles.Engines.Translation.TranslatorConverter.PerformCheck);
-        var catalog = AppHost.Get<TsuFiles.Core.Conversion.ConverterCatalog>();
-        catalog.Refresh();
-        _ = catalog.CheckInBackgroundAsync();
-    }
-
     /// <summary>Picks the program of a copy the user already has (ffmpeg.exe, ebook-convert.exe, …) and uses it.</summary>
     private async void OnUseOwnCopy(object? sender, RoutedEventArgs e)
     {

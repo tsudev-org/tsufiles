@@ -486,6 +486,17 @@ internal static class SettingsMigrations
             }
         }
 
+        // v80 (TsuFiles, phiếu TG1 G3b): the local AI engines are gone (Whisper, Upscayl, the Ollama translator).
+        if (settings.SchemaVersion < 80)
+        {
+            foreach (var id in RemovedLocalAiEngines)
+            {
+                settings.EnginePriority.RemoveAll(e => string.Equals(e, id, StringComparison.OrdinalIgnoreCase));
+                settings.EngineOwnCopies.Remove(id);
+                settings.NotifiedEngineVersions.Remove(id);
+            }
+        }
+
         if (settings.Triggers.Count == 0)
             settings.Triggers = TriggerGesture.Defaults();
 
@@ -494,6 +505,9 @@ internal static class SettingsMigrations
 
     /// <summary>Engine ids removed in schema 77 (phiếu TG1 G2).</summary>
     internal static readonly string[] RemovedEngines = ["pandoc", "calibre", "vision", "unhwp"];
+
+    /// <summary>Engine ids removed in schema 80 (phiếu TG1 G3b).</summary>
+    internal static readonly string[] RemovedLocalAiEngines = ["whisper", "upscaler", "translator"];
 
     /// <summary>Upgrades presets and profiles written with settings schema <paramref name="from"/>.</summary>
     /// <returns>True when something was added.</returns>
@@ -994,9 +1008,7 @@ internal static class SettingsMigrations
         // v56: Bink videos (.bik, #751) learn the video donut; custom claims stay put.
         if (from < 56)
             changed |= LearnExtensions(profiles, out _, ["bik"]);
-        // v57: "Caption" preset (Whisper AI) outputs SRT directly; added to Video and Audio donut profiles
-        if (from < 57)
-            changed |= AddCaptionPreset(presets, profiles);
+        // v57 brought the Whisper "Caption" preset; v80 took it out again.
         // v58: C, C++ and C# source files (#864, #828) learn the text donut; custom claims stay put. (Schema 58 may be
         //      renumbered if another change takes it first.)
         if (from < 58)
@@ -1053,11 +1065,7 @@ internal static class SettingsMigrations
         //      renumbered if another change takes it first.)
         if (from < 68)
             changed |= LearnExtensions(profiles, out _, ["p7m"]);
-        // v69: the Translate preset (#1160), which no step brought to libraries saved before it existed, after the
-        //      built-in preset before it as in a new library; no donut gets a slot (#806). (Schema 69 may be renumbered
-        //      if another change takes it first.)
-        if (from < 69 && presets.All(p => p.Id != "translate"))
-            changed |= AddTranslatePreset(presets);
+        // v69 brought the Translate preset (Ollama); v80 took it out again.
         // v70: JPEG .jif files (#1184) learn the images donut without taking custom claims.
         if (from < 70)
             changed |= LearnExtensions(profiles, out _, ["jif"]);
@@ -1072,16 +1080,7 @@ internal static class SettingsMigrations
             presets.InsertRange(background < 0 ? presets.Count : background + 1, BuiltInData.MetadataPresets());
             changed = true;
         }
-        // v73: the "Upscale" tool, in the palette only, after "Metadata" (or "Add background") as in a new library (at
-        //      the end without either, #806).
-        if (from < 73 && presets.All(p => p.Id != BuiltInData.UpscaleId))
-        {
-            var after = presets.FindIndex(p => p.Id == BuiltInData.MetadataId);
-            if (after < 0)
-                after = presets.FindIndex(p => p.Id == BuiltInData.BackgroundId);
-            presets.InsertRange(after < 0 ? presets.Count : after + 1, BuiltInData.UpscalePresets());
-            changed = true;
-        }
+        // v73 brought the Upscale tool (Upscayl); v80 took it out again.
         // v74: folder inputs have their own small ISO donut; existing archive donuts remain untouched. (Schema 74 may
         //      be renumbered if another change takes it first.)
         if (from < 74)
@@ -1119,17 +1118,22 @@ internal static class SettingsMigrations
         if (from < 79)
             foreach (var profile in profiles)
                 changed |= profile.Extensions.RemoveAll(e => string.Equals(e, "ofd", StringComparison.OrdinalIgnoreCase)) > 0;
+        // v80 (TsuFiles, phiếu TG1 G3b): the local AI tools are gone (Whisper captions, Upscayl, Ollama translation).
+        //      Their built-in presets leave the library and every donut; the user's own presets stay as they are.
+        if (from < 80)
+        {
+            changed |= presets.RemoveAll(p => LocalAiPresets.Contains(p.Id)) > 0;
+            foreach (var profile in profiles)
+            {
+                changed |= profile.PresetIds.RemoveAll(LocalAiPresets.Contains) > 0;
+                changed |= profile.BackPresetIds?.RemoveAll(LocalAiPresets.Contains) > 0;
+            }
+        }
         return changed;
     }
 
-    private static bool AddTranslatePreset(List<Preset> presets)
-    {
-        var defaults = BuiltInData.CreatePresets();
-        var at = defaults.FindIndex(p => p.Id == "translate");
-        var after = defaults.Take(at).Select(p => presets.FindIndex(existing => existing.Id == p.Id)).LastOrDefault(i => i >= 0, -1);
-        presets.Insert(after + 1, defaults[at]);
-        return true;
-    }
+    /// <summary>Built-in presets of the local AI tools removed in schema 80 (phiếu TG1 G3b).</summary>
+    internal static readonly HashSet<string> LocalAiPresets = ["caption-video", "translate", "tool-upscale"];
 
     private static bool AddPdfSheets(List<Preset> presets)
     {
@@ -1194,29 +1198,6 @@ internal static class SettingsMigrations
             presets.Insert(at++, preset);
             changed = true;
         }
-        return changed;
-    }
-
-    private static bool AddCaptionPreset(List<Preset> presets, List<ToolbarProfile> profiles)
-    {
-        var changed = false;
-        var caption = BuiltInData.CreatePresets().First(p => p.Id == "caption-video");
-        if (presets.FirstOrDefault(p => p.Id == caption.Id) is { } existing)
-        {
-            if (!existing.Media.Caption && existing.TargetFormat == caption.TargetFormat)
-            {
-                existing.Media.Caption = true;
-                changed = true;
-            }
-        }
-        else
-        {
-            var at = presets.FindLastIndex(p => p.Id is "extract-audio" or "to-mp3");
-            presets.Insert(at < 0 ? presets.Count : at + 1, caption);
-            changed = true;
-        }
-        changed |= Offer(presets, profiles, "video", caption.Id, "extract-subtitles");
-        changed |= Offer(presets, profiles, "audio", caption.Id, "to-aac");
         return changed;
     }
 

@@ -5,7 +5,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:TsuFiles.App.ViewModels"
-             xmlns:upscale="using:TsuFiles.Engines.Upscale"
              x:Class="TsuFiles.App.Views.PresetEditorView"
              x:DataType="vm:PresetEditorViewModel">
   <UserControl.Styles>
@@ -254,76 +253,6 @@
       </StackPanel>
     </Border>
 
-    <!-- Translation options -->
-    <Border x:Name="TranslateCard" Classes="card" IsVisible="{Binding ShowTranslate}" Padding="14">
-      <StackPanel Spacing="10">
-        <TextBlock Classes="h2" Text="{DynamicResource presets.group.translate}" />
-        <TextBlock Classes="caption" TextWrapping="Wrap" Text="{DynamicResource presets.translate_hint}" />
-        <Grid ColumnDefinitions="*,12,*">
-          <StackPanel Grid.Column="0">
-            <TextBlock Classes="label" Text="{DynamicResource presets.target_language}" />
-            <ComboBox ItemsSource="{Binding TranslationLanguageChoices}" SelectedItem="{Binding TargetLanguage}" HorizontalAlignment="Stretch" AutomationProperties.Name="{DynamicResource presets.target_language}" />
-          </StackPanel>
-          <StackPanel Grid.Column="2" VerticalAlignment="Bottom">
-            <Button Classes="secondary" Command="{Binding TestTranslationCommand}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" IsEnabled="{Binding !IsTestingTranslation}">
-              <StackPanel Orientation="Horizontal" Spacing="6">
-                <TextBlock Text="⚡" />
-                <TextBlock Text="{DynamicResource presets.test_connection}" />
-              </StackPanel>
-            </Button>
-          </StackPanel>
-        </Grid>
-        <Border IsVisible="{Binding TestTranslationResult, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                Background="{DynamicResource CardBackground}" CornerRadius="6" Padding="10,8">
-          <StackPanel Orientation="Horizontal" Spacing="8">
-            <TextBlock Text="✓" Foreground="#10b981" FontWeight="Bold" IsVisible="{Binding !TestTranslationHasError}" />
-            <TextBlock Text="⚠" Foreground="#f59e0b" FontWeight="Bold" IsVisible="{Binding TestTranslationHasError}" />
-            <TextBlock Text="{Binding TestTranslationResult}" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="12" />
-          </StackPanel>
-        </Border>
-      </StackPanel>
-    </Border>
-
-    <!-- Upscale options -->
-    <Border x:Name="UpscaleCard" Classes="card" IsVisible="{Binding ShowUpscale}" Padding="14">
-      <StackPanel Spacing="10">
-        <TextBlock Classes="h2" Text="{DynamicResource preset.upscale}" />
-        <TextBlock Classes="caption" TextWrapping="Wrap" Text="{DynamicResource engines.package.upscayl-bin.description}" />
-        <Grid ColumnDefinitions="*,12,*">
-          <StackPanel Grid.Column="0" Spacing="4">
-            <TextBlock Classes="label" Text="{DynamicResource upscale.model}" />
-            <ComboBox ItemsSource="{Binding UpscaleModels}" SelectedItem="{Binding SelectedUpscaleModel}" HorizontalAlignment="Stretch">
-              <ComboBox.ItemTemplate>
-                <DataTemplate x:DataType="upscale:UpscaleModel">
-                  <StackPanel Orientation="Horizontal" Spacing="8">
-                    <TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
-                    <TextBlock Classes="caption" Text="{Binding License, StringFormat='({0})'}" />
-                  </StackPanel>
-                </DataTemplate>
-              </ComboBox.ItemTemplate>
-            </ComboBox>
-          </StackPanel>
-          <StackPanel Grid.Column="2" Spacing="4">
-            <DockPanel LastChildFill="False">
-              <TextBlock DockPanel.Dock="Left" Classes="label" Text="{DynamicResource upscale.scale}" />
-              <TextBlock DockPanel.Dock="Right" FontWeight="SemiBold" Text="{Binding UpscaleScale, StringFormat='{}{0}×'}" />
-            </DockPanel>
-            <Slider Minimum="2" Maximum="4" Value="{Binding UpscaleScale}" TickFrequency="1" IsSnapToTickEnabled="True" />
-          </StackPanel>
-        </Grid>
-        <Border Background="{DynamicResource CardBackground}" CornerRadius="6" Padding="10,8"
-                IsVisible="{Binding SelectedUpscaleModel, Converter={x:Static ObjectConverters.IsNotNull}}">
-          <StackPanel Spacing="4">
-            <DockPanel LastChildFill="False">
-              <TextBlock DockPanel.Dock="Left" FontWeight="SemiBold" Text="{Binding SelectedUpscaleModel.Name}" />
-              <TextBlock DockPanel.Dock="Right" Classes="caption" Text="{Binding SelectedUpscaleModel.Author}" />
-            </DockPanel>
-            <TextBlock Classes="caption" TextWrapping="Wrap" Text="{Binding SelectedUpscaleModel.Description}" />
-          </StackPanel>
-        </Border>
-      </StackPanel>
-    </Border>
-
     <!-- Video & audio options -->
     <Border x:Name="MediaCard" Classes="card" IsVisible="{Binding ShowMedia}" Padding="14">
       <StackPanel Spacing="10">
@@ -395,23 +324,6 @@
         <StackPanel Spacing="2" IsVisible="{Binding ShowHardwareEncoding}">
           <CheckBox Content="{DynamicResource presets.hardware_encoding}" IsChecked="{Binding HardwareEncoding}" />
           <TextBlock Classes="caption" TextWrapping="Wrap" Margin="28,0,0,0" Text="{DynamicResource presets.hardware_encoding_hint}" />
-        </StackPanel>
-        <StackPanel Spacing="2" IsVisible="{Binding ShowCaption}">
-          <CheckBox Content="{DynamicResource presets.caption_video}" IsChecked="{Binding Caption}" />
-          <TextBlock Classes="caption" TextWrapping="Wrap" Margin="28,0,0,0" Text="{DynamicResource presets.caption_video_hint}" />
-          <Grid ColumnDefinitions="*,12,*" Margin="28,6,0,0" IsVisible="{Binding Caption}">
-            <StackPanel>
-              <TextBlock Classes="label" Text="{DynamicResource presets.spoken_language}" />
-              <ComboBox ItemsSource="{Binding SpokenLanguageChoices}" SelectedItem="{Binding SpokenLanguage}" HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Stretch" MaxDropDownHeight="420" AutomationProperties.Name="{DynamicResource presets.spoken_language}">
-                <ComboBox.ItemTemplate>
-                  <DataTemplate x:DataType="vm:IChoice">
-                    <TextBlock Text="{Binding Label}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
-                  </DataTemplate>
-                </ComboBox.ItemTemplate>
-              </ComboBox>
-            </StackPanel>
-          </Grid>
         </StackPanel>
       </StackPanel>
     </Border>

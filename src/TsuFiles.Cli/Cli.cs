@@ -312,8 +312,6 @@ internal static class Cli
             preset = found.Clone();
         }
         preset = host.Store.Settings.WithDefaultOutput(preset);
-        if (preset.Translate.Enabled && string.IsNullOrWhiteSpace(preset.Translate.Model))
-            preset.Translate.Model = host.Store.Settings.PreferredOllamaModel;
         if (options.Quality is { } quality)
             preset.Image.Quality = quality;
         // The pages of PDFs; asked for on the donut (AskedPages), given here.

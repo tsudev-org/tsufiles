@@ -40,8 +40,8 @@
 
 1. Mọi khác biệt của fork gom vào `src/TsuFiles.Core/ForkDefaults.cs` (giá trị lúc chạy) và `Directory.Build.props`
    (giá trị lúc build). Không rải URL/khóa khắp mã.
-2. Không thêm bất kỳ lệnh gọi mạng nào trong luồng chuyển đổi. Tính năng cần mạng (cập nhật, tải engine, Ollama cục
-   bộ) phải có kiểm tra toàn vẹn và mặc định an toàn.
+2. Không thêm bất kỳ lệnh gọi mạng nào trong luồng chuyển đổi. Tính năng cần mạng (cập nhật, tải engine) phải có
+   kiểm tra toàn vẹn và mặc định an toàn.
 3. Bộ đọc XML mới: `DtdProcessing.Prohibit` (hoặc `Parse` + `XmlResolver = null` + `MaxCharactersFromEntities`).
 4. Giải nén mới: bắt buộc đi qua `ArchiveSafety`.
 5. Chuỗi giao diện mới: thêm khóa vào **cả** `en.json` và `vi.json`; `tools/check_i18n_vi.py` phải xanh.
@@ -50,7 +50,7 @@
 
 - Không có tệp nhị phân thực thi trong repo; không có mã bị làm rối, base64 lớn, `Invoke-Expression`, hay tải-rồi-chạy.
 - Không có telemetry/analytics. Kết nối mạng duy nhất: GitHub API (cập nhật), nguồn tải engine (có SHA-256),
-  Ollama tại `127.0.0.1:11434` (tùy chọn, cục bộ).
+  Ollama tại `127.0.0.1:11434` (tùy chọn, cục bộ; đã bỏ 27/11/2026 cùng AI cục bộ, phiếu TG1 G3b).
 - Duy nhất một chỗ `curl | sh` trong CI (`portable.yml`, cài rustup chính thức qua HTTPS/TLS1.2) - chấp nhận được, chỉ
   chạy trên runner GitHub.
 - Kết luận: **an toàn để fork và phát triển**.

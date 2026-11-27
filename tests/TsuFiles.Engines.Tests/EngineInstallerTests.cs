@@ -683,40 +683,6 @@ public sealed class EngineInstallerTests : IDisposable
     }
 
     [Fact]
-    public async Task Model_components_are_copied_and_marked_installed()
-    {
-        var modelBytes = "ggml-model-bytes"u8.ToArray();
-        var component = Component("whisper-model", "model", modelBytes);
-        var server = new FakeServer(new() { [component.Url] = modelBytes });
-        var installer = Installer(server, component);
-        var package = new EnginePackage("whisper", ["whisper-model"], modelBytes.Length, ["whisper"]);
-
-        Assert.False(installer.IsInstalled(package));
-        await installer.InstallAsync(package, null, TestContext.Current.CancellationToken);
-
-        Assert.True(File.Exists(Path.Combine(_root, "whisper-model", "whisper-model.model")));
-        Assert.True(File.Exists(Path.Combine(_root, "whisper-model", ".filee-component")));
-        Assert.True(installer.IsInstalled(package));
-        Assert.True(installer.IsUpToDate(package));
-    }
-
-    [Fact]
-    public async Task Ncnn_components_write_custom_marker_and_are_reported_installed()
-    {
-        var paramBytes = "ncnn-param-bytes"u8.ToArray();
-        var component = Component("model-param", "ncnn-param", paramBytes);
-        var server = new FakeServer(new() { [component.Url] = paramBytes });
-        var installer = Installer(server, component);
-        var package = new EnginePackage("ncnn-test", ["model-param"], paramBytes.Length, ["upscaler"]);
-
-        Assert.False(installer.IsInstalled(package));
-        await installer.InstallAsync(package, null, TestContext.Current.CancellationToken);
-
-        Assert.True(File.Exists(Path.Combine(_root, "model", ".model-param")));
-        Assert.True(installer.IsInstalled(package));
-    }
-
-    [Fact]
     public async Task Uninstalling_a_package_leaves_components_shared_with_another_installed_package_intact()
     {
         var archiveA = Zip(("toolA.exe", "binaryA"));
@@ -785,14 +751,14 @@ public sealed class EngineInstallerTests : IDisposable
         var vcConda = Conda(("Library/bin/vcruntime140.dll", "vc"));
         var vcComp = Conda(("Library/bin/vcomp140.dll", "vcomp"));
         // The installer checks for the program under its name on this OS.
-        var program = OperatingSystem.IsWindows() ? "upscayl-bin.exe" : "upscayl-bin";
+        var program = OperatingSystem.IsWindows() ? "gpu-tool.exe" : "gpu-tool";
         var zip = Zip(($"tool/{program}", "bin"));
 
         var compVc = Component("vcruntime", "conda", vcConda);
         var compVcomp = Component("vcomp14", "conda", vcComp);
-        var compTool = Component("upscayl-bin", "zip", zip);
+        var compTool = Component("gpu-tool", "zip", zip);
 
-        var package = new EnginePackage("upscayl-bin", ["upscayl-bin", "vcruntime", "vcomp14"], 1, ["upscaler"]);
+        var package = new EnginePackage("gpu-tool", ["gpu-tool", "vcruntime", "vcomp14"], 1, ["gpu-tool"]);
         var server = new FakeServer(new()
         {
             [compVc.Url] = vcConda,
@@ -803,7 +769,7 @@ public sealed class EngineInstallerTests : IDisposable
         var installer = Installer(server, compVc, compVcomp, compTool);
         await installer.InstallAsync(package, null, TestContext.Current.CancellationToken);
 
-        var toolDir = Path.Combine(_root, "upscayl-bin");
+        var toolDir = Path.Combine(_root, "gpu-tool");
         Assert.True(File.Exists(Path.Combine(toolDir, program)));
         Assert.True(File.Exists(Path.Combine(toolDir, "vcruntime140.dll")));
         Assert.True(File.Exists(Path.Combine(toolDir, "vcomp140.dll")));

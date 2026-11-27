@@ -55,9 +55,6 @@ namespace TsuFiles.Core.Conversion;
 /// It is never part of an ordinary route, and with <see cref="RoutePlanner.Plan"/>
 /// asking for it the route starts with it.
 /// </param>
-/// <param name="Caption">
-/// The edge transcribes speech to SRT subtitles using Whisper (<see cref="Presets.MediaOptions.Caption"/>).
-/// </param>
 /// <param name="Metadata">
 /// The edge writes a file's metadata changes into a copy of it in its own format, the picture, sound or document itself
 /// left as it is (<see cref="Presets.Preset.Metadata"/>, ExifTool). It is never part of an ordinary route, and with
@@ -66,7 +63,7 @@ namespace TsuFiles.Core.Conversion;
 public readonly record struct ConversionEdge(
     string From, string To, int Cost = 10, bool ImageSourcesOnly = false, bool NotForImageSources = false,
     bool DirectOnly = false, bool FrameSequence = false, bool Unshaped = false, bool MotionPhoto = false, bool LivePhoto = false,
-    bool Ocr = false, bool Caption = false, bool Translate = false, bool Metadata = false, bool Upscale = false);
+    bool Ocr = false, bool Metadata = false);
 
 /// <summary>
 /// A conversion an engine refuses with a reason the user can act on, shown in their language (the file's
@@ -136,7 +133,6 @@ public interface IOutputAllocator
 /// The step takes a <see cref="ConversionEdge.LivePhoto"/> edge: a clip of the video becomes a Live / Motion Photo
 /// (<see cref="Presets.MediaOptions.LivePhoto"/> says which kind).
 /// </param>
-/// <param name="Caption">The step takes a <see cref="ConversionEdge.Caption"/> edge to transcribe speech to SRT subtitles using Whisper.</param>
 public sealed record ConversionStep(
     string InputPath,
     string From,
@@ -149,9 +145,7 @@ public sealed record ConversionStep(
     bool MotionPhoto = false,
     bool LivePhoto = false,
     Action<IReadOnlyList<string>>? MissingFonts = null,
-    string? OriginalSourcePath = null,
-    bool Caption = false,
-    bool Translate = false);
+    string? OriginalSourcePath = null);
 
 /// <summary>
 /// A conversion engine (ImageMagick, LibreOffice, rhwp, ...).
