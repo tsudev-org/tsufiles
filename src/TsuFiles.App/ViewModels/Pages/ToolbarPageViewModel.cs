@@ -52,7 +52,7 @@ public sealed partial class ProfileItemViewModel(ToolbarProfile profile, ILocali
 }
 
 /// <summary>A preset chip in the "available presets" palette.</summary>
-public enum PaletteTab { All, Image, Document, Media, Edit, Model3DCad, Map, Archive, Font }
+public enum PaletteTab { All, Image, Document, Media, Edit, Model3DCad, Map, Archive }
 
 public sealed record PaletteTabItem(PaletteTab Id, string Label);
 
@@ -79,7 +79,6 @@ public sealed partial class ToolbarPageViewModel : ObservableObject, IDisposable
         (PaletteTab.Model3DCad, "toolbar.tab.model3d_cad", [FormatCategory.Model3D, FormatCategory.Cad]),
         (PaletteTab.Map, "format.category.Geo", [FormatCategory.Geo]),
         (PaletteTab.Archive, "format.category.Archive", [FormatCategory.Archive]),
-        (PaletteTab.Font, "format.category.Font", [FormatCategory.Font]),
     ];
 
     private readonly UserDataStore _store;
@@ -590,7 +589,7 @@ public sealed partial class ToolbarPageViewModel : ObservableObject, IDisposable
     [RelayCommand]
     private async Task NewPreset()
     {
-        var preset = new Preset { Name = _loc["toolbar.new_preset"], TargetFormat = SelectedProfile?.Profile.Id == "folders" ? "iso" : "png" };
+        var preset = new Preset { Name = _loc["toolbar.new_preset"], TargetFormat = SelectedProfile?.Profile.Id == "folders" ? "zip" : "png" };
         if (!await _windows.EditPresetAsync(preset, _windows.Main, folderInput: SelectedProfile?.Profile.Id == "folders"))
             return;
         _store.Presets.Add(preset);

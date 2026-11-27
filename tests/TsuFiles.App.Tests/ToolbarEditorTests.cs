@@ -1102,7 +1102,7 @@ public class ToolbarPaletteModelTests
     {
         using var f = new PresetAvailabilityTests.Fixture();
         var original = f.Store.Settings.TurnedOffFields.ToList();
-        f.Store.Settings.TurnedOffFields = ["font"];
+        f.Store.Settings.TurnedOffFields = ["model3d"];
         Window? window = null;
         try
         {
@@ -1112,20 +1112,20 @@ public class ToolbarPaletteModelTests
                 Assert.All(chips, c => Assert.True(FormatFields.IsShown(f.Preset(c.PresetId).TargetFormat, off), c.PresetId));
             AssertShown(vm.Palette);
             AssertShown(vm.VisiblePalette);
-            Assert.Contains(vm.Palette, c => c.PresetId == "to-eot");
+            Assert.Contains(vm.Palette, c => c.PresetId == "to-stl");
             foreach (var tab in vm.Tabs.ToList())
             {
                 vm.SelectedTab = tab;
                 AssertShown(vm.VisiblePalette);
             }
-            vm.PaletteSearch = "WOFF";
+            vm.PaletteSearch = "GLB";
             AssertShown(vm.Palette);
             AssertShown(vm.VisiblePalette);
             vm.PaletteSearch = "";
             vm.SelectedTab = vm.Tabs.Single(t => t.Id == PaletteTab.All);
             Dispatcher.UIThread.RunJobs();
             AssertShown(vm.VisiblePalette);
-            Assert.Contains(vm.VisiblePalette, c => c.PresetId == "to-eot");
+            Assert.Contains(vm.VisiblePalette, c => c.PresetId == "to-stl");
 
             window = new Window { Width = 1080, Height = 820, Content = new ToolbarPage { DataContext = vm } };
             window.Show();
@@ -1133,20 +1133,20 @@ public class ToolbarPaletteModelTests
             IEnumerable<PaletteChip> RenderedChips() => window.GetVisualDescendants().OfType<Border>()
                 .Select(b => b.DataContext).OfType<PaletteChip>();
             AssertShown(RenderedChips());
-            Assert.Contains(RenderedChips(), c => c.PresetId == "to-eot");
-            RenderTests.Save(window, "toolbar-palette-font-off.png");
-            vm.SelectedTab = vm.Tabs.Single(t => t.Id == PaletteTab.Font);
+            Assert.Contains(RenderedChips(), c => c.PresetId == "to-stl");
+            RenderTests.Save(window, "toolbar-palette-model3d-off.png");
+            vm.SelectedTab = vm.Tabs.Single(t => t.Id == PaletteTab.Model3DCad);
             RenderTests.Pump();
-            RenderTests.Save(window, "toolbar-palette-font-tab-off.png");
+            RenderTests.Save(window, "toolbar-palette-model3d-tab-off.png");
             f.Store.Settings.TurnedOffFields.Clear();
-            vm.PaletteSearch = "WOFF";
+            vm.PaletteSearch = "GLB";
             vm.PaletteSearch = "";
             vm.SelectedTab = vm.Tabs.Single(t => t.Id == PaletteTab.All);
             RenderTests.Pump();
-            Assert.Contains(RenderedChips(), c => c.PresetId == "to-woff2");
-            vm.SelectedTab = vm.Tabs.Single(t => t.Id == PaletteTab.Font);
+            Assert.Contains(RenderedChips(), c => c.PresetId == "to-glb");
+            vm.SelectedTab = vm.Tabs.Single(t => t.Id == PaletteTab.Model3DCad);
             RenderTests.Pump();
-            RenderTests.Save(window, "toolbar-palette-font-tab-on.png");
+            RenderTests.Save(window, "toolbar-palette-model3d-tab-on.png");
         }
         finally
         {
@@ -1187,7 +1187,7 @@ public class ToolbarPaletteModelTests
     }
 
     [AvaloniaFact]
-    public void Groups_categories_into_eight_tabs()
+    public void Groups_categories_into_seven_tabs()
     {
         var targets = new (string Format, PaletteTab Tab)[]
         {
@@ -1197,7 +1197,6 @@ public class ToolbarPaletteModelTests
             ("zip", PaletteTab.Archive), ("geojson", PaletteTab.Map),
             (FormatRegistry.Known.First(f => f.Category == FormatCategory.Model3D).Id, PaletteTab.Model3DCad),
             (FormatRegistry.Known.First(f => f.Category == FormatCategory.Cad).Id, PaletteTab.Model3DCad),
-            (FormatRegistry.Known.First(f => f.Category == FormatCategory.Font).Id, PaletteTab.Font),
         };
         foreach (var (format, tab) in targets)
             Assert.Equal(tab, ToolbarPageViewModel.TabOf(new Preset { TargetFormat = format }));
@@ -1227,7 +1226,6 @@ public class ToolbarPaletteModelTests
             [FormatCategory.Audio] = PaletteTab.Media,
             [FormatCategory.Subtitle] = PaletteTab.Media,
             [FormatCategory.Archive] = PaletteTab.Archive,
-            [FormatCategory.Font] = PaletteTab.Font,
             [FormatCategory.Model3D] = PaletteTab.Model3DCad,
             [FormatCategory.Cad] = PaletteTab.Model3DCad,
             [FormatCategory.Geo] = PaletteTab.Map,
@@ -1276,7 +1274,7 @@ public class ToolbarPaletteModelTests
         {
             "toolbar.tab.all", "format.category.Image", "format.category.Document",
             "toolbar.tab.media", "toolbar.tab.edit", "toolbar.tab.model3d_cad",
-            "format.category.Geo", "format.category.Archive", "format.category.Font",
+            "format.category.Geo", "format.category.Archive",
         };
         Assert.Equal(Enum.GetValues<PaletteTab>(), vm.Tabs.Select(t => t.Id));
         Assert.Equal(expectedKeys.Select(key => f.Loc[key]), vm.Tabs.Select(t => t.Label));

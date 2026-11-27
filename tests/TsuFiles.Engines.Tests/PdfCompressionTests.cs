@@ -1,7 +1,7 @@
 // PDF → smaller PDF ("Compress PDF"): pictures scaled down to the level's resolution where they are drawn (also inside
 // forms), soft masks kept, text untouched, page ranges and one file per page, nothing made bigger, password-protected
-// files refused like the other PDF conversions, and Ghostscript's rewrite when it is installed. The PDFs are built in
-// the tests: photos (noise, so they don't compress to nothing) drawn small at a high resolution, and Helvetica text.
+// files refused like the other PDF conversions. The PDFs are built in the tests: photos (noise, so they don't compress
+// to nothing) drawn small at a high resolution, and Helvetica text.
 
 using ImageMagick;
 using PdfSharp.Drawing;
@@ -18,8 +18,6 @@ namespace TsuFiles.Engines.Tests;
 public class PdfCompressionTests(EngineFixture fx) : IClassFixture<EngineFixture>
 {
     private const string Sentence = "Quarterly report with photos";
-
-    private static bool GhostscriptInstalled => GhostscriptConverter.Locate() is not null;
 
     /// <summary>A photo-like picture: a gradient with noise, so JPEG and Flate can't make it tiny.</summary>
     private static string Photo(string folder, string name, uint width, uint height, MagickFormat format, bool transparentCorner = false)
@@ -54,10 +52,10 @@ public class PdfCompressionTests(EngineFixture fx) : IClassFixture<EngineFixture
         return pdf.Save(Path.Combine(folder, "report.pdf"));
     }
 
-    private static Preset Compress(PdfCompression level = PdfCompression.Ebook, bool ghostscript = false) => new()
+    private static Preset Compress(PdfCompression level = PdfCompression.Ebook) => new()
     {
         TargetFormat = "pdf",
-        Pdf = { Compression = level, CompressWithGhostscript = ghostscript },
+        Pdf = { Compression = level },
         Output = { FileNamePattern = "{name}_compressed" },
     };
 
@@ -338,33 +336,14 @@ public class PdfCompressionTests(EngineFixture fx) : IClassFixture<EngineFixture
     }
 
     [Fact]
-    public async Task Ghostscript_is_used_when_asked_and_installed()
-    {
-        Assert.SkipUnless(GhostscriptInstalled, "Ghostscript is not installed (pwsh build/fetch-engines.ps1 -Only ghostscript).");
-        var dir = fx.NewFolder();
-        var source = ReportPdf(dir, pages: 2);
-
-        var job = await fx.ConvertAsync([source], Compress(PdfCompression.Screen, ghostscript: true));
-
-        AssertDone(job);
-        var output = job.Outputs.Single();
-        Assert.True(new FileInfo(output).Length < new FileInfo(source).Length / 4);
-        Assert.Equal(Texts(source).Select(Words), Texts(output).Select(Words));
-        Assert.All(Pictures(output), p => Assert.True(p.Width <= 300, $"{p.Width} px"));
-    }
-
-    [Fact]
     public void Compression_adds_no_route()
     {
-        // PDF → PDF stays one PDFsharp step; Ghostscript is called from it, never planned.
-        var planner = fx.Catalog.CreatePlanner(["ghostscript"]);
+        // PDF → PDF stays one PDFsharp step.
+        var planner = fx.Catalog.CreatePlanner();
         Assert.Equal("pdfsharp", string.Join(',', planner.Plan("pdf", "pdf")!.Steps.Select(s => s.Converter.Id)));
         Assert.Equal("pdfium", string.Join(',', planner.Plan("pdf", "png")!.Steps.Select(s => s.Converter.Id)));
-        Assert.Equal("ghostscript", string.Join(',', planner.Plan("pdf", "eps")!.Steps.Select(s => s.Converter.Id)));
         Assert.Equal("docx-writer", string.Join(',', planner.Plan("pdf", "docx")!.Steps.Select(s => s.Converter.Id)));
     }
-
-    private static string Words(string text) => string.Concat(text.Where(c => !char.IsWhiteSpace(c)));
 
     private static string Latin1(string path) => System.Text.Encoding.Latin1.GetString(File.ReadAllBytes(path));
 

@@ -1859,14 +1859,12 @@ public class RenderTests
         window.Close();
 
         vm.CompressionLevel = vm.CompressionLevels.Single(c => c.Value == TsuFiles.Core.Presets.PdfCompression.Screen);
-        vm.CompressWithGhostscript = true;
         vm.KeepMetadata = false;
         Assert.True(vm.Apply());
         Assert.Equal(TsuFiles.Core.Presets.PdfCompression.Screen, preset.Pdf.Compression);
-        Assert.True(preset.Pdf.CompressWithGhostscript);
         Assert.False(preset.Image.KeepMetadata);
 
-        // Off: Ghostscript and metadata have nothing to do. Other targets don't compress PDFs at all.
+        // Off: metadata has nothing to do. Other targets don't compress PDFs at all.
         vm.CompressionLevel = vm.CompressionLevels[0];
         Assert.False(vm.ShowPdfCompressionOptions);
         vm.Target = vm.Targets.Single(t => t.Value == "png");
@@ -2613,12 +2611,11 @@ public class RenderTests
             Assert.True(InWindow(last).Right <= InWindow(column).Right + 0.5);
             var chips = window.GetVisualDescendants().OfType<Border>().Where(b => b.DataContext is PaletteChip && b.Classes.Contains("chip"))
                 .Select(b => ((PaletteChip)b.DataContext!).PresetId).ToList();
-            // The last tab is Font: font presets, no image or archive ones.
-            Assert.Equal(PaletteTab.Font, vm.SelectedTab!.Id);
-            Assert.Contains("to-ttf", chips);
-            Assert.DoesNotContain("to-zip", chips);
+            // The last tab is Archive: archive presets, no image ones.
+            Assert.Equal(PaletteTab.Archive, vm.SelectedTab!.Id);
+            Assert.Contains("to-zip", chips);
             Assert.DoesNotContain("to-png", chips);
-            Save(window, $"toolbar-tabs-{language}-{suffix}-font.png");
+            Save(window, $"toolbar-tabs-{language}-{suffix}-archive.png");
 
             // Up goes back to the row above, to the tab nearest above.
             var above = Nearest(items.Count - 1, below: false);

@@ -56,7 +56,6 @@ public sealed class PortableEngineTests : IDisposable
     [Theory]
     [InlineData("libreoffice", "LibreOffice.app/Contents/MacOS", "soffice")]
     [InlineData("tesseract", "bin", "tesseract")]
-    [InlineData("ghostscript", "bin", "gs")]
     public void Unix_programs_are_found_inside_archives_and_Mac_application_bundles(string id, string relative, string program)
     {
         var folder = Path.Combine(_root, relative.Replace('/', Path.DirectorySeparatorChar));

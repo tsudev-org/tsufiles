@@ -16,11 +16,11 @@ namespace TsuFiles.App.Tests;
 public class PresetEditorTargetTests
 {
     [AvaloniaFact]
-    public void Preset_editor_target_box_excludes_fon_and_shows_ttf()
+    public void Preset_editor_target_box_excludes_read_only_cdr_and_shows_svg()
     {
         TestServices.EnsureInitialized("en");
         var store = AppHost.Get<UserDataStore>();
-        var editor = new PresetEditorViewModel(store.FindPreset("to-ttf")!, AppHost.Get<ILocalizer>());
+        var editor = new PresetEditorViewModel(store.FindPreset("to-svg")!, AppHost.Get<ILocalizer>());
         var window = new PresetEditorWindow { DataContext = editor, Height = 900 };
         window.Show();
         for (var i = 0; i < 20; i++)
@@ -33,9 +33,9 @@ public class PresetEditorTargetTests
             var box = window.GetVisualDescendants().OfType<ComboBox>().Single(c => c.Name == "TargetBox");
             var targets = box.Items.OfType<Choice<string>>().Select(c => c.Value).ToList();
             Assert.NotEmpty(targets);
-            Assert.DoesNotContain("fon", targets);
-            Assert.Single(targets, t => t == "ttf");
-            Assert.Equal("ttf", ((Choice<string>)box.SelectedItem!).Value);
+            Assert.DoesNotContain("cdr", targets);
+            Assert.Single(targets, t => t == "svg");
+            Assert.Equal("svg", ((Choice<string>)box.SelectedItem!).Value);
         }
         finally
         {

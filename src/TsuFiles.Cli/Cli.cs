@@ -64,7 +64,7 @@ internal static class Cli
 
         var missing = new List<string>();
         var files = ExpandInputs(options.Inputs, options.Recursive, missing,
-            foldersAsInputs: preset.TargetFormat == "iso" || preset.PacksIntoOneArchive);
+            foldersAsInputs: preset.PacksIntoOneArchive);
         foreach (var path in missing)
             errors.WriteLine(CliLanguage.T($"tsufiles: không tìm thấy: {path}", $"tsufiles: not found: {path}"));
         if (missing.Count > 0)

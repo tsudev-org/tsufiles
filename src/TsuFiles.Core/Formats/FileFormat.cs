@@ -18,7 +18,6 @@ public enum FormatCategory
     Archive,
     Vector,
     Cad,
-    Font,
     Subtitle,
     Data,
     Model3D,

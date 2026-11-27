@@ -279,7 +279,7 @@ public class PaletteChipTipViewTests
         // Eight kinds reach ODT in one step with one format each; Text reaches it only in two steps, with two formats.
         var kindsConverter = new FakeConverter("test-kinds",
             ("wav", "odt"), ("mp4", "odt"), ("png", "odt"), ("epub", "odt"), ("zip", "odt"), ("svg", "odt"),
-            ("ttf", "odt"), ("rtf", "odt"), ("txt", "test-mid-a"), ("md", "test-mid-a"), ("test-mid-a", "odt"));
+            ("dwg", "odt"), ("rtf", "odt"), ("txt", "test-mid-a"), ("md", "test-mid-a"), ("test-mid-a", "odt"));
         using var f = new Fixture(kindsConverter);
         f.Store.Presets.Add(new() { Id = "test-tip-odt", TargetFormat = "odt" });
         using var vm = f.PageWithPalette();

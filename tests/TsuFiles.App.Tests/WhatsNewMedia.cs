@@ -1023,15 +1023,15 @@ public class WhatsNewMedia
         var turnedOff = store.Settings.TurnedOffFields.ToList();
         var images = store.Profiles.Single(p => p.Id == "images");
         var front = images.PresetIds.ToList();
-        // Someone who works in design and games: PSD, EPS and DDS on the pictures donut, those fields on.
+        // Someone who works in design and games: PSD, PSB and DDS on the pictures donut, those fields on.
         Preset[] added =
         [
             new() { Id = "whatsnew-psd", Name = "PSD", TargetFormat = "psd" },
-            new() { Id = "whatsnew-eps", Name = "EPS", TargetFormat = "eps" },
+            new() { Id = "whatsnew-psb", Name = "PSB", TargetFormat = "psb" },
             new() { Id = "whatsnew-dds", Name = "DDS", TargetFormat = "dds" },
         ];
         store.Presets.AddRange(added);
-        images.PresetIds = ["to-png", "to-jpg", "to-webp", "whatsnew-psd", "whatsnew-eps", "whatsnew-dds", "to-pdf", "trace-svg"];
+        images.PresetIds = ["to-png", "to-jpg", "to-webp", "whatsnew-psd", "whatsnew-psb", "whatsnew-dds", "to-pdf", "trace-svg"];
         store.Settings.TurnedOffFields = TsuFiles.Core.Formats.FormatFields.All
             .Where(f => f.CanTurnOff && !f.OnByDefault && f.Id is not ("design" or "game")).Select(f => f.Id).ToList();
         string[] files = [@"C:\Pictures\poster.png"];

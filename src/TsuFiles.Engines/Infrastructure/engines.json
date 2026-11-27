@@ -36,13 +36,6 @@
       "size": 611297,
       "kind": "oxt"
     },
-    "ghostscript": {
-      "version": "10.08.0",
-      "url": "https://conda.anaconda.org/conda-forge/win-64/ghostscript-10.08.0-hac47afa_0.conda",
-      "sha256": "512BE9413C58B0AD3A2CD95A63EAEA73CBE32D9A6B9170C848BF825694A4ADB0",
-      "size": 19295904,
-      "kind": "conda"
-    },
     "vcruntime": {
       "version": "14.44.35208",
       "url": "https://conda.anaconda.org/conda-forge/win-64/vc14_runtime-14.44.35208-h818238b_41.conda",

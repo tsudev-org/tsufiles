@@ -17,19 +17,6 @@
         "resolved": "147.0.7690",
         "contentHash": "vPUlS9LklHm59lcBc9f6loggGgezogOoMdRYbUfTvum1Ndlr7u7KrAq3ZTuTdPF0ijHjhtfjNafZvyyTbmB4mg=="
       },
-      "DiscUtils.Core": {
-        "type": "Transitive",
-        "resolved": "0.16.13",
-        "contentHash": "TU/Ns5RMa3060K7AsSDqG94/H7eaWaz1XoYuCUur40Mg+t0/ubtKqxCffkoiB1e/cFMGvHL0evFoY6uDL9Ocmw==",
-        "dependencies": {
-          "DiscUtils.Streams": "0.16.13"
-        }
-      },
-      "DiscUtils.Streams": {
-        "type": "Transitive",
-        "resolved": "0.16.13",
-        "contentHash": "BSrywAX2mmvt6j00u6VQYQLtxc6jDniK2aP4p0q20bbTGXImtW4N26eUZYKfkW9aj6XLaqISFgtWfssKURixeA=="
-      },
       "ExCSS": {
         "type": "Transitive",
         "resolved": "4.3.1",
@@ -158,7 +145,6 @@
         "dependencies": {
           "ACadSharp": "[3.8.35, )",
           "AngleSharp": "[1.10.2, )",
-          "DiscUtils.Iso9660": "[0.16.13, )",
           "ExcelDataReader": "[3.9.0, )",
           "ExcelNumberFormat": "[1.2.0, )",
           "Magick.NET-Q8-AnyCPU": "[15.1.0, )",
@@ -209,15 +195,6 @@
         "requested": "[1.10.2, )",
         "resolved": "1.10.2",
         "contentHash": "f/5wfCkGt6eDs2CEJSXZWKmuvOd58mSkN/fyZ88X9btackH2AhXxR6DrTRdak7pK5/pP0EZhHDE8EupnNJgawg=="
-      },
-      "DiscUtils.Iso9660": {
-        "type": "CentralTransitive",
-        "requested": "[0.16.13, )",
-        "resolved": "0.16.13",
-        "contentHash": "hT0DbN+sIqg5Bu3/sCQUuKLwIrceF9BZvn7AeRe+f2iY0p4mgN9xEmXpFWQshnBBxN9r75364agBHDeb5owiUA==",
-        "dependencies": {
-          "DiscUtils.Core": "0.16.13"
-        }
       },
       "ExcelDataReader": {
         "type": "CentralTransitive",

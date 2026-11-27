@@ -621,7 +621,7 @@ public sealed class RadialController(
     /// archive"; any other preset converts the files beside them (issue #186).
     /// </summary>
     internal static IReadOnlyList<string> SourcesFor(Preset preset, IReadOnlyList<string> files) =>
-        preset.PacksIntoOneArchive || preset.IsCopyToFolder || preset.TargetFormat == "iso" ? files : [.. files.Where(path => !Directory.Exists(path))];
+        preset.PacksIntoOneArchive || preset.IsCopyToFolder ? files : [.. files.Where(path => !Directory.Exists(path))];
 
     // ───────── Progress ring ─────────
 

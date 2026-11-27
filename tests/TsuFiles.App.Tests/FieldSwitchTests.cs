@@ -141,21 +141,21 @@ public class FieldSwitchTests
     public void User_added_slots_follow_the_switch_on_both_faces()
     {
         using var f = new Fixture();
-        var custom = f.Add("woff2");
+        var custom = f.Add("glb");
         var profile = f.Profile("/p/a.jpg");
-        profile.PresetIds = ["to-png", "to-woff2", custom.Id];
-        // PNG keeps the back usable even when font outputs are hidden or their engine is missing.
-        profile.BackPresetIds = ["to-png", "to-ttf"];
-        f.Store.Settings.TurnedOffFields = ["font"];
+        profile.PresetIds = ["to-png", "to-glb", custom.Id];
+        // PNG keeps the back usable even when 3D model outputs are hidden or their engine is missing.
+        profile.BackPresetIds = ["to-png", "to-gltf"];
+        f.Store.Settings.TurnedOffFields = ["model3d"];
         f.Load("/p/a.jpg");
         f.Face(["to-png"]);
         Assert.True(f.Vm.ToggleFace());
         f.Face(["to-png"]);
         f.Store.Settings.TurnedOffFields.Clear();
         f.Load("/p/a.jpg");
-        f.Face(["to-png", "to-woff2", custom.Id]);
+        f.Face(["to-png", "to-glb", custom.Id]);
         Assert.True(f.Vm.ToggleFace());
-        f.Face(["to-png", "to-ttf"]);
+        f.Face(["to-png", "to-gltf"]);
     }
 
     [AvaloniaFact]
@@ -175,16 +175,16 @@ public class FieldSwitchTests
         var png = f.Add("png");
         var jpg = f.Add("jpg");
         var webp = f.Add("webp");
-        var woff2 = f.Add("woff2");
-        var ttf = f.Add("ttf");
-        var b = f.Group("B", woff2.Id, ttf.Id);
-        var a = f.Group("A", png.Id, woff2.Id);
+        var glb = f.Add("glb");
+        var gltf = f.Add("gltf");
+        var b = f.Group("B", glb.Id, gltf.Id);
+        var a = f.Group("A", png.Id, glb.Id);
         var c = f.Group("C", "test-missing");
         var d = f.Group("D", jpg.Id, webp.Id);
         Preset[] groups = [b, a, c, d];
         var saved = groups.Select(p => p.SubPresetIds.ToArray()).ToArray();
         f.Profile("/p/a.jpg").PresetIds = groups.Select(p => p.Id).ToList();
-        f.Store.Settings.TurnedOffFields = ["font"];
+        f.Store.Settings.TurnedOffFields = ["model3d"];
         f.Load("/p/a.jpg");
         f.Face([a.Id, c.Id, d.Id]);
         Assert.Single(f.Window.DonutControl.Items![0].Children!);
@@ -205,8 +205,8 @@ public class FieldSwitchTests
         f.Store.Settings.TurnedOffFields.Clear();
         f.Load("/p/a.jpg");
         f.Face(groups.Select(p => p.Id));
-        Assert.Same(ttf, f.Vm.PresetShownAt(0, 1));
-        Assert.Same(woff2, f.Vm.PresetShownAt(1, 1));
+        Assert.Same(gltf, f.Vm.PresetShownAt(0, 1));
+        Assert.Same(glb, f.Vm.PresetShownAt(1, 1));
         for (var i = 0; i < groups.Length; i++)
             Assert.Equal(saved[i], groups[i].SubPresetIds);
     }
@@ -215,52 +215,52 @@ public class FieldSwitchTests
     public void Outputs_in_the_dropped_files_fields_stay_in_all_three_cases()
     {
         using var f = new Fixture();
-        var woff2 = f.Add("woff2");
-        var eot = f.Add("eot");
+        var glb = f.Add("glb");
+        var stl = f.Add("stl");
         var png = f.Add("png");
-        var group = f.Group("group", woff2.Id, png.Id);
-        var profile = f.Profile("/f/a.ttf");
-        var defaultFonts = profile.PresetIds.Select(f.Store.FindPreset).OfType<Preset>()
-            .Where(p => FormatRegistry.FindById(p.TargetFormat) is { } format && FormatFields.Of(format).Any(x => x.Id == "font"))
+        var group = f.Group("group", glb.Id, png.Id);
+        var profile = f.Profile("/f/a.glb");
+        var defaultModels = profile.PresetIds.Select(f.Store.FindPreset).OfType<Preset>()
+            .Where(p => FormatRegistry.FindById(p.TargetFormat) is { } format && FormatFields.Of(format).Any(x => x.Id == "model3d"))
             .ToArray();
-        Assert.NotEmpty(defaultFonts);
-        profile.PresetIds.AddRange([woff2.Id, eot.Id, group.Id]);
+        Assert.NotEmpty(defaultModels);
+        profile.PresetIds.AddRange([glb.Id, stl.Id, group.Id]);
         var saved = profile.PresetIds.ToArray();
-        f.Load("/f/a.ttf");
+        f.Load("/f/a.glb");
         var baseline = f.Vm.Presets.ToArray();
-        f.Store.Settings.TurnedOffFields = ["font", "legacy"];
-        Assert.False(FormatFields.IsShown("woff2", f.Store.Settings.TurnedOffFieldSet()));
-        Assert.False(FormatFields.IsShown("eot", f.Store.Settings.TurnedOffFieldSet()));
-        f.Load("/f/a.ttf");
-        var effectiveOff = new HashSet<string>(["legacy"], StringComparer.OrdinalIgnoreCase);
+        f.Store.Settings.TurnedOffFields = ["model3d", "cad"];
+        Assert.False(FormatFields.IsShown("glb", f.Store.Settings.TurnedOffFieldSet()));
+        Assert.False(FormatFields.IsShown("stl", f.Store.Settings.TurnedOffFieldSet()));
+        f.Load("/f/a.glb");
+        var effectiveOff = new HashSet<string>(["cad"], StringComparer.OrdinalIgnoreCase);
         f.Face(baseline.Where(p => FormatFields.IsShown(p.TargetFormat, effectiveOff)).Select(p => p.Id));
-        foreach (var preset in defaultFonts.Concat([woff2, eot, group]))
+        foreach (var preset in defaultModels.Concat([glb, stl, group]))
             Assert.Contains(f.Vm.Items, item => item.Id == preset.Id);
         var shown = Assert.Single(f.Window.DonutControl.Items!, item => item.Id == group.Id);
-        Assert.Equal(new[] { woff2.Id, png.Id }, shown.Children!.Select(p => p.Id));
+        Assert.Equal(new[] { glb.Id, png.Id }, shown.Children!.Select(p => p.Id));
         Assert.Equal(saved, profile.PresetIds);
-        Assert.Equal(new[] { woff2.Id, png.Id }, group.SubPresetIds);
+        Assert.Equal(new[] { glb.Id, png.Id }, group.SubPresetIds);
     }
 
     [AvaloniaFact]
-    public void A_new_install_opens_the_font_donut_with_font_conversions()
+    public void A_new_install_opens_the_3d_model_donut_with_model_conversions()
     {
         using var f = new Fixture();
         f.Store.Settings.TurnedOffFields = FormatFields.All.Where(x => x.CanTurnOff && !x.OnByDefault).Select(x => x.Id).ToList();
         var off = f.Store.Settings.TurnedOffFieldSet();
-        var profile = f.Profile("/f/a.ttf");
+        var profile = f.Profile("/f/a.glb");
         Assert.False(profile.IsFallback);
-        Assert.Contains("ttf", profile.Extensions);
-        var fonts = profile.PresetIds.Select(f.Store.FindPreset).OfType<Preset>()
-            .Where(p => FormatRegistry.FindById(p.TargetFormat) is { } format && FormatFields.Of(format).Any(x => x.Id == "font"))
+        Assert.Contains("glb", profile.Extensions);
+        var models = profile.PresetIds.Select(f.Store.FindPreset).OfType<Preset>()
+            .Where(p => FormatRegistry.FindById(p.TargetFormat) is { } format && FormatFields.Of(format).Any(x => x.Id == "model3d"))
             .ToArray();
-        Assert.NotEmpty(fonts);
-        Assert.Contains(fonts, p => !FormatFields.IsShown(p.TargetFormat, off));
-        f.Load("/f/a.ttf");
-        foreach (var preset in fonts)
+        Assert.NotEmpty(models);
+        Assert.Contains(models, p => !FormatFields.IsShown(p.TargetFormat, off));
+        f.Load("/f/a.glb");
+        foreach (var preset in models)
             Assert.Contains(f.Window.DonutControl.Items!, item => item.Id == preset.Id);
-        RenderTests.Save(f.Window, "donut-fields-font-new-install.png");
-        Assert.Equal(f.Loc.Format("donut.files_same", 1, FormatRegistry.Get("ttf").DisplayName), f.Window.DonutControl.CenterTitle);
+        RenderTests.Save(f.Window, "donut-fields-model3d-new-install.png");
+        Assert.Equal(f.Loc.Format("donut.files_same", 1, FormatRegistry.Get("glb").DisplayName), f.Window.DonutControl.CenterTitle);
     }
 
     [AvaloniaFact]
@@ -284,12 +284,12 @@ public class FieldSwitchTests
     {
         using var f = new Fixture();
         f.Store.Settings.TurnedOffFields = FormatFields.All.Where(x => x.CanTurnOff && !x.OnByDefault).Select(x => x.Id).ToList();
-        string[] files = ["/m/a.jpg", "/m/b.ttf", "/m/c.glb"];
+        string[] files = ["/m/a.jpg", "/m/b.dwg", "/m/c.glb"];
         var profile = f.Profile(files);
         Assert.True(profile.IsFallback);
-        profile.PresetIds = ["to-woff2", "to-glb", "to-kml"];
+        profile.PresetIds = ["to-dwg", "to-glb", "to-kml"];
         f.Load(files);
-        f.Face(["to-woff2", "to-glb"]);
+        f.Face(["to-dwg", "to-glb"]);
         RenderTests.Save(f.Window, "donut-fields-mixed.png");
     }
 
@@ -309,17 +309,17 @@ public class FieldSwitchTests
     public void The_preset_library_leaves_out_turned_off_fields()
     {
         using var f = new Fixture();
-        f.Store.Settings.TurnedOffFields = ["font"];
+        f.Store.Settings.TurnedOffFields = ["model3d"];
         var off = f.Store.Settings.TurnedOffFieldSet();
         var page = new PresetsPageViewModel(f.Store, f.Loc, AppHost.Get<WindowService>());
         Assert.All(page.Presets, p => Assert.True(FormatFields.IsShown(p.Preset.TargetFormat, off), p.Preset.Id));
-        Assert.Contains(page.Presets, p => p.Preset.Id == "to-eot");
-        page.Search = "woff";
+        Assert.Contains(page.Presets, p => p.Preset.Id == "to-stl");
+        page.Search = "glb";
         Assert.Empty(page.VisiblePresets);
         Assert.All(page.PlacePresets, p => Assert.True(FormatFields.IsShown(p.Preset.TargetFormat, off)));
         f.Store.Settings.TurnedOffFields.Clear();
         var enabled = new PresetsPageViewModel(f.Store, f.Loc, AppHost.Get<WindowService>());
-        Assert.Contains(enabled.Presets, p => p.Preset.Id == "to-woff2");
+        Assert.Contains(enabled.Presets, p => p.Preset.Id == "to-glb");
     }
 
     [AvaloniaFact]
@@ -353,20 +353,20 @@ public class FieldSwitchTests
     public async Task A_preset_whose_target_is_hidden_keeps_it_through_an_edit()
     {
         using var f = new Fixture();
-        f.Store.Settings.TurnedOffFields = ["font"];
+        f.Store.Settings.TurnedOffFields = ["model3d"];
         var off = f.Store.Settings.TurnedOffFieldSet();
-        var preset = f.Add("ttf");
+        var preset = f.Add("gltf");
         var editor = new PresetEditorViewModel(preset, f.Loc, off);
         Assert.All(editor.Targets, t => Assert.True(FormatFields.IsShown(t.Value, off), t.Value));
-        Assert.DoesNotContain(editor.Targets, t => t.Value is "ttf" or "woff2" or "otf");
-        var name = FormatRegistry.Get("ttf").DisplayName;
-        Assert.Equal("ttf", editor.Target.Value);
+        Assert.DoesNotContain(editor.Targets, t => t.Value is "gltf" or "glb" or "ply");
+        var name = FormatRegistry.Get("gltf").DisplayName;
+        Assert.Equal("gltf", editor.Target.Value);
         Assert.Null(editor.TargetSelection);
         Assert.Equal(name, editor.HiddenTarget);
         Assert.Equal(f.Loc.Format("presets.target_hidden", name), editor.HiddenTargetNote);
-        editor.Name = "Renamed font";
+        editor.Name = "Renamed model";
         Assert.True(editor.Apply());
-        Assert.Equal("ttf", preset.TargetFormat);
+        Assert.Equal("gltf", preset.TargetFormat);
 
         var window = new PresetEditorWindow { DataContext = editor, Width = 440, Height = 900 };
         window.Show();
@@ -374,14 +374,14 @@ public class FieldSwitchTests
         {
             RenderTests.Pump();
             var box = window.GetVisualDescendants().OfType<ComboBox>().Single(c => c.Name == "TargetBox");
-            Assert.DoesNotContain(box.Items.OfType<Choice<string>>(), t => t.Value == "ttf");
+            Assert.DoesNotContain(box.Items.OfType<Choice<string>>(), t => t.Value == "gltf");
             Assert.Null(box.SelectedItem);
             Assert.Equal(name, box.PlaceholderText);
             var note = Assert.Single(window.GetVisualDescendants().OfType<TextBlock>(), t => t.Text == editor.HiddenTargetNote);
             Assert.True(note.IsVisible);
-            Assert.Equal("ttf", editor.Target.Value);
+            Assert.Equal("gltf", editor.Target.Value);
             Assert.True(editor.Apply());
-            Assert.Equal("ttf", preset.TargetFormat);
+            Assert.Equal("gltf", preset.TargetFormat);
             RenderTests.Save(window, "preset-editor-hidden-target.png");
         }
         finally
@@ -395,10 +395,10 @@ public class FieldSwitchTests
             RenderTests.Pump();
             var popupEditor = Assert.IsType<PresetEditorViewModel>(popup.DataContext);
             var box = popup.GetVisualDescendants().OfType<ComboBox>().Single(c => c.Name == "TargetBox");
-            Assert.DoesNotContain(box.Items.OfType<Choice<string>>(), t => t.Value == "ttf");
+            Assert.DoesNotContain(box.Items.OfType<Choice<string>>(), t => t.Value == "gltf");
             Assert.Null(box.SelectedItem);
             Assert.Equal(name, box.PlaceholderText);
-            Assert.Equal("ttf", popupEditor.Target.Value);
+            Assert.Equal("gltf", popupEditor.Target.Value);
             RenderTests.Save(popup, "field-switch-hidden-target-popup.png");
         }
         finally

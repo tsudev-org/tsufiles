@@ -66,8 +66,6 @@ public static class FormatRegistry
         // Vector graphics
         new("svg", "SVG", FormatCategory.Vector, ["svg"]),
         new("svgz", "SVGZ", FormatCategory.Vector, ["svgz"]),
-        new("eps", "EPS", FormatCategory.Vector, ["eps", "epsf", "epsi"]),
-        new("ps", "PS", FormatCategory.Vector, ["ps"]),
         new("ai", "AI", FormatCategory.Vector, ["ai"], Writable: false),
         new("emf", "EMF", FormatCategory.Vector, ["emf"]),
         new("wmf", "WMF", FormatCategory.Vector, ["wmf"]),
@@ -316,7 +314,7 @@ public static class FormatRegistry
         new("deb", "DEB", FormatCategory.Archive, ["deb"], Writable: false),
         new("rpm", "RPM", FormatCategory.Archive, ["rpm"], Writable: false),
         new("dmg", "DMG", FormatCategory.Archive, ["dmg"], Writable: false),
-        new("iso", "ISO", FormatCategory.Archive, ["iso"]),
+        new("iso", "ISO", FormatCategory.Archive, ["iso"], Writable: false),
         new("img", "IMG", FormatCategory.Archive, ["img"], Writable: false),
         new("lha", "LHA", FormatCategory.Archive, ["lha", "lzh"], Writable: false),
         new("arj", "ARJ", FormatCategory.Archive, ["arj"], Writable: false),
@@ -328,14 +326,6 @@ public static class FormatRegistry
         // CAD
         new("dwg", "DWG", FormatCategory.Cad, ["dwg"]),
         new("dxf", "DXF", FormatCategory.Cad, ["dxf"]),
-
-        // Fonts
-        new("ttf", "TTF", FormatCategory.Font, ["ttf"]),
-        new("otf", "OTF", FormatCategory.Font, ["otf"]),
-        new("woff", "WOFF", FormatCategory.Font, ["woff"]),
-        new("woff2", "WOFF2", FormatCategory.Font, ["woff2"]),
-        new("eot", "EOT", FormatCategory.Font, ["eot"]),
-        new("fon", "FON", FormatCategory.Font, ["fon"], Writable: false),
 
         // Subtitles (text)
         new("srt", "SRT", FormatCategory.Subtitle, ["srt"]),

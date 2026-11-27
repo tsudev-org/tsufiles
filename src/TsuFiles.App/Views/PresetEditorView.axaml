@@ -448,8 +448,6 @@
           </Grid>
           <TextBlock Classes="caption" TextWrapping="Wrap" Text="{DynamicResource presets.pdf_compression_hint}" />
           <StackPanel Spacing="2" Margin="0,6,0,0" IsVisible="{Binding ShowPdfCompressionOptions}">
-            <CheckBox Content="{DynamicResource presets.pdf_ghostscript}" IsChecked="{Binding CompressWithGhostscript}" />
-            <TextBlock Classes="caption" TextWrapping="Wrap" Margin="28,0,0,0" Text="{DynamicResource presets.pdf_ghostscript_hint}" />
             <CheckBox Content="{DynamicResource presets.pdf_keep_metadata}" IsChecked="{Binding KeepMetadata}" />
           </StackPanel>
         </StackPanel>

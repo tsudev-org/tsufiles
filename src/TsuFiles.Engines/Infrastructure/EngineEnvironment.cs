@@ -1,6 +1,6 @@
 // Shared context for engines: where TsuFiles's own engine copies live and where engines keep their state.
 // Built-in engines never use software installed on the system (Microsoft Office, Hancom Office). The optional
-// engines (FFmpeg, Ghostscript, LibreOffice, Tesseract) are looked up in this order: a copy the user chose in
+// engines (FFmpeg, LibreOffice, Tesseract) are looked up in this order: a copy the user chose in
 // Settings → Engines (OwnCopies), TsuFiles's own copy (installer or download, the tested version), then one already on
 // the PC (on the PATH or where its installer puts it), so nobody has to download a second FFmpeg they already have.
 
@@ -81,7 +81,6 @@ public sealed class EngineEnvironment(string dataDirectory)
     private static IReadOnlyDictionary<string, string[]> Programs(bool windows) => new Dictionary<string, string[]>
     {
         ["libreoffice"] = [windows ? "soffice.exe" : "soffice"],
-        ["ghostscript"] = [windows ? "gswin64c.exe" : "gs"],
         ["ffmpeg"] = windows ? ["ffmpeg.exe", "ffprobe.exe"] : ["ffmpeg", "ffprobe"],
         ["rhwp"] = [windows ? "rhwp.exe" : "rhwp"],
         ["7zip"] = [windows ? "7z.exe" : "7zz"],
@@ -90,7 +89,7 @@ public sealed class EngineEnvironment(string dataDirectory)
     };
 
     public static string ProgramName(string name) => OperatingSystem.IsWindows() ? name
-        : name == "gswin64c.exe" ? "gs" : name.EndsWith(".exe", StringComparison.Ordinal) ? name[..^4] : name;
+        : name.EndsWith(".exe", StringComparison.Ordinal) ? name[..^4] : name;
 
     /// <summary>The folder of the user's own copy of package <paramref name="id"/>, when it has every program.</summary>
     public static string? OwnCopyFolder(string id) =>
@@ -140,7 +139,7 @@ public sealed class EngineEnvironment(string dataDirectory)
     /// <summary>
     /// The folder of a copy of package <paramref name="id"/> already on the PC: on the PATH (also the user's and the
     /// machine's PATH as saved, so a tool installed after TsuFiles started is found, e.g. Scoop's shims) or where its
-    /// installer puts it (LibreOffice, Ghostscript under Program Files). Cached until
+    /// installer puts it (LibreOffice under Program Files). Cached until
     /// <see cref="ForgetSystemCopies"/>.
     /// </summary>
     public static string? SystemCopyFolder(string id) =>
@@ -233,19 +232,6 @@ public sealed class EngineEnvironment(string dataDirectory)
                     break;
                 case "tesseract":
                     folders.Add(Path.Combine(root, "Tesseract-OCR"));
-                    break;
-                case "ghostscript":
-                    // C:\Program Files\gs\gs10.04.0\bin, newest first
-                    try
-                    {
-                        var gs = Path.Combine(root, "gs");
-                        if (Directory.Exists(gs))
-                            folders.AddRange(Directory.EnumerateDirectories(gs).OrderByDescending(d => d, StringComparer.OrdinalIgnoreCase)
-                                .Select(d => Path.Combine(d, "bin")));
-                    }
-                    catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-                    {
-                    }
                     break;
             }
         }

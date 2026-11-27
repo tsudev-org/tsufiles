@@ -84,7 +84,7 @@ public class LibreOfficeFormatTests(EngineFixture fx) : IClassFixture<EngineFixt
     [Fact]
     public void Svg_and_pdf_open_in_draw_only_where_nothing_else_does_better()
     {
-        var planner = fx.Catalog.CreatePlanner(["libreoffice", "ghostscript"]);
+        var planner = fx.Catalog.CreatePlanner(["libreoffice"]);
 
         // The vector engine keeps SVG → PDF and images.
         Assert.Equal("vector", Assert.Single(planner.Plan("svg", "pdf")!.Steps).Converter.Id);
@@ -93,9 +93,6 @@ public class LibreOfficeFormatTests(EngineFixture fx) : IClassFixture<EngineFixt
         foreach (var to in new[] { "emf", "wmf", "odg" })
             Assert.Equal("libreoffice", Assert.Single(planner.Plan("svg", to)!.Steps).Converter.Id);
         Assert.Equal("libreoffice", Assert.Single(planner.Plan("pdf", "svg")!.Steps).Converter.Id);
-        // EPS goes through Ghostscript's PDF: Draw would only show the EPS preview picture.
-        Assert.Equal(["ghostscript", "libreoffice"], planner.Plan("eps", "svg")!.Steps.Select(s => s.Converter.Id));
-        Assert.DoesNotContain(LibreOffice.Edges, e => e.From is "eps" or "ps");
     }
 
     [Fact]

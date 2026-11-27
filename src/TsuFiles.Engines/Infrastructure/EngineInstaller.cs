@@ -5,7 +5,7 @@
 //    cancelled install never leaves a half-installed engine behind.
 //  * MSIs (LibreOffice) are unpacked with an administrative install (msiexec /a): files only, no registry
 //    entries, no admin rights. Parts headless LibreOffice never uses (help, gallery, most dictionaries) are removed.
-//  * conda-forge packages (Ghostscript, the Microsoft C++ runtime) are zip files holding zstd-compressed tarballs;
+//  * conda-forge packages (the Microsoft C++ runtime) are zip files holding zstd-compressed tarballs;
 //    only their Windows binaries (Library/bin) are unpacked, with a managed decompressor (no 7-Zip, no installer).
 //  * NSIS installers (Tesseract) are unpacked with TsuFiles's own 7-Zip, never run: files only, no registry entries.
 //  * A marker file with the component's hash records what is installed, so an engines.json update is detected.
@@ -676,7 +676,7 @@ public sealed class EngineInstaller
 
     /// <summary>
     /// Unpacks the Windows binaries of a conda package (.conda = zip with pkg-*.tar.zst): the files under Library/bin
-    /// land directly in <paramref name="target"/>. Resources such as Ghostscript's fonts are compiled into its DLL.
+    /// land directly in <paramref name="target"/>.
     /// </summary>
     internal static void UnpackConda(string condaFile, string target, CancellationToken cancellationToken)
     {

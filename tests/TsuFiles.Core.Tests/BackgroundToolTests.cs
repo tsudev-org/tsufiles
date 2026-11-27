@@ -142,11 +142,11 @@ public class BackgroundToolTests
     [Fact]
     public async Task The_background_is_set_once_by_the_first_engine_that_applies_image_options()
     {
-        // EPS → TIFF (Ghostscript) → PNG (ImageMagick): set in the first step; a second would set it on a background
+        // CDR → TIFF (LibreOffice) → PNG (ImageMagick): set in the first step; a second would set it on a background
         // again.
         using var dir = new TempDir();
-        var art = dir.File("art.eps");
-        var reader = new BackdropRecorder("ghostscript", transforms: true, new ConversionEdge("eps", "tiff"));
+        var art = dir.File("art.cdr");
+        var reader = new BackdropRecorder("libreoffice", transforms: true, new ConversionEdge("cdr", "tiff"));
         var writer = new BackdropRecorder("magick", transforms: true, new ConversionEdge("tiff", "png"));
         await using var queue = new JobQueue(new ConverterCatalog([reader, writer]));
 

@@ -36,20 +36,20 @@ public class GroupEditorTests
         TestServices.EnsureInitialized("en");
         var settings = AppHost.Get<UserDataStore>().Settings;
         var off = settings.TurnedOffFields;
-        settings.TurnedOffFields = ["font"];
+        settings.TurnedOffFields = ["model3d"];
         try
         {
-            var vm = Edit(new Preset { Name = "Fonts", Kind = PresetKind.Group, SubPresetIds = ["to-ttf"] });
-            Assert.Equal("to-ttf", Assert.Single(vm.Members).PresetId); // saved members aren't dropped (rule 7)
-            Assert.DoesNotContain(vm.Available, c => c.Value == "to-otf");
-            Assert.Contains(vm.Available, c => c.Value == "to-eot"); // also in Old formats, which is on
+            var vm = Edit(new Preset { Name = "Models", Kind = PresetKind.Group, SubPresetIds = ["to-glb"] });
+            Assert.Equal("to-glb", Assert.Single(vm.Members).PresetId); // saved members aren't dropped (rule 7)
+            Assert.DoesNotContain(vm.Available, c => c.Value == "to-gltf");
+            Assert.Contains(vm.Available, c => c.Value == "to-stl"); // also in CAD, which is on
             Assert.Contains(vm.Available, c => c.Value == "to-png");
 
             vm.RemoveCommand.Execute(vm.Members[0]);
-            Assert.DoesNotContain(vm.Available, c => c.Value == "to-ttf");
+            Assert.DoesNotContain(vm.Available, c => c.Value == "to-glb");
 
             settings.TurnedOffFields = [];
-            Assert.Contains(Edit(new Preset { Name = "Fonts", Kind = PresetKind.Group }).Available, c => c.Value == "to-otf");
+            Assert.Contains(Edit(new Preset { Name = "Models", Kind = PresetKind.Group }).Available, c => c.Value == "to-gltf");
         }
         finally
         {

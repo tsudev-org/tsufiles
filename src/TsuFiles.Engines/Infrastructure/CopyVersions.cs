@@ -13,7 +13,7 @@ public static partial class CopyVersions
     private static readonly ConcurrentDictionary<string, Version?> Cache = new();
 
     /// <summary>The version TsuFiles is tested with ("9.0"), from engines.json; null for unknown packages.</summary>
-    // Where TsuFiles offers no download (FFmpeg and Ghostscript on macOS come from Homebrew), the version it is tested
+    // Where TsuFiles offers no download (FFmpeg on macOS comes from Homebrew), the version it is tested
     // with is the one the Windows list names, so an older copy still gets "update recommended".
     public static Version? Expected(string id) =>
         Parse(EngineVersions.Component(id) ?? ReferenceComponents.Value.GetValueOrDefault(id)?.Version);

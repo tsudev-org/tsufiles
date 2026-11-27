@@ -11,12 +11,12 @@ public static class BuiltInData
     /// <summary>Special target format meaning "same format as the source file" (e.g. resize only).</summary>
     public const string SameAsSource = "*";
 
-    /// <summary>Whether a conversion target accepts a folder directly.</summary>
-    public static bool SupportsFolderTarget(string target) => target == "iso";
-
-    /// <summary>Whether a preset accepts folders without converting their individual files.</summary>
+    /// <summary>
+    /// Whether a preset accepts folders without converting their individual files: "Compress into one archive" and
+    /// copying to a folder (ISO images, the other target that took folders, left with TG1 G3b).
+    /// </summary>
     public static bool AcceptsFolders(Preset preset) => !preset.IsGroup
-        && (preset.IsCopyToFolder || SupportsFolderTarget(preset.TargetFormat));
+        && (preset.IsCopyToFolder || preset.PacksIntoOneArchive);
 
     /// <summary>Creates the default preset list.</summary>
     public static List<Preset> CreatePresets() =>
@@ -562,7 +562,6 @@ public static class BuiltInData
         new() { Id = "to-tga", Name = "TGA", TargetFormat = "tga" },
         new() { Id = "to-icns", Name = "ICNS", TargetFormat = "icns" },
         new() { Id = "to-svg", Name = "SVG", TargetFormat = "svg" },
-        new() { Id = "to-eps", Name = "EPS", TargetFormat = "eps" },
 
         // Office and text
         new() { Id = "to-ods", Name = "ODS", TargetFormat = "ods" },
@@ -606,7 +605,6 @@ public static class BuiltInData
         new() { Id = "to-aac", Name = "AAC", TargetFormat = "aac" },
 
         // Archives
-        new() { Id = "to-iso", NameKey = "preset.iso_image", TargetFormat = "iso" },
         new() { Id = "to-zip", Name = "ZIP", TargetFormat = "zip" },
         new() { Id = "to-7z", Name = "7Z", TargetFormat = "7z" },
         new() { Id = "to-tgz", Name = "TAR.GZ", TargetFormat = "tgz" },
@@ -622,13 +620,6 @@ public static class BuiltInData
         // CAD
         new() { Id = "to-dxf", Name = "DXF", TargetFormat = "dxf" },
         new() { Id = "to-dwg", Name = "DWG", TargetFormat = "dwg" },
-
-        // Fonts
-        new() { Id = "to-ttf", Name = "TTF", TargetFormat = "ttf" },
-        new() { Id = "to-otf", Name = "OTF", TargetFormat = "otf" },
-        new() { Id = "to-woff", Name = "WOFF", TargetFormat = "woff" },
-        new() { Id = "to-woff2", Name = "WOFF2", TargetFormat = "woff2" },
-        new() { Id = "to-eot", Name = "EOT", TargetFormat = "eot" },
     ];
 
     /// <summary>
@@ -724,7 +715,6 @@ public static class BuiltInData
                 "vector" => (["to-png", "to-pdf", "to-svg", "to-jpg", "to-webp"], ["to-tiff", "to-ico", "to-icns", "to-dxf", "zip-all"]),
                 "archives" => (["extract", "zip-all", "to-zip", "to-7z"], []),
                 "cad" => (["to-pdf", "to-png", "to-svg", "to-dxf", "to-dwg"], ["to-jpg", "merge-pdf", "zip-all"]),
-                "fonts" => (["to-woff2", "to-woff", "to-ttf", "to-otf"], ["zip-all"]),
                 "data" => (["to-json", "to-yaml", "to-xml", "to-csv", "to-xlsx"], ["to-ods", "to-html", "to-md", "zip-all"]),
                 "models" => (["to-glb", "to-stl", "to-obj", "to-3mf", "to-png"], ["zip-all"]),
                 "geo" => (["to-geojson", "to-shp", "to-kml", "to-csv", "to-gpx"], ["zip-all"]),
@@ -735,15 +725,6 @@ public static class BuiltInData
             };
             (profile.PresetIds, profile.BackPresetIds) = layout;
         }
-        var folders = new ToolbarProfile
-        {
-            Id = "folders",
-            NameKey = "profile.folders",
-            Extensions = [],
-            PresetIds = ["to-iso"],
-            BackPresetIds = [],
-        };
-        profiles.Insert(profiles.FindIndex(p => p.Id == "archives") + 1, folders);
         return profiles;
     }
 
@@ -873,7 +854,7 @@ public static class BuiltInData
         {
             Id = "vector", NameKey = "profile.vector",
             Extensions = ExtensionsOf(FormatCategory.Vector),
-            PresetIds = ["to-png", "to-pdf", "to-svg", "to-jpg", "to-webp", "to-eps"],
+            PresetIds = ["to-png", "to-pdf", "to-svg", "to-jpg", "to-webp"],
             BackPresetIds = ["to-tiff", "to-ico", "to-icns", "to-avif", "to-dxf", "merge-pdf", "zip-all"],
         },
         new()
@@ -892,16 +873,9 @@ public static class BuiltInData
             PresetIds = ["to-pdf", "to-png", "to-svg", "to-dxf", "to-dwg"],
             BackPresetIds = ["to-jpg", "to-webp", "to-tiff", "merge-pdf", "zip-all"],
         },
-        new()
-        {
-            Id = "fonts", NameKey = "profile.fonts",
-            Extensions = ExtensionsOf(FormatCategory.Font),
-            PresetIds = ["to-woff2", "to-woff", "to-ttf", "to-otf", "to-eot"],
-            BackPresetIds = ["zip-all"],
-        },
     ];
 
-    /// <summary>JSON, YAML, TOML, XML, vCard and iCalendar files (added in settings schema 14, after "fonts").</summary>
+    /// <summary>JSON, YAML, TOML, XML, vCard and iCalendar files (added in settings schema 14, after the fonts donut that left with schema 81).</summary>
     public static ToolbarProfile DataProfile() => new()
     {
         Id = "data",

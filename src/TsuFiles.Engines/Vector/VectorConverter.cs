@@ -174,7 +174,8 @@ public sealed class VectorConverter : IConverter, IImageTransformer
     /// <summary>
     /// Illustrator 9 and later save a complete PDF inside the .ai file ("Create PDF compatible file", on by
     /// default), so the file is copied as a PDF after checking its header. Files saved without it (and Illustrator 8
-    /// and older) are PostScript, which needs Ghostscript.
+    /// and older) are PostScript, which TsuFiles no longer reads (Ghostscript left with TG1 G3b): the user is told to save
+    /// the file again with PDF compatibility.
     /// </summary>
     private static async Task<IReadOnlyList<string>> ConvertIllustratorAsync(ConversionStep step, IProgress<double>? progress, CancellationToken ct)
     {
@@ -191,12 +192,7 @@ public sealed class VectorConverter : IConverter, IImageTransformer
             return [output];
         }
 
-        var gs = GhostscriptConverter.Locate()
-                 ?? throw new InvalidOperationException(
-                     "This Illustrator file was saved without PDF compatibility, so it is PostScript. " +
-                     "Install Ghostscript in Settings → Engines to convert it, or save it in Illustrator with \"Create PDF compatible file\".");
-        await GhostscriptConverter.ConvertToPdfAsync(gs, step.InputPath, output, crop: true, step.WorkDirectory, ct, progress);
-        return [output];
+        throw new ConversionRefusedException("error.ai_postscript");
     }
 
     internal enum AiKind
