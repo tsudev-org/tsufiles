@@ -88,10 +88,27 @@ jobs:
     if: ${{ !cancelled() && needs.changes.outputs.code != 'false' }}
     uses: ./.github/workflows/portable.yml
 
+  # The required check: passes when the Windows build and every UI test shard passed. Skipped (as on a
+  # docs-only change) like the jobs it waits for, so the changes job above never takes a docs-only run for a build.
   build:
+    needs: [changes, build-core, ui-tests]
+    if: ${{ !cancelled() && needs.changes.outputs.code != 'false' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Windows build and UI tests passed
+        env:
+          CORE: ${{ needs.build-core.result }}
+          UI: ${{ needs.ui-tests.result }}
+        run: |
+          echo "build-core: $CORE, ui-tests: $UI"
+          [ "$CORE" = success ] && [ "$UI" = success ]
+
+  build-core:
     needs: changes
     if: ${{ !cancelled() && needs.changes.outputs.code != 'false' }}
     runs-on: windows-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -144,11 +161,6 @@ jobs:
         shell: pwsh
         run: ./build/fetch-engines.ps1 -Only rhwp,7zip,exiftool
 
-      # The UI tests on their own first, as the release runs them (there they crashed with 0xC0000005): a crash
-      # names the test that was running and leaves a dump in TestResults.
-      - name: Test UI on its own
-        run: dotnet test tests/TsuFiles.App.Tests --no-build -c Release --blame-crash --blame-hang-timeout 5m --logger "console;verbosity=normal" --results-directory TestResults/app
-
       # TSUFILES_TEST_EXIFTOOL: the metadata tests write real files, and fail rather than skip if it isn't there.
       - name: Test
         env:
@@ -173,10 +185,88 @@ jobs:
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
-          name: ui-screenshots
-          path: |
-            tests/TsuFiles.App.Tests/bin/Release/net10.0/screenshots/
-            tests/TsuFiles.Setup.Tests/bin/Release/net10.0/screenshots/
+          name: ui-screenshots-setup
+          path: tests/TsuFiles.Setup.Tests/bin/Release/net10.0/screenshots/
+          if-no-files-found: ignore
+
+  # The UI tests (about 30 minutes on one runner) in three shards next to build-core, split by the first letter of
+  # the test class (CI times of 27/11/2026: R + W ~10 min, A-D ~9 min, the rest ~9 min). The last shard takes every
+  # class the others don't, so a new class is never left out. A crash names the test that was running and leaves a
+  # dump in TestResults (the release still runs them in one go, where they once crashed with 0xC0000005).
+  ui-tests:
+    needs: changes
+    if: ${{ !cancelled() && needs.changes.outputs.code != 'false' }}
+    runs-on: windows-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - shard: r-w
+            filter: FullyQualifiedName~TsuFiles.App.Tests.R|FullyQualifiedName~TsuFiles.App.Tests.W
+          - shard: a-d
+            filter: FullyQualifiedName~TsuFiles.App.Tests.A|FullyQualifiedName~TsuFiles.App.Tests.B|FullyQualifiedName~TsuFiles.App.Tests.C|FullyQualifiedName~TsuFiles.App.Tests.D
+          # Explorer menu (E), metadata window (M) and toolbar editor (T) tests need the menu DLL and the engines.
+          - shard: rest
+            filter: FullyQualifiedName!~TsuFiles.App.Tests.R&FullyQualifiedName!~TsuFiles.App.Tests.W&FullyQualifiedName!~TsuFiles.App.Tests.A&FullyQualifiedName!~TsuFiles.App.Tests.B&FullyQualifiedName!~TsuFiles.App.Tests.C&FullyQualifiedName!~TsuFiles.App.Tests.D
+            engines: true
+    name: ui-tests (${{ matrix.shard }})
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6
+        with:
+          global-json-file: global.json
+
+      - name: Restore
+        run: dotnet restore tests/TsuFiles.App.Tests --locked-mode
+
+      - name: Fonts
+        shell: pwsh
+        run: ./build/fetch-fonts.ps1
+
+      - name: Build
+        run: dotnet build tests/TsuFiles.App.Tests --no-restore -c Release
+
+      - name: Restore Zig toolchain
+        if: matrix.engines
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: build/.cache/zig-x86_64-windows-0.16.0
+          key: zig-0.16.0-x86_64-windows
+
+      - name: Build Explorer menu extension
+        if: matrix.engines
+        timeout-minutes: 30
+        shell: pwsh
+        run: ./build/build-explorer-menu.ps1
+
+      - name: Fetch rhwp, 7-Zip and ExifTool
+        if: matrix.engines
+        shell: pwsh
+        run: ./build/fetch-engines.ps1 -Only rhwp,7zip,exiftool
+
+      - name: Test UI
+        env:
+          FILTER: ${{ matrix.filter }}
+        run: dotnet test tests/TsuFiles.App.Tests --no-build -c Release --filter "$env:FILTER" --blame-crash --blame-hang-timeout 5m --logger "console;verbosity=normal" --results-directory TestResults/app
+
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: test-results-ui-${{ matrix.shard }}
+          path: TestResults/
+          if-no-files-found: ignore
+
+      - name: Upload UI screenshots
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: ui-screenshots-${{ matrix.shard }}
+          path: tests/TsuFiles.App.Tests/bin/Release/net10.0/screenshots/
           if-no-files-found: ignore
 
   # The metadata writer on Linux, with the Perl ExifTool pinned in engines.json (the build above is its Windows side).
@@ -222,8 +312,9 @@ jobs:
   build-arm64:
     name: build (win-arm64)
     needs: changes
-    # TsuFiles: runner ARM chỉ miễn phí cho repo công khai; bỏ qua khi repo còn riêng tư.
-    if: ${{ !cancelled() && needs.changes.outputs.code != 'false' && !github.event.repository.private }}
+    # TsuFiles: runner ARM chỉ miễn phí cho repo công khai; bỏ qua khi repo còn riêng tư. Phiếu TG1 G4: chỉ chạy khi
+    # đẩy lên main (không chạy trên PR) tới khi P1 (#42) ghim rhwp ARM64 - không phải check bắt buộc, PR khỏi chờ ~37 phút.
+    if: ${{ !cancelled() && needs.changes.outputs.code != 'false' && !github.event.repository.private && github.event_name == 'push' }}
     runs-on: windows-11-arm
     timeout-minutes: 120
     defaults:
