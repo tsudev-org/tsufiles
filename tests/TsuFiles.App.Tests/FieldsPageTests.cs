@@ -18,7 +18,7 @@ namespace TsuFiles.App.Tests;
 public class FieldsPageTests
 {
     [AvaloniaFact]
-    public void The_page_shows_the_twelve_fields_with_the_new_install_defaults()
+    public void The_page_shows_the_eleven_fields_with_the_new_install_defaults()
     {
         TestServices.EnsureInitialized();
         var store = AppHost.Get<UserDataStore>();
@@ -34,7 +34,7 @@ public class FieldsPageTests
             RenderTests.Pump();
 
             var switches = window.GetVisualDescendants().OfType<ToggleSwitch>().ToList();
-            Assert.Equal(12, switches.Count);
+            Assert.Equal(11, switches.Count);
             Assert.Equal(FormatFields.All.Where(f => f.CanTurnOff).Select(f => loc[$"fields.name.{f.Id}"]),
                 switches.Select(AutomationProperties.GetName));
             Assert.Equal(loc["fields.name.developer"], AutomationProperties.GetName(Assert.Single(switches, s => s.IsChecked == true)));
@@ -126,7 +126,7 @@ public class FieldsPageTests
             restarted.Show();
             RenderTests.Pump();
             var switches = restarted.GetVisualDescendants().OfType<ToggleSwitch>().ToList();
-            Assert.Equal(12, switches.Count);
+            Assert.Equal(11, switches.Count);
             Assert.Equal(loc["fields.name.developer"], AutomationProperties.GetName(Assert.Single(switches, s => s.IsChecked == false)));
             Assert.All(switches.Where(s => AutomationProperties.GetName(s) != loc["fields.name.developer"]),
                 s => Assert.True(s.IsChecked));
@@ -198,7 +198,7 @@ public class FieldsPageTests
             RenderTests.Pump();
 
             var switches = window.GetVisualDescendants().OfType<ToggleSwitch>().ToList();
-            Assert.Equal(12, switches.Count);
+            Assert.Equal(11, switches.Count);
             Assert.Equal(loc["fields.name.developer"], AutomationProperties.GetName(Assert.Single(switches, s => s.IsChecked == true)));
             Assert.All(switches.Where(s => AutomationProperties.GetName(s) != loc["fields.name.developer"]),
                 s => Assert.False(s.IsChecked));
