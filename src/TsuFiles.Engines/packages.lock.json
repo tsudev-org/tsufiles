@@ -10,9 +10,9 @@
       },
       "AngleSharp": {
         "type": "Direct",
-        "requested": "[1.10.2, )",
-        "resolved": "1.10.2",
-        "contentHash": "f/5wfCkGt6eDs2CEJSXZWKmuvOd58mSkN/fyZ88X9btackH2AhXxR6DrTRdak7pK5/pP0EZhHDE8EupnNJgawg=="
+        "requested": "[1.11.0, )",
+        "resolved": "1.11.0",
+        "contentHash": "1wEWfvt74q9RNAgWYLC9lfS1rT/CNfFw2rvjLJTaZEKRJ3qf35iTbwjH15VTQDwv48CjekHQIcVbxuD/GSiWcQ=="
       },
       "DiscUtils.Iso9660": {
         "type": "Direct",
@@ -37,11 +37,11 @@
       },
       "Magick.NET-Q8-AnyCPU": {
         "type": "Direct",
-        "requested": "[15.1.0, )",
-        "resolved": "15.1.0",
-        "contentHash": "nHJpUfEkhiDu5XJAymHWQBCinVQJABTK2j6haHqs650UPUP9iEMqN73VNu8m+YyoyEp5gGwO65hqivhgzzpfnQ==",
+        "requested": "[15.1.1, )",
+        "resolved": "15.1.1",
+        "contentHash": "rR5IddjNrgQKqYTQagVWPiXhqE1QbQRpMbOmfk8vnzWGEUGIw25cBFabKv1miPrY07bbU8NCFZmNtXkJ/+70ow==",
         "dependencies": {
-          "Magick.NET.Core": "15.1.0"
+          "Magick.NET.Core": "15.1.1"
         }
       },
       "Markdig": {
@@ -232,8 +232,8 @@
       },
       "Magick.NET.Core": {
         "type": "Transitive",
-        "resolved": "15.1.0",
-        "contentHash": "WIaemRN4tJvw5BNUfsO8/V3LojV5FOCojQ/sQ4ruXme1o2frRYfcvHPhKV5E6TbYoEdVEvtGX+8Wbut0F2lJHg=="
+        "resolved": "15.1.1",
+        "contentHash": "Jb8ph4BtzabDb9PRjXy1bWJVVZIelcOA1WicWzYgHhHeyzaKXbRgYdEq3DBQmFQgT/tw65oiyVTDee+SN1hX4Q=="
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions": {
         "type": "Transitive",
